@@ -1,0 +1,319 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="CTCObject">
+      <UniqueIdentifier>{302a3b28-05e2-4a50-9f2c-c317ffed2af7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="CTCMainWindow">
+      <UniqueIdentifier>{b4a060aa-692a-498e-9b13-b7fe74b74f39}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="CTCMainWindow\BaseWndClass">
+      <UniqueIdentifier>{0d326fec-7ed7-4dee-824b-747de4aa14c7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="CTCMainWindow\BaseWndClassInterface">
+      <UniqueIdentifier>{8ee46037-5879-49bc-8078-979746e6ac77}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="StationObject">
+      <UniqueIdentifier>{6dffa247-d004-4610-90a3-6fc01ec259c4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="CTCMainWindow\StationViewKSK">
+      <UniqueIdentifier>{ae57bafa-6244-48f1-8cdd-3ce1337ad0d0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="CTCMainWindow\StationViewKSK\HeaderFile">
+      <UniqueIdentifier>{6e5c1b43-8370-4366-a6f7-ab5e3bae3e47}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="CTCMainWindow\StationViewKSK\SourceFile">
+      <UniqueIdentifier>{77009484-1fa3-4b12-9422-391652b67e37}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="CTCMainWindow\StationViewKSK\FormsFile">
+      <UniqueIdentifier>{782d0117-61a5-4047-a471-ff034d3f750f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="CTCMainWindow\StationViewTKY">
+      <UniqueIdentifier>{f1ddddbe-d45a-49f4-842c-303e5161f3c6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="CTCMainWindow\StationViewTKY\HeaderFile">
+      <UniqueIdentifier>{97450801-0a53-4f85-a19e-bc49397122ac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="CTCMainWindow\StationViewTKY\FormsFile">
+      <UniqueIdentifier>{b7644892-0078-4039-a77c-92a8697934e8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="CTCMainWindow\StationViewTKY\SourceFile">
+      <UniqueIdentifier>{8aef3537-5e10-41ff-9baa-d033ec6c3e99}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="StationObject\Device">
+      <UniqueIdentifier>{18725145-7831-4503-bbf0-66d4e7bf637c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="StationObject\Device\HeaderFile">
+      <UniqueIdentifier>{1932356d-3d0c-4521-8b0d-1186c0a9aa57}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="StationObject\Device\SourceFile">
+      <UniqueIdentifier>{f9c36ae5-1354-4f92-9fc2-cdc9c9f70080}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="CTCMainWindow\BaseWndClass\HeaderFile">
+      <UniqueIdentifier>{2f4d17d5-3088-4a44-b154-cf53ea82f748}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="CTCMainWindow\BaseWndClass\SourceFile">
+      <UniqueIdentifier>{2130008e-80a0-4629-a7b8-51516c5c023c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SocketObject">
+      <UniqueIdentifier>{844c30e4-60d7-41d3-8d77-cb1cba339b3a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SocketObject\HeaderFile">
+      <UniqueIdentifier>{9df981f7-cd15-455a-ac1c-9b9fbdfdcb0e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SocketObject\SourceFile">
+      <UniqueIdentifier>{27581afd-81e5-4369-82ec-6bebf48d4330}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="StationObject\Protocol">
+      <UniqueIdentifier>{b32c4a10-0780-4b34-8f81-ad6d24e988d3}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="CTCObject\CTCObject.cpp">
+      <Filter>CTCObject</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="CTCMainWindow\CTCMainWindow.cpp">
+      <Filter>CTCMainWindow</Filter>
+    </ClCompile>
+    <ClCompile Include="StationObject\StationObject.cpp">
+      <Filter>StationObject</Filter>
+    </ClCompile>
+    <ClCompile Include="CTCMainWindow\StationViewKSK\StationCtrlDispKSK.cpp">
+      <Filter>CTCMainWindow\StationViewKSK\SourceFile</Filter>
+    </ClCompile>
+    <ClCompile Include="CTCMainWindow\StationViewKSK\StationLogDispKSK.cpp">
+      <Filter>CTCMainWindow\StationViewKSK\SourceFile</Filter>
+    </ClCompile>
+    <ClCompile Include="CTCMainWindow\StationViewKSK\StationMultiDispKSK.cpp">
+      <Filter>CTCMainWindow\StationViewKSK\SourceFile</Filter>
+    </ClCompile>
+    <ClCompile Include="CTCMainWindow\StationViewKSK\StationViewKSK.cpp">
+      <Filter>CTCMainWindow\StationViewKSK\SourceFile</Filter>
+    </ClCompile>
+    <ClCompile Include="CTCMainWindow\StationViewTKY\StationViewTKY.cpp">
+      <Filter>CTCMainWindow\StationViewTKY\SourceFile</Filter>
+    </ClCompile>
+    <ClCompile Include="CTCMainWindow\StationViewTKY\StationCtrlDispTKY.cpp">
+      <Filter>CTCMainWindow\StationViewTKY\SourceFile</Filter>
+    </ClCompile>
+    <ClCompile Include="CTCMainWindow\StationViewTKY\StationLogDispTKY.cpp">
+      <Filter>CTCMainWindow\StationViewTKY\SourceFile</Filter>
+    </ClCompile>
+    <ClCompile Include="CTCMainWindow\StationViewTKY\StationMultiDispTKY.cpp">
+      <Filter>CTCMainWindow\StationViewTKY\SourceFile</Filter>
+    </ClCompile>
+    <ClCompile Include="StationObject\Device\StaTrack.cpp">
+      <Filter>StationObject\Device\SourceFile</Filter>
+    </ClCompile>
+    <ClCompile Include="Global.cpp" />
+    <ClCompile Include="StationObject\Device\StaSwitch.cpp">
+      <Filter>StationObject\Device\SourceFile</Filter>
+    </ClCompile>
+    <ClCompile Include="CTCMainWindow\BaseWndClass\StationCtrlDisp.cpp">
+      <Filter>CTCMainWindow\BaseWndClass\SourceFile</Filter>
+    </ClCompile>
+    <ClCompile Include="StationObject\Device\StaSignal.cpp">
+      <Filter>StationObject\Device\SourceFile</Filter>
+    </ClCompile>
+    <ClCompile Include="StationObject\Device\StaButton.cpp">
+      <Filter>StationObject\Device\SourceFile</Filter>
+    </ClCompile>
+    <ClCompile Include="SocketObject\servertcp.cpp">
+      <Filter>SocketObject\SourceFile</Filter>
+    </ClCompile>
+    <ClCompile Include="SocketObject\sockettcp.cpp">
+      <Filter>SocketObject\SourceFile</Filter>
+    </ClCompile>
+    <ClCompile Include="SocketObject\socketudp.cpp">
+      <Filter>SocketObject\SourceFile</Filter>
+    </ClCompile>
+    <ClCompile Include="SocketObject\SerialPort.cpp">
+      <Filter>SocketObject\SourceFile</Filter>
+    </ClCompile>
+    <ClCompile Include="StationObject\Protocol\StaStateProtocol.cpp">
+      <Filter>StationObject\Protocol</Filter>
+    </ClCompile>
+    <ClCompile Include="StationObject\Device\StaDerailer.cpp">
+      <Filter>StationObject\Device\SourceFile</Filter>
+    </ClCompile>
+    <ClCompile Include="StationObject\Device\StaSemiAutoBlock.cpp">
+      <Filter>StationObject\Device\SourceFile</Filter>
+    </ClCompile>
+    <ClCompile Include="StationObject\Device\StaLocomotive.cpp">
+      <Filter>StationObject\Device\SourceFile</Filter>
+    </ClCompile>
+    <ClCompile Include="StationObject\Device\StaText.cpp">
+      <Filter>StationObject\Device\SourceFile</Filter>
+    </ClCompile>
+    <ClCompile Include="StationObject\Device\DeviceBase.cpp">
+      <Filter>StationObject\Device</Filter>
+    </ClCompile>
+    <ClCompile Include="StationObject\Device\StaAutoBlock.cpp">
+      <Filter>StationObject\Device\SourceFile</Filter>
+    </ClCompile>
+    <ClCompile Include="StationObject\Device\StaConnection.cpp">
+      <Filter>StationObject\Device\SourceFile</Filter>
+    </ClCompile>
+    <ClCompile Include="StationObject\Device\StaScattered.cpp">
+      <Filter>StationObject\Device\SourceFile</Filter>
+    </ClCompile>
+    <ClCompile Include="StationObject\Device\StaHump.cpp">
+      <Filter>StationObject\Device\SourceFile</Filter>
+    </ClCompile>
+    <ClCompile Include="StationObject\Device\StaBraidLine.cpp">
+      <Filter>StationObject\Device\SourceFile</Filter>
+    </ClCompile>
+    <ClCompile Include="StationObject\Device\StaEndLine.cpp">
+      <Filter>StationObject\Device\SourceFile</Filter>
+    </ClCompile>
+    <ClCompile Include="StationObject\Device\StaOthers.cpp">
+      <Filter>StationObject\Device\SourceFile</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="CTCObject\CTCObject.h">
+      <Filter>CTCObject</Filter>
+    </ClInclude>
+    <ClInclude Include="CTCMainWindow\BaseWndClassInterface\StationViewInterface.h">
+      <Filter>CTCMainWindow\BaseWndClassInterface</Filter>
+    </ClInclude>
+    <ClInclude Include="StationObject\StationObject.h">
+      <Filter>StationObject</Filter>
+    </ClInclude>
+    <ClInclude Include="StationObject\Device\StaTrack.h">
+      <Filter>StationObject\Device\HeaderFile</Filter>
+    </ClInclude>
+    <ClInclude Include="Global.h" />
+    <ClInclude Include="StationObject\Device\StaSwitch.h">
+      <Filter>StationObject\Device\HeaderFile</Filter>
+    </ClInclude>
+    <ClInclude Include="StationObject\Device\StaSignal.h">
+      <Filter>StationObject\Device\HeaderFile</Filter>
+    </ClInclude>
+    <ClInclude Include="StationObject\Device\StaButton.h">
+      <Filter>StationObject\Device\HeaderFile</Filter>
+    </ClInclude>
+    <ClInclude Include="SocketObject\SerialPort.h">
+      <Filter>SocketObject\HeaderFile</Filter>
+    </ClInclude>
+    <ClInclude Include="StationObject\Protocol\StaStateProtocol.h">
+      <Filter>StationObject\Protocol</Filter>
+    </ClInclude>
+    <ClInclude Include="StationObject\Device\StaDerailer.h">
+      <Filter>StationObject\Device\HeaderFile</Filter>
+    </ClInclude>
+    <ClInclude Include="StationObject\Device\StaSemiAutoBlock.h">
+      <Filter>StationObject\Device\HeaderFile</Filter>
+    </ClInclude>
+    <ClInclude Include="StationObject\Device\StaLocomotive.h">
+      <Filter>StationObject\Device\HeaderFile</Filter>
+    </ClInclude>
+    <ClInclude Include="StationObject\Device\StaText.h">
+      <Filter>StationObject\Device\HeaderFile</Filter>
+    </ClInclude>
+    <ClInclude Include="StationObject\Device\StaAutoBlock.h">
+      <Filter>StationObject\Device\HeaderFile</Filter>
+    </ClInclude>
+    <ClInclude Include="StationObject\Device\StaConnection.h">
+      <Filter>StationObject\Device\HeaderFile</Filter>
+    </ClInclude>
+    <ClInclude Include="StationObject\Device\StaScattered.h">
+      <Filter>StationObject\Device\HeaderFile</Filter>
+    </ClInclude>
+    <ClInclude Include="StationObject\Device\StaDevice.h">
+      <Filter>StationObject\Device</Filter>
+    </ClInclude>
+    <ClInclude Include="StationObject\Device\StaHump.h">
+      <Filter>StationObject\Device\HeaderFile</Filter>
+    </ClInclude>
+    <ClInclude Include="StationObject\Device\StaBraidLine.h">
+      <Filter>StationObject\Device\HeaderFile</Filter>
+    </ClInclude>
+    <ClInclude Include="StationObject\Device\StaEndLine.h">
+      <Filter>StationObject\Device\HeaderFile</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="cpp.hint" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="CTCMainWindow\CTCMainWindow.h">
+      <Filter>CTCMainWindow</Filter>
+    </QtMoc>
+    <QtMoc Include="CTCMainWindow\StationViewKSK\StationCtrlDispKSK.h">
+      <Filter>CTCMainWindow\StationViewKSK\HeaderFile</Filter>
+    </QtMoc>
+    <QtMoc Include="CTCMainWindow\StationViewKSK\StationLogDispKSK.h">
+      <Filter>CTCMainWindow\StationViewKSK\HeaderFile</Filter>
+    </QtMoc>
+    <QtMoc Include="CTCMainWindow\StationViewKSK\StationMultiDispKSK.h">
+      <Filter>CTCMainWindow\StationViewKSK\HeaderFile</Filter>
+    </QtMoc>
+    <QtMoc Include="CTCMainWindow\StationViewKSK\StationViewKSK.h">
+      <Filter>CTCMainWindow\StationViewKSK\HeaderFile</Filter>
+    </QtMoc>
+    <QtMoc Include="CTCMainWindow\StationViewTKY\StationViewTKY.h">
+      <Filter>CTCMainWindow\StationViewTKY\HeaderFile</Filter>
+    </QtMoc>
+    <QtMoc Include="CTCMainWindow\StationViewTKY\StationCtrlDispTKY.h">
+      <Filter>CTCMainWindow\StationViewTKY\HeaderFile</Filter>
+    </QtMoc>
+    <QtMoc Include="CTCMainWindow\StationViewTKY\StationLogDispTKY.h">
+      <Filter>CTCMainWindow\StationViewTKY\HeaderFile</Filter>
+    </QtMoc>
+    <QtMoc Include="CTCMainWindow\StationViewTKY\StationMultiDispTKY.h">
+      <Filter>CTCMainWindow\StationViewTKY\HeaderFile</Filter>
+    </QtMoc>
+    <QtMoc Include="StationObject\Device\DeviceBase.h">
+      <Filter>StationObject\Device</Filter>
+    </QtMoc>
+    <QtMoc Include="CTCMainWindow\BaseWndClass\StationCtrlDisp.h">
+      <Filter>CTCMainWindow\BaseWndClass\HeaderFile</Filter>
+    </QtMoc>
+    <QtMoc Include="CTCMainWindow\BaseWndClass\StationLogDisp.h">
+      <Filter>CTCMainWindow\BaseWndClass\HeaderFile</Filter>
+    </QtMoc>
+    <QtMoc Include="CTCMainWindow\BaseWndClass\StationMultiDisp.h">
+      <Filter>CTCMainWindow\BaseWndClass\HeaderFile</Filter>
+    </QtMoc>
+    <QtMoc Include="SocketObject\servertcp.h">
+      <Filter>SocketObject\HeaderFile</Filter>
+    </QtMoc>
+    <QtMoc Include="SocketObject\sockettcp.h">
+      <Filter>SocketObject\HeaderFile</Filter>
+    </QtMoc>
+    <QtMoc Include="SocketObject\socketudp.h">
+      <Filter>SocketObject\HeaderFile</Filter>
+    </QtMoc>
+    <QtMoc Include="StationObject\Device\StaOthers.h">
+      <Filter>StationObject\Device\HeaderFile</Filter>
+    </QtMoc>
+  </ItemGroup>
+  <ItemGroup>
+    <QtUic Include="CTCMainWindow\StationViewKSK\StationCtrlDispKSK.ui">
+      <Filter>CTCMainWindow\StationViewKSK\FormsFile</Filter>
+    </QtUic>
+    <QtUic Include="CTCMainWindow\StationViewKSK\StationLogDispKSK.ui">
+      <Filter>CTCMainWindow\StationViewKSK\FormsFile</Filter>
+    </QtUic>
+    <QtUic Include="CTCMainWindow\StationViewKSK\StationMultiDispKSK.ui">
+      <Filter>CTCMainWindow\StationViewKSK\FormsFile</Filter>
+    </QtUic>
+    <QtUic Include="CTCMainWindow\StationViewKSK\StationViewKSK.ui">
+      <Filter>CTCMainWindow\StationViewKSK\FormsFile</Filter>
+    </QtUic>
+    <QtUic Include="CTCMainWindow\StationViewTKY\StationViewTKY.ui">
+      <Filter>CTCMainWindow\StationViewTKY\FormsFile</Filter>
+    </QtUic>
+    <QtUic Include="CTCMainWindow\StationViewTKY\StationCtrlDispTKY.ui">
+      <Filter>CTCMainWindow\StationViewTKY\FormsFile</Filter>
+    </QtUic>
+    <QtUic Include="CTCMainWindow\StationViewTKY\StationLogDispTKY.ui">
+      <Filter>CTCMainWindow\StationViewTKY\FormsFile</Filter>
+    </QtUic>
+    <QtUic Include="CTCMainWindow\StationViewTKY\StationMultiDispTKY.ui">
+      <Filter>CTCMainWindow\StationViewTKY\FormsFile</Filter>
+    </QtUic>
+  </ItemGroup>
+</Project>

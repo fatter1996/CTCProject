@@ -1,0 +1,3 @@
+﻿  CTCProject.vcxproj -> E:\QtProject\CTCProject\bin\CTCProject.exe
+  windeployqt: "D:/Qt/5.14.0/msvc2017_64/bin\windeployqt.exe" --list target --dir E:\QtProject\CTCProject\bin\ E:\QtProject\CTCProject\bin\CTCProject.exe
+EXEC : warning : Cannot find Visual Studio installation directory, VCINSTALLDIR is not set.

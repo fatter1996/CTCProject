@@ -1,0 +1,10 @@
+{
+    "staName": "标准站",
+    "comAddress": {
+        "#Address": "联锁通信地址",
+        "ip": "127.0.0.1",
+        "port": 9999
+    },
+    "deviceInfo": "Station.xml",
+    "lampInfo": "lampConfig.josn",
+}
