@@ -16,8 +16,6 @@ namespace Station {
 
         void StaText::Draw(const bool& bElapsed, const bool& isMulti)
         {
-            if (!m_pPainter)
-                return;
             return DeviceBase::Draw(bElapsed, isMulti);
         }
 

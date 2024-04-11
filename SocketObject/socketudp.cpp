@@ -6,7 +6,6 @@ namespace Socket {
     {
         m_pUdpSocket = new QUdpSocket();
         nTimerId = startTimer(1000);
-        InitSocket();
     }
 
     SocketUDP::~SocketUDP()

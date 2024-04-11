@@ -11,8 +11,6 @@ namespace Station {
             ~StaSwitchSection();
 
         private:
-            //清除某一道岔区段内不连续道岔状态
-            void ClearStateInSection(const DeviceBase* pMainDevice, DeviceBase* pDevice);
             //站场翻转
             void setVollover(const QPoint& ptBase);
             //状态重置
@@ -22,7 +20,7 @@ namespace Station {
             uint m_nChildNum = 0;
 
         public:
-            QVector<DeviceBase*> m_vecSections;
+            QVector<int> m_vecSectionsCode;
         };
 
 

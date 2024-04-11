@@ -37,33 +37,29 @@ namespace Station {
 
         void StaConnection::Draw(const bool& bElapsed, const bool& isMulti)
         {
-            if (!m_pPainter)
-                return;
-
             DrawArrow(m_pPainter);
             if (m_strCLType.contains("_DC")) {
                 DrawButton(m_pPainter, bElapsed, Scale(m_rcAllowBtn), COLOR_BTN_DEEPGRAY, 2);
             }
-
             return StaDistant::Draw(bElapsed, isMulti);
         }
 
         void StaConnection::DrawLight()
         {
-            m_pPainter->setRenderHint(QPainter::Antialiasing, true);
+            m_pPainter.setRenderHint(QPainter::Antialiasing, true);
             //接近
-            m_pPainter->setPen(QPen(COLOR_LIGHT_WHITE, 1));
-            m_pPainter->setBrush((m_nState & 0x04) ? COLOR_LIGHT_RED : COLOR_LIGHT_BLACK);
-            m_pPainter->drawEllipse(Scale(m_rcNearLight));
+            m_pPainter.setPen(QPen(COLOR_LIGHT_WHITE, 1));
+            m_pPainter.setBrush((m_nState & 0x04) ? COLOR_LIGHT_RED : COLOR_LIGHT_BLACK);
+            m_pPainter.drawEllipse(Scale(m_rcNearLight));
             if (m_strCLType.contains("_DC")) {
                 //本场
-                m_pPainter->setBrush((m_nState & 0x40) ? COLOR_LIGHT_RED : COLOR_LIGHT_BLACK);
-                m_pPainter->drawEllipse(Scale(m_rcFileldLight));
+                m_pPainter.setBrush((m_nState & 0x40) ? COLOR_LIGHT_RED : COLOR_LIGHT_BLACK);
+                m_pPainter.drawEllipse(Scale(m_rcFileldLight));
                 //邻场
-                m_pPainter->setBrush((m_nState & 0x80) ? COLOR_LIGHT_RED : COLOR_LIGHT_BLACK);
-                m_pPainter->drawEllipse(Scale(m_rcAdjFileldLight));
+                m_pPainter.setBrush((m_nState & 0x80) ? COLOR_LIGHT_RED : COLOR_LIGHT_BLACK);
+                m_pPainter.drawEllipse(Scale(m_rcAdjFileldLight));
             }
-            m_pPainter->setRenderHint(QPainter::Antialiasing, false);
+            m_pPainter.setRenderHint(QPainter::Antialiasing, false);
         }
 
         void StaConnection::DrawText()
@@ -72,46 +68,69 @@ namespace Station {
             font.setFamily("微软雅黑");
             font.setPixelSize(Scale(m_nFontSize));//字号
 
-            m_pPainter->setFont(font);//设置字体
-            m_pPainter->setPen(Qt::white);
+            m_pPainter.setFont(font);//设置字体
+            m_pPainter.setPen(Qt::white);
 
             QFontMetrics  fontMetrics(font);
-            //信号
-            m_pPainter->drawText(Scale(QRect(m_ptSignal, fontMetrics.size(Qt::TextSingleLine, "信号"))), "信号", QTextOption(Qt::AlignCenter));
+            
             //接近
-            m_pPainter->drawText(Scale(QRect(m_ptNear, fontMetrics.size(Qt::TextSingleLine, "接近"))), "接近", QTextOption(Qt::AlignCenter));
-            //照查  
-            m_pPainter->drawText(Scale(QRect(m_ptTakeLook, fontMetrics.size(Qt::TextSingleLine, "照查"))), "照查", QTextOption(Qt::AlignCenter));
+            m_pPainter.drawText(Scale(QRect(m_ptNear, fontMetrics.size(Qt::TextSingleLine, "接近"))), "接近", QTextOption(Qt::AlignCenter));
+            
+            if (m_nSX) {
+                //信号
+                m_pPainter.drawText(Scale(QRect(m_ptSignal, fontMetrics.size(Qt::TextSingleLine, "信号"))), "信号", QTextOption(Qt::AlignCenter));
+                //照查  
+                m_pPainter.drawText(Scale(QRect(m_ptTakeLook, fontMetrics.size(Qt::TextSingleLine, "照查"))), "照查", QTextOption(Qt::AlignCenter));
+            }
+            else {
+                //信号
+                m_pPainter.drawText(Scale(QRect(m_ptTakeLook, fontMetrics.size(Qt::TextSingleLine, "信号"))), "信号", QTextOption(Qt::AlignCenter));
+                //照查  
+                m_pPainter.drawText(Scale(QRect(m_ptSignal, fontMetrics.size(Qt::TextSingleLine, "照查"))), "照查", QTextOption(Qt::AlignCenter));
+            }
+            
             if (m_strCLType.contains("_DC")) {
                 //允许
-                m_pPainter->drawText(Scale(QRect(m_ptAllow, fontMetrics.size(Qt::TextSingleLine, "允许操动道岔"))), "允许操动道岔", QTextOption(Qt::AlignCenter));
+                m_pPainter.drawText(Scale(QRect(m_ptAllow, fontMetrics.size(Qt::TextSingleLine, "允许操动道岔"))), "允许操动道岔", QTextOption(Qt::AlignCenter));
                 //本场
-                m_pPainter->drawText(Scale(QRect(m_ptFileld, fontMetrics.size(Qt::TextSingleLine, "本场"))), "本场", QTextOption(Qt::AlignCenter));
+                m_pPainter.drawText(Scale(QRect(m_ptFileld, fontMetrics.size(Qt::TextSingleLine, "本场"))), "本场", QTextOption(Qt::AlignCenter));
                 //邻场
-                m_pPainter->drawText(Scale(QRect(m_ptAdjFileld, fontMetrics.size(Qt::TextSingleLine, "邻场"))), "邻场", QTextOption(Qt::AlignCenter));
+                m_pPainter.drawText(Scale(QRect(m_ptAdjFileld, fontMetrics.size(Qt::TextSingleLine, "邻场"))), "邻场", QTextOption(Qt::AlignCenter));
             }
         }
 
         void StaConnection::getArrowColor()
         {
-            if ((m_nState & 0x03) == 0x01) {
-                m_cColor1 = COLOR_LIGHT_GREEN;
+            QColor cColor1;
+            QColor cColor2;
+
+            if ((m_nArrowState & 0x03) == 0x01) {
+                cColor1 = COLOR_LIGHT_GREEN;
             }
-            else if ((m_nState & 0x03) == 0x02) {
-                m_cColor1 = COLOR_LIGHT_WHITE;
+            else if ((m_nArrowState & 0x03) == 0x02) {
+                cColor1 = COLOR_LIGHT_WHITE;
             }
             else {
-                m_cColor1 = COLOR_LIGHT_BLACK;
+                cColor1 = COLOR_LIGHT_BLACK;
             }
 
-            if ((m_nState & 0x30) == 0x01) {
-                m_cColor2 = COLOR_LIGHT_GREEN;
+            if ((m_nArrowState & 0x30) == 0x10) {
+                cColor2 = COLOR_LIGHT_GREEN;
             }
-            else if ((m_nState & 0x03) == 0x02) {
-                m_cColor2 = COLOR_LIGHT_WHITE;
+            else if ((m_nArrowState & 0x30) == 0x20) {
+                cColor2 = COLOR_LIGHT_WHITE;
             }
             else {
-                m_cColor2 = COLOR_LIGHT_BLACK;
+                cColor2 = COLOR_LIGHT_GREEN;
+            }
+
+            if (m_nSX) {
+                m_cColor1 = cColor1;
+                m_cColor2 = cColor2;
+            }
+            else {
+                m_cColor2 = cColor1;
+                m_cColor1 = cColor2;
             }
         }
 

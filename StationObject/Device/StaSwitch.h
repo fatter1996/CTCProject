@@ -41,7 +41,7 @@ namespace Station {
             QPen getDeviceNameColor(const bool& bElapsed);
 
         public:
-            void setSwitchState(const uint& nSwitchState) { m_nSwitchState = nSwitchState; }
+            void setSwitchState(const uint& nSwitchState);
             uint getSwitchState() { return m_nSwitchState; }
             uint getCQSwitchCode() { return m_nQ; }
             uint getDWSwitchCode() { return m_nD; }

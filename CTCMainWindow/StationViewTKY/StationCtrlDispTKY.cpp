@@ -6,12 +6,18 @@ namespace CTCWindows {
 		: StationCtrlDisp(parent)
 	{
 		ui.setupUi(this);
-		ui.widget->setFixedSize(m_pStationObject->getStaFixedSize());
+		ui.widget->setFixedSize(m_staMainStation->getStaFixedSize());
 	}
 
 	StationCtrlDispTKY::~StationCtrlDispTKY()
 	{
 
+	}
+
+	void StationCtrlDispTKY::CreatStaFunBtnToolBar()
+	{
+		m_pStaFunBtnToolBar = new StaFunBtnToolBarTKY();
+		this->layout()->addWidget(m_pStaFunBtnToolBar);
 	}
 
 	QWidget* StationCtrlDispTKY::GetStationPaintView()

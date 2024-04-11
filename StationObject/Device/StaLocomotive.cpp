@@ -21,20 +21,16 @@ namespace Station {
 
         void StaLocomotive::Draw(const bool& bElapsed, const bool& isMulti)
         {
-            if (!m_pPainter)
-                return;
-
-
             return StaDistant::Draw(bElapsed, isMulti);
         }
 
         void StaLocomotive::DrawLight()
         {
-            m_pPainter->setRenderHint(QPainter::Antialiasing, true);
-            m_pPainter->setPen(QPen(COLOR_BTN_WHITE, 1));
-            m_pPainter->setBrush(((m_nState & 0x0f) == 0x05) ? COLOR_LIGHT_RED : COLOR_LIGHT_BLACK);
-            m_pPainter->drawEllipse(m_rcLight);
-            m_pPainter->setRenderHint(QPainter::Antialiasing, false);
+            m_pPainter.setRenderHint(QPainter::Antialiasing, true);
+            m_pPainter.setPen(QPen(COLOR_BTN_WHITE, 1));
+            m_pPainter.setBrush(((m_nState & 0x0f) == 0x05) ? COLOR_LIGHT_WHITE : COLOR_LIGHT_BLACK);
+            m_pPainter.drawEllipse(m_rcLight);
+            m_pPainter.setRenderHint(QPainter::Antialiasing, false);
         }
 
         void StaLocomotive::DrawText()

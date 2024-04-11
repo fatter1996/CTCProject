@@ -21,8 +21,6 @@ namespace Station {
 
         void StaTrack::Draw(const bool& bElapsed, const bool& isMulti)
         {
-            if (!m_pPainter)
-                return;
             //绘制股道底部的灰色区域
             DrawTrackBack();
             //绘制股道
@@ -37,9 +35,9 @@ namespace Station {
                 QRect bkRect(
                     Scale(QPoint(p12.x() + (p34.x() - p12.x()) / 4, p12.y() - 12)),
                     QSize(Scale((p34.x() - p12.x()) / 2), Scale(p34.y() - p12.y() + 24)));
-                m_pPainter->setPen(QPen(COLOR_TRACK_DEEPBLUE));
-                m_pPainter->setBrush(QBrush(COLOR_TRACK_DEEPBLUE, Qt::SolidPattern));
-                m_pPainter->drawRect(bkRect);
+                m_pPainter.setPen(QPen(COLOR_TRACK_DEEPBLUE));
+                m_pPainter.setBrush(QBrush(COLOR_TRACK_DEEPBLUE, Qt::SolidPattern));
+                m_pPainter.drawRect(bkRect);
             }
         }
 
@@ -92,11 +90,13 @@ namespace Station {
 
         void StaTrack::DrawInsulateNode()
         {
-            if (m_bShowInsulateNode) {
-                m_pPainter->setPen(QPen(COLOR_TRACK_BLUE, 2));
-                m_pPainter->drawLine(Scale(QPoint(p1.x(), p1.y())), Scale(QPoint(p2.x(), p2.y()))); //绘制轨道区段左侧绝缘节
-                m_pPainter->drawLine(Scale(QPoint(p3.x(), p3.y())), Scale(QPoint(p4.x(), p4.y()))); //绘制轨道区段右侧绝缘节
+            if (!m_bInsulateNodeChange) {
+                return;
             }
+
+            m_pPainter.setPen(QPen(COLOR_TRACK_BLUE, 2));
+            m_pPainter.drawLine(Scale(QPoint(p1.x(), p1.y())), Scale(QPoint(p2.x(), p2.y()))); //绘制轨道区段左侧绝缘节
+            m_pPainter.drawLine(Scale(QPoint(p3.x(), p3.y())), Scale(QPoint(p4.x(), p4.y()))); //绘制轨道区段右侧绝缘节
         }
 
         QPen StaTrack::getDeviceNameColor(const bool& bElapsed)

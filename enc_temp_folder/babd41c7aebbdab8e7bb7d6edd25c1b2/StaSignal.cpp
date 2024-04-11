@@ -82,6 +82,8 @@ namespace Station {
                     m_rcLight2 = QRect(p12.x() - 5 * m_nRadius, p12.y() - m_nRadius, Scale(nDiameter), Scale(nDiameter));
                 }
             }
+
+            m_rcRespondRect = m_rcTrainBtn;
         }
 
         void StaSignal::Draw(const bool& bElapsed, const bool& isMulti)
@@ -240,32 +242,6 @@ namespace Station {
             }
         }
 
-        bool StaSignal::ContainsVisible(QPoint ptPos)
-        {
-            //选中类型(0-未选中; 0x01-选中信号机名称; 0x02-选中列车按钮; 0x04-选中调车按钮; 0x08-选中通过按钮; 0x1f-选中信号机灯位)
-            DeviceBase* m_pRelatedBtn = nullptr; //关联通过按钮
-
-            QRect m_rcLight1;    //灯位1范围
-            QRect m_rcLight2;    //灯位2范围
-
-            QRect ;  //调车按钮范围
-            QRect m_rcGuideBtn;  //引导按钮范围
-            if (m_rcTextRect.contains(ptPos)) {     //0x01-选中信号机名称
-                m_nSelectType = 0x01;
-                return true;
-            }
-            else if (m_rcTrainBtn.contains(ptPos)) {    //0x02-选中列车按钮
-                m_nSelectType = 0x02;
-                return true;
-            }
-            else if (m_rcShuntBtn.contains(ptPos)) {    //0x04-选中列车按钮
-                m_nSelectType = 0x04;
-                return true;
-            }
-
-            return false;
-        }
-
         QPen StaSignal::getDeviceNameColor(const bool& bElapsed)
         {
             return QPen((m_bRangeVisible && (m_nSelectType & 0x01)) ? Qt::black : Qt::white);
@@ -273,7 +249,6 @@ namespace Station {
 
         void StaSignal::OnButtonClick()
         {
-
         }
 
         void StaSignal::setVollover(const QPoint& ptBase)

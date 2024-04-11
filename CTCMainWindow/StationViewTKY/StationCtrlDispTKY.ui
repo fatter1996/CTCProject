@@ -13,7 +13,7 @@
   <property name="windowTitle">
    <string>StationCtrlDispTKY</string>
   </property>
-  <layout class="QHBoxLayout" name="horizontalLayout">
+  <layout class="QVBoxLayout" name="verticalLayout">
    <property name="spacing">
     <number>0</number>
    </property>

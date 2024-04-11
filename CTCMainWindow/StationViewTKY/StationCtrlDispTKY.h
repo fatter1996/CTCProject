@@ -1,5 +1,6 @@
 #pragma once
 
+#include "StaFunBtnToolBarTKY.h"
 #include "../BaseWndClass/StationCtrlDisp.h"
 #include "ui_StationCtrlDispTKY.h"
 
@@ -11,6 +12,9 @@ namespace CTCWindows {
 	public:
 		StationCtrlDispTKY(QWidget* parent = nullptr);
 		~StationCtrlDispTKY();
+
+	public:
+		void CreatStaFunBtnToolBar();
 
 	public:
 		QWidget* GetStationPaintView();

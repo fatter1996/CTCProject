@@ -102,6 +102,7 @@
 //自定义颜色
 #define COLOR_TRACK_DEEPBLUE			QColor("#202040")
 #define COLOR_TRACK_BLUE				QColor("#104E8B")
+#define COLOR_TRACK_PRELOCK_BLUE		QColor("#0000EE")
 #define COLOR_TRACK_WHITE				QColor("#FAFAFA")
 #define COLOR_TRACK_GREEN				QColor("#00CD00")
 #define COLOR_TRACK_RED					QColor("#FD0C0C")
@@ -118,8 +119,9 @@
 #define COLOR_BTN_GREEN_TG				QColor("#00EE00")
 #define COLOR_BTN_BLUE					QColor("#0000EE")
 #define COLOR_BTN_BLUE_YD				QColor("#4169E1")
+#define COLOR_BTN_RED					QColor("#FD0C0C")
 
-#define COLOR_LIGHT_BLACK				QColor("#0D0D0D")
+#define COLOR_LIGHT_BLACK				Qt::NoBrush
 #define COLOR_LIGHT_GREEN				QColor("#33FF00")
 #define COLOR_LIGHT_RED					QColor("#EE0000")
 #define COLOR_LIGHT_YELLOW				QColor("#FFFF33")
@@ -128,4 +130,4 @@
 
 
 //全局变量
-extern Station::StationObject* m_pStationObject;
+extern Station::StationObject* m_staMainStation;

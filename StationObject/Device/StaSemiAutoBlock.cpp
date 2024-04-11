@@ -45,15 +45,12 @@ namespace Station {
 
         void StaSemiAutoBlock::Draw(const bool& bElapsed, const bool& isMulti)
         {
-            if (!m_pPainter)
-                return;
-
             DrawArrow(m_pPainter);
             DrawButton(m_pPainter, bElapsed, Scale(m_rcBSBtn), COLOR_BTN_DEEPGRAY);
             DrawButton(m_pPainter, bElapsed, Scale(m_rcFYBtn), COLOR_BTN_DEEPGRAY);
             DrawButton(m_pPainter, bElapsed, Scale(m_rcSGBtn), COLOR_BTN_DEEPGRAY);
 
-            return DeviceBase::Draw(bElapsed, isMulti);
+            return StaDistant::Draw(bElapsed, isMulti);
         }
 
         void StaSemiAutoBlock::DrawLight()
@@ -67,33 +64,40 @@ namespace Station {
             font.setFamily("Î¢ÈíÑÅºÚ");
             font.setPixelSize(Scale(m_nFontSize));//×ÖºÅ
 
-            m_pPainter->setFont(font);//ÉèÖÃ×ÖÌå
-            m_pPainter->setPen(Qt::white);
+            m_pPainter.setFont(font);//ÉèÖÃ×ÖÌå
+            m_pPainter.setPen(Qt::white);
 
             QFontMetrics  fontMetrics(font);
             //±ÕÈû
-            m_pPainter->drawText(Scale(QRect(m_ptBSText, fontMetrics.size(Qt::TextSingleLine, "±ÕÈû"))), "±ÕÈû", QTextOption(Qt::AlignCenter));
+            m_pPainter.drawText(Scale(QRect(m_ptBSText, fontMetrics.size(Qt::TextSingleLine, "±ÕÈû"))), "±ÕÈû", QTextOption(Qt::AlignCenter));
             //¸´Ô­
-            m_pPainter->drawText(Scale(QRect(m_ptFYText, fontMetrics.size(Qt::TextSingleLine, "¸´Ô­"))), "¸´Ô­", QTextOption(Qt::AlignCenter));
+            m_pPainter.drawText(Scale(QRect(m_ptFYText, fontMetrics.size(Qt::TextSingleLine, "¸´Ô­"))), "¸´Ô­", QTextOption(Qt::AlignCenter));
             //ÊÂ¹Ê
-            m_pPainter->drawText(Scale(QRect(m_ptSGText, fontMetrics.size(Qt::TextSingleLine, "ÊÂ¹Ê"))), "ÊÂ¹Ê", QTextOption(Qt::AlignCenter));
+            m_pPainter.drawText(Scale(QRect(m_ptSGText, fontMetrics.size(Qt::TextSingleLine, "ÊÂ¹Ê"))), "ÊÂ¹Ê", QTextOption(Qt::AlignCenter));
         }
 
         void StaSemiAutoBlock::getArrowColor()
         {
-            switch (m_nState & 0x0f) {
-            case 0x01: m_cColor1 = COLOR_LIGHT_RED;    break;
-            case 0x02: m_cColor1 = COLOR_LIGHT_GREEN;  break;
-            case 0x04: m_cColor1 = COLOR_LIGHT_YELLOW; break;
-            case 0x08: m_cColor1 = COLOR_LIGHT_RED;    break;
-            default:   m_cColor1 = COLOR_LIGHT_BLACK;  break;
+            QColor& cColor1 = m_cColor1;
+            QColor& cColor2 = m_cColor2;
+            if (m_nSX) {
+                cColor2 = m_cColor1;
+                cColor1 = m_cColor2;
             }
-            switch (m_nState & 0xf0) {
-            case 0x10: m_cColor2 = COLOR_LIGHT_RED;    break;
-            case 0x20: m_cColor2 = COLOR_LIGHT_GREEN;  break;
-            case 0x40: m_cColor2 = COLOR_LIGHT_YELLOW; break;
-            case 0x80: m_cColor2 = COLOR_LIGHT_RED;    break;
-            default:   m_cColor2 = COLOR_LIGHT_BLACK;  break;
+            
+            switch (m_nArrowState & 0x0f) {
+            case 0x01: cColor1 = COLOR_LIGHT_YELLOW; break;
+            case 0x02: cColor1 = COLOR_LIGHT_GREEN;  break;
+            case 0x04: cColor1 = COLOR_LIGHT_RED;    break;
+            case 0x08: cColor1 = COLOR_LIGHT_RED;    break;
+            default:   cColor1 = COLOR_LIGHT_BLACK;  break;
+            }
+            switch (m_nArrowState & 0xf0) {
+            case 0x10: cColor2 = COLOR_LIGHT_YELLOW; break;
+            case 0x20: cColor2 = COLOR_LIGHT_GREEN;  break;
+            case 0x40: cColor2 = COLOR_LIGHT_RED;    break;
+            case 0x80: cColor2 = COLOR_LIGHT_RED;    break;
+            default:   cColor2 = COLOR_LIGHT_BLACK;  break;
             }
         }
 

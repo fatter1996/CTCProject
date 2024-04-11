@@ -84,51 +84,49 @@ namespace Station {
 
         void StaAutoBlock::Draw(const bool& bElapsed, const bool& isMulti)
         {
-            if (!m_pPainter)
-                return;
-
             DrawArrow(m_pPainter);
             DrawButton(m_pPainter, bElapsed, Scale(m_rcZFZBtn), COLOR_BTN_DEEPGRAY, 1);
             DrawButton(m_pPainter, bElapsed, Scale(m_rcJCFZBtn), COLOR_BTN_DEEPGRAY, 1);
             DrawButton(m_pPainter, bElapsed, Scale(m_rcFCFZBtn), COLOR_BTN_DEEPGRAY, 1);
-            DrawLeaveTrack(bElapsed);
+            
+            for (StaLeaveTrack& track : m_vecStaLeaveTrack) {
+                DrawLeaveTrack(bElapsed, track);
+            }
 
             return StaDistant::Draw(bElapsed, isMulti);
         }
 
-        void StaAutoBlock::DrawLeaveTrack(const bool& bElapsed)
+        void StaAutoBlock::DrawLeaveTrack(const bool& bElapsed, const StaLeaveTrack& track)
         {
             QFont font;
             font.setFamily("微软雅黑");
             font.setPixelSize(Scale(m_nFontSize));//字号
             QFontMetrics  fontMetrics(font);
-            m_pPainter->setFont(font);//设置字体
+            m_pPainter.setFont(font);//设置字体
 
-            for (StaLeaveTrack& track : m_vecStaLeaveTrack) {
-                //绘制股道名称
-                m_pPainter->setPen(Qt::white);
-                m_pPainter->drawText(Scale(QRect(track.m_ptName, fontMetrics.size(Qt::TextSingleLine, track.m_strName))), track.m_strName, QTextOption(Qt::AlignCenter));
-                //绘制股道
-                m_pPainter->setPen(QPen(getTrackColor(bElapsed, track.m_nIndex), Scale(TRACK_WIDTH), Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
-                m_pPainter->drawLine(Scale(QPoint(track.m_rcTrack.left(), m_ptLempCenter.y())), 
-                                     Scale(QPoint(track.m_rcTrack.right(), m_ptLempCenter.y())));
-                //绘制绝缘节
-                m_pPainter->setPen(QPen(COLOR_TRACK_BLUE, 2));
-                m_pPainter->drawLine(Scale(track.m_rcTrack.topLeft()), Scale(track.m_rcTrack.bottomLeft())); //绘制轨道区段左侧绝缘节
-                m_pPainter->drawLine(Scale(track.m_rcTrack.topRight()), Scale(track.m_rcTrack.bottomRight())); //绘制轨道区段右侧绝缘节
-            }
+            //绘制股道名称
+            m_pPainter.setPen(Qt::white);
+            m_pPainter.drawText(Scale(QRect(track.m_ptName, fontMetrics.size(Qt::TextSingleLine, track.m_strName))), track.m_strName, QTextOption(Qt::AlignCenter));
+            //绘制股道
+            m_pPainter.setPen(QPen(getTrackColor(bElapsed, track.m_nIndex), Scale(TRACK_WIDTH), Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
+            m_pPainter.drawLine(Scale(QPoint(track.m_rcTrack.left(), m_ptLempCenter.y())),
+                Scale(QPoint(track.m_rcTrack.right(), m_ptLempCenter.y())));
+            //绘制绝缘节
+            m_pPainter.setPen(QPen(COLOR_TRACK_BLUE, 2));
+            m_pPainter.drawLine(Scale(track.m_rcTrack.topLeft()), Scale(track.m_rcTrack.bottomLeft())); //绘制轨道区段左侧绝缘节
+            m_pPainter.drawLine(Scale(track.m_rcTrack.topRight()), Scale(track.m_rcTrack.bottomRight())); //绘制轨道区段右侧绝缘节
         }
 
         void StaAutoBlock::DrawLight()
         {
-            m_pPainter->setRenderHint(QPainter::Antialiasing, true);
-            m_pPainter->setPen(QPen(COLOR_LIGHT_WHITE, 1));
+            m_pPainter.setRenderHint(QPainter::Antialiasing, true);
+            m_pPainter.setPen(QPen(COLOR_LIGHT_WHITE, 1));
 
             //辅助闭塞灯
-            m_pPainter->setBrush((m_nState & 0x10) ? COLOR_LIGHT_RED : COLOR_LIGHT_BLACK);
-            m_pPainter->drawEllipse(Scale(m_rcFZLight));
+            m_pPainter.setBrush((m_nState & 0x10) ? COLOR_LIGHT_RED : COLOR_LIGHT_BLACK);
+            m_pPainter.drawEllipse(Scale(m_rcFZLight));
 
-            m_pPainter->setRenderHint(QPainter::Antialiasing, false);
+            m_pPainter.setRenderHint(QPainter::Antialiasing, false);
         }
 
         void StaAutoBlock::DrawText()
@@ -136,18 +134,18 @@ namespace Station {
             QFont font;
             font.setFamily("微软雅黑");
             font.setPixelSize(Scale(m_nFontSize));//字号
-            m_pPainter->setFont(font);//设置字体
-            m_pPainter->setPen(Qt::white);
+            m_pPainter.setFont(font);//设置字体
+            m_pPainter.setPen(Qt::white);
 
             QFontMetrics  fontMetrics(font);
             //总辅助
-            m_pPainter->drawText(Scale(QRect(m_ptZFZText, fontMetrics.size(Qt::TextSingleLine, "总辅助"))), "总辅助", QTextOption(Qt::AlignCenter));
+            m_pPainter.drawText(Scale(QRect(m_ptZFZText, fontMetrics.size(Qt::TextSingleLine, "总辅助"))), "总辅助", QTextOption(Qt::AlignCenter));
             //接车辅助
-            m_pPainter->drawText(Scale(QRect(m_ptJCFZText, fontMetrics.size(Qt::TextSingleLine, "接车辅助"))), "接车辅助", QTextOption(Qt::AlignCenter));
+            m_pPainter.drawText(Scale(QRect(m_ptJCFZText, fontMetrics.size(Qt::TextSingleLine, "接车辅助"))), "接车辅助", QTextOption(Qt::AlignCenter));
             //发车辅助
-            m_pPainter->drawText(Scale(QRect(m_ptFCFZText, fontMetrics.size(Qt::TextSingleLine, "发车辅助"))), "发车辅助", QTextOption(Qt::AlignCenter));
+            m_pPainter.drawText(Scale(QRect(m_ptFCFZText, fontMetrics.size(Qt::TextSingleLine, "发车辅助"))), "发车辅助", QTextOption(Qt::AlignCenter));
             //发车辅助
-            m_pPainter->drawText(Scale(QRect(m_ptFZText, fontMetrics.size(Qt::TextSingleLine, "辅助办理"))), "辅助办理", QTextOption(Qt::AlignCenter));
+            m_pPainter.drawText(Scale(QRect(m_ptFZText, fontMetrics.size(Qt::TextSingleLine, "辅助办理"))), "辅助办理", QTextOption(Qt::AlignCenter));
         }
 
         void StaAutoBlock::setLeaveTrackState(int nState)
@@ -175,14 +173,14 @@ namespace Station {
 
         void StaAutoBlock::getArrowColor()
         {
-            switch (DeviceBase::getState() & 0x0f) {
+            switch (m_nArrowState & 0x0f) {
             case 0x01: m_cColor1 = COLOR_LIGHT_RED;    break;
             case 0x02: m_cColor1 = COLOR_LIGHT_GREEN;  break;
             case 0x04: m_cColor1 = COLOR_LIGHT_YELLOW; break;
             case 0x08: m_cColor1 = COLOR_LIGHT_RED;    break;
             default:   m_cColor1 = COLOR_LIGHT_BLACK;  break;
             }
-            switch (m_nState & 0xf0) {
+            switch (m_nArrowState & 0xf0) {
             case 0x10: m_cColor2 = COLOR_LIGHT_RED;    break;
             case 0x20: m_cColor2 = COLOR_LIGHT_GREEN;  break;
             case 0x40: m_cColor2 = COLOR_LIGHT_YELLOW; break;

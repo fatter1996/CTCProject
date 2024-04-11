@@ -62,7 +62,7 @@ namespace Station {
 
             if (event->type() == QEvent::MouseMove) {
                 QMouseEvent* mouseEvent = dynamic_cast<QMouseEvent*>(event);
-                if (Contains(mouseEvent->pos())) {
+                if (m_rcRespondRect.contains(mouseEvent->pos())) {
                     m_bRangeVisible = true;
                 }
                 else {
@@ -149,11 +149,6 @@ namespace Station {
             m_pPainter.setPen(QPen(COLOR_TRACK_WHITE, 1, Qt::DashLine));
             m_pPainter.setBrush(COLOR_TRACK_SELECT_BLUE);
             m_pPainter.drawRect(Scale(OutSideRect(m_rcTextRect, 2, 0)));
-        }
-
-        bool DeviceBase::ContainsVisible(QPoint ptPos)
-        {
-            return false;
         }
 
         QPen DeviceBase::getDeviceNameColor(const bool& bElapsed)

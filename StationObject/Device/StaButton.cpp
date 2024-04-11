@@ -34,11 +34,7 @@ namespace Station {
 
         void StaButton::Draw(const bool& bElapsed, const bool& isMulti)
         {
-            if (!m_pPainter) {
-                return;
-            }
             DrawStaButton(bElapsed);
-
             return DeviceBase::Draw(bElapsed, isMulti);
         }
 

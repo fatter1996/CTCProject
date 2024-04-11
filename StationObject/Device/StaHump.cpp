@@ -44,47 +44,43 @@ namespace Station {
 
         void StaHump::Draw(const bool& bElapsed, const bool& isMulti)
         {
-            if (!m_pPainter)
-                return;
-
             DrawHump();
             DrawButton(m_pPainter, bElapsed, Scale(m_rcButton), COLOR_BTN_DEEPGRAY);
-
             return StaDistant::Draw(bElapsed, isMulti);
         }
 
         void StaHump::DrawHump()
         {
-            m_pPainter->setPen(QPen(COLOR_TRACK_BLUE, Scale(TRACK_WIDTH)));
-            m_pPainter->drawLine(Scale(p1), Scale(QPoint(p2.x() - TRACK_WIDTH, p2.y())));
+            m_pPainter.setPen(QPen(COLOR_TRACK_BLUE, Scale(TRACK_WIDTH)));
+            m_pPainter.drawLine(Scale(p1), Scale(QPoint(p2.x() - TRACK_WIDTH, p2.y())));
                  
-            m_pPainter->setPen(QPen(COLOR_TRACK_BLUE, 2));
-            m_pPainter->setBrush(COLOR_TRACK_BLUE);
-            m_pPainter->drawPolygon(QPolygon() << Scale(p3) << Scale(p4) << Scale(p5));
-            m_pPainter->drawLine(Scale(p6), Scale(p7));
-            m_pPainter->drawLine(Scale(p8), Scale(p9));
+            m_pPainter.setPen(QPen(COLOR_TRACK_BLUE, 2));
+            m_pPainter.setBrush(COLOR_TRACK_BLUE);
+            m_pPainter.drawPolygon(QPolygon() << Scale(p3) << Scale(p4) << Scale(p5));
+            m_pPainter.drawLine(Scale(p6), Scale(p7));
+            m_pPainter.drawLine(Scale(p8), Scale(p9));
         }
 
         void StaHump::DrawLight()
         {
-            m_pPainter->setRenderHint(QPainter::Antialiasing, true);
-            m_pPainter->setPen(QPen(COLOR_LIGHT_WHITE, 1));
+            m_pPainter.setRenderHint(QPainter::Antialiasing, true);
+            m_pPainter.setPen(QPen(COLOR_LIGHT_WHITE, 1));
 
             //«–∂œÕ∆ÀÕ
-            m_pPainter->setBrush((m_nState & 0x10) ? COLOR_LIGHT_RED : COLOR_LIGHT_BLACK);
-            m_pPainter->drawEllipse(Scale(m_rcCutOff));
+            m_pPainter.setBrush((m_nState & 0x10) ? COLOR_LIGHT_RED : COLOR_LIGHT_BLACK);
+            m_pPainter.drawEllipse(Scale(m_rcCutOff));
             //’’≤È
-            m_pPainter->setBrush((m_nState & 0x20) ? COLOR_LIGHT_RED : COLOR_LIGHT_BLACK);
-            m_pPainter->drawEllipse(Scale(m_rcTakeLook));
+            m_pPainter.setBrush((m_nState & 0x20) ? COLOR_LIGHT_RED : COLOR_LIGHT_BLACK);
+            m_pPainter.drawEllipse(Scale(m_rcTakeLook));
             //‘ –ÌÕ∆ÀÕ
-            m_pPainter->setBrush((m_nState & 0x40) ? COLOR_LIGHT_RED : COLOR_LIGHT_BLACK);
-            m_pPainter->drawEllipse(Scale(m_rcAllow));
+            m_pPainter.setBrush((m_nState & 0x40) ? COLOR_LIGHT_RED : COLOR_LIGHT_BLACK);
+            m_pPainter.drawEllipse(Scale(m_rcAllow));
             //–≈∫≈
-            m_pPainter->setPen(QPen(COLOR_TRACK_BLUE, 2));
-            m_pPainter->setBrush((m_nState & 0x80) ? COLOR_LIGHT_RED : COLOR_LIGHT_BLACK);
-            m_pPainter->drawEllipse(Scale(m_rcSignal));
+            m_pPainter.setPen(QPen(COLOR_TRACK_BLUE, 2));
+            m_pPainter.setBrush((m_nState & 0x80) ? COLOR_LIGHT_RED : COLOR_LIGHT_BLACK);
+            m_pPainter.drawEllipse(Scale(m_rcSignal));
 
-            m_pPainter->setRenderHint(QPainter::Antialiasing, false);
+            m_pPainter.setRenderHint(QPainter::Antialiasing, false);
         }
 
         void StaHump::DrawText()
@@ -93,16 +89,16 @@ namespace Station {
             font.setFamily("Œ¢»Ì—≈∫⁄");
             font.setPixelSize(Scale(m_nFontSize));//◊÷∫≈
 
-            m_pPainter->setFont(font);//…Ë÷√◊÷ÃÂ
-            m_pPainter->setPen(Qt::white);
+            m_pPainter.setFont(font);//…Ë÷√◊÷ÃÂ
+            m_pPainter.setPen(Qt::white);
 
             QFontMetrics  fontMetrics(font);
             //«–∂œÕ∆ÀÕ
-            m_pPainter->drawText(Scale(QRect(m_ptCutOff, fontMetrics.size(Qt::TextSingleLine, "«–∂œÕ∆ÀÕ"))), "«–∂œÕ∆ÀÕ", QTextOption(Qt::AlignCenter));
+            m_pPainter.drawText(Scale(QRect(m_ptCutOff, fontMetrics.size(Qt::TextSingleLine, "«–∂œÕ∆ÀÕ"))), "«–∂œÕ∆ÀÕ", QTextOption(Qt::AlignCenter));
             //‘ –ÌÕ∆ÀÕ
-            m_pPainter->drawText(Scale(QRect(m_ptAllow, fontMetrics.size(Qt::TextSingleLine, "‘ –ÌÕ∆ÀÕ"))), "‘ –ÌÕ∆ÀÕ", QTextOption(Qt::AlignCenter));
+            m_pPainter.drawText(Scale(QRect(m_ptAllow, fontMetrics.size(Qt::TextSingleLine, "‘ –ÌÕ∆ÀÕ"))), "‘ –ÌÕ∆ÀÕ", QTextOption(Qt::AlignCenter));
             //’’≤È  
-            m_pPainter->drawText(Scale(QRect(m_ptTakeLook, fontMetrics.size(Qt::TextSingleLine, "’’≤È"))), "’’≤È", QTextOption(Qt::AlignCenter));
+            m_pPainter.drawText(Scale(QRect(m_ptTakeLook, fontMetrics.size(Qt::TextSingleLine, "’’≤È"))), "’’≤È", QTextOption(Qt::AlignCenter));
         }
 
         void StaHump::OnButtonClick()

@@ -14,19 +14,23 @@ namespace CTCWindows {
     //初始化主界面
 	void CTCMainWindow::InitStattionView()
 	{
-		m_pStationCtrlDisp = CreateStationCtrlDisp();
-		m_pStationMultiDisp = CreateMultiStationDisp();
-		m_pStationLogDisp = CreateTrafficLogManage();
-		//初始化主菜单
-		InitStationViewMenuBar();
-		//初始化工具栏-主工具栏
-		InitStationViewToolBar();
-		//初始化工具栏-行车日志工具栏
-		InitTrafficLogToolBar();
-		//初始化工具栏-签收工具栏
-		InitSignForToolBar();  
+        //初始化主菜单
+        InitStationViewMenuBar();
+        //初始化工具栏-主工具栏
+        InitStationViewToolBar();
+        //初始化工具栏-行车日志工具栏
+        InitTrafficLogToolBar();
+        //初始化工具栏-签收工具栏
+        InitSignForToolBar();
         //初始化工具栏-签收工具栏
         InitStateToolBar();
+
+
+		m_pStationCtrlDisp = CreateStationCtrlDisp();
+        m_pStationCtrlDisp->CreatStaFunBtnToolBar();
+
+		m_pStationMultiDisp = CreateMultiStationDisp();
+		m_pStationLogDisp = CreateTrafficLogManage();
 	}
 
     QAction* CTCMainWindow::MenuInfo::addNewAction(QWidget* parent, const int& level, const int& index, const QString& text, const bool& Enabled, const bool& isCheckable, const bool& isChecked)

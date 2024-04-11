@@ -23,24 +23,21 @@ namespace Station {
 
         void StaBraidLine::Draw(const bool& bElapsed, const bool& isMulti)
         {
-            if (!m_pPainter)
-                return;
-
             return StaDistant::Draw(bElapsed, isMulti);
         }
 
         void StaBraidLine::DrawLight()
         {
-            m_pPainter->setRenderHint(QPainter::Antialiasing, true);
+            m_pPainter.setRenderHint(QPainter::Antialiasing, true);
 
-            m_pPainter->setPen(QPen(COLOR_LIGHT_WHITE, 1));
-            m_pPainter->setBrush((m_nState & 0x04) ? COLOR_LIGHT_RED : COLOR_LIGHT_BLACK);
+            m_pPainter.setPen(QPen(COLOR_LIGHT_WHITE, 1));
+            m_pPainter.setBrush((m_nState & 0x04) ? COLOR_LIGHT_RED : COLOR_LIGHT_BLACK);
 
             //允许发车
-            m_pPainter->setBrush((m_nState & 0x01) ? COLOR_LIGHT_RED : COLOR_LIGHT_BLACK);
-            m_pPainter->drawEllipse(Scale(m_rcAllowLamp));
+            m_pPainter.setBrush((m_nState & 0x01) ? COLOR_LIGHT_RED : COLOR_LIGHT_BLACK);
+            m_pPainter.drawEllipse(Scale(m_rcAllowLamp));
 
-            m_pPainter->setRenderHint(QPainter::Antialiasing, false);
+            m_pPainter.setRenderHint(QPainter::Antialiasing, false);
         }
 
         void StaBraidLine::DrawText()
@@ -49,12 +46,12 @@ namespace Station {
             font.setFamily("微软雅黑");
             font.setPixelSize(Scale(m_nFontSize));//字号
 
-            m_pPainter->setFont(font);//设置字体
-            m_pPainter->setPen(Qt::white);
+            m_pPainter.setFont(font);//设置字体
+            m_pPainter.setPen(Qt::white);
 
             QFontMetrics  fontMetrics(font);
             //允许发车
-            m_pPainter->drawText(Scale(QRect(m_rcAllowText.topLeft(), fontMetrics.size(Qt::TextSingleLine, "允许发车"))), "允许发车", QTextOption(Qt::AlignCenter));
+            m_pPainter.drawText(Scale(QRect(m_rcAllowText.topLeft(), fontMetrics.size(Qt::TextSingleLine, "允许发车"))), "允许发车", QTextOption(Qt::AlignCenter));
         }
 
         void StaBraidLine::setVollover(const QPoint& ptBase)

@@ -1,3 +1,4 @@
 #include "Global.h"
 
-Station::StationObject* m_pStationObject = nullptr;
+//定义全局变量
+Station::StationObject* m_staMainStation = nullptr;

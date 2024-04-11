@@ -39,10 +39,7 @@ namespace CTCWindows {
 	public:
 		StationCtrlDisp* GetStationCtrlDisp() { return m_pStationCtrlDisp; }
 	
-	private:
-		StationCtrlDisp* m_pStationCtrlDisp = nullptr;
-		StationMultiDisp* m_pStationMultiDisp = nullptr;
-		StationLogDisp* m_pStationLogDisp = nullptr;
+	
 		
 	protected:
 		struct MenuInfo {
@@ -66,6 +63,12 @@ namespace CTCWindows {
 			void addSeparator();
 			MenuInfo* getSubActionByIndex(int level, ...);
 		};
+
+	private:
+		StationCtrlDisp* m_pStationCtrlDisp = nullptr;
+		StationMultiDisp* m_pStationMultiDisp = nullptr;
+		StationLogDisp* m_pStationLogDisp = nullptr;
+
 	protected:
 		//主菜单
 		QMenuBar* m_pMenuBar = nullptr;

@@ -32,8 +32,7 @@ namespace Station {
             void DrawDeviceNameRange();
             //绘制信号机按钮虚线框
             void DrawButtonRange();
-            //判断鼠标是否在高亮显示范围内
-            bool ContainsVisible(QPoint ptPos);
+
             //获取信号灯颜色
             void GetSignalLightColor(const bool& bElapsed);
             //获取设备名称颜色

@@ -11,25 +11,26 @@ namespace CTCDoc{
 	CTCObject::CTCObject()
 	{
 		socketUDP = new Socket::SocketUDP;
-		m_pStationObject = new Station::StationObject;
+		m_staMainStation = new Station::StationObject;
 
 		if (ConfigInit() < 0) {
 			qDebug() << "配置文件解析失败。";
 		}
 		//初始化站场设备
-		m_pStationObject->InitStaDevice();
+		m_staMainStation->InitStaDevice();
 
 		//网络通信初始化
+		socketUDP->InitSocket();
 		QObject::connect(socketUDP, &Socket::SocketUDP::recvDataSignal, [&](QByteArray dataAyyay) {
-			m_pStationObject->UnpackDataPacket(dataAyyay);
+			m_staMainStation->UnpackData(dataAyyay);
 		});
 		
 	}
 
 	CTCObject::~CTCObject()
 	{
-		delete m_pStationObject;
-		m_pStationObject = nullptr;
+		delete m_staMainStation;
+		m_staMainStation = nullptr;
 
 		delete socketUDP;
 		socketUDP = nullptr;
@@ -48,7 +49,7 @@ namespace CTCDoc{
 		if (m_pCTCMainWindow) {
 			//初始化主界面
 			m_pCTCMainWindow->InitStattionView();
-			m_pStationObject->InitDeviceEventFilter(m_pCTCMainWindow->GetStationCtrlDisp()->GetStationPaintView());
+			m_staMainStation->InitDeviceEventFilter(m_pCTCMainWindow->GetStationCtrlDisp()->GetStationPaintView());
 		}
 		return m_pCTCMainWindow;
 	}
@@ -77,17 +78,17 @@ namespace CTCDoc{
 		// 提取根节点
 		QJsonObject rootObj = josnDoc.object();
 		//站名
-		m_pStationObject->setStationName(rootObj.value("staName").toString());
+		m_staMainStation->setStationName(rootObj.value("staName").toString());
 		//站场界面类型
 		m_nStationViewType = rootObj.value("StationType").toInt();
 		//联锁通信地址
 		QJsonObject addressObj = rootObj.value("comAddress").toObject();
 		socketUDP->setLocalAddress(QHostAddress(addressObj.value("localIp").toString()), addressObj.value("localPort").toInt());
-		socketUDP->setLocalAddress(QHostAddress(addressObj.value("interlockIp").toString()), addressObj.value("interlockPort").toInt());
+		socketUDP->setInterlockAddress(QHostAddress(addressObj.value("interlockIp").toString()), addressObj.value("interlockPort").toInt());
 		//解析站场设备
 		QString path = rootObj.value("deviceInfo").toString();
 		QString path2 = rootObj.value("lampInfo").toString();
-		if (m_pStationObject->ReadStationInfo(rootObj.value("deviceInfo").toString()) < 0) {
+		if (m_staMainStation->ReadStationInfo(rootObj.value("deviceInfo").toString()) < 0) {
 			qDebug() << "无效的xml文件.";
 			return -1;
 		}

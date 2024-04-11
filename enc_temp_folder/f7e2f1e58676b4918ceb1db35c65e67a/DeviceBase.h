@@ -41,8 +41,7 @@ namespace Station {
             virtual void Draw(const bool& bElapsed, const bool& isMulti = false);
             //绘制设备选中虚线框
             virtual void DrawSelectRange();
-            //判断鼠标是否在高亮显示范围内
-            virtual bool ContainsVisible(QPoint ptPos);
+            
             //获取设备名称颜色
             virtual QPen getDeviceNameColor(const bool& bElapsed);
             //站场翻转
@@ -86,6 +85,7 @@ namespace Station {
 
             uint m_nState = 0;         //设备状态
             bool m_bRangeVisible = false; //是否高亮
+            QRect m_rcRespondRect;  //鼠标响应区域
 
         protected:
             static QPainter m_pPainter;    //绘制器

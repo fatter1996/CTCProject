@@ -57,13 +57,9 @@ namespace Station {
     
         void StaSwitch::Draw(const bool& bElapsed, const bool& isMulti)
         {
-            if (!m_pPainter)
-                return;
-
             //绘制股道
-            QColor cColor = getTrackColor(bElapsed);
             DrawTrack(QPen(getTrackColor(bElapsed), Scale(TRACK_WIDTH), Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin), m_nSwitchState | SWITCH_DRAW_CQ);
-            DrawTrack(QPen(COLOR_TRACK_BLUE, Scale(TRACK_WIDTH), Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin), 0x07 ^(m_nSwitchState | SWITCH_DRAW_CQ));
+            DrawTrack(QPen(COLOR_TRACK_BLUE, Scale(TRACK_WIDTH), Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin), 0x07 ^ (m_nSwitchState | SWITCH_DRAW_CQ));
             //绘制岔心
             DrawSwitchCenterTrack(bElapsed);
             //绘制股道状态
@@ -117,7 +113,8 @@ namespace Station {
                 }
             }
             else {
-                DrawSwitchCenter(QPen(getSwitchCenterColor(bElapsed), Scale(TRACK_WIDTH), Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin), m_nSwitchState & 0x03);
+                QColor cColor = getSwitchCenterColor(bElapsed);
+                DrawSwitchCenter(QPen(cColor == Qt::black ? Qt::NoPen : cColor, Scale(TRACK_WIDTH), Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin), m_nSwitchState & 0x03);
             }
 
             if (m_nSpeedLimit) { //临时限速
@@ -159,67 +156,67 @@ namespace Station {
 
         void StaSwitch::DrawSelectRange()
         {
-            m_pPainter->setPen(QPen(COLOR_TRACK_WHITE, 1, Qt::DashLine));
+            m_pPainter.setPen(QPen(COLOR_TRACK_WHITE, 1, Qt::DashLine));
             //道岔虚线框
             int minX = MIN(MIN(p12.x(), p34.x()), p56.x());
             int minY = MIN(MIN(p12.y(), p34.y()), p56.y());
             int maxX = MAX(MAX(p12.x(), p34.x()), p56.x());
             int maxY = MAX(MAX(p12.y(), p34.y()), p56.y());
             m_rcDevRect = QRect(QPoint(minX - 10, minY - 10), QPoint(maxX + 10, maxY + 10));
-            m_pPainter->drawRect(Scale(m_rcDevRect));
+            m_pPainter.drawRect(Scale(m_rcDevRect));
 
             return DeviceBase::DrawSelectRange();
         }
 
         void StaSwitch::DrawInsulateNode()
         {
-            m_pPainter->setRenderHint(QPainter::Antialiasing, true);
+            m_pPainter.setRenderHint(QPainter::Antialiasing, true);
             
             //岔前
             if (m_nJyj & SWITCH_KINK_CQ) {
                 if (m_nCxjy & SWITCH_KINK_CQ) {
-                    m_pPainter->setPen(QPen(COLOR_TRACK_BLUE, 1));
-                    m_pPainter->drawEllipse(p12, Scale(5), Scale(5));
+                    m_pPainter.setPen(QPen(COLOR_TRACK_BLUE, 1));
+                    m_pPainter.drawEllipse(p12, Scale(5), Scale(5));
                 }
-                m_pPainter->setPen(QPen(COLOR_TRACK_BLUE, 2));
-                m_pPainter->drawLine(p1, p2);
+                m_pPainter.setPen(QPen(COLOR_TRACK_BLUE, 2));
+                m_pPainter.drawLine(p1, p2);
             }
             //定位
             if (m_nJyj & SWITCH_KINK_DW) {
                 if (m_nCxjy & SWITCH_KINK_DW) {
-                    m_pPainter->setPen(QPen(COLOR_TRACK_BLUE, 1));
-                    m_pPainter->drawEllipse(p34, Scale(5), Scale(5));
+                    m_pPainter.setPen(QPen(COLOR_TRACK_BLUE, 1));
+                    m_pPainter.drawEllipse(p34, Scale(5), Scale(5));
                 }
-                m_pPainter->setPen(QPen(COLOR_TRACK_BLUE, 2));
-                m_pPainter->drawLine(p3, p4);
+                m_pPainter.setPen(QPen(COLOR_TRACK_BLUE, 2));
+                m_pPainter.drawLine(p3, p4);
             }
             //反位
             if (m_nJyj & SWITCH_KINK_FW) {
                 if (m_nCxjy & SWITCH_KINK_FW) {
-                    m_pPainter->setPen(QPen(COLOR_TRACK_BLUE, 1));
-                    m_pPainter->drawEllipse(p56, Scale(5), Scale(5));
+                    m_pPainter.setPen(QPen(COLOR_TRACK_BLUE, 1));
+                    m_pPainter.drawEllipse(p56, Scale(5), Scale(5));
                 }
-                m_pPainter->setPen(QPen(COLOR_TRACK_BLUE, 2));
-                m_pPainter->drawLine(p5, p6);
+                m_pPainter.setPen(QPen(COLOR_TRACK_BLUE, 2));
+                m_pPainter.drawLine(p5, p6);
             }
 
-            m_pPainter->setRenderHint(QPainter::Antialiasing, false);
+            m_pPainter.setRenderHint(QPainter::Antialiasing, false);
         }
 
         void StaSwitch::DrawSwitchState()
         {
             if (m_nSwitchState & SWITCH_STATE_LOCK) { //单锁
                 //反走样,防止出现锯齿状线条
-                m_pPainter->setRenderHint(QPainter::Antialiasing, true);
+                m_pPainter.setRenderHint(QPainter::Antialiasing, true);
 
-                m_pPainter->setPen(QPen(isSwitchSK() ? COLOR_TRACK_RED : COLOR_TRACK_GREEN, Scale(1)));
-                m_pPainter->drawEllipse(m_ptCenter, Scale(8), Scale(8));
+                m_pPainter.setPen(QPen(isSwitchSK() ? COLOR_TRACK_RED : COLOR_TRACK_GREEN, Scale(1)));
+                m_pPainter.drawEllipse(m_ptCenter, Scale(8), Scale(8));
 
-                m_pPainter->setRenderHint(QPainter::Antialiasing, false);
+                m_pPainter.setRenderHint(QPainter::Antialiasing, false);
             }
             if (m_nSwitchState & SWITCH_STATE_BLOCK) { //封锁
-                m_pPainter->setPen(QPen(Qt::red, Scale(1)));
-                m_pPainter->drawRect(Scale(m_rcTextRect));
+                m_pPainter.setPen(QPen(Qt::red, Scale(1)));
+                m_pPainter.drawRect(Scale(m_rcTextRect));
             }
         }
 
@@ -235,7 +232,7 @@ namespace Station {
 
         QColor StaSwitch::getSwitchCenterColor(const bool& bElapsed)
         {
-            QColor cTrackColor;
+            QColor cTrackColor = Qt::black;
 
             if (m_nSwitchState & SWITCH_DRAW_DW) {
                 cTrackColor = COLOR_TRACK_GREEN;
@@ -252,7 +249,7 @@ namespace Station {
             }
 
             if (m_nState & SECTION_STATE_PRELOCK) {
-                cTrackColor = Qt::blue;
+                cTrackColor = COLOR_TRACK_PRELOCK_BLUE;
             }
             else if (m_nState & SECTION_STATE_LOCK) {
                 cTrackColor = COLOR_TRACK_WHITE;
@@ -289,6 +286,11 @@ namespace Station {
             }
 
             return pen;
+        }
+
+        void StaSwitch::setSwitchState(const uint& nSwitchState)
+        { 
+            m_nSwitchState = nSwitchState;
         }
 
         bool StaSwitch::isSwitchSK()

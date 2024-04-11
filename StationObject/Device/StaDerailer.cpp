@@ -26,21 +26,17 @@ namespace Station {
 
         void StaDerailer::Draw(const bool& bElapsed, const bool& isMulti)
         {
-            if (!m_pPainter)
-                return;
-            
             DrawDerailer();
-
             return DeviceBase::Draw(bElapsed, isMulti);
         }
 
         void StaDerailer::DrawDerailer()
         {
-            m_pPainter->setRenderHint(QPainter::Antialiasing, true);
-            m_pPainter->setPen(QPen(COLOR_TRACK_BLUE, 2));
-            m_pPainter->setBrush(COLOR_BTN_GRAY);
-            m_pPainter->drawPolygon(QPolygon() << Scale(p1) << Scale(p2) << Scale(p3));
-            m_pPainter->setRenderHint(QPainter::Antialiasing, false);
+            m_pPainter.setRenderHint(QPainter::Antialiasing, true);
+            m_pPainter.setPen(QPen(COLOR_TRACK_BLUE, 2));
+            m_pPainter.setBrush(COLOR_BTN_GRAY);
+            m_pPainter.drawPolygon(QPolygon() << Scale(p1) << Scale(p2) << Scale(p3));
+            m_pPainter.setRenderHint(QPainter::Antialiasing, false);
         }
 
         QPen StaDerailer::getDeviceNameColor(const bool& bElapsed)

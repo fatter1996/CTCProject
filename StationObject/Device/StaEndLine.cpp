@@ -26,22 +26,18 @@ namespace Station {
 
         void StaEndLine::Draw(const bool& bElapsed, const bool& isMulti)
         {
-            if (!m_pPainter)
-                return;
-
             DrawEndLine();
-
             return DeviceBase::Draw(bElapsed, isMulti);
         }
 
         void StaEndLine::DrawEndLine()
         {
-            m_pPainter->setPen(QPen(COLOR_TRACK_WHITE, 2));
-            m_pPainter->drawLine(Scale(p1), Scale(p6));
-            m_pPainter->drawLine(Scale(p2), Scale(p7));
-            m_pPainter->drawLine(Scale(p6), Scale(p7));
-            m_pPainter->drawLine(Scale(p4), Scale(p5));
-            m_pPainter->drawLine(Scale(p3), Scale(QPoint(p4.x(), p3.y())));
+            m_pPainter.setPen(QPen(COLOR_TRACK_WHITE, 2));
+            m_pPainter.drawLine(Scale(p1), Scale(p6));
+            m_pPainter.drawLine(Scale(p2), Scale(p7));
+            m_pPainter.drawLine(Scale(p6), Scale(p7));
+            m_pPainter.drawLine(Scale(p4), Scale(p5));
+            m_pPainter.drawLine(Scale(p3), Scale(QPoint(p4.x(), p3.y())));
         }
 
         void StaEndLine::setVollover(const QPoint& ptBase)

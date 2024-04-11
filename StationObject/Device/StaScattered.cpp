@@ -80,43 +80,40 @@ namespace Station {
     
         void StaScattered::Draw(const bool& bElapsed, const bool& isMulti)
         {
-            if (!m_pPainter)
-                return;
-
             return DeviceBase::Draw(bElapsed, isMulti);
         }
 
         void StaScattered::DrawLight()
         {
-            m_pPainter->setRenderHint(QPainter::Antialiasing, true);
+            m_pPainter.setRenderHint(QPainter::Antialiasing, true);
 
-            m_pPainter->setPen(QPen(COLOR_LIGHT_WHITE, 1));
+            m_pPainter.setPen(QPen(COLOR_LIGHT_WHITE, 1));
             //熔丝报警
-            m_pPainter->setBrush((m_nState & 0x01) ? COLOR_LIGHT_RED : COLOR_LIGHT_BLACK);
-            m_pPainter->drawEllipse(Scale(m_rcFuseAlarmLemp));
+            m_pPainter.setBrush((m_nState & 0x01) ? COLOR_LIGHT_RED : COLOR_LIGHT_BLACK);
+            m_pPainter.drawEllipse(Scale(m_rcFuseAlarmLemp));
             //主副电源
-            m_pPainter->drawEllipse(Scale(m_rcMainAuxPowerLemp));
+            m_pPainter.drawEllipse(Scale(m_rcMainAuxPowerLemp));
             //上行轨道停电
-            m_pPainter->drawEllipse(Scale(m_rcTrackOutageSLemp));
+            m_pPainter.drawEllipse(Scale(m_rcTrackOutageSLemp));
             //下行轨道停电
-            m_pPainter->drawEllipse(Scale(m_rcTrackOutageXLemp));
+            m_pPainter.drawEllipse(Scale(m_rcTrackOutageXLemp));
 
             //上行总锁闭
-            m_pPainter->drawEllipse(Scale(m_rcTotalLockSLemp));
+            m_pPainter.drawEllipse(Scale(m_rcTotalLockSLemp));
             //下行总锁闭
-            m_pPainter->drawEllipse(Scale(m_rcTotalLockXLemp));
+            m_pPainter.drawEllipse(Scale(m_rcTotalLockXLemp));
 
             //上行灯丝断丝
-            m_pPainter->drawEllipse(Scale(m_rcFilamentBreakSLemp));
+            m_pPainter.drawEllipse(Scale(m_rcFilamentBreakSLemp));
             //下行灯丝断丝
-            m_pPainter->drawEllipse(Scale(m_rcFilamentBreakXLemp));
+            m_pPainter.drawEllipse(Scale(m_rcFilamentBreakXLemp));
 
             //挤岔报警
-            m_pPainter->drawEllipse(Scale(m_rcCrowdAlarmLemp));
+            m_pPainter.drawEllipse(Scale(m_rcCrowdAlarmLemp));
             //电码化报警
-            m_pPainter->drawEllipse(Scale(m_rcCodeAlarmLemp));
+            m_pPainter.drawEllipse(Scale(m_rcCodeAlarmLemp));
 
-            m_pPainter->setRenderHint(QPainter::Antialiasing, false);
+            m_pPainter.setRenderHint(QPainter::Antialiasing, false);
         }
         
 
@@ -126,19 +123,19 @@ namespace Station {
             font.setFamily("微软雅黑");
             font.setPixelSize(Scale(m_nFontSize));//字号
 
-            m_pPainter->setFont(font);//设置字体
-            m_pPainter->setPen(Qt::white);
+            m_pPainter.setFont(font);//设置字体
+            m_pPainter.setPen(Qt::white);
 
-            m_pPainter->drawText(Scale(m_rcFuseAlarmText), "熔丝报警", QTextOption(Qt::AlignCenter));
-            m_pPainter->drawText(Scale(m_rcMainAuxPowerText), "主副电源", QTextOption(Qt::AlignCenter));
-            m_pPainter->drawText(Scale(m_rcTrackOutageSText), "上行轨道停电", QTextOption(Qt::AlignCenter));
-            m_pPainter->drawText(Scale(m_rcTrackOutageXText), "下行轨道停电", QTextOption(Qt::AlignCenter));
-            m_pPainter->drawText(Scale(m_rcTotalLockSText), "上行总锁闭", QTextOption(Qt::AlignCenter));
-            m_pPainter->drawText(Scale(m_rcTotalLockXText), "下行总锁闭", QTextOption(Qt::AlignCenter));
-            m_pPainter->drawText(Scale(m_rcFilamentBreakSText), "上行灯丝断丝", QTextOption(Qt::AlignCenter));
-            m_pPainter->drawText(Scale(m_rcFilamentBreakXText), "下行灯丝断丝", QTextOption(Qt::AlignCenter));
-            m_pPainter->drawText(Scale(m_rcCrowdAlarmText), "挤岔报警", QTextOption(Qt::AlignCenter));
-            m_pPainter->drawText(Scale(m_rcCodeAlarmText), "电码化报警", QTextOption(Qt::AlignCenter));
+            m_pPainter.drawText(Scale(m_rcFuseAlarmText), "熔丝报警", QTextOption(Qt::AlignCenter));
+            m_pPainter.drawText(Scale(m_rcMainAuxPowerText), "主副电源", QTextOption(Qt::AlignCenter));
+            m_pPainter.drawText(Scale(m_rcTrackOutageSText), "上行轨道停电", QTextOption(Qt::AlignCenter));
+            m_pPainter.drawText(Scale(m_rcTrackOutageXText), "下行轨道停电", QTextOption(Qt::AlignCenter));
+            m_pPainter.drawText(Scale(m_rcTotalLockSText), "上行总锁闭", QTextOption(Qt::AlignCenter));
+            m_pPainter.drawText(Scale(m_rcTotalLockXText), "下行总锁闭", QTextOption(Qt::AlignCenter));
+            m_pPainter.drawText(Scale(m_rcFilamentBreakSText), "上行灯丝断丝", QTextOption(Qt::AlignCenter));
+            m_pPainter.drawText(Scale(m_rcFilamentBreakXText), "下行灯丝断丝", QTextOption(Qt::AlignCenter));
+            m_pPainter.drawText(Scale(m_rcCrowdAlarmText), "挤岔报警", QTextOption(Qt::AlignCenter));
+            m_pPainter.drawText(Scale(m_rcCodeAlarmText), "电码化报警", QTextOption(Qt::AlignCenter));
         }
 
         void StaScattered::setVollover(const QPoint& ptBase)

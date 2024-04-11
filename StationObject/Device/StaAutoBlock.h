@@ -10,6 +10,16 @@ namespace Station {
             explicit StaAutoBlock(QObject* parent = nullptr);
             ~StaAutoBlock();
 
+        public:
+            struct StaLeaveTrack
+            {
+                uint m_nIndex = 0;
+                QString m_strName;
+                QPoint m_ptName;
+                QRect m_rcTrack;
+                uint m_nState = 0;
+            };
+
         private:
             virtual bool eventFilter(QObject* obj, QEvent* event);
 
@@ -17,7 +27,7 @@ namespace Station {
             //站场绘制
             void Draw(const bool& bElapsed, const bool& isMulti = false);
             //绘制接近/离去区段
-            void DrawLeaveTrack(const bool& bElapsed);
+            void DrawLeaveTrack(const bool& bElapsed, const StaLeaveTrack& track);
             //绘制信号灯
             void DrawLight();
             //绘制文字
@@ -37,16 +47,6 @@ namespace Station {
         public:
             //设置接近/离去区段状态
             void setLeaveTrackState(int nState);
-
-        public:
-            struct StaLeaveTrack
-            {
-                uint m_nIndex = 0;
-                QString m_strName;
-                QPoint m_ptName;
-                QRect m_rcTrack;
-                int m_nState = 0;
-            };
 
         private:
             QRect m_rcZFZBtn;
