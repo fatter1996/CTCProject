@@ -42,11 +42,11 @@ namespace Station {
             return DeviceBase::eventFilter(obj, event);
         }
 
-        void StaHump::Draw(const bool& bElapsed, const bool& isMulti)
+        void StaHump::Draw(const bool& isMulti)
         {
             DrawHump();
-            DrawButton(m_pPainter, bElapsed, Scale(m_rcButton), COLOR_BTN_DEEPGRAY);
-            return StaDistant::Draw(bElapsed, isMulti);
+            DrawButton(m_pPainter, Scale(m_rcButton), COLOR_BTN_DEEPGRAY, m_nBtnState);
+            return StaDistant::Draw(isMulti);
         }
 
         void StaHump::DrawHump()
@@ -99,6 +99,11 @@ namespace Station {
             m_pPainter.drawText(Scale(QRect(m_ptAllow, fontMetrics.size(Qt::TextSingleLine, "允许推送"))), "允许推送", QTextOption(Qt::AlignCenter));
             //照查  
             m_pPainter.drawText(Scale(QRect(m_ptTakeLook, fontMetrics.size(Qt::TextSingleLine, "照查"))), "照查", QTextOption(Qt::AlignCenter));
+        }
+
+        bool StaHump::IsMouseWheel(const QPoint& ptPos)
+        {
+            return false;
         }
 
         void StaHump::OnButtonClick()

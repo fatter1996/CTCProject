@@ -6,7 +6,7 @@ namespace CTCWindows {
 		: StationCtrlDisp(parent)
 	{
 		ui.setupUi(this);
-		ui.widget->setFixedSize(m_staMainStation->getStaFixedSize());
+		//ui.widget->setFixedSize(m_staMainStation->getStaFixedSize());
 	}
 
 	StationCtrlDispTKY::~StationCtrlDispTKY()
@@ -20,7 +20,7 @@ namespace CTCWindows {
 		this->layout()->addWidget(m_pStaFunBtnToolBar);
 	}
 
-	QWidget* StationCtrlDispTKY::GetStationPaintView()
+	QWidget* StationCtrlDispTKY::StaPaintView()
 	{
 		return ui.widget;
 	}

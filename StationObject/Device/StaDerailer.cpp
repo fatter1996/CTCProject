@@ -24,10 +24,10 @@ namespace Station {
             return DeviceBase::eventFilter(obj, event);
         }
 
-        void StaDerailer::Draw(const bool& bElapsed, const bool& isMulti)
+        void StaDerailer::Draw(const bool& isMulti)
         {
             DrawDerailer();
-            return DeviceBase::Draw(bElapsed, isMulti);
+            return DeviceBase::Draw(isMulti);
         }
 
         void StaDerailer::DrawDerailer()
@@ -39,7 +39,7 @@ namespace Station {
             m_pPainter.setRenderHint(QPainter::Antialiasing, false);
         }
 
-        QPen StaDerailer::getDeviceNameColor(const bool& bElapsed)
+        QPen StaDerailer::getDeviceNameColor()
         {
             return QPen(Qt::red);
         }

@@ -1,5 +1,4 @@
 #include "StaFunBtnToolBarTKY.h"
-#include <QDebug>
 #include <QButtonGroup>
 #include <QAbstractButton>
 #include "Global.h"
@@ -31,12 +30,11 @@ namespace CTCWindows {
 
 		FunBtnStateReset();
 
-		connect(ui.buttonGroup, qOverload<QAbstractButton*>(&QButtonGroup::buttonClicked), [&](QAbstractButton* pButton) {
-			if (ui.buttonGroup->checkedButton() == pButton) {
-				m_SelectFunType = m_mapFunBtnType[pButton];
-				qDebug() << pButton->objectName();
-			}
-		});
+		connect(ui.buttonGroup, qOverload<QAbstractButton*>(&QButtonGroup::buttonClicked), this, &StaFunBtnToolBarTKY::onButtonClicked);
+		//ÃüÁîÇå³ý
+		connect(ui.FunBtn21_CommandClear, &QPushButton::clicked, this, &StaFunBtnToolBarTKY::onOrderClear);
+		//ÃüÁîÏÂ´ï
+		connect(ui.FunBtn22_CommandIssued, &QPushButton::clicked, this, &StaFunBtnToolBarTKY::onOrderIssued);
 	}
 
 	StaFunBtnToolBarTKY::~StaFunBtnToolBarTKY()

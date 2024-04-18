@@ -28,10 +28,26 @@ namespace CTCWindows {
 
 		m_pStationCtrlDisp = CreateStationCtrlDisp();
         m_pStationCtrlDisp->CreatStaFunBtnToolBar();
+        //connect(m_pStationCtrlDisp->GetStationPaintView);
 
 		m_pStationMultiDisp = CreateMultiStationDisp();
 		m_pStationLogDisp = CreateTrafficLogManage();
 	}
+
+    QWidget* CTCMainWindow::StaPaintView() 
+    { 
+        return m_pStationCtrlDisp->StaPaintView(); 
+    }
+
+    const QWidget* CTCMainWindow::StaFunBtnToolBar()
+    {
+        return m_pStationCtrlDisp->StaFunBtnBar();
+    }
+
+    void CTCMainWindow::setFixedSize(const QSize& size)
+    {
+        StaPaintView()->setFixedSize(size);
+    }
 
     QAction* CTCMainWindow::MenuInfo::addNewAction(QWidget* parent, const int& level, const int& index, const QString& text, const bool& Enabled, const bool& isCheckable, const bool& isChecked)
     {

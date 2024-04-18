@@ -1,6 +1,6 @@
 ﻿#pragma once
 #include "StationObject/StationObject.h"
-
+#include <QDebug>
 //设备类型
 #define ALLDEVICE		"Device"		//全部设备
 #define SWITCH			"DC"			//道岔
@@ -91,13 +91,11 @@
 #define  SIGNAL_STATE_HS	0x0EU		//红闪
 #define  SIGNAL_STATE_USU	0x0FU		//黄闪黄
 
-
-
-
-
-
-
-
+//通信目标软件类型
+#define	 TARGET_INTERLOCK	0xAA		//联锁
+#define	 TARGET_TEACHER		0xBB		//联锁
+#define	 TARGET_CTC			0xCC		//CTC
+#define	 TARGET_CULTIVATE	0xDD		//培训软件
 
 //自定义颜色
 #define COLOR_TRACK_DEEPBLUE			QColor("#202040")
@@ -128,6 +126,3 @@
 #define COLOR_LIGHT_WHITE				QColor("#FCFCFC")
 #define COLOR_LIGHT_BLUE				QColor("#4876FF")
 
-
-//全局变量
-extern Station::StationObject* m_staMainStation;

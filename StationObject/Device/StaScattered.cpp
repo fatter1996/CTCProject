@@ -78,9 +78,9 @@ namespace Station {
             return DeviceBase::eventFilter(obj, event);
         }
     
-        void StaScattered::Draw(const bool& bElapsed, const bool& isMulti)
+        void StaScattered::Draw(const bool& isMulti)
         {
-            return DeviceBase::Draw(bElapsed, isMulti);
+            return DeviceBase::Draw(isMulti);
         }
 
         void StaScattered::DrawLight()

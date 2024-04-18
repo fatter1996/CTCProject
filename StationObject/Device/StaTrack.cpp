@@ -19,14 +19,19 @@ namespace Station {
             return StaSection::eventFilter(obj, event);
         }
 
-        void StaTrack::Draw(const bool& bElapsed, const bool& isMulti)
+        void StaTrack::InitDeviceAttribute()
+        {
+            m_rcRespondRect = QRect(p1, p4);
+        }
+
+        void StaTrack::Draw(const bool& isMulti)
         {
             //绘制股道底部的灰色区域
             DrawTrackBack();
             //绘制股道
-            DrawTrack(QPen(getTrackColor(bElapsed), Scale(TRACK_WIDTH), Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
+            DrawTrack(QPen(getTrackColor(), Scale(TRACK_WIDTH), Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
 
-            return StaSection::Draw(bElapsed, isMulti);
+            return StaSection::Draw(isMulti);
         }
 
         void StaTrack::DrawTrackBack()
@@ -57,17 +62,17 @@ namespace Station {
             }
         }
 
-        void StaTrack::DrawDeviceOutSide(const bool& bElapsed)
+        void StaTrack::DrawDeviceOutSide()
         {
             //绘制股道外边缘-分路不良
             if (m_bShuntFault) {
                 if (m_bSpeedLimit || m_bPowerCut) {
-                    if (m_bShuntFaultIdle || bElapsed) {
+                    if (m_bShuntFaultIdle || m_bElapsed) {
                         DrawTrack(QPen(COLOR_TRACK_OUTSIDE_RED, 2), true, 4);
                     }
                 }
                 else {
-                    if (m_bShuntFaultIdle || bElapsed) {
+                    if (m_bShuntFaultIdle || m_bElapsed) {
                         DrawTrack(QPen(COLOR_TRACK_OUTSIDE_RED, 2), true, 2);
                     }
                 }
@@ -99,9 +104,29 @@ namespace Station {
             m_pPainter.drawLine(Scale(QPoint(p3.x(), p3.y())), Scale(QPoint(p4.x(), p4.y()))); //绘制轨道区段右侧绝缘节
         }
 
-        QPen StaTrack::getDeviceNameColor(const bool& bElapsed)
+        bool StaTrack::Contains(const QPoint& ptPos)
         {
-            return QPen(m_bRangeVisible ? Qt::black : Qt::white);
+            return m_rcTextRect.contains(ptPos) || m_rcRespondRect.contains(ptPos);
+        }
+
+        void StaTrack::InitClickEvent()
+        {
+            for (int i = 0; i < static_cast<int>(CTCWindows::FunType::MethodConvert); ++i) {
+                switch (i)
+                {
+                case static_cast<int>(CTCWindows::FunType::RegionRelieve):      //区故解
+                case static_cast<int>(CTCWindows::FunType::Blockade):           //封锁
+                case static_cast<int>(CTCWindows::FunType::UnBlockade):         //解封
+                case static_cast<int>(CTCWindows::FunType::RampUnlock):         //坡道解锁
+                case static_cast<int>(CTCWindows::FunType::PoorRoute):          //分路不良
+                case static_cast<int>(CTCWindows::FunType::IdleConfirm): {      //确认空闲
+                    m_mapClickEvent.insert(static_cast<CTCWindows::FunType>(i), [&]() {
+                        StationObject::AddSelectDevice(this);
+                    });
+                    break;
+                }
+                }
+            }
         }
 
         void StaTrack::setVollover(const QPoint& ptBase)

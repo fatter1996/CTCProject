@@ -12,7 +12,7 @@ namespace Station {
 
         private:
             //站场绘制
-            void Draw(const bool& bElapsed, const bool& isMulti = false);
+            void Draw(const bool& isMulti = false);
 
             //站场翻转
             void setVollover(const QPoint& ptBase);

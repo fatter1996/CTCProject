@@ -1,23 +1,36 @@
-﻿#include "StaStateProtocol.h"
+﻿#include "StaProtocol.h"
 #include "Global.h"
 #include "../Device/StaDevice.h"
 #include <QDebug>
+
 namespace Station {
-    namespace Protocol {
+    namespace Transmission {
         using namespace Device;
 
-        StaStateProtocol::StaStateProtocol(QMap<QString, QVector<DeviceBase*>>& mapDeviceVector) 
+        StaProtocol::StaProtocol(QMap<QString, QVector<DeviceBase*>>& mapDeviceVector)
             : m_mapDeviceVector(mapDeviceVector)
         {
-        
+            m_mapUnPackOrder.insert(0x40, [=](const QByteArray& dataAyyay) { UnpackStaViewState(dataAyyay); });
+            m_mapUnPackOrder.insert(0x80, [=](const QByteArray& dataAyyay) { UnpackLogin(dataAyyay); });
+            m_mapUnPackOrder.insert(0x81, [=](const QByteArray& dataAyyay) { UnpackCultivate(dataAyyay); });
         }
 
-        StaStateProtocol::~StaStateProtocol()
+        StaProtocol::~StaProtocol()
         {
         
         }
 
-        void StaStateProtocol::UnpackStaViewState(QByteArray& dataAyyay)
+        void StaProtocol::UnpackData(const QByteArray& dataAyyay)
+        {
+            m_mapUnPackOrder[dataAyyay[10] & 0xFF](dataAyyay);
+        }
+
+        void StaProtocol::UnpackLogin(const QByteArray& dataAyyay)
+        {
+        
+        }
+
+        void StaProtocol::UnpackStaViewState(const QByteArray& dataAyyay)
         {
             int nFlag = 3 + 4;
             //道岔
@@ -111,43 +124,25 @@ namespace Station {
                     bAddByte = !bAddByte;
                 }
             }
-            
-            /*
-            //通过按钮
-            StaButton* pButton = nullptr;
-            for (DeviceBase* pDevice : StationObject::m_vecButton) {
-                pButton = dynamic_cast<StaButton*>(pDevice);
-                if (!bAddByte) {
-                    pButton->setState(dataAyyay[nFlag] & 0x0f);
-                    if (pButton == StationObject::m_vecButton.at(StationObject::m_vecButton.size() - 1)) {
-                        nFlag++;
-                    }
-                }
-                else {
-                    pButton->setState((dataAyyay[nFlag++] >> 4) & 0x0f);
-                }
-                bAddByte = !bAddByte;
-            }
-            
-            
-            
-            
-            //站联
-            
-            //电码化
             //自动闭塞
-            StaAutoBlock* pAutoBlock = nullptr;
-            for (DeviceBase* pDevice : StationObject::m_vecAutoBlock) {
-                pAutoBlock = dynamic_cast<StaAutoBlock*>(pDevice);
-                pAutoBlock->setArrowState(dataAyyay[nFlag] & 0x0f);
-                pAutoBlock->setState((dataAyyay[nFlag] & 0xf0) + ((dataAyyay[nFlag + 1] & 0xff) << 8));
-                pAutoBlock->setBtnState(dataAyyay[nFlag + 2]);
-                pAutoBlock->setLeaveTrackState(dataAyyay[nFlag + 3]);
-                nFlag += 4;
-            }*/
+            {
+                StaAutoBlock* pAutoBlock = nullptr;
+                for (DeviceBase* pDevice : m_mapDeviceVector[AUTOBLOCK]) {
+                    pAutoBlock = dynamic_cast<StaAutoBlock*>(pDevice);
+                    pAutoBlock->setArrowState(dataAyyay[nFlag] & 0x0f);
+                    pAutoBlock->setState(dataAyyay[nFlag] & 0xf0);
+                    pAutoBlock->setLeaveTrackState(dataAyyay[nFlag + 1]);
+                    nFlag += 2;
+                }
+            }
         }
 
-        DeviceBase* StaStateProtocol::getDeviceByCode(uint nCode)
+        void StaProtocol::UnpackCultivate(const QByteArray& dataAyyay)
+        {
+        
+        }
+
+        DeviceBase* StaProtocol::getDeviceByCode(uint nCode)
         {
             for (DeviceBase* pDevice : m_mapDeviceVector[ALLDEVICE]) {
                 if (pDevice->getCode() == nCode) {

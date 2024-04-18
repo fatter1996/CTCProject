@@ -21,9 +21,9 @@ namespace Station {
             return DeviceBase::eventFilter(obj, event);
         }
 
-        void StaBraidLine::Draw(const bool& bElapsed, const bool& isMulti)
+        void StaBraidLine::Draw(const bool& isMulti)
         {
-            return StaDistant::Draw(bElapsed, isMulti);
+            return StaDistant::Draw(isMulti);
         }
 
         void StaBraidLine::DrawLight()

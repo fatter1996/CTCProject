@@ -17,13 +17,19 @@ namespace Station {
             //初始化设备属性
             void InitDeviceAttribute();
             //站场绘制
-            void Draw(const bool& bElapsed, const bool& isMulti = false);
+            void Draw(const bool& isMulti = false);
             //绘制按钮
-            void DrawStaButton(const bool& bElapsed);
-            //获取设备名称颜色
-            QPen getDeviceNameColor(const bool& bElapsed);
+            void DrawStaButton();
+            //判断鼠标是否在事件范围内
+            bool Contains(const QPoint& ptPos);
+            //鼠标是否在按钮上
+            bool IsMouseWheel(const QPoint& ptPos);
+            //初始化设备点击事件
+            void InitClickEvent();
             //按钮点击事件
             void OnButtonClick();
+            //命令清除
+            void OrderClear();
             //站场翻转
             void setVollover(const QPoint& ptBase);
             //状态重置
@@ -31,6 +37,7 @@ namespace Station {
 
         public:
             void setRelatedSignal(const DeviceBase* pDevice) { m_pRelatedSignal = const_cast<DeviceBase*>(pDevice); }
+            QRect getButtonRect() { return n_rcButton; }
 
         private:
             QPoint p1, p2; //绘制坐标

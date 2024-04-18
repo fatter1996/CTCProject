@@ -15,14 +15,15 @@ namespace Station {
 
         private:
             //站场绘制
-            void Draw(const bool& bElapsed, const bool& isMulti = false);
+            void Draw(const bool& isMulti = false);
             //绘制信号灯
             void DrawLight();
             //绘制文字
             void DrawText();
             //获取箭头颜色
             void getArrowColor();
-
+            //鼠标是否在按钮上
+            bool IsMouseWheel(const QPoint& ptPos);
             //按钮点击事件
             void OnButtonClick();
             //站场翻转

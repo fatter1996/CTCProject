@@ -15,7 +15,7 @@ namespace CTCWindows {
 	void StationCtrlDisp::timerEvent(QTimerEvent* event)
 	{
 		if (event->timerId() == m_nTimerId_500) {
-			GetStationPaintView()->update();
+			StaPaintView()->update();
 		}
 	}
 }

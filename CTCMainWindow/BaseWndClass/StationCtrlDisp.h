@@ -16,8 +16,8 @@ namespace CTCWindows {
         virtual void CreatStaFunBtnToolBar() = 0;
 
     public:
-        virtual QWidget* GetStationPaintView() = 0;
-
+        virtual QWidget* StaPaintView() = 0;
+        const QWidget* StaFunBtnBar() { return m_pStaFunBtnToolBar; }
     public:
         virtual void timerEvent(QTimerEvent* event);
 

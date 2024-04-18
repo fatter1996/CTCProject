@@ -17,28 +17,32 @@ namespace Station {
             //初始化设备属性
             void InitDeviceAttribute();
             //站场绘制
-            void Draw(const bool& bElapsed, const bool& isMulti = false);
+            void Draw(const bool& isMulti = false);
             //绘制股道
             void DrawTrack(const QPen& pen, const uint nPosition = 7, const bool bOutSide = false, const int nOffset = 0);
             //绘制岔心
-            void DrawSwitchCenterTrack(const bool& bElapsed);
+            void DrawSwitchCenterTrack();
             void DrawSwitchCenter(const QPen& pen, const uint nPosition, const bool bOutSide = false, const int nOffset = 0);
             //绘制外边缘
-            void DrawDeviceOutSide(const bool& bElapsed);
+            void DrawDeviceOutSide();
             //绘制设备选中虚线框
             void DrawSelectRange();
             //绘制绝缘节
             void DrawInsulateNode();
             //绘制道岔状态
             void DrawSwitchState();
+            //判断鼠标是否在高亮显示范围内
+            bool Contains(const QPoint& ptPos);
+            //初始化设备点击事件
+            void InitClickEvent();
              //站场翻转
             void setVollover(const QPoint& ptBase);
             //状态重置
             void ResetDevState();
             //获取岔心颜色
-            QColor getSwitchCenterColor(const bool& bElapsed);
+            QColor getSwitchCenterColor();
             //获取设备名称颜色
-            QPen getDeviceNameColor(const bool& bElapsed);
+            QPen getDeviceNameColor();
 
         public:
             void setSwitchState(const uint& nSwitchState);

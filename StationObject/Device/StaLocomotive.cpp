@@ -19,9 +19,9 @@ namespace Station {
             return DeviceBase::eventFilter(obj, event);
         }
 
-        void StaLocomotive::Draw(const bool& bElapsed, const bool& isMulti)
+        void StaLocomotive::Draw(const bool& isMulti)
         {
-            return StaDistant::Draw(bElapsed, isMulti);
+            return StaDistant::Draw(isMulti);
         }
 
         void StaLocomotive::DrawLight()

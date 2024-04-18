@@ -22,21 +22,24 @@ namespace Station {
 
         private:
             virtual bool eventFilter(QObject* obj, QEvent* event);
-
+        
         private:
+            //初始化设备属性
+            void InitDeviceAttribute();
             //站场绘制
-            void Draw(const bool& bElapsed, const bool& isMulti = false);
+            void Draw(const bool& isMulti = false);
             //绘制接近/离去区段
-            void DrawLeaveTrack(const bool& bElapsed, const StaLeaveTrack& track);
+            void DrawLeaveTrack(const StaLeaveTrack& track);
             //绘制信号灯
             void DrawLight();
             //绘制文字
             void DrawText();
-
             //获取接近区段颜色
-            QColor getTrackColor(const bool& bElapsed, int nIndex);
+            QColor getTrackColor(int nIndex);
             //获取箭头颜色
             void getArrowColor();
+            //鼠标是否在按钮上
+            bool IsMouseWheel(const QPoint& ptPos);
             //按钮点击事件
             void OnButtonClick();
             //站场翻转
@@ -62,6 +65,7 @@ namespace Station {
             uint m_nLempNum = 0;
             bool m_bLeave = false;
             QPoint m_ptLempCenter;
+            QPoint m_ptInterUsed;
             QVector<StaLeaveTrack> m_vecStaLeaveTrack;
             QString m_strAutoBlockType;
 

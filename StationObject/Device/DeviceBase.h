@@ -7,6 +7,8 @@
 #include <QRect>
 #include <QMap>
 
+#include "../../CTCMainWindow/BaseWndClass/StaFunBtnToolBar.h"
+
 #define TRACK_WIDTH     4    //股道宽度
 #define COLOR_BTN_BLUE		 QColor("#0000EE")
 #define COLOR_BTN_WHITE      QColor("#FAFAFA")
@@ -22,29 +24,36 @@ namespace Station {
 
         protected:
             virtual bool eventFilter(QObject* obj, QEvent* event);
-            virtual void timerEvent(QTimerEvent* event);
 
         public:
             //初始化设备信息
-            void InitDeviceInfo(QXmlStreamReader* m_pDeviceInfoReader, QString strDeviceType);
+            void InitDeviceInfo(QXmlStreamReader* m_pDeviceInfoReader, const QString& strDeviceType);
 
         private:
             //读取设备属性
             void ReadDeviceAttribute(QXmlStreamReader* m_pDeviceInfoReader);
             //绘制设备名称
-            void DrawDeviceName(const bool& bElapsed);
+            void DrawDeviceName();
+            //设备点击事件
+            void onDeviceClick();
+
+        public:
+            //命令清除
+            virtual void OrderClear();
 
         protected:
             //初始化设备属性
             virtual void InitDeviceAttribute();
             //站场绘制
-            virtual void Draw(const bool& bElapsed, const bool& isMulti = false);
+            virtual void Draw(const bool& isMulti = false);
             //绘制设备选中虚线框
             virtual void DrawSelectRange();
-            //判断鼠标是否在高亮显示范围内
-            virtual bool ContainsVisible(QPoint ptPos);
+            //判断鼠标是否在事件范围内
+            virtual bool Contains(const QPoint& ptPos);
+            //初始化设备点击事件
+            virtual void InitClickEvent();
             //获取设备名称颜色
-            virtual QPen getDeviceNameColor(const bool& bElapsed);
+            virtual QPen getDeviceNameColor();
             //站场翻转
             virtual void setVollover(const QPoint& ptBase) = 0;
             //状态重置
@@ -58,6 +67,10 @@ namespace Station {
             void setRangeVisible(const bool& bRangeVisible) { m_bRangeVisible = bRangeVisible; }
             uint getState() { return m_nState; }
 
+        public:
+            static bool getElapsed();
+            static bool setElapsed();
+
         public: //工具函数
             static QRect QStringToQRect(QString strRect);
             static QPoint QStringToQPoint(QString strRect);
@@ -70,11 +83,12 @@ namespace Station {
         protected:
             uint nIndex = 0;
             QMap<QString, std::function<void(const QString& strElement)>> m_mapAttribute;
-            
+            QMap<CTCWindows::FunType, std::function<void()>> m_mapClickEvent;
+
             //设备信息
             uint m_nType = 0;         //设备类型
             QString m_strName;        //设备名称
-            uint m_nCode = 0xFFFF;    //设备编号
+            int m_nCode = -1;    //设备编号
             QPoint m_ptCenter;        //设备中心点
             uint m_nSX = 0;           //上下行咽喉 1:S 0:X
             QRect m_rcTextRect;       //设备名称文本区域
@@ -87,11 +101,10 @@ namespace Station {
             uint m_nState = 0;         //设备状态
             bool m_bRangeVisible = false; //是否高亮
 
+            static int m_rcWheelDevCode;
+
         protected:
             static QPainter m_pPainter;    //绘制器
-
-        private:
-            static int m_nTimerId_500;
             static bool m_bElapsed;     //闪烁控制
         };
 
@@ -104,17 +117,17 @@ namespace Station {
 
         protected:
             //站场绘制
-            virtual void Draw(const bool& bElapsed, const bool& isMulti = false);
+            virtual void Draw(const bool& isMulti = false);
             //绘制外边缘
-            virtual void DrawDeviceOutSide(const bool& bElapsed) = 0;
+            virtual void DrawDeviceOutSide() = 0;
             //绘制绝缘节
             virtual void DrawInsulateNode() = 0;
 
         protected:
             //绘制股道
-            void DrawTrackLine(QPen pen, const QPoint& ptStart, const QPoint& ptEnd, const bool bOutSide = false, const int nOffset = 0);
+            void DrawTrackLine(const QPen& pen, const QPoint& ptStart, const QPoint& ptEnd, const bool bOutSide = false, const int nOffset = 0);
             //获取股道颜色
-            QColor getTrackColor(const bool& bElapsed);
+            QColor getTrackColor();
 
         protected:
             uint m_nZ = 0; //折点数
@@ -122,6 +135,8 @@ namespace Station {
 
             bool m_bShowInsulateNode = true;  //是否显示绝缘节
             bool m_bInsulateNodeChange = true;  //是否显示绝缘节
+
+            QRect m_rcRespondRect;
         };
 
         
@@ -133,12 +148,20 @@ namespace Station {
 
         protected:
             //绘制按钮
-            void DrawButton(QPainter& pPainter, const bool& bElapsed, const QRect rcButton, const QColor cBtnColor, int nType = 1, const QColor cBtnDownColor = COLOR_BTN_BLUE, const QColor cBtnElapsedColor = COLOR_BTN_WHITE);
+            void DrawButton(QPainter& pPainter, const QRect rcButton, const QColor& cBtnColor, bool bBtnDown, int nType = 1, const QColor cBtnDownColor = COLOR_BTN_BLUE, const QColor cBtnElapsedColor = COLOR_BTN_WHITE);
+            //按钮鼠标移动事件
+            void onMouseMoveToButton(const QPoint& ptPos, const int& nCode);
+            //鼠标是否在按钮上
+            virtual bool IsMouseWheel(const QPoint& ptPos) = 0;
             //按钮点击事件
             virtual void OnButtonClick() = 0;
+            //按钮状态重置
+            void BtnStateReset();
 
         protected:
-            bool m_bBtnDown = false; //按钮是否按下
+            int m_nBtnState = 0; //按钮状态
+            static int m_nFirstBtnType; //按钮类型(1 - 列车按钮; 2 - 调车按钮; 3 - 通过按钮; 4 - 引导按钮; 5 - 功能按钮)
+            static int m_nSelectDevCode;
         };
 
 
@@ -177,7 +200,7 @@ namespace Station {
 
         protected:
             //站场绘制
-            virtual void Draw(const bool& bElapsed, const bool& isMulti = false);
+            virtual void Draw(const bool& isMulti = false);
             //绘制信号灯
             virtual void DrawLight() = 0;
             //绘制文字

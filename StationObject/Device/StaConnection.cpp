@@ -35,13 +35,13 @@ namespace Station {
             return DeviceBase::eventFilter(obj, event);
         }
 
-        void StaConnection::Draw(const bool& bElapsed, const bool& isMulti)
+        void StaConnection::Draw(const bool& isMulti)
         {
             DrawArrow(m_pPainter);
             if (m_strCLType.contains("_DC")) {
-                DrawButton(m_pPainter, bElapsed, Scale(m_rcAllowBtn), COLOR_BTN_DEEPGRAY, 2);
+                DrawButton(m_pPainter, Scale(m_rcAllowBtn), COLOR_BTN_DEEPGRAY, m_nBtnState, 2);
             }
-            return StaDistant::Draw(bElapsed, isMulti);
+            return StaDistant::Draw(isMulti);
         }
 
         void StaConnection::DrawLight()
@@ -121,7 +121,7 @@ namespace Station {
                 cColor2 = COLOR_LIGHT_WHITE;
             }
             else {
-                cColor2 = COLOR_LIGHT_GREEN;
+                cColor2 = COLOR_LIGHT_BLACK;
             }
 
             if (m_nSX) {
@@ -132,6 +132,11 @@ namespace Station {
                 m_cColor2 = cColor1;
                 m_cColor1 = cColor2;
             }
+        }
+
+        bool StaConnection::IsMouseWheel(const QPoint& ptPos)
+        {
+            return false;
         }
 
         void StaConnection::OnButtonClick()

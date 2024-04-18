@@ -15,10 +15,6 @@ namespace Socket {
         ~SocketUDP();
 
     public:
-        //申明socket通道
-        QUdpSocket* m_pUdpSocket = nullptr;
-
-    public:
         //初始化端口
         bool InitSocket();
         void timerEvent(QTimerEvent* event);
@@ -26,16 +22,20 @@ namespace Socket {
     public:
         void setLocalAddress(const QHostAddress& hAddress, const quint16& nPort);
         void setInterlockAddress(const QHostAddress& hAddress, const quint16& nPort);
-
+        
     signals:
         //接收数据信号
-        void recvDataSignal(QByteArray dataArray);
+        void recvData(const QByteArray&);
 
     public slots:
         //接收数据槽
         void onRecvData();
         //发送数据槽
-        void onSendData(const QByteArray& dataArray, const QHostAddress& hAddress, const quint16& nPort);
+        void onSendData(const QByteArray& dataArray);
+
+    private:
+        //socket通道
+        QUdpSocket* m_pUdpSocket = nullptr;
 
     private:
         int nTimerId = -1;

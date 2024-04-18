@@ -5,8 +5,8 @@
 #include <QAbstractButton>
 
 namespace CTCWindows {
-
-    enum class FunType {
+    //功能按钮类型
+    enum class FunType : int {
         RouteBuild,     //进路建立
         TotalCancel,    //总取消
         SignalReopen,   //信号重开
@@ -37,17 +37,29 @@ namespace CTCWindows {
     {
         Q_OBJECT
     public:
-        StaFunBtnToolBar(QWidget* parent = nullptr) {};
-        ~StaFunBtnToolBar() {}
+        StaFunBtnToolBar(QWidget* parent = nullptr);
+        ~StaFunBtnToolBar();
 
     public:
         virtual void FunBtnStateReset() = 0;
 
-    public:
-        FunType getCurrFunType() { return m_SelectFunType; }
+    public slots:
+        void onButtonClicked(QAbstractButton* pButton);
+        void onOrderClear(bool checked);
+        void onOrderIssued(bool checked);
+
+    signals:
+        void OrderClear();
+        void OrderIssued();
 
     protected:
-        FunType m_SelectFunType = FunType::RouteBuild;
         QMap<QAbstractButton*, FunType> m_mapFunBtnType;
+
+    public:
+        static FunType m_SelectFunType;
+        static QMap<FunType, int> m_mapStaOrderCode;
     }; 
+
+    FunType getCurrFunType();
+    int getFunBtnOrderCode();
 }

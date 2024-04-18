@@ -3,6 +3,8 @@
 
 #define MAX(a, b)  (a > b ? a : b)
 #define MIN(a, b)  (a < b ? a : b)
+#define MAX2(a, b, c)  (a > b ? (a > c ? a : c) : (b > c ? b : c))
+#define MIN2(a, b, c)  (a < b ? (a < c ? a : c) : (b < c ? b : c))
 
 namespace Station {
     namespace Device {
@@ -53,19 +55,22 @@ namespace Station {
             c = sqrt(a * a + b * b);
             p56C.setX(m_ptCenter.x() - 16 * a / c);
             p56C.setY(m_ptCenter.y() - 16 * b / c);
+
+            m_rcRespondRect = QRect(QPoint(MIN2(p34C.x(), p56C.x(), m_ptCenter.x()) - 2, MIN2(p34C.y(), p56C.y(), m_ptCenter.y()) - 2),
+                QPoint(MAX2(p34C.x(), p56C.x(), m_ptCenter.x()) + 2, MAX2(p34C.y(), p56C.y(), m_ptCenter.y()) + 2));
         }
-    
-        void StaSwitch::Draw(const bool& bElapsed, const bool& isMulti)
+
+        void StaSwitch::Draw(const bool& isMulti)
         {
             //绘制股道
-            DrawTrack(QPen(getTrackColor(bElapsed), Scale(TRACK_WIDTH), Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin), m_nSwitchState | SWITCH_DRAW_CQ);
+            DrawTrack(QPen(getTrackColor(), Scale(TRACK_WIDTH), Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin), m_nSwitchState | SWITCH_DRAW_CQ);
             DrawTrack(QPen(COLOR_TRACK_BLUE, Scale(TRACK_WIDTH), Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin), 0x07 ^ (m_nSwitchState | SWITCH_DRAW_CQ));
             //绘制岔心
-            DrawSwitchCenterTrack(bElapsed);
+            DrawSwitchCenterTrack();
             //绘制股道状态
             DrawSwitchState();
 
-            return StaSection::Draw(bElapsed, isMulti);
+            return StaSection::Draw(isMulti);
         }
 
         void StaSwitch::DrawTrack(const QPen& pen, const uint nPosition, const bool bOutSide, const int nOffset)
@@ -102,18 +107,18 @@ namespace Station {
             }
         }
 
-        void StaSwitch::DrawSwitchCenterTrack(const bool& bElapsed)
+        void StaSwitch::DrawSwitchCenterTrack()
         {
             if (m_bRangeVisible) { //选中状态
                 DrawSwitchCenter(QPen(COLOR_TRACK_SELECT_BLUE, Scale(TRACK_WIDTH), Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin), SWITCH_DRAW_DW | SWITCH_DRAW_FW);
             }
             else if (m_nShuntFault) { //分路不良
-                if (bElapsed && !m_bShuntFaultIdle) {
+                if (m_bElapsed && !m_bShuntFaultIdle) {
                     DrawSwitchCenter(QPen(COLOR_TRACK_YELLOW, Scale(TRACK_WIDTH), Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin), m_nShuntFault & m_nSwitchState);
                 }
             }
             else {
-                QColor cColor = getSwitchCenterColor(bElapsed);
+                QColor cColor = getSwitchCenterColor();
                 DrawSwitchCenter(QPen(cColor == Qt::black ? Qt::NoPen : cColor, Scale(TRACK_WIDTH), Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin), m_nSwitchState & 0x03);
             }
 
@@ -124,10 +129,10 @@ namespace Station {
 
         void StaSwitch::DrawSwitchCenter(const QPen& pen, const uint nPosition, const bool bOutSide, const int nOffset)
         {
-            if (nPosition & SWITCH_STATE_DW) {  //定位
+            if (nPosition == SWITCH_STATE_DW) {  //定位
                 DrawTrackLine(pen, m_ptCenter, p34C, bOutSide, nOffset);
             }
-            else if (nPosition & SWITCH_STATE_FW) { //反位
+            else if (nPosition == SWITCH_STATE_FW) { //反位
                 DrawTrackLine(pen, m_ptCenter, p56C, bOutSide, nOffset);
             }
             else {  //四开
@@ -136,10 +141,10 @@ namespace Station {
             }
         }
 
-        void StaSwitch::DrawDeviceOutSide(const bool& bElapsed)
+        void StaSwitch::DrawDeviceOutSide()
         {
             //绘制股道外边缘-分路不良
-            if (m_nShuntFault && (m_bShuntFaultIdle || bElapsed)) {
+            if (m_nShuntFault && (m_bShuntFaultIdle || m_bElapsed)) {
                 DrawTrack(QPen(COLOR_TRACK_OUTSIDE_RED, 2, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin), m_nShuntFault & (m_nSpeedLimit | m_nPowerCut), true, 4);
                 DrawTrack(QPen(COLOR_TRACK_OUTSIDE_RED, 2, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin), m_nShuntFault & (~(m_nSpeedLimit | m_nPowerCut)), true, 2);
             }
@@ -220,6 +225,31 @@ namespace Station {
             }
         }
 
+        bool StaSwitch::Contains(const QPoint& ptPos)
+        {
+            return m_rcTextRect.contains(ptPos) || m_rcRespondRect.contains(ptPos);
+        }
+
+        void StaSwitch::InitClickEvent()
+        {
+            for (int i = 0; i < static_cast<int>(CTCWindows::FunType::MethodConvert); ++i) {
+                switch (i)
+                {
+                case static_cast<int>(CTCWindows::FunType::TotalPosition):      //总定位
+                case static_cast<int>(CTCWindows::FunType::TotalReverse):       //总反位
+                case static_cast<int>(CTCWindows::FunType::SingleLock):         //单锁
+                case static_cast<int>(CTCWindows::FunType::SingleUnlock):       //单解
+                case static_cast<int>(CTCWindows::FunType::Blockade):           //封锁
+                case static_cast<int>(CTCWindows::FunType::UnBlockade): {       //解封
+                    m_mapClickEvent.insert(static_cast<CTCWindows::FunType>(i), [&]() {
+                        StationObject::AddSelectDevice(this);
+                    });
+                    break;
+                }
+                }
+            }
+        }
+
         void StaSwitch::setVollover(const QPoint& ptBase)
         {
 
@@ -230,7 +260,7 @@ namespace Station {
 
         }
 
-        QColor StaSwitch::getSwitchCenterColor(const bool& bElapsed)
+        QColor StaSwitch::getSwitchCenterColor()
         {
             QColor cTrackColor = Qt::black;
 
@@ -241,7 +271,7 @@ namespace Station {
                 cTrackColor = COLOR_TRACK_YELLOW;
             }
             else {
-                cTrackColor = bElapsed ? COLOR_TRACK_RED : cTrackColor;
+                cTrackColor = m_bElapsed ? COLOR_TRACK_RED : cTrackColor;
             }
 
             if (m_nState & SECTION_STATE_TAKEUP) {
@@ -259,7 +289,7 @@ namespace Station {
             }
 
             if (m_nState & SECTION_STATE_BLOCK) {
-                cTrackColor = bElapsed ? COLOR_TRACK_RED : cTrackColor;
+                cTrackColor = m_bElapsed ? COLOR_TRACK_RED : cTrackColor;
             }
 
             if (m_bRangeVisible) {
@@ -268,11 +298,11 @@ namespace Station {
             return cTrackColor;
         }
 
-        QPen StaSwitch::getDeviceNameColor(const bool& bElapsed)
+        QPen StaSwitch::getDeviceNameColor()
         {
             QPen pen;
             if (isSwitchSK()) {
-                pen = QPen(!bElapsed ? COLOR_TRACK_RED : Qt::NoPen);
+                pen = QPen(!m_bElapsed ? COLOR_TRACK_RED : Qt::NoPen);
             }
             else if (m_nSwitchState & SWITCH_STATE_DW) {
                 pen = QPen(COLOR_TRACK_GREEN);
@@ -282,7 +312,7 @@ namespace Station {
             }
 
             if (m_bRangeVisible) {
-                pen = QPen(Qt::black);
+                pen = QPen(Qt::white);
             }
 
             return pen;

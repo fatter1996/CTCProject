@@ -42,10 +42,10 @@ namespace Station {
         
         }
 
-        void StaPermillSix::Draw(const bool& bElapsed, const bool& isMulti)
+        void StaPermillSix::Draw(const bool& isMulti)
         {
             DrawPermillSix();
-            return DeviceBase::Draw(bElapsed, isMulti);
+            return DeviceBase::Draw(isMulti);
         }
         
         void StaPermillSix::DrawPermillSix()

@@ -2,21 +2,24 @@
 #include "Global.h"
 #include <QPainter>
 #include <QMouseEvent>
+#include <QCursor>
+#include <QApplication>
 
 namespace Station {
     namespace Device {
 
+        int DeviceBase::m_rcWheelDevCode = -1;
         QPainter DeviceBase::m_pPainter;
-        int DeviceBase::m_nTimerId_500 = -1;
+        
         bool DeviceBase::m_bElapsed = false;
 
         DeviceBase::DeviceBase(QObject* parent)
         {
-            m_nTimerId_500 = startTimer(500);
+            
 
             m_mapAttribute.insert("m_nType", [&](const QString& strElement) { m_nType = strElement.toUInt(); });
             m_mapAttribute.insert("m_strName", [&](const QString& strElement) { m_strName = strElement; });
-            m_mapAttribute.insert("m_nCode", [&](const QString& strElement) { m_nCode = strElement.toUInt(nullptr, 16); });
+            m_mapAttribute.insert("m_nCode", [&](const QString& strElement) { m_nCode = strElement.toInt(nullptr, 16); });
 
             m_mapAttribute.insert("m_textRect", [&](const QString& strElement) { 
                 m_rcTextRect = QStringToQRect(strElement); 
@@ -49,39 +52,41 @@ namespace Station {
 
         DeviceBase::~DeviceBase()
         {
-            killTimer(m_nTimerId_500);
+            
         }
 
         bool DeviceBase::eventFilter(QObject* obj, QEvent* event)
         {
             if (event->type() == QEvent::Paint) {
                 m_pPainter.begin((QWidget*)obj);
-                Draw(m_bElapsed);
+                Draw();
                 m_pPainter.end();
             }
 
             if (event->type() == QEvent::MouseMove) {
                 QMouseEvent* mouseEvent = dynamic_cast<QMouseEvent*>(event);
-                if (Contains(mouseEvent->pos())) {
+                if ((m_nCode != -1) && Contains(mouseEvent->pos()) && (m_rcWheelDevCode == -1 || m_rcWheelDevCode == m_nCode)) {
                     m_bRangeVisible = true;
+                    m_rcWheelDevCode = m_nCode;
                 }
                 else {
                     m_bRangeVisible = false;
+                    if (m_rcWheelDevCode == m_nCode) {
+                        m_rcWheelDevCode = -1;
+                    }
                 }
             }
 
+            if (event->type() == QEvent::MouseButtonRelease) {  //鼠标点击事件
+                QMouseEvent* mouseEvent = dynamic_cast<QMouseEvent*>(event);
+                if (StationObject::IsAllowStaOperation() && Contains(mouseEvent->pos())) {
+                    onDeviceClick();
+                }
+            }
             return QObject::eventFilter(obj, event);
         }
 
-        void DeviceBase::timerEvent(QTimerEvent* event)
-        {
-            if (event->timerId() == m_nTimerId_500) {
-                m_bElapsed = !m_bElapsed;
-            }
-            return QObject::timerEvent(event);
-        }
-
-        void DeviceBase::InitDeviceInfo(QXmlStreamReader* m_pDeviceInfoReader, QString strDeviceType)
+        void DeviceBase::InitDeviceInfo(QXmlStreamReader* m_pDeviceInfoReader, const QString& strDeviceType)
         {
             while (!m_pDeviceInfoReader->atEnd()) {
                 m_pDeviceInfoReader->readNext();
@@ -106,41 +111,34 @@ namespace Station {
             }
         }
 
-        void DeviceBase::DrawDeviceName(const bool& bElapsed)
+        void DeviceBase::DrawDeviceName()
         {
             QFont font;
             font.setFamily("微软雅黑");
             font.setPixelSize(Scale(m_nFontSize));//字号
-            QPen pen = getDeviceNameColor(bElapsed);
+            QPen pen = getDeviceNameColor();
             if (pen.color() == Qt::NoPen) {
                 return;
             }
             m_pPainter.setFont(font);//设置字体
-            m_pPainter.setPen(getDeviceNameColor(bElapsed));
+            m_pPainter.setPen(getDeviceNameColor());
             
             m_pPainter.drawText(Scale(m_rcTextRect), m_strName, QTextOption(Qt::AlignCenter));
-
-            //if (m_rcTextRect != QRect()) {
-            //    m_pPainter.drawText(Scale(m_rcTextRect), m_strName, QTextOption(Qt::AlignCenter));
-            //}
-            //else if (m_ptName != QPoint()) {
-            //    m_pPainter.drawText(Scale(QRect(m_ptName, fontMetrics.size(Qt::TextSingleLine, m_strName))), m_strName, QTextOption(Qt::AlignCenter));
-            //}
         }
 
         void DeviceBase::InitDeviceAttribute()
         {
-        
+            
         }
 
-        void DeviceBase::Draw(const bool& bElapsed, const bool& isMulti)
+        void DeviceBase::Draw(const bool& isMulti)
         {
             //绘制设备选中虚线框
             if (m_bRangeVisible) {
                 DrawSelectRange();
             }
             //绘制设备名称
-            DrawDeviceName(bElapsed);
+            DrawDeviceName();
         }
 
         void DeviceBase::DrawSelectRange()
@@ -151,12 +149,29 @@ namespace Station {
             m_pPainter.drawRect(Scale(OutSideRect(m_rcTextRect, 2, 0)));
         }
 
-        bool DeviceBase::ContainsVisible(QPoint ptPos)
+        bool DeviceBase::Contains(const QPoint& ptPos)
         {
             return false;
         }
 
-        QPen DeviceBase::getDeviceNameColor(const bool& bElapsed)
+        void DeviceBase::InitClickEvent()
+        {
+        
+        }
+
+        void DeviceBase::onDeviceClick()
+        {
+            if (m_mapClickEvent.contains(CTCWindows::getCurrFunType())) {
+                m_mapClickEvent[CTCWindows::getCurrFunType()];
+            }
+        }
+
+        void DeviceBase::OrderClear()
+        {
+
+        }
+
+        QPen DeviceBase::getDeviceNameColor()
         {
             return QPen(Qt::white);
         }
@@ -165,6 +180,17 @@ namespace Station {
         { 
             m_nState = nState;
         }
+
+        bool DeviceBase::getElapsed()
+        {
+            return m_bElapsed;
+        }
+
+        bool DeviceBase::setElapsed()
+        {
+            m_bElapsed = !m_bElapsed;
+        }
+
 
         QRect DeviceBase::QStringToQRect(QString strRect)
         {
@@ -185,28 +211,28 @@ namespace Station {
         
         int DeviceBase::Scale(const int& value, const int& nOffset)
         {
-            return (value + nOffset) * StationObject::m_nDiploid;
+            return (value + nOffset) * StationObject::getDiploid(1);
         }
 
         QPoint DeviceBase::Scale(const QPoint& pt, const bool bOutSide, const bool bTopLine)
         {
             if (!bOutSide) {
-                return QPoint(Scale(pt.x(), StationObject::m_ptOffset.x()), Scale(pt.y(), StationObject::m_ptOffset.y()));
+                return QPoint(Scale(pt.x(), StationObject::getOffset().x()), Scale(pt.y(), StationObject::getOffset().y()));
             }
             else {
                 if (bTopLine) {
-                    return QPoint(Scale(pt.x(), StationObject::m_ptOffset.x()), Scale(pt.y() - TRACK_WIDTH / 2, StationObject::m_ptOffset.y()) + 1);
+                    return QPoint(Scale(pt.x(), StationObject::getOffset().x()), Scale(pt.y() - TRACK_WIDTH / 2, StationObject::getOffset().y()) + 1);
                 }
                 else {
-                    return QPoint(Scale(pt.x(), StationObject::m_ptOffset.x()), Scale(pt.y() + TRACK_WIDTH / 2, StationObject::m_ptOffset.y()));
+                    return QPoint(Scale(pt.x(), StationObject::getOffset().x()), Scale(pt.y() + TRACK_WIDTH / 2, StationObject::getOffset().y()));
                 } 
             }
         }
 
         QRect DeviceBase::Scale(const QRect& rect)
         {
-            return QRect(Scale(rect.x(), StationObject::m_ptOffset.x()), 
-                    Scale(rect.y(), StationObject::m_ptOffset.y()),
+            return QRect(Scale(rect.x(), StationObject::getOffset().x()),
+                    Scale(rect.y(), StationObject::getOffset().y()),
                     Scale(rect.width()), Scale(rect.height()));
         }
 
@@ -235,18 +261,18 @@ namespace Station {
 
         }
 
-        void StaSection::Draw(const bool& bElapsed, const bool& isMulti)
+        void StaSection::Draw(const bool& isMulti)
         {
             //绘制股道外边缘
-            DrawDeviceOutSide(bElapsed);
+            DrawDeviceOutSide();
             //绘制绝缘节
             if (m_bShowInsulateNode) {
                 DrawInsulateNode();
             }
-            return DeviceBase::Draw(bElapsed, isMulti);
+            return DeviceBase::Draw(isMulti);
         }
 
-        void StaSection::DrawTrackLine(QPen pen, const QPoint& ptStart, const QPoint& ptEnd, const bool bOutSide, const int nOffset)
+        void StaSection::DrawTrackLine(const QPen& pen, const QPoint& ptStart, const QPoint& ptEnd, const bool bOutSide, const int nOffset)
         {
             m_pPainter.setPen(pen);
 
@@ -288,7 +314,7 @@ namespace Station {
             }
         }
 
-        QColor StaSection::getTrackColor(const bool& bElapsed)
+        QColor StaSection::getTrackColor()
         {
             QColor cTrackColor = COLOR_TRACK_BLUE;
 
@@ -303,7 +329,7 @@ namespace Station {
             }
 
             if (m_nState & SECTION_STATE_BLOCK) {
-                cTrackColor = bElapsed ? COLOR_TRACK_RED : cTrackColor;
+                cTrackColor = m_bElapsed ? COLOR_TRACK_RED : cTrackColor;
             }
 
             if (m_nState & SECTION_STATE_TAKEUP) {
@@ -317,7 +343,8 @@ namespace Station {
         }
 
 
-
+        int DeviceBtn::m_nFirstBtnType = 0;
+        int DeviceBtn::m_nSelectDevCode = -1;
         DeviceBtn::DeviceBtn()
         {
 
@@ -328,11 +355,11 @@ namespace Station {
         
         }
 
-        void DeviceBtn::DrawButton(QPainter& pPainter, const bool& bElapsed, const QRect rcButton, const QColor cBtnColor, int nType, const QColor cBtnDownColor, const QColor cBtnElapsedColor)
+        void DeviceBtn::DrawButton(QPainter& pPainter, const QRect rcButton, const QColor& cBtnColor, bool bBtnDown, int nType, const QColor cBtnDownColor, const QColor cBtnElapsedColor)
         {
             //按钮边框默认颜色
-            QColor btnClrTopLeft = m_bBtnDown ? COLOR_BTN_GRAY : COLOR_BTN_WHITE;      //按钮边框-TL
-            QColor btnClrBottomRight = m_bBtnDown ? COLOR_BTN_WHITE : COLOR_BTN_GRAY;   //按钮边框-BR
+            QColor btnClrTopLeft = bBtnDown ? COLOR_BTN_GRAY : COLOR_BTN_WHITE;      //按钮边框-TL
+            QColor btnClrBottomRight = bBtnDown ? COLOR_BTN_WHITE : COLOR_BTN_GRAY;   //按钮边框-BR
             
             pPainter.setRenderHint(QPainter::Antialiasing, true);
             //绘制按钮边框
@@ -350,14 +377,34 @@ namespace Station {
             }
             //绘制按钮
             if (nType == 1) {   //矩形按钮 
-                pPainter.setBrush(QBrush(m_bBtnDown ? (bElapsed ? cBtnDownColor : cBtnElapsedColor) : cBtnColor, Qt::SolidPattern));
+                pPainter.setBrush(QBrush(bBtnDown ? (DeviceBase::getElapsed() ? cBtnDownColor : cBtnElapsedColor) : cBtnColor, Qt::SolidPattern));
                 pPainter.drawRect(rcButton.x() + 2, rcButton.y() + 2, rcButton.width() - 4, rcButton.height() - 4);
             }
             else if (nType == 2) { //圆形按钮 
-                pPainter.setBrush(QBrush(m_bBtnDown ? (bElapsed ? cBtnDownColor : cBtnElapsedColor) : cBtnColor, Qt::SolidPattern));
+                pPainter.setBrush(QBrush(bBtnDown ? (DeviceBase::getElapsed() ? cBtnDownColor : cBtnElapsedColor) : cBtnColor, Qt::SolidPattern));
                 pPainter.drawEllipse(rcButton.x() + 2, rcButton.y() + 2, rcButton.width() - 4, rcButton.height() - 4);  
             }
             pPainter.setRenderHint(QPainter::Antialiasing, false);
+        }
+
+        void DeviceBtn::onMouseMoveToButton(const QPoint& ptPos, const int& nCode)
+        {
+            if (StationObject::IsAllowStaOperation() &&  IsMouseWheel(ptPos)) {
+                QApplication::setOverrideCursor(QCursor(Qt::PointingHandCursor));
+                m_nSelectDevCode = nCode;
+            }
+            else if (m_nSelectDevCode == nCode) {
+                m_nSelectDevCode = -1;
+            }
+            if (m_nSelectDevCode == -1) {
+                QApplication::restoreOverrideCursor();
+            }
+        }
+
+        void DeviceBtn::BtnStateReset() 
+        { 
+            m_nBtnState = 0; 
+            m_nFirstBtnType = 0; 
         }
 
 
@@ -428,13 +475,13 @@ namespace Station {
         }
 
         //站场绘制
-        void StaDistant::Draw(const bool& bElapsed, const bool& isMulti)
+        void StaDistant::Draw(const bool& isMulti)
         {
             //绘制信号灯
             DrawLight();
             //绘制文字
             DrawText();
-            return DeviceBase::Draw(bElapsed, isMulti);
+            return DeviceBase::Draw(isMulti);
         }
     }
 }

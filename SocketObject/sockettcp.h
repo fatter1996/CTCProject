@@ -15,24 +15,21 @@ namespace Socket {
         ~SocketTCP();
 
     public:
-        QTcpSocket* m_pTcpSocket = nullptr;
-        QHostAddress m_hAdress;
-        quint16 m_nPort = 0;
-        int m_nTimer = -1;
-    public:
         //初始化端口
-        bool InitServer(const QHostAddress& hAddress, const quint16& nPort);
+        bool InitServer();
+        void setLocalAddress(const QHostAddress& hAddress, const quint16& nPort);
+        void setCultivateAddress(const QHostAddress& hAddress, const quint16& nPort);
 
     private:
         void timerEvent(QTimerEvent* event);
 
     signals:
         //接收数据信号
-        void recvData(const QByteArray& dataArray, const QHostAddress& hAddress, const quint16& nPort);
+        void recvData(const QByteArray&, const QHostAddress&, const quint16&);
         //断开链接信号
-        void disconnected(const QHostAddress& hAddress, const quint16& nPort);
+        void disconnected(const QHostAddress&, const quint16&);
         //链接成功信号
-        void connected(const QHostAddress& hAddress, const quint16& nPort);
+        void connected(const QHostAddress&, const quint16&);
 
     public slots:
         //链接成功槽
@@ -42,7 +39,16 @@ namespace Socket {
         //接收数据槽
         void onRecvData();
         //发送数据槽
-        void onSendDataSlot(const QByteArray& dataArray);
+        void onSendData(const QByteArray& dataArray);
+
+    private:
+        QTcpSocket* m_pTcpSocket = nullptr;
+
+        int m_nTimer = -1;
+        QHostAddress m_hLocalIp;
+        uint m_nLocalPort = 0;
+        QHostAddress m_hCultivateIp;
+        uint m_nCultivatePort = 0;
     };
 }
 

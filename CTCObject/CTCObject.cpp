@@ -1,36 +1,38 @@
 ﻿#include <QJsonDocument>
 #include <QJsonObject>
 #include <QFile>
-#include "Global.h"
+
 #include "CTCObject.h"
 #include "CTCMainWindow/StationViewKSK/StationViewKSK.h"
 #include "CTCMainWindow/StationViewTKY/StationViewTKY.h"
+#include "CTCMainWindow/CurrentWnd/UserLoginDlg.h" 
 
 namespace CTCDoc{
+	using namespace CTCWindows;
+	using namespace Station;
+	using namespace Socket;
 
 	CTCObject::CTCObject()
 	{
-		socketUDP = new Socket::SocketUDP;
-		m_staMainStation = new Station::StationObject;
+		socketTCP = new SocketTCP;
+		socketUDP = new SocketUDP;
+		m_pMainStation = new StationObject;
 
-		if (ConfigInit() < 0) {
+		if (ConfigFileInit() < 0) {
 			qDebug() << "配置文件解析失败。";
 		}
 		//初始化站场设备
-		m_staMainStation->InitStaDevice();
+		m_pMainStation->InitStaDevice();
 
 		//网络通信初始化
 		socketUDP->InitSocket();
-		QObject::connect(socketUDP, &Socket::SocketUDP::recvDataSignal, [&](QByteArray dataAyyay) {
-			m_staMainStation->UnpackData(dataAyyay);
-		});
-		
+		socketTCP->InitServer();
 	}
 
 	CTCObject::~CTCObject()
 	{
-		delete m_staMainStation;
-		m_staMainStation = nullptr;
+		delete m_pMainStation;
+		m_pMainStation = nullptr;
 
 		delete socketUDP;
 		socketUDP = nullptr;
@@ -39,8 +41,8 @@ namespace CTCDoc{
 	QMainWindow* CTCObject::CreatCTCMainWnd()
 	{
 		switch (CTCObject::m_nStationViewType) {
-		case 1: m_pCTCMainWindow = CTCWindows::StationViewKSK::CreatStationView(); break;
-		case 2: m_pCTCMainWindow = CTCWindows::StationViewTKY::CreatStationView(); break;
+		case 1: m_pCTCMainWindow = StationViewKSK::CreatStationView(); break;
+		case 2: m_pCTCMainWindow = StationViewTKY::CreatStationView(); break;
 		case 3: break;
 		case 4: break;
 		default: break;
@@ -49,12 +51,20 @@ namespace CTCDoc{
 		if (m_pCTCMainWindow) {
 			//初始化主界面
 			m_pCTCMainWindow->InitStattionView();
-			m_staMainStation->InitDeviceEventFilter(m_pCTCMainWindow->GetStationCtrlDisp()->GetStationPaintView());
+			m_pCTCMainWindow->setFixedSize(m_pMainStation->getStaFixedSize());
+			m_pMainStation->InitDeviceEventFilter(m_pCTCMainWindow->StaPaintView());
+			StaOperationConnect();
 		}
 		return m_pCTCMainWindow;
+		//if (UserLogin()) {
+		//	return m_pCTCMainWindow;
+		//}
+		//else {
+		//	return nullptr;
+		//}
 	}
 
-	int CTCObject::ConfigInit()
+	int CTCObject::ConfigFileInit()
 	{
 		// 打开JSON文件
 		QFile file("config/station.json");
@@ -78,21 +88,46 @@ namespace CTCDoc{
 		// 提取根节点
 		QJsonObject rootObj = josnDoc.object();
 		//站名
-		m_staMainStation->setStationName(rootObj.value("staName").toString());
+		m_pMainStation->setStationName(rootObj.value("staName").toString());
 		//站场界面类型
 		m_nStationViewType = rootObj.value("StationType").toInt();
-		//联锁通信地址
+		//通信地址
 		QJsonObject addressObj = rootObj.value("comAddress").toObject();
-		socketUDP->setLocalAddress(QHostAddress(addressObj.value("localIp").toString()), addressObj.value("localPort").toInt());
+		socketUDP->setLocalAddress(QHostAddress(addressObj.value("localIp").toString()), addressObj.value("localPortUDP").toInt());
 		socketUDP->setInterlockAddress(QHostAddress(addressObj.value("interlockIp").toString()), addressObj.value("interlockPort").toInt());
+		socketTCP->setLocalAddress(QHostAddress(addressObj.value("localIp").toString()), addressObj.value("localPortTCP").toInt());
+		socketTCP->setCultivateAddress(QHostAddress(addressObj.value("cultivateIp").toString()), addressObj.value("cultivatePort").toInt());
+		
 		//解析站场设备
 		QString path = rootObj.value("deviceInfo").toString();
 		QString path2 = rootObj.value("lampInfo").toString();
-		if (m_staMainStation->ReadStationInfo(rootObj.value("deviceInfo").toString()) < 0) {
+		if (m_pMainStation->ReadStationInfo(rootObj.value("deviceInfo").toString()) < 0) {
 			qDebug() << "无效的xml文件.";
 			return -1;
 		}
 		return 0;
+	}
+
+	void CTCObject::StaOperationConnect()
+	{
+		QObject::connect(socketUDP, &SocketUDP::recvData, m_pMainStation, &StationObject::onReciveData);
+		QObject::connect( m_pMainStation, &StationObject::SendDataToUDP,socketUDP, &SocketUDP::onSendData);
+		QObject::connect(socketTCP, &SocketTCP::recvData, m_pMainStation, &StationObject::onReciveData);
+		QObject::connect(m_pMainStation, &StationObject::SendDataToTCP, socketTCP, &SocketTCP::onSendData);
+
+		//命令清除
+		const StaFunBtnToolBar* pStaFunBtnToolBar = dynamic_cast<const StaFunBtnToolBar*>(m_pCTCMainWindow->StaFunBtnToolBar());
+		QObject::connect(pStaFunBtnToolBar, &StaFunBtnToolBar::OrderClear, m_pMainStation, &StationObject::onOrderClear);
+		//命令下达
+		QObject::connect(pStaFunBtnToolBar, &StaFunBtnToolBar::OrderIssued, m_pMainStation, &StationObject::onOrderIssued);
+	}
+
+	bool CTCObject::UserLogin()
+	{
+		UserLoginDlg dlgUserLogin;
+		QObject::connect(&dlgUserLogin, &UserLoginDlg::UserLogin, m_pMainStation, &StationObject::UserLogin);
+		
+		return dlgUserLogin.exec() == QDialog::Accepted;
 	}
 }
 

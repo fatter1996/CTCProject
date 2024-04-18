@@ -15,12 +15,12 @@ namespace Station {
 
         private:
             //站场绘制
-            void Draw(const bool& bElapsed, const bool& isMulti = false);
+            void Draw(const bool& isMulti = false);
             //绘制脱轨器
             void DrawDerailer();
 
             //获取设备名称颜色
-            QPen getDeviceNameColor(const bool& bElapsed);
+            QPen getDeviceNameColor();
             //站场翻转
             void setVollover(const QPoint& ptBase);
             //状态重置

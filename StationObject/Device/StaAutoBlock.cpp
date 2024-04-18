@@ -47,6 +47,7 @@ namespace Station {
 
             m_mapAttribute.insert("isLeave", [&](const QString& strElement) { m_bLeave = strElement.toUInt(); });
             m_mapAttribute.insert("LampCenter0", [&](const QString& strElement) { m_ptLempCenter = QStringToQPoint(strElement); });
+            m_mapAttribute.insert("InterUsed", [&](const QString& strElement) { m_ptInterUsed = QStringToQPoint(strElement); });
             m_mapAttribute.insert("ZDBS_Type", [&](const QString& strElement) { m_strAutoBlockType = strElement; });
             
             m_mapAttribute.insert("trackName", [&](const QString& strElement) {
@@ -82,21 +83,43 @@ namespace Station {
             return DeviceBase::eventFilter(obj, event);
         }
 
-        void StaAutoBlock::Draw(const bool& bElapsed, const bool& isMulti)
+        void StaAutoBlock::InitDeviceAttribute()
         {
-            DrawArrow(m_pPainter);
-            DrawButton(m_pPainter, bElapsed, Scale(m_rcZFZBtn), COLOR_BTN_DEEPGRAY, 1);
-            DrawButton(m_pPainter, bElapsed, Scale(m_rcJCFZBtn), COLOR_BTN_DEEPGRAY, 1);
-            DrawButton(m_pPainter, bElapsed, Scale(m_rcFCFZBtn), COLOR_BTN_DEEPGRAY, 1);
-            
-            for (StaLeaveTrack& track : m_vecStaLeaveTrack) {
-                DrawLeaveTrack(bElapsed, track);
+            if (m_nSX) {
+                p11.setX(p11.x() + 48);
+                p12.setX(p12.x() + 48);
+                p13.setX(p13.x() + 48);
+                p14.setX(p14.x() + 48);
+                p15.setX(p15.x() + 48);
+                p16.setX(p16.x() + 48);
+                p17.setX(p17.x() + 48);
             }
-
-            return StaDistant::Draw(bElapsed, isMulti);
+            else {
+                p21.setX(p21.x() - 48);
+                p22.setX(p22.x() - 48);
+                p23.setX(p23.x() - 48);
+                p24.setX(p24.x() - 48);
+                p25.setX(p25.x() - 48);
+                p26.setX(p26.x() - 48);
+                p27.setX(p27.x() - 48);
+            }
         }
 
-        void StaAutoBlock::DrawLeaveTrack(const bool& bElapsed, const StaLeaveTrack& track)
+        void StaAutoBlock::Draw(const bool& isMulti)
+        {
+            DrawArrow(m_pPainter);
+            DrawButton(m_pPainter, Scale(m_rcZFZBtn), COLOR_BTN_DEEPGRAY, m_nBtnState, 1);
+            DrawButton(m_pPainter, Scale(m_rcJCFZBtn), COLOR_BTN_DEEPGRAY, m_nBtnState, 1);
+            DrawButton(m_pPainter, Scale(m_rcFCFZBtn), COLOR_BTN_DEEPGRAY, m_nBtnState, 1);
+            
+            for (StaLeaveTrack& track : m_vecStaLeaveTrack) {
+                DrawLeaveTrack(track);
+            }
+
+            return StaDistant::Draw(isMulti);
+        }
+
+        void StaAutoBlock::DrawLeaveTrack(const StaLeaveTrack& track)
         {
             QFont font;
             font.setFamily("Î¢ÈíÑÅºÚ");
@@ -108,9 +131,9 @@ namespace Station {
             m_pPainter.setPen(Qt::white);
             m_pPainter.drawText(Scale(QRect(track.m_ptName, fontMetrics.size(Qt::TextSingleLine, track.m_strName))), track.m_strName, QTextOption(Qt::AlignCenter));
             //»æÖÆ¹ÉµÀ
-            m_pPainter.setPen(QPen(getTrackColor(bElapsed, track.m_nIndex), Scale(TRACK_WIDTH), Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
-            m_pPainter.drawLine(Scale(QPoint(track.m_rcTrack.left(), m_ptLempCenter.y())),
-                Scale(QPoint(track.m_rcTrack.right(), m_ptLempCenter.y())));
+            m_pPainter.setPen(QPen(getTrackColor(track.m_nIndex), Scale(TRACK_WIDTH), Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
+            m_pPainter.drawLine(Scale(QPoint(track.m_rcTrack.left(), m_ptInterUsed.y())),
+                Scale(QPoint(track.m_rcTrack.right(), m_ptInterUsed.y())));
             //»æÖÆ¾øÔµ½Ú
             m_pPainter.setPen(QPen(COLOR_TRACK_BLUE, 2));
             m_pPainter.drawLine(Scale(track.m_rcTrack.topLeft()), Scale(track.m_rcTrack.bottomLeft())); //»æÖÆ¹ìµÀÇø¶Î×ó²à¾øÔµ½Ú
@@ -123,7 +146,14 @@ namespace Station {
             m_pPainter.setPen(QPen(COLOR_LIGHT_WHITE, 1));
 
             //¸¨Öú±ÕÈûµÆ
-            m_pPainter.setBrush((m_nState & 0x10) ? COLOR_LIGHT_RED : COLOR_LIGHT_BLACK);
+            QColor color;
+            if (m_nState & 0x40) {
+                color = COLOR_LIGHT_WHITE;
+            }
+            else if (m_nState & 0x80) {
+                color = m_bElapsed ? COLOR_LIGHT_WHITE : COLOR_LIGHT_BLACK;
+            }
+            m_pPainter.setBrush(color);
             m_pPainter.drawEllipse(Scale(m_rcFZLight));
 
             m_pPainter.setRenderHint(QPainter::Antialiasing, false);
@@ -156,15 +186,10 @@ namespace Station {
             }
         }
 
-        QColor StaAutoBlock::getTrackColor(const bool& bElapsed, int nIndex)
+        QColor StaAutoBlock::getTrackColor(int nIndex)
         {
-            if (bElapsed){
-                if (m_vecStaLeaveTrack.at(nIndex).m_nState == 0x02) {
-                    return COLOR_TRACK_RED;
-                }
-                else {
-                    return COLOR_TRACK_BLUE;
-                }
+            if (m_vecStaLeaveTrack.at(nIndex).m_nState == 0x02) {
+                return COLOR_TRACK_RED;
             }
             else {
                 return COLOR_TRACK_BLUE;
@@ -187,6 +212,11 @@ namespace Station {
             case 0x80: m_cColor2 = COLOR_LIGHT_RED;    break;
             default:   m_cColor2 = COLOR_LIGHT_BLACK;  break;
             }
+        }
+
+        bool StaAutoBlock::IsMouseWheel(const QPoint& ptPos)
+        {
+            return false;
         }
 
         void StaAutoBlock::OnButtonClick()

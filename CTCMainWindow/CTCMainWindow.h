@@ -8,7 +8,6 @@
 #include "BaseWndClass/StationCtrlDisp.h"
 #include "BaseWndClass/StationMultiDisp.h"
 #include "BaseWndClass/StationLogDisp.h"
-#include "StationObject/StationObject.h"
 
 namespace CTCWindows {
 	class CTCMainWindow : public QMainWindow, public StationViewInterface
@@ -37,10 +36,11 @@ namespace CTCWindows {
 		virtual void InitStateToolBar() = 0;
 
 	public:
-		StationCtrlDisp* GetStationCtrlDisp() { return m_pStationCtrlDisp; }
-	
-	
-		
+		StationCtrlDisp* StaCtrlDisp() { return m_pStationCtrlDisp; }
+		QWidget* StaPaintView();
+		const QWidget* StaFunBtnToolBar();
+		void setFixedSize(const QSize& size);
+
 	protected:
 		struct MenuInfo {
 			int nLevel = 0;

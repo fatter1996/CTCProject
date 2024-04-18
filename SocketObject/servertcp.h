@@ -25,7 +25,7 @@ namespace Socket {
 
     signals:
         //接收数据信号
-        void recvDataSignal(const QByteArray& dataArray, const QHostAddress& hAddress, const quint16& nPort);
+        void recvDataSignal(const QByteArray&, const QHostAddress&, const quint16&);
 
     public slots:
         //和客户端建立连接的槽

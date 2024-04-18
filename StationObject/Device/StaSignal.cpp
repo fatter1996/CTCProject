@@ -1,6 +1,9 @@
 ﻿#include "StaSignal.h"
+#include "StaButton.h"
 #include "Global.h"
 #include <QDebug>
+#include <QMouseEvent>
+
 namespace Station {
     namespace Device {
 
@@ -26,6 +29,8 @@ namespace Station {
             m_mapAttribute.insert("m_nBSQModuAddr", [&](const QString& strElement) { m_nBSQModuAddr = strElement.toInt(); });
             m_mapAttribute.insert("isMD", [&](const QString& strElement) { m_bSingleDeng = strElement.toInt(); });
             m_mapAttribute.insert("DC_LC_Signa", [&](const QString& strElement) { m_bMD = strElement.toInt(); });
+
+            InitSignalLightColor();
         }
 
         StaSignal::~StaSignal()
@@ -35,6 +40,10 @@ namespace Station {
 
         bool StaSignal::eventFilter(QObject* obj, QEvent* event)
         {
+            if (event->type() == QEvent::MouseMove) {
+                QMouseEvent* mouseEvent = dynamic_cast<QMouseEvent*>(event);
+                onMouseMoveToButton(mouseEvent->pos(), m_nCode);
+            }
             return DeviceBase::eventFilter(obj, event);
         }
 
@@ -84,33 +93,33 @@ namespace Station {
             }
         }
 
-        void StaSignal::Draw(const bool& bElapsed, const bool& isMulti)
+        void StaSignal::Draw(const bool& isMulti)
         {
             if (!isMulti && bShowBtn) {
-                DrawSignalButton(bElapsed);
+                DrawSignalButton();
             }
-            DrawSignalLight(bElapsed);
+            DrawSignalLight();
             DrawSignalButtonLock();
-            return DeviceBase::Draw(bElapsed, isMulti);
+            return DeviceBase::Draw(isMulti);
         }
 
-        void StaSignal::DrawSignalButton(const bool& bElapsed)
+        void StaSignal::DrawSignalButton()
         {
             //列车按钮
             if (m_nAttr & (SIGNAL_LCZD | SIGNAL_LCSD)) {   
-                DrawButton(m_pPainter, bElapsed, Scale(m_rcTrainBtn), COLOR_BTN_GREEN);
+                DrawButton(m_pPainter, Scale(m_rcTrainBtn), COLOR_BTN_GREEN, m_nBtnState & BTNDOWN_TRAIN);
             }
             //调车按钮
             if (m_nAttr & (SIGNAL_DCZD | SIGNAL_DCSD)) {
-                DrawButton(m_pPainter, bElapsed, Scale(m_rcShuntBtn), COLOR_BTN_DEEPGRAY, 2);
+                DrawButton(m_pPainter, Scale(m_rcShuntBtn), COLOR_BTN_DEEPGRAY, m_nBtnState & BTNDOWN_SHUNT, 2);
             }
             //引导按钮,仅可作为始端
             if ((m_nAttr & SIGNAL_LCSD) && (m_nAttr & SIGNAL_JCXH || m_nAttr & SIGNAL_FCJLXH) && m_rcGuideBtn != QRect()) {
-                DrawButton(m_pPainter, bElapsed, Scale(m_rcGuideBtn), COLOR_BTN_BLUE_YD);
+                DrawButton(m_pPainter, Scale(m_rcGuideBtn), COLOR_BTN_BLUE_YD, m_nBtnState & BTNDOWN_GUIDE);
             }
         }
 
-        void StaSignal::DrawSignalLight(const bool& bElapsed)
+        void StaSignal::DrawSignalLight()
         {
             if (m_nAttr & SIGNAL_ISXXH) {  //虚信号机,不绘制灯位
                 return;
@@ -126,7 +135,7 @@ namespace Station {
                 m_pPainter.drawLine(Scale(QPoint(p12.x(), p12.y())), Scale(QPoint(p12.x() - m_nRadius, p12.y())));
             }
 
-            GetSignalLightColor(bElapsed);
+            GetSignalLightColor();
             m_pPainter.setRenderHint(QPainter::Antialiasing, true);
             //第一灯位
             m_pPainter.setBrush(m_cLightColor1);
@@ -159,10 +168,9 @@ namespace Station {
         {
             m_pPainter.setRenderHint(QPainter::Antialiasing, false);
             DrawLightRange();
-            //选中类型(0-未选中; 0x01-选中信号机名称; 0x02-选中列车按钮; 0x04-选中调车按钮; 0x08-选中通过按钮; 0x1f-选中信号机灯位)
-            //if (m_nSelectType & 0x01) {  //信号机名称
+            if (m_nSelectType & 0x01) {  //信号机名称
                 DeviceBase::DrawSelectRange();
-            //}
+            }
             DrawButtonRange();
         }
 
@@ -195,61 +203,55 @@ namespace Station {
             m_pPainter.setBrush(COLOR_LIGHT_BLACK);
 
             if (m_nSelectType & 0x02) {   //列车信号机按钮
-                if (m_nAttr & (SIGNAL_LCZD | SIGNAL_LCSD)) {
-                    m_pPainter.drawRect(Scale(OutSideRect(m_rcTrainBtn, 1, 1)));
-                    
-                }
+                m_pPainter.drawRect(Scale(OutSideRect(m_rcTrainBtn, 1, 1)));
             }
             if (m_nSelectType & 0x04) {   //调车信号机按钮
-                if (m_nAttr & (SIGNAL_DCZD | SIGNAL_DCSD)) {
-                    m_pPainter.drawRect(Scale(OutSideRect(m_rcShuntBtn, 1, 1)));
-                }
+                m_pPainter.drawRect(Scale(OutSideRect(m_rcShuntBtn, 1, 1)));
             }
-            if (m_nSelectType & 0x08) {   //通过信号机按钮
-                if (m_pRelatedBtn) {
-                    m_pRelatedBtn->setRangeVisible(true);
-                }
+            if (m_pRelatedBtn&& m_nSelectType & 0x08) {   //通过信号机按钮
+                StaButton* pButton = dynamic_cast<StaButton*>(m_pRelatedBtn);
+                m_pPainter.drawRect(Scale(OutSideRect(pButton->getButtonRect(), 1, 1)));
             }
             if (m_nSelectType & 0x10) {   //引导信号机按钮
-                if ((m_nAttr & SIGNAL_LCSD) && (m_nAttr & SIGNAL_JCXH || m_nAttr & SIGNAL_FCJLXH)) {
-                    m_pPainter.drawRect(Scale(OutSideRect(m_rcGuideBtn, 1, 1)));
-                }
+                m_pPainter.drawRect(Scale(OutSideRect(m_rcGuideBtn, 1, 1)));
             }
         }
 
-        void StaSignal::GetSignalLightColor(const bool& bElapsed)
+        void StaSignal::InitSignalLightColor()
         {
-            switch (m_nState & 0x0f) {
-                case SIGNAL_STATE_B   : m_cLightColor1 = COLOR_LIGHT_WHITE;   m_cLightColor2 = COLOR_LIGHT_BLACK;     break;
-                case SIGNAL_STATE_A   : m_cLightColor1 = COLOR_LIGHT_BLUE;    m_cLightColor2 = COLOR_LIGHT_BLACK;     break;
-                case SIGNAL_STATE_H   : m_cLightColor1 = COLOR_LIGHT_RED;     m_cLightColor2 = COLOR_LIGHT_BLACK;     break;
-                case SIGNAL_STATE_L   : m_cLightColor1 = COLOR_LIGHT_BLACK;   m_cLightColor2 = COLOR_LIGHT_GREEN;     break;
-                case SIGNAL_STATE_LL  : m_cLightColor1 = COLOR_LIGHT_GREEN;   m_cLightColor2 = COLOR_LIGHT_GREEN;     break;
-                case SIGNAL_STATE_U   : m_cLightColor1 = COLOR_LIGHT_BLACK;   m_cLightColor2 = COLOR_LIGHT_YELLOW;    break;
-                case SIGNAL_STATE_UU  : m_cLightColor1 = COLOR_LIGHT_YELLOW;  m_cLightColor2 = COLOR_LIGHT_YELLOW;    break;
-                case SIGNAL_STATE_2U  : m_cLightColor1 = COLOR_LIGHT_BLACK;   m_cLightColor2 = COLOR_LIGHT_YELLOW;    break;
-                case SIGNAL_STATE_HB  : m_cLightColor1 = COLOR_LIGHT_WHITE;   m_cLightColor2 = COLOR_LIGHT_RED;       break;
-                case SIGNAL_STATE_LU  : m_cLightColor1 = COLOR_LIGHT_GREEN;   m_cLightColor2 = COLOR_LIGHT_YELLOW;    break;
-                case SIGNAL_STATE_BS  : m_cLightColor1 = bElapsed ? COLOR_LIGHT_WHITE : COLOR_LIGHT_BLACK;     m_cLightColor2 = COLOR_LIGHT_BLACK;     break;
-                case SIGNAL_STATE_HS  : m_cLightColor1 = bElapsed ? COLOR_LIGHT_RED : COLOR_LIGHT_BLACK;       m_cLightColor2 = COLOR_LIGHT_BLACK;     break;
-                case SIGNAL_STATE_LS  : m_cLightColor1 = COLOR_LIGHT_BLACK;   m_cLightColor2 = bElapsed ? COLOR_LIGHT_GREEN : COLOR_LIGHT_BLACK;       break;
-                case SIGNAL_STATE_USU : m_cLightColor1 = bElapsed ? COLOR_LIGHT_YELLOW : COLOR_LIGHT_BLACK;    m_cLightColor2 = COLOR_LIGHT_YELLOW;    break;
-                case SIGNAL_STATE_US  : m_cLightColor1 = bElapsed ? COLOR_LIGHT_YELLOW : COLOR_LIGHT_BLACK;    m_cLightColor2 = COLOR_LIGHT_BLACK;     break;
-                case SIGNAL_STATE_DS  : m_cLightColor1 = bElapsed ? COLOR_LIGHT_RED : COLOR_LIGHT_BLACK;       m_cLightColor2 = COLOR_LIGHT_BLACK;     break;
-                default               : m_cLightColor1 = COLOR_LIGHT_BLACK;   m_cLightColor2 = COLOR_LIGHT_BLACK;     break;
+            m_mapLightColor.insert(SIGNAL_STATE_B, [&]() { m_cLightColor1 = COLOR_LIGHT_WHITE; m_cLightColor2 = COLOR_LIGHT_BLACK; });
+            m_mapLightColor.insert(SIGNAL_STATE_A, [&]() { m_cLightColor1 = COLOR_LIGHT_BLUE; m_cLightColor2 = COLOR_LIGHT_BLACK; });
+            m_mapLightColor.insert(SIGNAL_STATE_H, [&]() { m_cLightColor1 = COLOR_LIGHT_RED; m_cLightColor2 = COLOR_LIGHT_BLACK; });
+            m_mapLightColor.insert(SIGNAL_STATE_L, [&]() { m_cLightColor1 = COLOR_LIGHT_BLACK; m_cLightColor2 = COLOR_LIGHT_GREEN; });
+            m_mapLightColor.insert(SIGNAL_STATE_LL, [&]() { m_cLightColor1 = COLOR_LIGHT_GREEN; m_cLightColor2 = COLOR_LIGHT_GREEN; });
+            m_mapLightColor.insert(SIGNAL_STATE_U, [&]() { m_cLightColor1 = COLOR_LIGHT_BLACK; m_cLightColor2 = COLOR_LIGHT_YELLOW; });
+            m_mapLightColor.insert(SIGNAL_STATE_UU, [&]() {m_cLightColor1 = COLOR_LIGHT_YELLOW; m_cLightColor2 = COLOR_LIGHT_YELLOW; });
+            m_mapLightColor.insert(SIGNAL_STATE_2U, [&]() {m_cLightColor1 = COLOR_LIGHT_BLACK; m_cLightColor2 = COLOR_LIGHT_YELLOW; });
+            m_mapLightColor.insert(SIGNAL_STATE_HB, [&]() {m_cLightColor1 = COLOR_LIGHT_WHITE; m_cLightColor2 = COLOR_LIGHT_RED; });
+            m_mapLightColor.insert(SIGNAL_STATE_LU, [&]() {m_cLightColor1 = COLOR_LIGHT_GREEN; m_cLightColor2 = COLOR_LIGHT_YELLOW; });
+            m_mapLightColor.insert(SIGNAL_STATE_BS, [&]() { m_cLightColor1 = m_bElapsed ? COLOR_LIGHT_WHITE : COLOR_LIGHT_BLACK; m_cLightColor2 = COLOR_LIGHT_BLACK; });
+            m_mapLightColor.insert(SIGNAL_STATE_HS, [&]() { m_cLightColor1 = m_bElapsed ? COLOR_LIGHT_RED : COLOR_LIGHT_BLACK; m_cLightColor2 = COLOR_LIGHT_BLACK; });
+            m_mapLightColor.insert(SIGNAL_STATE_LS, [&]() { m_cLightColor1 = COLOR_LIGHT_BLACK;   m_cLightColor2 = m_bElapsed ? COLOR_LIGHT_GREEN : COLOR_LIGHT_BLACK; });
+            m_mapLightColor.insert(SIGNAL_STATE_USU, [&]() {m_cLightColor1 = m_bElapsed ? COLOR_LIGHT_YELLOW : COLOR_LIGHT_BLACK; m_cLightColor2 = COLOR_LIGHT_YELLOW; });
+            m_mapLightColor.insert(SIGNAL_STATE_US, [&]() { m_cLightColor1 = m_bElapsed ? COLOR_LIGHT_YELLOW : COLOR_LIGHT_BLACK; m_cLightColor2 = COLOR_LIGHT_BLACK; });
+            m_mapLightColor.insert(SIGNAL_STATE_DS, [&]() { m_cLightColor1 = m_bElapsed ? COLOR_LIGHT_RED : COLOR_LIGHT_BLACK; m_cLightColor2 = COLOR_LIGHT_BLACK; });
+        }
+
+        void StaSignal::GetSignalLightColor()
+        {
+            if (m_mapLightColor.contains(m_nState & 0x0f)) {
+                m_mapLightColor[m_nState & 0x0f]();
+            }
+            else {
+                m_cLightColor1 = COLOR_LIGHT_RED; 
+                m_cLightColor2 = COLOR_LIGHT_BLACK;
             }
         }
 
-        bool StaSignal::ContainsVisible(QPoint ptPos)
+        bool StaSignal::Contains(const QPoint& ptPos)
         {
-            //选中类型(0-未选中; 0x01-选中信号机名称; 0x02-选中列车按钮; 0x04-选中调车按钮; 0x08-选中通过按钮; 0x1f-选中信号机灯位)
-            DeviceBase* m_pRelatedBtn = nullptr; //关联通过按钮
+            StaButton* pButton = dynamic_cast<StaButton*>(m_pRelatedBtn);
 
-            QRect m_rcLight1;    //灯位1范围
-            QRect m_rcLight2;    //灯位2范围
-
-            QRect ;  //调车按钮范围
-            QRect m_rcGuideBtn;  //引导按钮范围
             if (m_rcTextRect.contains(ptPos)) {     //0x01-选中信号机名称
                 m_nSelectType = 0x01;
                 return true;
@@ -258,22 +260,129 @@ namespace Station {
                 m_nSelectType = 0x02;
                 return true;
             }
-            else if (m_rcShuntBtn.contains(ptPos)) {    //0x04-选中列车按钮
+            else if (m_rcShuntBtn.contains(ptPos)) {    //0x04-选中调车按钮
                 m_nSelectType = 0x04;
                 return true;
             }
+            else if (pButton && pButton->getButtonRect().contains(ptPos)) {    //0x08-选中通过按钮
+                m_nSelectType = 0x08;
+                return true;
+            }
+            else if (m_rcGuideBtn.contains(ptPos)) {    //0x10-选中引导按钮
+                m_nSelectType = 0x10;
+                return true;
+            }
+            else if (m_rcLight1.contains(ptPos) || m_rcLight2.contains(ptPos)) {    //0x1f-选中信号机灯位
+                m_nSelectType = 0x1f;
+                return true;
+            }
+            return false; 
+        }
 
+        bool StaSignal::IsMouseWheel(const QPoint& ptPos)
+        {
+            //进路建立，可操作列车按钮，调车按钮和通过按钮
+            if (CTCWindows::getCurrFunType() == CTCWindows::FunType::RouteBuild) {
+                return m_rcTrainBtn.contains(ptPos) || m_rcShuntBtn.contains(ptPos);
+            }
+            if (CTCWindows::getCurrFunType() == CTCWindows::FunType::GuideBtn) {
+                return m_rcGuideBtn.contains(ptPos);
+            }
             return false;
         }
 
-        QPen StaSignal::getDeviceNameColor(const bool& bElapsed)
+        void StaSignal::InitClickEvent()
         {
-            return QPen((m_bRangeVisible && (m_nSelectType & 0x01)) ? Qt::black : Qt::white);
+            for (int i = 0; i < static_cast<int>(CTCWindows::FunType::MethodConvert); ++i) {
+                switch (i)
+                {
+                case static_cast<int>(CTCWindows::FunType::RouteBuild):         //进路建立
+                case static_cast<int>(CTCWindows::FunType::GuideBtn): {         //引导按钮
+                    m_mapClickEvent.insert(static_cast<CTCWindows::FunType>(i), [&]() {
+                        OnButtonClick();
+                        if (m_nBtnState) {
+                            StationObject::AddSelectDevice(this);
+                        }
+                    });
+                    break;
+                }   
+                case static_cast<int>(CTCWindows::FunType::TotalCancel):        //总取消
+                case static_cast<int>(CTCWindows::FunType::SignalReopen):       //信号重开
+                case static_cast<int>(CTCWindows::FunType::TotalRelieve):       //总人解
+                case static_cast<int>(CTCWindows::FunType::RegionRelieve): {    //区故解
+                    m_mapClickEvent.insert(static_cast<CTCWindows::FunType>(i), [&]() {
+                        if (m_nSelectType == 0x01 || m_nSelectType == 0x1f) { //点击信号机名称或信号机灯位
+                            StationObject::AddSelectDevice(this);
+                        }
+                    });
+                    break;
+                }
+                case static_cast<int>(CTCWindows::FunType::GuideClock): {       //引导总锁
+                    m_mapClickEvent.insert(static_cast<CTCWindows::FunType>(i), [&]() {
+                        if (m_nSelectType == 0x10) { //点击信号机灯位
+                            StationObject::AddSelectDevice(this);
+                        }
+                    });
+                    break;
+                }
+                case static_cast<int>(CTCWindows::FunType::Blockade):           //封锁
+                case static_cast<int>(CTCWindows::FunType::UnBlockade): {       //解封
+                    m_mapClickEvent.insert(static_cast<CTCWindows::FunType>(i), [&]() {
+                        if (m_nSelectType == 0x02 && (m_nFirstBtnType == 0 || m_nFirstBtnType == 1)) { //点击列车按钮
+                            m_nBtnState |= BTNDOWN_TRAIN;
+                            m_nFirstBtnType = 1;
+                        }
+                        else if (m_nSelectType == 0x04 && (m_nFirstBtnType == 0 || m_nFirstBtnType == 2)) { //点击调车按钮
+                            m_nBtnState |= BTNDOWN_SHUNT;
+                            m_nFirstBtnType = 2;
+                        }
+                        StationObject::AddSelectDevice(this);
+                    });
+                    break;
+                }
+                case static_cast<int>(CTCWindows::FunType::Lighting):           //点灯
+                case static_cast<int>(CTCWindows::FunType::UnLighting): {       //灭灯
+                    m_mapClickEvent.insert(static_cast<CTCWindows::FunType>(i), [&]() {
+                        if (m_nSelectType == 0x10) { //点击信号机灯位
+                            StationObject::AddSelectDevice(this);
+                        }
+                    });
+                    break;
+                }
+                }
+            }
         }
 
         void StaSignal::OnButtonClick()
         {
+            if (m_nBtnState != 0) { //同一信号机不能重复点击
+                return;
+            }
 
+            if (CTCWindows::getCurrFunType() == CTCWindows::FunType::RouteBuild) {
+                if (m_nSelectType == 0x02 && (m_nFirstBtnType == 0 || m_nFirstBtnType == 1 || m_nFirstBtnType == 3)) { //点击列车按钮
+                    m_nBtnState |= BTNDOWN_TRAIN;
+                    m_nFirstBtnType = 1;
+                    return;
+                }
+                if (m_nSelectType == 0x04 && (m_nFirstBtnType == 0 || m_nFirstBtnType == 2)) { //点击调车按钮
+                    m_nBtnState |= BTNDOWN_SHUNT;
+                    m_nFirstBtnType = 2;
+                    return;
+                }
+            }
+            else if (CTCWindows::getCurrFunType() == CTCWindows::FunType::GuideBtn) {
+                if (m_nSelectType == 0x10 && m_nFirstBtnType == 0) {
+                    m_nBtnState |= BTNDOWN_GUIDE;
+                    m_nFirstBtnType = 4;
+                    return;
+                }
+            }
+        }
+
+        void StaSignal::OrderClear()
+        {
+            BtnStateReset();
         }
 
         void StaSignal::setVollover(const QPoint& ptBase)

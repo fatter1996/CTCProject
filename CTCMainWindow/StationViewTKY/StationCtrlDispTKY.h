@@ -17,7 +17,7 @@ namespace CTCWindows {
 		void CreatStaFunBtnToolBar();
 
 	public:
-		QWidget* GetStationPaintView();
+		QWidget* StaPaintView();
 
 	public:
 		void timerEvent(QTimerEvent* event);

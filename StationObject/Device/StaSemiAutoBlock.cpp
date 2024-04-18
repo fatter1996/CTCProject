@@ -43,14 +43,14 @@ namespace Station {
             return DeviceBase::eventFilter(obj, event);
         }
 
-        void StaSemiAutoBlock::Draw(const bool& bElapsed, const bool& isMulti)
+        void StaSemiAutoBlock::Draw(const bool& isMulti)
         {
             DrawArrow(m_pPainter);
-            DrawButton(m_pPainter, bElapsed, Scale(m_rcBSBtn), COLOR_BTN_DEEPGRAY);
-            DrawButton(m_pPainter, bElapsed, Scale(m_rcFYBtn), COLOR_BTN_DEEPGRAY);
-            DrawButton(m_pPainter, bElapsed, Scale(m_rcSGBtn), COLOR_BTN_DEEPGRAY);
+            DrawButton(m_pPainter, Scale(m_rcBSBtn), COLOR_BTN_DEEPGRAY, m_nBtnState);
+            DrawButton(m_pPainter, Scale(m_rcFYBtn), COLOR_BTN_DEEPGRAY, m_nBtnState);
+            DrawButton(m_pPainter, Scale(m_rcSGBtn), COLOR_BTN_DEEPGRAY, m_nBtnState);
 
-            return StaDistant::Draw(bElapsed, isMulti);
+            return StaDistant::Draw(isMulti);
         }
 
         void StaSemiAutoBlock::DrawLight()
@@ -99,6 +99,11 @@ namespace Station {
             case 0x80: cColor2 = COLOR_LIGHT_RED;    break;
             default:   cColor2 = COLOR_LIGHT_BLACK;  break;
             }
+        }
+
+        bool StaSemiAutoBlock::IsMouseWheel(const QPoint& ptPos)
+        {
+            return false;
         }
 
         void StaSemiAutoBlock::OnButtonClick()

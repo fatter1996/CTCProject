@@ -33,7 +33,7 @@ namespace Station {
 
         private:
             //站场绘制
-            void Draw(const bool& bElapsed, const bool& isMulti = false);
+            void Draw(const bool& isMulti = false);
             //绘制千分之六标识
             void DrawPermillSix();
 

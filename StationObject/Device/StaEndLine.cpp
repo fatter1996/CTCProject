@@ -24,10 +24,10 @@ namespace Station {
             return DeviceBase::eventFilter(obj, event);
         }
 
-        void StaEndLine::Draw(const bool& bElapsed, const bool& isMulti)
+        void StaEndLine::Draw(const bool& isMulti)
         {
             DrawEndLine();
-            return DeviceBase::Draw(bElapsed, isMulti);
+            return DeviceBase::Draw(isMulti);
         }
 
         void StaEndLine::DrawEndLine()

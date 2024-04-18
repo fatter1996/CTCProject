@@ -1,8 +1,13 @@
 ﻿#pragma once
 #include "DeviceBase.h"
 
+#define BTNDOWN_TRAIN    0x01    //列车按钮
+#define BTNDOWN_SHUNT    0x02    //调车按钮
+#define BTNDOWN_GUIDE    0x04    //引导按钮
+
 namespace Station {
     namespace Device {
+
         //信号机
         class StaSignal : public DeviceBase, public DeviceBtn
         {
@@ -17,11 +22,11 @@ namespace Station {
             //初始化设备属性
             void InitDeviceAttribute();
             //站场绘制
-            void Draw(const bool& bElapsed, const bool& isMulti = false);
+            void Draw(const bool& isMulti = false);
             //绘制信号机按钮
-            void DrawSignalButton(const bool& bElapsed);
+            void DrawSignalButton();
             //绘制信号机灯位
-            void DrawSignalLight(const bool& bElapsed);
+            void DrawSignalLight();
             //绘制信号机按钮封锁
             void DrawSignalButtonLock();
             //绘制设备选中虚线框
@@ -32,14 +37,20 @@ namespace Station {
             void DrawDeviceNameRange();
             //绘制信号机按钮虚线框
             void DrawButtonRange();
-            //判断鼠标是否在高亮显示范围内
-            bool ContainsVisible(QPoint ptPos);
+            //判断鼠标是否在事件范围内
+            bool Contains(const QPoint& ptPos);
+            //初始化信号灯颜色
+            void InitSignalLightColor();
             //获取信号灯颜色
-            void GetSignalLightColor(const bool& bElapsed);
-            //获取设备名称颜色
-            QPen getDeviceNameColor(const bool& bElapsed);
+            void GetSignalLightColor();
+            //鼠标是否在按钮上
+            bool IsMouseWheel(const QPoint& ptPos);
+            //初始化设备点击事件
+            void InitClickEvent();
             //按钮点击事件
             void OnButtonClick();
+            //命令清除
+            void OrderClear();
             //站场翻转
             void setVollover(const QPoint& ptBase);
             //状态重置
@@ -82,6 +93,7 @@ namespace Station {
             int m_nBSQModuAddr = 0;
 
             uint m_nBSQState = 0;
+            QMap<int, std::function<void()>> m_mapLightColor;
         };
     }
 }
