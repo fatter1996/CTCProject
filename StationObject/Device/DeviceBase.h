@@ -69,7 +69,7 @@ namespace Station {
 
         public:
             static bool getElapsed();
-            static bool setElapsed();
+            static void setElapsed();
 
         public: //工具函数
             static QRect QStringToQRect(QString strRect);

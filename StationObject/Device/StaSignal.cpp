@@ -219,28 +219,28 @@ namespace Station {
 
         void StaSignal::InitSignalLightColor()
         {
-            m_mapLightColor.insert(SIGNAL_STATE_B, [&]() { m_cLightColor1 = COLOR_LIGHT_WHITE; m_cLightColor2 = COLOR_LIGHT_BLACK; });
-            m_mapLightColor.insert(SIGNAL_STATE_A, [&]() { m_cLightColor1 = COLOR_LIGHT_BLUE; m_cLightColor2 = COLOR_LIGHT_BLACK; });
-            m_mapLightColor.insert(SIGNAL_STATE_H, [&]() { m_cLightColor1 = COLOR_LIGHT_RED; m_cLightColor2 = COLOR_LIGHT_BLACK; });
-            m_mapLightColor.insert(SIGNAL_STATE_L, [&]() { m_cLightColor1 = COLOR_LIGHT_BLACK; m_cLightColor2 = COLOR_LIGHT_GREEN; });
-            m_mapLightColor.insert(SIGNAL_STATE_LL, [&]() { m_cLightColor1 = COLOR_LIGHT_GREEN; m_cLightColor2 = COLOR_LIGHT_GREEN; });
-            m_mapLightColor.insert(SIGNAL_STATE_U, [&]() { m_cLightColor1 = COLOR_LIGHT_BLACK; m_cLightColor2 = COLOR_LIGHT_YELLOW; });
-            m_mapLightColor.insert(SIGNAL_STATE_UU, [&]() {m_cLightColor1 = COLOR_LIGHT_YELLOW; m_cLightColor2 = COLOR_LIGHT_YELLOW; });
-            m_mapLightColor.insert(SIGNAL_STATE_2U, [&]() {m_cLightColor1 = COLOR_LIGHT_BLACK; m_cLightColor2 = COLOR_LIGHT_YELLOW; });
-            m_mapLightColor.insert(SIGNAL_STATE_HB, [&]() {m_cLightColor1 = COLOR_LIGHT_WHITE; m_cLightColor2 = COLOR_LIGHT_RED; });
-            m_mapLightColor.insert(SIGNAL_STATE_LU, [&]() {m_cLightColor1 = COLOR_LIGHT_GREEN; m_cLightColor2 = COLOR_LIGHT_YELLOW; });
-            m_mapLightColor.insert(SIGNAL_STATE_BS, [&]() { m_cLightColor1 = m_bElapsed ? COLOR_LIGHT_WHITE : COLOR_LIGHT_BLACK; m_cLightColor2 = COLOR_LIGHT_BLACK; });
-            m_mapLightColor.insert(SIGNAL_STATE_HS, [&]() { m_cLightColor1 = m_bElapsed ? COLOR_LIGHT_RED : COLOR_LIGHT_BLACK; m_cLightColor2 = COLOR_LIGHT_BLACK; });
-            m_mapLightColor.insert(SIGNAL_STATE_LS, [&]() { m_cLightColor1 = COLOR_LIGHT_BLACK;   m_cLightColor2 = m_bElapsed ? COLOR_LIGHT_GREEN : COLOR_LIGHT_BLACK; });
-            m_mapLightColor.insert(SIGNAL_STATE_USU, [&]() {m_cLightColor1 = m_bElapsed ? COLOR_LIGHT_YELLOW : COLOR_LIGHT_BLACK; m_cLightColor2 = COLOR_LIGHT_YELLOW; });
-            m_mapLightColor.insert(SIGNAL_STATE_US, [&]() { m_cLightColor1 = m_bElapsed ? COLOR_LIGHT_YELLOW : COLOR_LIGHT_BLACK; m_cLightColor2 = COLOR_LIGHT_BLACK; });
-            m_mapLightColor.insert(SIGNAL_STATE_DS, [&]() { m_cLightColor1 = m_bElapsed ? COLOR_LIGHT_RED : COLOR_LIGHT_BLACK; m_cLightColor2 = COLOR_LIGHT_BLACK; });
+            m_mapLightColor.insert(SignalState::DS, [&]() { m_cLightColor1 = COLOR_LIGHT_WHITE; m_cLightColor2 = COLOR_LIGHT_BLACK; });
+            m_mapLightColor.insert(SignalState::A, [&]() { m_cLightColor1 = COLOR_LIGHT_BLUE; m_cLightColor2 = COLOR_LIGHT_BLACK; });
+            m_mapLightColor.insert(SignalState::H, [&]() { m_cLightColor1 = COLOR_LIGHT_RED; m_cLightColor2 = COLOR_LIGHT_BLACK; });
+            m_mapLightColor.insert(SignalState::L, [&]() { m_cLightColor1 = COLOR_LIGHT_BLACK; m_cLightColor2 = COLOR_LIGHT_GREEN; });
+            m_mapLightColor.insert(SignalState::LL, [&]() { m_cLightColor1 = COLOR_LIGHT_GREEN; m_cLightColor2 = COLOR_LIGHT_GREEN; });
+            m_mapLightColor.insert(SignalState::U, [&]() { m_cLightColor1 = COLOR_LIGHT_BLACK; m_cLightColor2 = COLOR_LIGHT_YELLOW; });
+            m_mapLightColor.insert(SignalState::UU, [&]() {m_cLightColor1 = COLOR_LIGHT_YELLOW; m_cLightColor2 = COLOR_LIGHT_YELLOW; });
+            m_mapLightColor.insert(SignalState::U2, [&]() {m_cLightColor1 = COLOR_LIGHT_BLACK; m_cLightColor2 = COLOR_LIGHT_YELLOW; });
+            m_mapLightColor.insert(SignalState::HB, [&]() {m_cLightColor1 = COLOR_LIGHT_WHITE; m_cLightColor2 = COLOR_LIGHT_RED; });
+            m_mapLightColor.insert(SignalState::LU, [&]() {m_cLightColor1 = COLOR_LIGHT_GREEN; m_cLightColor2 = COLOR_LIGHT_YELLOW; });
+            m_mapLightColor.insert(SignalState::BS, [&]() { m_cLightColor1 = m_bElapsed ? COLOR_LIGHT_WHITE : COLOR_LIGHT_BLACK; m_cLightColor2 = COLOR_LIGHT_BLACK; });
+            m_mapLightColor.insert(SignalState::HS, [&]() { m_cLightColor1 = m_bElapsed ? COLOR_LIGHT_RED : COLOR_LIGHT_BLACK; m_cLightColor2 = COLOR_LIGHT_BLACK; });
+            m_mapLightColor.insert(SignalState::LS, [&]() { m_cLightColor1 = COLOR_LIGHT_BLACK;   m_cLightColor2 = m_bElapsed ? COLOR_LIGHT_GREEN : COLOR_LIGHT_BLACK; });
+            m_mapLightColor.insert(SignalState::USU, [&]() {m_cLightColor1 = m_bElapsed ? COLOR_LIGHT_YELLOW : COLOR_LIGHT_BLACK; m_cLightColor2 = COLOR_LIGHT_YELLOW; });
+            m_mapLightColor.insert(SignalState::US, [&]() { m_cLightColor1 = m_bElapsed ? COLOR_LIGHT_YELLOW : COLOR_LIGHT_BLACK; m_cLightColor2 = COLOR_LIGHT_BLACK; });
+            m_mapLightColor.insert(SignalState::DS, [&]() { m_cLightColor1 = m_bElapsed ? COLOR_LIGHT_RED : COLOR_LIGHT_BLACK; m_cLightColor2 = COLOR_LIGHT_BLACK; });
         }
 
         void StaSignal::GetSignalLightColor()
         {
-            if (m_mapLightColor.contains(m_nState & 0x0f)) {
-                m_mapLightColor[m_nState & 0x0f]();
+            if (m_mapLightColor.contains(static_cast<SignalState>(m_nState & 0x0f))) {
+                m_mapLightColor[static_cast<SignalState>(m_nState & 0x0f)]();
             }
             else {
                 m_cLightColor1 = COLOR_LIGHT_RED; 
@@ -363,11 +363,13 @@ namespace Station {
                 if (m_nSelectType == 0x02 && (m_nFirstBtnType == 0 || m_nFirstBtnType == 1 || m_nFirstBtnType == 3)) { //点击列车按钮
                     m_nBtnState |= BTNDOWN_TRAIN;
                     m_nFirstBtnType = 1;
+                    CTCWindows::setRouteType(1);
                     return;
                 }
                 if (m_nSelectType == 0x04 && (m_nFirstBtnType == 0 || m_nFirstBtnType == 2)) { //点击调车按钮
                     m_nBtnState |= BTNDOWN_SHUNT;
                     m_nFirstBtnType = 2;
+                    CTCWindows::setRouteType(2);
                     return;
                 }
             }

@@ -10,9 +10,9 @@ namespace Station {
         StaProtocol::StaProtocol(QMap<QString, QVector<DeviceBase*>>& mapDeviceVector)
             : m_mapDeviceVector(mapDeviceVector)
         {
-            m_mapUnPackOrder.insert(0x40, [=](const QByteArray& dataAyyay) { UnpackStaViewState(dataAyyay); });
-            m_mapUnPackOrder.insert(0x80, [=](const QByteArray& dataAyyay) { UnpackLogin(dataAyyay); });
-            m_mapUnPackOrder.insert(0x81, [=](const QByteArray& dataAyyay) { UnpackCultivate(dataAyyay); });
+            m_mapUnPackOrder.insert(0x40, [=](const QByteArray& dataAyyay) { return UnpackStaViewState(dataAyyay); });
+            m_mapUnPackOrder.insert(0x80, [=](const QByteArray& dataAyyay) { return UnpackLogin(dataAyyay); });
+            m_mapUnPackOrder.insert(0x81, [=](const QByteArray& dataAyyay) { return UnpackCultivate(dataAyyay); });
         }
 
         StaProtocol::~StaProtocol()
@@ -20,17 +20,17 @@ namespace Station {
         
         }
 
-        void StaProtocol::UnpackData(const QByteArray& dataAyyay)
+        QByteArray StaProtocol::UnpackData(const QByteArray& dataAyyay)
         {
-            m_mapUnPackOrder[dataAyyay[10] & 0xFF](dataAyyay);
+            return m_mapUnPackOrder[dataAyyay[10] & 0xFF](dataAyyay);
         }
 
-        void StaProtocol::UnpackLogin(const QByteArray& dataAyyay)
+        QByteArray StaProtocol::UnpackLogin(const QByteArray& dataAyyay)
         {
-        
+            return "";
         }
 
-        void StaProtocol::UnpackStaViewState(const QByteArray& dataAyyay)
+        QByteArray StaProtocol::UnpackStaViewState(const QByteArray& dataAyyay)
         {
             int nFlag = 3 + 4;
             //道岔
@@ -135,11 +135,25 @@ namespace Station {
                     nFlag += 2;
                 }
             }
+            return "";
         }
 
-        void StaProtocol::UnpackCultivate(const QByteArray& dataAyyay)
+        QByteArray StaProtocol::UnpackCultivate(const QByteArray& dataAyyay)
         {
-        
+            int length = dataAyyay[11] & 0xFF;
+            QString strMsg = QString(dataAyyay.mid(12, length));
+            QStringList strOrders = strMsg.split("@");
+            QByteArray byteToInterLock;
+            for (QString strOrder : strOrders) {
+                QStringList subList = strOrder.split("-");
+                if (subList[0] == "QDZY") {
+                    byteToInterLock = subList[0].toLocal8Bit();
+                }
+                else if (subList[0] == "JLBL") {
+                    QStringList devList = subList[1].split(",");
+                }
+            }
+            return byteToInterLock;
         }
 
         DeviceBase* StaProtocol::getDeviceByCode(uint nCode)

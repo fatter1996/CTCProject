@@ -58,7 +58,7 @@ namespace Station {
         static void AddSelectDevice(Device::DeviceBase* pDevice);
         static QVector<Device::DeviceBase*>& getSelectDevice();
         static const UserInfo& getCurrUser();
-        
+        static const QString& getCultivateOrder();
     private:
         //站场设备数组
         QMap<QString, QVector<Device::DeviceBase*>> m_mapDeviceVector;
@@ -88,5 +88,6 @@ namespace Station {
         static QPoint m_ptOffset;       //站场图绘制偏移量
         static QVector<Device::DeviceBase*> m_vecSelectDevice;
         static UserInfo m_infoCurrUser;
+        static QString m_strOrderToInterLock;
     };
 }

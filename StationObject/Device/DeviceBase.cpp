@@ -16,7 +16,6 @@ namespace Station {
         DeviceBase::DeviceBase(QObject* parent)
         {
             
-
             m_mapAttribute.insert("m_nType", [&](const QString& strElement) { m_nType = strElement.toUInt(); });
             m_mapAttribute.insert("m_strName", [&](const QString& strElement) { m_strName = strElement; });
             m_mapAttribute.insert("m_nCode", [&](const QString& strElement) { m_nCode = strElement.toInt(nullptr, 16); });
@@ -80,8 +79,15 @@ namespace Station {
             if (event->type() == QEvent::MouseButtonRelease) {  //鼠标点击事件
                 QMouseEvent* mouseEvent = dynamic_cast<QMouseEvent*>(event);
                 if (StationObject::IsAllowStaOperation() && Contains(mouseEvent->pos())) {
-                    onDeviceClick();
+                    if (mouseEvent->button() == Qt::LeftButton) {   //鼠标左键点击事件
+                        onDeviceClick();
+                    }
+                    else if (mouseEvent->button() == Qt::RightButton) {   //鼠标右键点击事件
+                        onDeviceClick();
+                    }
                 }
+                
+                
             }
             return QObject::eventFilter(obj, event);
         }
@@ -95,6 +101,7 @@ namespace Station {
                 }
                 else if (m_pDeviceInfoReader->isEndElement() && m_pDeviceInfoReader->name() == strDeviceType) {
                     InitDeviceAttribute();
+                    InitClickEvent();
                     return;
                 }
             }
@@ -162,7 +169,7 @@ namespace Station {
         void DeviceBase::onDeviceClick()
         {
             if (m_mapClickEvent.contains(CTCWindows::getCurrFunType())) {
-                m_mapClickEvent[CTCWindows::getCurrFunType()];
+                m_mapClickEvent[CTCWindows::getCurrFunType()]();
             }
         }
 
@@ -186,7 +193,7 @@ namespace Station {
             return m_bElapsed;
         }
 
-        bool DeviceBase::setElapsed()
+        void DeviceBase::setElapsed()
         {
             m_bElapsed = !m_bElapsed;
         }

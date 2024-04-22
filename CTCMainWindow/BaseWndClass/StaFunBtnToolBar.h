@@ -58,8 +58,10 @@ namespace CTCWindows {
     public:
         static FunType m_SelectFunType;
         static QMap<FunType, int> m_mapStaOrderCode;
+        static int m_nRouteType; //进路类型(1-列车进路; 2-调车进路; 3-通过进路)
     }; 
 
     FunType getCurrFunType();
     int getFunBtnOrderCode();
+    void setRouteType(int nType);
 }

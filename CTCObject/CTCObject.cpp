@@ -55,6 +55,7 @@ namespace CTCDoc{
 			m_pMainStation->InitDeviceEventFilter(m_pCTCMainWindow->StaPaintView());
 			StaOperationConnect();
 		}
+		UserLogin();
 		return m_pCTCMainWindow;
 		//if (UserLogin()) {
 		//	return m_pCTCMainWindow;

@@ -86,11 +86,13 @@ namespace Station {
                 if (m_nType == 81 && m_nFirstBtnType == 0) {    //通过按钮
                     m_nBtnState |= true;
                     m_nFirstBtnType = 3;
+                    CTCWindows::setRouteType(3);
                     return;
                 }
                 if (m_nType == 380 && m_nFirstBtnType == 1) {   //虚信号按钮
                     m_nBtnState |= true;
                     m_nFirstBtnType = 1;
+                    CTCWindows::setRouteType(1);
                     return;
                 }
             }

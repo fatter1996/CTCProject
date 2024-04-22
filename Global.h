@@ -74,26 +74,27 @@
 #define SIGNAL_TFDCXH  0x80000000UL		//驼峰进路中的调车信号机
 
 //信号机灯光显示定义
-#define  SIGNAL_STATE_DS	0x00U		//断丝
-#define  SIGNAL_STATE_B		0x01U		//白灯
-#define  SIGNAL_STATE_A		0x02U		//蓝灯
-#define  SIGNAL_STATE_L		0x03U		//绿灯
-#define  SIGNAL_STATE_H		0x04U		//红灯
-#define  SIGNAL_STATE_U		0x05U		//黄灯
-#define  SIGNAL_STATE_UU	0x06U		//双黄
-#define  SIGNAL_STATE_LL	0x07U		//双绿
-#define  SIGNAL_STATE_HB	0x08U		//引导(红白)
-#define  SIGNAL_STATE_LU	0x0AU		//绿黄
-#define  SIGNAL_STATE_2U	0x09U		//2黄
-#define  SIGNAL_STATE_BS	0x0BU		//白闪
-#define  SIGNAL_STATE_US	0x0CU		//黄闪
-#define  SIGNAL_STATE_LS	0x0DU		//绿闪
-#define  SIGNAL_STATE_HS	0x0EU		//红闪
-#define  SIGNAL_STATE_USU	0x0FU		//黄闪黄
+
+//#define  SIGNAL_STATE_DS	0x00U		//断丝
+//#define  SIGNAL_STATE_B		0x01U		//白灯
+//#define  SIGNAL_STATE_A		0x02U		//蓝灯
+//#define  SIGNAL_STATE_L		0x03U		//绿灯
+//#define  SIGNAL_STATE_H		0x04U		//红灯
+//#define  SIGNAL_STATE_U		0x05U		//黄灯
+//#define  SIGNAL_STATE_UU	0x06U		//双黄
+//#define  SIGNAL_STATE_LL	0x07U		//双绿
+//#define  SIGNAL_STATE_HB	0x08U		//引导(红白)
+//#define  SIGNAL_STATE_LU	0x0AU		//绿黄
+//#define  SIGNAL_STATE_2U	0x09U		//2黄
+//#define  SIGNAL_STATE_BS	0x0BU		//白闪
+//#define  SIGNAL_STATE_US	0x0CU		//黄闪
+//#define  SIGNAL_STATE_LS	0x0DU		//绿闪
+//#define  SIGNAL_STATE_HS	0x0EU		//红闪
+//#define  SIGNAL_STATE_USU	0x0FU		//黄闪黄
 
 //通信目标软件类型
 #define	 TARGET_INTERLOCK	0xAA		//联锁
-#define	 TARGET_TEACHER		0xBB		//联锁
+#define	 TARGET_TEACHER		0xBB		//教师机
 #define	 TARGET_CTC			0xCC		//CTC
 #define	 TARGET_CULTIVATE	0xDD		//培训软件
 

@@ -3,6 +3,7 @@
 
 namespace Station {
     namespace Transmission {
+
         class StaProtocol {
 
         public:
@@ -10,17 +11,19 @@ namespace Station {
             ~StaProtocol();
 
         public:
-            void UnpackData(const QByteArray& dataAyyay);
+            QByteArray UnpackData(const QByteArray& dataAyyay);
 
         private:
-            void UnpackLogin(const QByteArray& dataAyyay);   //解析登录信息
-            void UnpackStaViewState(const QByteArray& dataAyyay);   //解析站场信息
-            void UnpackCultivate(const QByteArray& dataAyyay);      //解析培训信息
+            QByteArray UnpackLogin(const QByteArray& dataAyyay);   //解析登录信息
+            QByteArray UnpackStaViewState(const QByteArray& dataAyyay);   //解析站场信息
+            QByteArray UnpackCultivate(const QByteArray& dataAyyay);      //解析培训信息
             Device::DeviceBase* getDeviceByCode(uint nCode);
+
+        
 
         private:
             QMap<QString, QVector<Device::DeviceBase*>>& m_mapDeviceVector;
-            QMap<int, std::function<void(const QByteArray&)>> m_mapUnPackOrder;
+            QMap<int, std::function<QByteArray(const QByteArray&)>> m_mapUnPackOrder;
         };
     }
 }

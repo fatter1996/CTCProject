@@ -8,6 +8,7 @@ namespace Station {
         {
             m_mapPackOrder.insert(0x40, [=]() { return PackStaOperation(); });
             m_mapPackOrder.insert(0x80, [=]() { return PackUserLogin(); });
+            m_mapPackOrder.insert(0x81, [=]() { return PackCultivate(); });
         }
 
         StaPacket::~StaPacket()
@@ -59,7 +60,10 @@ namespace Station {
 
         QByteArray StaPacket::PackCultivate()
         {
-        
+            QByteArray byteOperation;
+            byteOperation.append(StationObject::getCultivateOrder().length());
+            byteOperation.append(StationObject::getCultivateOrder());
+            return byteOperation;
         }
     }
 }

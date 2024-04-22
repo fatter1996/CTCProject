@@ -7,9 +7,12 @@ int main(int argc, char *argv[]) {
     QApplication a(argc, argv);
 
     CTCDoc::CTCObject CTCObject;
-    
     QMainWindow* mainWnd = CTCObject.CreatCTCMainWnd();
-    mainWnd->showMaximized();
-
-    return a.exec();
+    if (mainWnd) {
+        mainWnd->showMaximized();
+        return a.exec();
+    }
+    else {
+        a.quit();
+    }
 }

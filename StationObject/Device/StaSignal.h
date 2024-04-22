@@ -8,6 +8,25 @@
 namespace Station {
     namespace Device {
 
+        enum class SignalState : int {
+            DS = 0x00U,		//断丝
+            B = 0x01U,		//白灯
+            A = 0x02U,		//蓝灯
+            L = 0x03U,		//绿灯
+            H = 0x04U,		//红灯
+            U = 0x05U,		//黄灯
+            UU = 0x06U,		//双黄
+            LL = 0x07U,		//双绿
+            HB = 0x08U,		//引导(红白)
+            LU = 0x0AU,		//绿黄
+            U2 = 0x09U,		//2黄
+            BS = 0x0BU,		//白闪
+            US = 0x0CU,		//黄闪
+            LS = 0x0DU,		//绿闪
+            HS = 0x0EU,		//红闪
+            USU = 0x0FU		//黄闪黄
+        };
+
         //信号机
         class StaSignal : public DeviceBase, public DeviceBtn
         {
@@ -93,7 +112,7 @@ namespace Station {
             int m_nBSQModuAddr = 0;
 
             uint m_nBSQState = 0;
-            QMap<int, std::function<void()>> m_mapLightColor;
+            QMap<SignalState, std::function<void()>> m_mapLightColor;
         };
     }
 }

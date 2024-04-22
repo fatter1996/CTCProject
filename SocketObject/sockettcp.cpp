@@ -21,18 +21,22 @@ namespace Socket {
     bool SocketTCP::InitServer()
     {
         //m_pTcpSocket->bind(m_hLocalIp, m_nLocalPort);
-        m_pTcpSocket->connectToHost(m_hCultivateIp, m_nCultivatePort);
-        return true;
-        //if (m_pTcpSocket->bind(m_hLocalIp, m_nLocalPort)) {
-        //    qDebug() << QString("Init TCP socket %1:%2 succeeded!").arg(m_hLocalIp.toString()).arg(m_nLocalPort);
-        //    //连接
-        //    m_pTcpSocket->connectToHost(m_hCultivateIp, m_nCultivatePort);
-        //    return true;
-        //}
-        //else {
-        //    qCritical() << QString("Init TCP socket %1:%2 failed!").arg(m_hLocalIp.toString()).arg(m_nLocalPort);
-        //    return false;
-        //}
+        //m_pTcpSocket->setSocketOption(QAbstractSocket::KeepAliveOption, 1);
+        //m_pTcpSocket->connectToHost(m_hCultivateIp, m_nCultivatePort);
+        ////m_pTcpSocket->connectToHost(QHostAddress("192.168.31.86"), 8080);
+        //return true;
+       if (m_pTcpSocket->bind(QHostAddress::Any, m_nLocalPort)) {
+           qDebug() << QString("Init TCP socket %1:%2 succeeded!").arg(m_hLocalIp.toString()).arg(m_nLocalPort);
+           //连接
+           m_pTcpSocket->setSocketOption(QAbstractSocket::KeepAliveOption, 1);
+           m_pTcpSocket->connectToHost(m_hCultivateIp, m_nCultivatePort);
+           m_nTimer = startTimer(3000);
+           return true;
+       }
+       else {
+           qCritical() << QString("Init TCP socket %1:%2 failed!").arg(m_hLocalIp.toString()).arg(m_nLocalPort);
+           return false;
+       }
     }
 
     void SocketTCP::onConnected()
@@ -49,7 +53,7 @@ namespace Socket {
     {
         qDebug() << QString("TCP disconnected from %1:%2 !").arg(m_hCultivateIp.toString()).arg(m_nCultivatePort);
         emit disconnected(m_hCultivateIp, m_nCultivatePort);
-        m_nTimer = startTimer(1000);
+        m_nTimer = startTimer(3000);
     }
 
     void SocketTCP::onRecvData()
@@ -65,7 +69,7 @@ namespace Socket {
     void SocketTCP::timerEvent(QTimerEvent* event)
     {
         if (m_nTimer == event->timerId()) {
-            //m_pTcpSocket->connectToHost(m_hCultivateIp, m_nCultivatePort);
+            m_pTcpSocket->connectToHost(m_hCultivateIp, m_nCultivatePort);
         }
     }
 
