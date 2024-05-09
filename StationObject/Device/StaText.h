@@ -11,15 +11,6 @@ namespace Station {
             ~StaText();
 
         private:
-            //站场绘制
-            void Draw(const bool& isMulti = false);
-
-            //站场翻转
-            void setVollover(const QPoint& ptBase);
-            //状态重置
-            void ResetDevState();
-
-        private:
             bool m_bIsTitle = false;
         };
     }

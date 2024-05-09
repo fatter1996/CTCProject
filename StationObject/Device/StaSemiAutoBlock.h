@@ -20,6 +20,12 @@ namespace Station {
             void DrawLight();
             //绘制文字
             void DrawText();
+            //鼠标是否在按钮上
+            bool IsMouseWheel(const QPoint& ptPos);
+            //初始化设备点击事件
+            void InitClickEvent();
+            //按钮点击事件
+            void OnButtonClick();
             //获取箭头颜色
             void getArrowColor();
             //鼠标是否在按钮上
@@ -41,6 +47,7 @@ namespace Station {
             QRect m_rcSGBtn;
 
             uint m_nBlockType = 0;
+            uint m_nSelectBtnType = 0x0;  //选中类型(0-未选中; 0x01-闭塞; 0x02-复原; 0x04-事故)
         };
     }
 }

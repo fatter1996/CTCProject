@@ -28,8 +28,8 @@ namespace Station {
 
             m_mapAttribute.insert("FZBSD_rect", [&](const QString& strElement) {
                 m_rcFZLight = QStringToQRect(strElement);
-                m_rcFZLight.setWidth(17);
-                m_rcFZLight.setHeight(17);
+                m_rcFZLight.setWidth(13);
+                m_rcFZLight.setHeight(13);
             });
 
             m_mapAttribute.insert("ZFZ_Text", [&](const QString& strElement) { m_ptZFZText = QStringToQPoint(strElement); });
@@ -38,15 +38,15 @@ namespace Station {
             m_mapAttribute.insert("FZ_Text", [&](const QString& strElement) { m_ptFZText = QStringToQPoint(strElement); });
 
             m_mapAttribute.insert("LampNum", [&](const QString& strElement) {
-                m_nLempNum = strElement.toUInt();
-                for (int i = 0; i < m_nLempNum; i++) {
+                m_nLampNum = strElement.toUInt();
+                for (int i = 0; i < m_nLampNum; i++) {
                     m_vecStaLeaveTrack.append(StaLeaveTrack());
                     m_vecStaLeaveTrack[i].m_nIndex = i;
                 }
             });
 
             m_mapAttribute.insert("isLeave", [&](const QString& strElement) { m_bLeave = strElement.toUInt(); });
-            m_mapAttribute.insert("LampCenter0", [&](const QString& strElement) { m_ptLempCenter = QStringToQPoint(strElement); });
+            m_mapAttribute.insert("LampCenter0", [&](const QString& strElement) { m_ptLampCenter = QStringToQPoint(strElement); });
             m_mapAttribute.insert("InterUsed", [&](const QString& strElement) { m_ptInterUsed = QStringToQPoint(strElement); });
             m_mapAttribute.insert("ZDBS_Type", [&](const QString& strElement) { m_strAutoBlockType = strElement; });
             
@@ -85,7 +85,7 @@ namespace Station {
 
         void StaAutoBlock::InitDeviceAttribute()
         {
-            if (m_nSX) {
+            if (m_rcFZLight.x() < p11.x()) {
                 p11.setX(p11.x() + 48);
                 p12.setX(p12.x() + 48);
                 p13.setX(p13.x() + 48);
@@ -94,7 +94,7 @@ namespace Station {
                 p16.setX(p16.x() + 48);
                 p17.setX(p17.x() + 48);
             }
-            else {
+            else if (m_rcFZLight.x() > p11.x()) {
                 p21.setX(p21.x() - 48);
                 p22.setX(p22.x() - 48);
                 p23.setX(p23.x() - 48);
@@ -103,14 +103,32 @@ namespace Station {
                 p26.setX(p26.x() - 48);
                 p27.setX(p27.x() - 48);
             }
+            //if (m_nSX) {
+            //    p11.setX(p11.x() + 48);
+            //    p12.setX(p12.x() + 48);
+            //    p13.setX(p13.x() + 48);
+            //    p14.setX(p14.x() + 48);
+            //    p15.setX(p15.x() + 48);
+            //    p16.setX(p16.x() + 48);
+            //    p17.setX(p17.x() + 48);
+            //}
+            //else {
+            //    p21.setX(p21.x() - 48);
+            //    p22.setX(p22.x() - 48);
+            //    p23.setX(p23.x() - 48);
+            //    p24.setX(p24.x() - 48);
+            //    p25.setX(p25.x() - 48);
+            //    p26.setX(p26.x() - 48);
+            //    p27.setX(p27.x() - 48);
+            //}
         }
 
         void StaAutoBlock::Draw(const bool& isMulti)
         {
             DrawArrow(m_pPainter);
-            DrawButton(m_pPainter, Scale(m_rcZFZBtn), COLOR_BTN_DEEPGRAY, m_nBtnState, 1);
-            DrawButton(m_pPainter, Scale(m_rcJCFZBtn), COLOR_BTN_DEEPGRAY, m_nBtnState, 1);
-            DrawButton(m_pPainter, Scale(m_rcFCFZBtn), COLOR_BTN_DEEPGRAY, m_nBtnState, 1);
+            DrawButton(m_pPainter, Scale(m_rcZFZBtn), COLOR_BTN_DEEPGRAY, m_nBtnState & 0x01);
+            DrawButton(m_pPainter, Scale(m_rcJCFZBtn), COLOR_BTN_DEEPGRAY, m_nBtnState & 0x02);
+            DrawButton(m_pPainter, Scale(m_rcFCFZBtn), COLOR_BTN_DEEPGRAY, m_nBtnState & 0x04);
             
             for (StaLeaveTrack& track : m_vecStaLeaveTrack) {
                 DrawLeaveTrack(track);
@@ -142,7 +160,6 @@ namespace Station {
 
         void StaAutoBlock::DrawLight()
         {
-            m_pPainter.setRenderHint(QPainter::Antialiasing, true);
             m_pPainter.setPen(QPen(COLOR_LIGHT_WHITE, 1));
 
             //¸¨Öú±ÕÈûµÆ
@@ -155,8 +172,6 @@ namespace Station {
             }
             m_pPainter.setBrush(color);
             m_pPainter.drawEllipse(Scale(m_rcFZLight));
-
-            m_pPainter.setRenderHint(QPainter::Antialiasing, false);
         }
 
         void StaAutoBlock::DrawText()
@@ -178,11 +193,45 @@ namespace Station {
             m_pPainter.drawText(Scale(QRect(m_ptFZText, fontMetrics.size(Qt::TextSingleLine, "¸¨Öú°ìÀí"))), "¸¨Öú°ìÀí", QTextOption(Qt::AlignCenter));
         }
 
-        void StaAutoBlock::setLeaveTrackState(int nState)
+        bool StaAutoBlock::IsMouseWheel(const QPoint& ptPos)
         {
-            for (StaLeaveTrack& pTrack : m_vecStaLeaveTrack) {
-                pTrack.m_nState = nState & 0x03;
-                nState = nState >> 2;
+            if (CTCWindows::getCurrFunType() == CTCWindows::FunType::FunBtn) {
+                if (m_rcZFZBtn.contains(ptPos)) {
+                    m_nSelectBtnType = 0x01;
+                    return true;
+                }
+                else if (m_rcJCFZBtn.contains(ptPos)) {
+                    m_nSelectBtnType = 0x02;
+                    return true;
+                }
+                else if (m_rcFCFZBtn.contains(ptPos)) {
+                    m_nSelectBtnType = 0x04;
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        void StaAutoBlock::InitClickEvent()
+        {
+            m_mapClickEvent.insert(CTCWindows::FunType::FunBtn, [&]() {
+                OnButtonClick();
+            });
+        }
+
+        void StaAutoBlock::OnButtonClick()
+        {
+            if (m_nBtnState != 0) {
+                return;
+            }
+
+            if (CTCWindows::getCurrFunType() == CTCWindows::FunType::FunBtn) {
+                m_nBtnState |= m_nSelectBtnType;
+                m_nFirstBtnType = 5;
+            }
+
+            if (m_nBtnState) {
+                StationObject::AddSelectDevice(this);
             }
         }
 
@@ -214,16 +263,6 @@ namespace Station {
             }
         }
 
-        bool StaAutoBlock::IsMouseWheel(const QPoint& ptPos)
-        {
-            return false;
-        }
-
-        void StaAutoBlock::OnButtonClick()
-        {
-
-        }
-
         void StaAutoBlock::setVollover(const QPoint& ptBase)
         {
 
@@ -232,6 +271,14 @@ namespace Station {
         void StaAutoBlock::ResetDevState()
         {
 
+        }
+
+        void StaAutoBlock::setLeaveTrackState(int nState)
+        {
+            for (StaLeaveTrack& pTrack : m_vecStaLeaveTrack) {
+                pTrack.m_nState = nState & 0x03;
+                nState = nState >> 2;
+            }
         }
     }
 }

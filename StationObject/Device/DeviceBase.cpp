@@ -4,13 +4,13 @@
 #include <QMouseEvent>
 #include <QCursor>
 #include <QApplication>
-
+#include <QJsonObject>
+#include <QJsonArray>
 namespace Station {
     namespace Device {
 
         int DeviceBase::m_rcWheelDevCode = -1;
         QPainter DeviceBase::m_pPainter;
-        
         bool DeviceBase::m_bElapsed = false;
 
         DeviceBase::DeviceBase(QObject* parent)
@@ -86,20 +86,18 @@ namespace Station {
                         onDeviceClick();
                     }
                 }
-                
-                
             }
             return QObject::eventFilter(obj, event);
         }
 
-        void DeviceBase::InitDeviceInfo(QXmlStreamReader* m_pDeviceInfoReader, const QString& strDeviceType)
+        void DeviceBase::InitDeviceInfoFromXml(QXmlStreamReader* pDeviceInfoReader, const QString& strDeviceType)
         {
-            while (!m_pDeviceInfoReader->atEnd()) {
-                m_pDeviceInfoReader->readNext();
-                if (m_pDeviceInfoReader->isStartElement()) {
-                    ReadDeviceAttribute(m_pDeviceInfoReader);
+            while (!pDeviceInfoReader->atEnd()) {
+                pDeviceInfoReader->readNext();
+                if (pDeviceInfoReader->isStartElement()) {
+                    ReadDeviceAttributeFromXml(pDeviceInfoReader);
                 }
-                else if (m_pDeviceInfoReader->isEndElement() && m_pDeviceInfoReader->name() == strDeviceType) {
+                else if (pDeviceInfoReader->isEndElement() && pDeviceInfoReader->name() == strDeviceType) {
                     InitDeviceAttribute();
                     InitClickEvent();
                     return;
@@ -107,7 +105,16 @@ namespace Station {
             }
         }
 
-        void DeviceBase::ReadDeviceAttribute(QXmlStreamReader* m_pDeviceInfoReader)
+        void DeviceBase::InitInitDeviceInfoFromJson(const QJsonObject& object, const QString& strKey)
+        {
+            for (QString key : object.keys()) {
+                ReadDeviceAttributeFromJson(object, key);
+            }
+            InitDeviceAttribute();
+            InitClickEvent();
+        }
+
+        void DeviceBase::ReadDeviceAttributeFromXml(QXmlStreamReader* m_pDeviceInfoReader)
         {
             QString str = m_pDeviceInfoReader->name().toString();
             if (m_mapAttribute.contains(str)) {
@@ -115,6 +122,18 @@ namespace Station {
                     nIndex = m_pDeviceInfoReader->attributes().value("index").toInt();
                 }
                 m_mapAttribute[str](m_pDeviceInfoReader->readElementText());
+            }
+        }
+
+        void DeviceBase::ReadDeviceAttributeFromJson(const QJsonObject& lampObject, const QString& strKey)
+        {
+            if (m_mapAttribute.contains(strKey)) {
+                if (lampObject.value(strKey).isString()) {
+                    m_mapAttribute[strKey](lampObject.value(strKey).toString());
+                }
+                else {
+                    m_mapAttribute[strKey](QString::number(lampObject.value(strKey).toInt()));
+                }
             }
         }
 
@@ -129,13 +148,7 @@ namespace Station {
             }
             m_pPainter.setFont(font);//设置字体
             m_pPainter.setPen(getDeviceNameColor());
-            
             m_pPainter.drawText(Scale(m_rcTextRect), m_strName, QTextOption(Qt::AlignCenter));
-        }
-
-        void DeviceBase::InitDeviceAttribute()
-        {
-            
         }
 
         void DeviceBase::Draw(const bool& isMulti)
@@ -146,6 +159,10 @@ namespace Station {
             }
             //绘制设备名称
             DrawDeviceName();
+            //绘制培训提示信息
+            if (m_bShowTips) {
+                DrawCultivateTips();
+            }
         }
 
         void DeviceBase::DrawSelectRange()
@@ -156,48 +173,12 @@ namespace Station {
             m_pPainter.drawRect(Scale(OutSideRect(m_rcTextRect, 2, 0)));
         }
 
-        bool DeviceBase::Contains(const QPoint& ptPos)
-        {
-            return false;
-        }
-
-        void DeviceBase::InitClickEvent()
-        {
-        
-        }
-
         void DeviceBase::onDeviceClick()
         {
             if (m_mapClickEvent.contains(CTCWindows::getCurrFunType())) {
                 m_mapClickEvent[CTCWindows::getCurrFunType()]();
             }
         }
-
-        void DeviceBase::OrderClear()
-        {
-
-        }
-
-        QPen DeviceBase::getDeviceNameColor()
-        {
-            return QPen(Qt::white);
-        }
-
-        void DeviceBase::setState(const uint& nState) 
-        { 
-            m_nState = nState;
-        }
-
-        bool DeviceBase::getElapsed()
-        {
-            return m_bElapsed;
-        }
-
-        void DeviceBase::setElapsed()
-        {
-            m_bElapsed = !m_bElapsed;
-        }
-
 
         QRect DeviceBase::QStringToQRect(QString strRect)
         {

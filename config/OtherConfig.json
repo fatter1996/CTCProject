@@ -1,0 +1,116 @@
+﻿{
+    "Lamp": [
+        {
+            "m_nType": 341,
+            "m_nCode": 265,
+            "m_strName": "A机工作",
+            "m_textRect": "200,100,240,120",
+            "lampRect": "212,74,228,90",
+            "FontHeight": 14
+        },
+        {
+            "m_nType": 341,
+            "m_nCode": 266,
+            "m_strName": "A机状态",
+            "m_textRect": "260,100,300,120",
+            "lampRect": "272,74,288,90",
+            "FontHeight": 14
+        },
+        {
+            "m_nType": 341,
+            "m_nCode": 267,
+            "m_strName": "B机工作",
+            "m_textRect": "320,100,360,120",
+            "lampRect": "332,74,348,90",
+            "FontHeight": 14
+        },
+        {
+            "m_nType": 341,
+            "m_nCode": 268,
+            "m_strName": "B机状态",
+            "m_textRect": "380,100,420,120",
+            "lampRect": "392,74,408,90",
+            "FontHeight": 14
+        },
+        {
+            "m_nType": 341,
+            "m_nCode": 269,
+            "m_strName": "非常站控",
+            "m_textRect": "440,100,480,120",
+            "lampRect": "452,74,468,90",
+            "FontHeight": 14
+        },
+        {
+            "m_nType": 341,
+            "m_nCode": 270,
+            "m_strName": "允许转回",
+            "m_textRect": "500,100,540,120",
+            "lampRect": "512,74,528,90",
+            "FontHeight": 14
+        },
+        {
+            "m_nType": 341,
+            "m_nCode": 271,
+            "m_strName": "分散自律",
+            "m_textRect": "200,180,240,200",
+            "lampRect": "212,154,228,170",
+            "FontHeight": 14
+        },
+        {
+            "m_nType": 341,
+            "m_nCode": 272,
+            "m_strName": "中心操作",
+            "m_textRect": "260,180,300,200",
+            "lampRect": "272,154,288,170",
+            "FontHeight": 14
+        },
+        {
+            "m_nType": 341,
+            "m_nCode": 273,
+            "m_strName": "车站调车",
+            "m_textRect": "320,180,360,200",
+            "lampRect": "332,154,348,170",
+            "FontHeight": 14
+        },
+        {
+            "m_nType": 341,
+            "m_nCode": 274,
+            "m_strName": "车站操作",
+            "m_textRect": "380,180,420,200",
+            "lampRect": "392,154,408,170",
+            "FontHeight": 14
+        },
+        {
+            "m_nType": 341,
+            "m_nCode": 275,
+            "m_strName": "列控",
+            "m_textRect": "440,180,480,200",
+            "lampRect": "452,154,468,170",
+            "FontHeight": 14
+        }
+    ],
+    "BuRect": [
+        {
+            "m_nType": 342,
+            "m_nCode": 276,
+            "m_strName": "X引导总锁",
+            "center": "830,1010",
+            "p1": "822,974",
+            "p2": "838,990",
+            "m_nSX": 0,
+            "m_textRect": "800,1000,860,1020",
+            "FontHeight": 14
+        },
+        {
+            "m_nType": 342,
+            "m_nCode": 277,
+            "m_strName": "S引导总锁",
+            "center": "920,1010",
+            "p1": "912,974",
+            "p2": "928,990",
+            "m_nSX": 1,
+            "m_textRect": "890,1000,950,1020",
+            "FontHeight": 14
+        }
+    ]
+}

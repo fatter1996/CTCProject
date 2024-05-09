@@ -17,8 +17,9 @@ namespace Station {
             QByteArray UnpackLogin(const QByteArray& dataAyyay);   //解析登录信息
             QByteArray UnpackStaViewState(const QByteArray& dataAyyay);   //解析站场信息
             QByteArray UnpackCultivate(const QByteArray& dataAyyay);      //解析培训信息
+            QByteArray UnpackPractice(const QByteArray& dataAyyay);      //解析实训信息
             Device::DeviceBase* getDeviceByCode(uint nCode);
-
+            Device::DeviceBase* getDeviceByName(QString strName);
         
 
         private:

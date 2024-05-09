@@ -1,6 +1,6 @@
 #include "StaPacket.h"
 #include "Global.h"
-
+#include "../Device/StaSwitch.h"
 namespace Station {
     namespace Transmission {
 
@@ -49,11 +49,19 @@ namespace Station {
         QByteArray StaPacket::PackStaOperation()
         {
             QByteArray byteOperation;
-            byteOperation.append(CTCWindows::getFunBtnOrderCode());
+            byteOperation.append(static_cast<int>(CTCWindows::getCurrFunType()));
+            byteOperation.append(static_cast<int>(CTCWindows::getOperObjType()));
             byteOperation.append(StationObject::getSelectDevice().size());
             for (Device::DeviceBase* pDevice : StationObject::getSelectDevice()) {
-                byteOperation.append(pDevice->getCode() & 0xff);
-                byteOperation.append(pDevice->getCode() >> 8);
+                if (CTCWindows::getCurrFunType() == CTCWindows::FunType::RegionRelieve && pDevice->getStrType() == SWITCH) {
+                    Device::StaSwitch* pSwitch = dynamic_cast<Device::StaSwitch*>(pDevice);
+                    byteOperation.append(pSwitch->getQDCode() & 0xff);
+                    byteOperation.append(pSwitch->getQDCode() >> 8);
+                }
+                else {
+                    byteOperation.append(pDevice->getCode() & 0xff);
+                    byteOperation.append(pDevice->getCode() >> 8);
+                }
             }
             return byteOperation;
         }

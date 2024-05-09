@@ -4,6 +4,8 @@
 #include <QDebug>
 #include <QMouseEvent>
 
+#pragma execution_character_set("utf-8")
+
 namespace Station {
     namespace Device {
 
@@ -31,6 +33,7 @@ namespace Station {
             m_mapAttribute.insert("DC_LC_Signa", [&](const QString& strElement) { m_bMD = strElement.toInt(); });
 
             InitSignalLightColor();
+            
         }
 
         StaSignal::~StaSignal()
@@ -217,6 +220,33 @@ namespace Station {
             }
         }
 
+        void StaSignal::DrawCultivateTips()
+        {
+            m_pPainter.setPen(QPen(COLOR_TRACK_YELLOW, 2));
+            m_pPainter.setBrush(COLOR_LIGHT_BLACK);
+
+            QFont font;
+            font.setFamily("微软雅黑");
+            font.setPixelSize(Scale(14));//字号
+            QRect rcTips;
+            QString strType;
+            if (m_nTipsType & 0x01) {
+                rcTips = QRect(m_rcTrainBtn.x() - 5, m_rcTrainBtn.y() - 5, m_rcTrainBtn.width() + 10, m_rcTrainBtn.height() + 10);
+                strType = "列车按钮";
+            }
+            if (m_nTipsType & 0x02) {
+                rcTips = QRect(m_rcShuntBtn.x() - 5, m_rcShuntBtn.y() - 5, m_rcShuntBtn.width() + 10, m_rcShuntBtn.height() + 10);
+                strType = "调车按钮";
+            }
+
+            m_pPainter.drawRect(Scale(rcTips));
+
+            m_pPainter.setFont(font);//设置字体
+            m_pPainter.setPen(COLOR_TRACK_YELLOW);
+            QRect rcTipsText = QRect(rcTips.x() - 72, rcTips.y() + 36, rcTips.width() + 144, 20);
+            m_pPainter.drawText(rcTipsText, QString("%1点击%2信号机%3").arg(m_nTipsType&0x80 ? "先" : "后").arg(m_strName).arg(strType));
+        }
+
         void StaSignal::InitSignalLightColor()
         {
             m_mapLightColor.insert(SignalState::DS, [&]() { m_cLightColor1 = COLOR_LIGHT_WHITE; m_cLightColor2 = COLOR_LIGHT_BLACK; });
@@ -300,50 +330,58 @@ namespace Station {
                 case static_cast<int>(CTCWindows::FunType::GuideBtn): {         //引导按钮
                     m_mapClickEvent.insert(static_cast<CTCWindows::FunType>(i), [&]() {
                         OnButtonClick();
-                        if (m_nBtnState) {
-                            StationObject::AddSelectDevice(this);
-                        }
                     });
                     break;
                 }   
-                case static_cast<int>(CTCWindows::FunType::TotalCancel):        //总取消
-                case static_cast<int>(CTCWindows::FunType::SignalReopen):       //信号重开
-                case static_cast<int>(CTCWindows::FunType::TotalRelieve):       //总人解
-                case static_cast<int>(CTCWindows::FunType::RegionRelieve): {    //区故解
+
+                
+                case static_cast<int>(CTCWindows::FunType::SignalReopen): {     //信号重开
                     m_mapClickEvent.insert(static_cast<CTCWindows::FunType>(i), [&]() {
                         if (m_nSelectType == 0x01 || m_nSelectType == 0x1f) { //点击信号机名称或信号机灯位
+                            CTCWindows::setOperObjType(CTCWindows::OperObjType::Signal);
                             StationObject::AddSelectDevice(this);
                         }
                     });
                     break;
                 }
-                case static_cast<int>(CTCWindows::FunType::GuideClock): {       //引导总锁
-                    m_mapClickEvent.insert(static_cast<CTCWindows::FunType>(i), [&]() {
-                        if (m_nSelectType == 0x10) { //点击信号机灯位
-                            StationObject::AddSelectDevice(this);
-                        }
-                    });
-                    break;
-                }
+                
+                //case static_cast<int>(CTCWindows::FunType::GuideClock): {       //引导总锁
+                //    m_mapClickEvent.insert(static_cast<CTCWindows::FunType>(i), [&]() {
+                //        if (m_nSelectType == 0x10) { //点击信号机灯位
+                //            CTCWindows::setOperObjType(CTCWindows::OperObjType::Signal);
+                //            StationObject::AddSelectDevice(this);
+                //        }
+                //    });
+                //    break;
+                //}
+
+                case static_cast<int>(CTCWindows::FunType::TotalCancel):        //总取消
+                case static_cast<int>(CTCWindows::FunType::TotalRelieve):       //总人解
                 case static_cast<int>(CTCWindows::FunType::Blockade):           //封锁
                 case static_cast<int>(CTCWindows::FunType::UnBlockade): {       //解封
                     m_mapClickEvent.insert(static_cast<CTCWindows::FunType>(i), [&]() {
                         if (m_nSelectType == 0x02 && (m_nFirstBtnType == 0 || m_nFirstBtnType == 1)) { //点击列车按钮
-                            m_nBtnState |= BTNDOWN_TRAIN;
-                            m_nFirstBtnType = 1;
+                            CTCWindows::setOperObjType(CTCWindows::OperObjType::Train);
+                            if (m_nFirstBtnType == 0) {
+                                m_nFirstBtnType = 1;
+                            }
                         }
                         else if (m_nSelectType == 0x04 && (m_nFirstBtnType == 0 || m_nFirstBtnType == 2)) { //点击调车按钮
-                            m_nBtnState |= BTNDOWN_SHUNT;
-                            m_nFirstBtnType = 2;
+                            CTCWindows::setOperObjType(CTCWindows::OperObjType::Shunt);
+                            if (m_nFirstBtnType == 0) {
+                                m_nFirstBtnType = 2;
+                            }
                         }
                         StationObject::AddSelectDevice(this);
                     });
                     break;
                 }
+
                 case static_cast<int>(CTCWindows::FunType::Lighting):           //点灯
                 case static_cast<int>(CTCWindows::FunType::UnLighting): {       //灭灯
                     m_mapClickEvent.insert(static_cast<CTCWindows::FunType>(i), [&]() {
                         if (m_nSelectType == 0x10) { //点击信号机灯位
+                            CTCWindows::setOperObjType(CTCWindows::OperObjType::Signal);
                             StationObject::AddSelectDevice(this);
                         }
                     });
@@ -361,24 +399,30 @@ namespace Station {
 
             if (CTCWindows::getCurrFunType() == CTCWindows::FunType::RouteBuild) {
                 if (m_nSelectType == 0x02 && (m_nFirstBtnType == 0 || m_nFirstBtnType == 1 || m_nFirstBtnType == 3)) { //点击列车按钮
+                    CTCWindows::setOperObjType(CTCWindows::OperObjType::Train);
                     m_nBtnState |= BTNDOWN_TRAIN;
-                    m_nFirstBtnType = 1;
-                    CTCWindows::setRouteType(1);
-                    return;
+                    if (m_nFirstBtnType == 0) {
+                        m_nFirstBtnType = 1;
+                    }
                 }
-                if (m_nSelectType == 0x04 && (m_nFirstBtnType == 0 || m_nFirstBtnType == 2)) { //点击调车按钮
+                if (m_nSelectType == 0x04 && (m_nFirstBtnType == 0 || m_nFirstBtnType == 1 || m_nFirstBtnType == 2)) { //点击调车按钮
+                    CTCWindows::setOperObjType(CTCWindows::OperObjType::Shunt);
                     m_nBtnState |= BTNDOWN_SHUNT;
-                    m_nFirstBtnType = 2;
-                    CTCWindows::setRouteType(2);
-                    return;
+                    if (m_nFirstBtnType == 0) {
+                        m_nFirstBtnType = 2;
+                    }
                 }
             }
             else if (CTCWindows::getCurrFunType() == CTCWindows::FunType::GuideBtn) {
-                if (m_nSelectType == 0x10 && m_nFirstBtnType == 0) {
+                if (m_nSelectType == 0x10 && m_nFirstBtnType == 0) {    //点击引导按钮
+                    CTCWindows::setOperObjType(CTCWindows::OperObjType::Guide);
                     m_nBtnState |= BTNDOWN_GUIDE;
                     m_nFirstBtnType = 4;
-                    return;
                 }
+            }
+
+            if (m_nBtnState) {
+                StationObject::AddSelectDevice(this);
             }
         }
 

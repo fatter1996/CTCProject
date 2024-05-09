@@ -46,9 +46,9 @@ namespace Station {
         void StaSemiAutoBlock::Draw(const bool& isMulti)
         {
             DrawArrow(m_pPainter);
-            DrawButton(m_pPainter, Scale(m_rcBSBtn), COLOR_BTN_DEEPGRAY, m_nBtnState);
-            DrawButton(m_pPainter, Scale(m_rcFYBtn), COLOR_BTN_DEEPGRAY, m_nBtnState);
-            DrawButton(m_pPainter, Scale(m_rcSGBtn), COLOR_BTN_DEEPGRAY, m_nBtnState);
+            DrawButton(m_pPainter, Scale(m_rcBSBtn), COLOR_BTN_DEEPGRAY, m_nBtnState & 0x01);
+            DrawButton(m_pPainter, Scale(m_rcFYBtn), COLOR_BTN_DEEPGRAY, m_nBtnState & 0x02);
+            DrawButton(m_pPainter, Scale(m_rcSGBtn), COLOR_BTN_DEEPGRAY, m_nBtnState & 0x04);
 
             return StaDistant::Draw(isMulti);
         }
@@ -74,6 +74,48 @@ namespace Station {
             m_pPainter.drawText(Scale(QRect(m_ptFYText, fontMetrics.size(Qt::TextSingleLine, "复原"))), "复原", QTextOption(Qt::AlignCenter));
             //事故
             m_pPainter.drawText(Scale(QRect(m_ptSGText, fontMetrics.size(Qt::TextSingleLine, "事故"))), "事故", QTextOption(Qt::AlignCenter));
+        }
+
+        bool StaSemiAutoBlock::IsMouseWheel(const QPoint& ptPos)
+        {
+            if (CTCWindows::getCurrFunType() == CTCWindows::FunType::FunBtn) {
+                if (m_rcBSBtn.contains(ptPos)) {
+                    m_nSelectBtnType = 0x01;
+                    return true;
+                }
+                else if (m_rcFYBtn.contains(ptPos)) {
+                    m_nSelectBtnType = 0x02;
+                    return true;
+                }
+                else if (m_rcSGBtn.contains(ptPos)) {
+                    m_nSelectBtnType = 0x04;
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        void StaSemiAutoBlock::InitClickEvent()
+        {
+            m_mapClickEvent.insert(CTCWindows::FunType::FunBtn, [&]() {
+                OnButtonClick();
+                });
+        }
+
+        void StaSemiAutoBlock::OnButtonClick()
+        {
+            if (m_nBtnState != 0) {
+                return;
+            }
+
+            if (CTCWindows::getCurrFunType() == CTCWindows::FunType::FunBtn) {
+                m_nBtnState |= m_nSelectBtnType;
+                m_nFirstBtnType = 5;
+            }
+
+            if (m_nBtnState) {
+                StationObject::AddSelectDevice(this);
+            }
         }
 
         void StaSemiAutoBlock::getArrowColor()

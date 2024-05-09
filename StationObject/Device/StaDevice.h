@@ -13,4 +13,5 @@
 #include "StaHump.h"
 #include "StaBraidLine.h"
 #include "StaEndLine.h"
+#include "StaLamp.h"
 #include "StaOthers.h"

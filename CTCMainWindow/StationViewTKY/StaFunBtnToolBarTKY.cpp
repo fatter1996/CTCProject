@@ -32,9 +32,9 @@ namespace CTCWindows {
 
 		connect(ui.buttonGroup, qOverload<QAbstractButton*>(&QButtonGroup::buttonClicked), this, &StaFunBtnToolBarTKY::onButtonClicked);
 		//ÃüÁîÇå³ý
-		connect(ui.FunBtn21_CommandClear, &QPushButton::clicked, this, &StaFunBtnToolBarTKY::onOrderClear);
+		connect(ui.FunBtn21_CommandClear, &QPushButton::clicked, this, &StationViewInterface::onOrderClear);
 		//ÃüÁîÏÂ´ï
-		connect(ui.FunBtn22_CommandIssued, &QPushButton::clicked, this, &StaFunBtnToolBarTKY::onOrderIssued);
+		connect(ui.FunBtn22_CommandIssued, &QPushButton::clicked, this, &StationViewInterface::onOrderIssued);
 	}
 
 	StaFunBtnToolBarTKY::~StaFunBtnToolBarTKY()

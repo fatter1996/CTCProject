@@ -56,6 +56,8 @@ namespace Station {
             void DrawDeviceNameRange();
             //绘制信号机按钮虚线框
             void DrawButtonRange();
+            //绘制培训提示信息
+            void DrawCultivateTips();
             //判断鼠标是否在事件范围内
             bool Contains(const QPoint& ptPos);
             //初始化信号灯颜色

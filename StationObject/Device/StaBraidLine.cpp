@@ -28,16 +28,12 @@ namespace Station {
 
         void StaBraidLine::DrawLight()
         {
-            m_pPainter.setRenderHint(QPainter::Antialiasing, true);
-
             m_pPainter.setPen(QPen(COLOR_LIGHT_WHITE, 1));
             m_pPainter.setBrush((m_nState & 0x04) ? COLOR_LIGHT_RED : COLOR_LIGHT_BLACK);
 
             //‘ –Ì∑¢≥µ
             m_pPainter.setBrush((m_nState & 0x01) ? COLOR_LIGHT_RED : COLOR_LIGHT_BLACK);
             m_pPainter.drawEllipse(Scale(m_rcAllowLamp));
-
-            m_pPainter.setRenderHint(QPainter::Antialiasing, false);
         }
 
         void StaBraidLine::DrawText()

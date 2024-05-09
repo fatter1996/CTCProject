@@ -21,7 +21,7 @@ namespace Socket {
 
     public:
         void setLocalAddress(const QHostAddress& hAddress, const quint16& nPort);
-        void setInterlockAddress(const QHostAddress& hAddress, const quint16& nPort);
+        void setServerAddress(const QHostAddress& hAddress, const quint16& nPort);
         
     signals:
         //接收数据信号
@@ -41,8 +41,8 @@ namespace Socket {
         int nTimerId = -1;
         QHostAddress m_hLocalIp;
         uint m_nLocalPort = 0;
-        QHostAddress m_hInterlockIp;
-        uint m_nInterlockPort = 0;
+        QHostAddress m_hServerIp;
+        uint m_nServerPort = 0;
     };
 }
 

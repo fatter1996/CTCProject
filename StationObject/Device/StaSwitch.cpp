@@ -235,6 +235,7 @@ namespace Station {
             for (int i = 0; i < static_cast<int>(CTCWindows::FunType::MethodConvert); ++i) {
                 switch (i)
                 {
+                case static_cast<int>(CTCWindows::FunType::RegionRelieve):      //区故解
                 case static_cast<int>(CTCWindows::FunType::TotalPosition):      //总定位
                 case static_cast<int>(CTCWindows::FunType::TotalReverse):       //总反位
                 case static_cast<int>(CTCWindows::FunType::SingleLock):         //单锁
@@ -242,6 +243,7 @@ namespace Station {
                 case static_cast<int>(CTCWindows::FunType::Blockade):           //封锁
                 case static_cast<int>(CTCWindows::FunType::UnBlockade): {       //解封
                     m_mapClickEvent.insert(static_cast<CTCWindows::FunType>(i), [&]() {
+                        CTCWindows::setOperObjType(CTCWindows::OperObjType::Switch);
                         StationObject::AddSelectDevice(this);
                     });
                     break;

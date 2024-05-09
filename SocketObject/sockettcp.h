@@ -16,9 +16,9 @@ namespace Socket {
 
     public:
         //初始化端口
-        bool InitServer();
+        bool InitClient();
         void setLocalAddress(const QHostAddress& hAddress, const quint16& nPort);
-        void setCultivateAddress(const QHostAddress& hAddress, const quint16& nPort);
+        void setServerAddress(const QHostAddress& hAddress, const quint16& nPort);
 
     private:
         void timerEvent(QTimerEvent* event);
@@ -47,8 +47,8 @@ namespace Socket {
         int m_nTimer = -1;
         QHostAddress m_hLocalIp;
         uint m_nLocalPort = 0;
-        QHostAddress m_hCultivateIp;
-        uint m_nCultivatePort = 0;
+        QHostAddress m_hServerIp;
+        uint m_nServerPort = 0;
     };
 }
 

@@ -10,55 +10,55 @@ namespace Station {
         {
             m_mapAttribute.insert("mRsbjRect", [&](const QString& strElement) { 
                 m_rcFuseAlarmText = QStringToQRect(strElement); 
-                m_rcFuseAlarmLemp = getLempRectByTextRect(m_rcFuseAlarmText); 
+                m_rcFuseAlarmLamp = getLampRectByTextRect(m_rcFuseAlarmText); 
             });
 
             m_mapAttribute.insert("mZFdyRect", [&](const QString& strElement) {
                 m_rcMainAuxPowerText = QStringToQRect(strElement);
-                m_rcMainAuxPowerLemp = getLempRectByTextRect(m_rcMainAuxPowerText);
+                m_rcMainAuxPowerLamp = getLampRectByTextRect(m_rcMainAuxPowerText);
             });
 
             m_mapAttribute.insert("mGdtdRect", [&](const QString& strElement) {
                 if (nIndex == 0) {
                     m_rcTrackOutageSText = QStringToQRect(strElement);
-                    m_rcTrackOutageSLemp = getLempRectByTextRect(m_rcTrackOutageSText);
+                    m_rcTrackOutageSLamp = getLampRectByTextRect(m_rcTrackOutageSText);
                 }
                 else if (nIndex == 1) {
                     m_rcTrackOutageXText = QStringToQRect(strElement);
-                    m_rcTrackOutageXLemp = getLempRectByTextRect(m_rcTrackOutageXText);
+                    m_rcTrackOutageXLamp = getLampRectByTextRect(m_rcTrackOutageXText);
                 }
             });
 
             m_mapAttribute.insert("mYdzsbRect", [&](const QString& strElement) {
                 if (nIndex == 0) {
                     m_rcTotalLockSText = QStringToQRect(strElement);
-                    m_rcTotalLockSLemp = getLempRectByTextRect(m_rcTotalLockSText);
+                    m_rcTotalLockSLamp = getLampRectByTextRect(m_rcTotalLockSText);
                 }
                 else if (nIndex == 1) {
                     m_rcTotalLockXText = QStringToQRect(strElement);
-                    m_rcTotalLockXLemp = getLempRectByTextRect(m_rcTotalLockXText);
+                    m_rcTotalLockXLamp = getLampRectByTextRect(m_rcTotalLockXText);
                 }
             });
 
             m_mapAttribute.insert("mDsdsRect", [&](const QString& strElement) {
                 if (nIndex == 0) {
                     m_rcFilamentBreakSText = QStringToQRect(strElement);
-                    m_rcFilamentBreakSLemp = getLempRectByTextRect(m_rcFilamentBreakSText);
+                    m_rcFilamentBreakSLamp = getLampRectByTextRect(m_rcFilamentBreakSText);
                 }
                 else if (nIndex == 1) {
                     m_rcFilamentBreakXText = QStringToQRect(strElement);
-                    m_rcFilamentBreakXLemp = getLempRectByTextRect(m_rcFilamentBreakXText);
+                    m_rcFilamentBreakXLamp = getLampRectByTextRect(m_rcFilamentBreakXText);
                 }
             });
             
             m_mapAttribute.insert("mJcbjRect", [&](const QString& strElement) {
                 m_rcCrowdAlarmText = QStringToQRect(strElement);
-                m_rcCrowdAlarmLemp = getLempRectByTextRect(m_rcCrowdAlarmText);
+                m_rcCrowdAlarmLamp = getLampRectByTextRect(m_rcCrowdAlarmText);
             });
             
             m_mapAttribute.insert("mDmhbjRect", [&](const QString& strElement) {
                 m_rcCodeAlarmText = QStringToQRect(strElement);
-                m_rcCodeAlarmLemp = getLempRectByTextRect(m_rcCodeAlarmText);
+                m_rcCodeAlarmLamp = getLampRectByTextRect(m_rcCodeAlarmText);
             });
 
             m_mapAttribute.insert("SGDTDJ", [&](const QString& strElement) { m_strSGDTDJ = strElement; });
@@ -85,35 +85,31 @@ namespace Station {
 
         void StaScattered::DrawLight()
         {
-            m_pPainter.setRenderHint(QPainter::Antialiasing, true);
-
             m_pPainter.setPen(QPen(COLOR_LIGHT_WHITE, 1));
             //熔丝报警
             m_pPainter.setBrush((m_nState & 0x01) ? COLOR_LIGHT_RED : COLOR_LIGHT_BLACK);
-            m_pPainter.drawEllipse(Scale(m_rcFuseAlarmLemp));
+            m_pPainter.drawEllipse(Scale(m_rcFuseAlarmLamp));
             //主副电源
-            m_pPainter.drawEllipse(Scale(m_rcMainAuxPowerLemp));
+            m_pPainter.drawEllipse(Scale(m_rcMainAuxPowerLamp));
             //上行轨道停电
-            m_pPainter.drawEllipse(Scale(m_rcTrackOutageSLemp));
+            m_pPainter.drawEllipse(Scale(m_rcTrackOutageSLamp));
             //下行轨道停电
-            m_pPainter.drawEllipse(Scale(m_rcTrackOutageXLemp));
+            m_pPainter.drawEllipse(Scale(m_rcTrackOutageXLamp));
 
             //上行总锁闭
-            m_pPainter.drawEllipse(Scale(m_rcTotalLockSLemp));
+            m_pPainter.drawEllipse(Scale(m_rcTotalLockSLamp));
             //下行总锁闭
-            m_pPainter.drawEllipse(Scale(m_rcTotalLockXLemp));
+            m_pPainter.drawEllipse(Scale(m_rcTotalLockXLamp));
 
             //上行灯丝断丝
-            m_pPainter.drawEllipse(Scale(m_rcFilamentBreakSLemp));
+            m_pPainter.drawEllipse(Scale(m_rcFilamentBreakSLamp));
             //下行灯丝断丝
-            m_pPainter.drawEllipse(Scale(m_rcFilamentBreakXLemp));
+            m_pPainter.drawEllipse(Scale(m_rcFilamentBreakXLamp));
 
             //挤岔报警
-            m_pPainter.drawEllipse(Scale(m_rcCrowdAlarmLemp));
+            m_pPainter.drawEllipse(Scale(m_rcCrowdAlarmLamp));
             //电码化报警
-            m_pPainter.drawEllipse(Scale(m_rcCodeAlarmLemp));
-
-            m_pPainter.setRenderHint(QPainter::Antialiasing, false);
+            m_pPainter.drawEllipse(Scale(m_rcCodeAlarmLamp));
         }
         
 
@@ -148,7 +144,7 @@ namespace Station {
 
         }
 
-        QRect StaScattered::getLempRectByTextRect(const QRect& rcText)
+        QRect StaScattered::getLampRectByTextRect(const QRect& rcText)
         {
             return QRect(QPoint(rcText.left() + ((rcText.width() - 12) / 2), rcText.top() + 18), QSize(13, 13));
         }

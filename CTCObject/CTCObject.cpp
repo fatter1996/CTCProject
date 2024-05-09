@@ -26,7 +26,7 @@ namespace CTCDoc{
 
 		//网络通信初始化
 		socketUDP->InitSocket();
-		socketTCP->InitServer();
+		socketTCP->InitClient();
 	}
 
 	CTCObject::~CTCObject()
@@ -91,19 +91,21 @@ namespace CTCDoc{
 		//站名
 		m_pMainStation->setStationName(rootObj.value("staName").toString());
 		//站场界面类型
-		m_nStationViewType = rootObj.value("StationType").toInt();
+		m_nStationViewType = rootObj.value("stationType").toInt();
 		//通信地址
 		QJsonObject addressObj = rootObj.value("comAddress").toObject();
 		socketUDP->setLocalAddress(QHostAddress(addressObj.value("localIp").toString()), addressObj.value("localPortUDP").toInt());
-		socketUDP->setInterlockAddress(QHostAddress(addressObj.value("interlockIp").toString()), addressObj.value("interlockPort").toInt());
+		socketUDP->setServerAddress(QHostAddress(addressObj.value("serverIp").toString()), addressObj.value("serverPortUDP").toInt());
 		socketTCP->setLocalAddress(QHostAddress(addressObj.value("localIp").toString()), addressObj.value("localPortTCP").toInt());
-		socketTCP->setCultivateAddress(QHostAddress(addressObj.value("cultivateIp").toString()), addressObj.value("cultivatePort").toInt());
+		socketTCP->setServerAddress(QHostAddress(addressObj.value("serverIp").toString()), addressObj.value("serverPortTCP").toInt());
 		
 		//解析站场设备
-		QString path = rootObj.value("deviceInfo").toString();
-		QString path2 = rootObj.value("lampInfo").toString();
 		if (m_pMainStation->ReadStationInfo(rootObj.value("deviceInfo").toString()) < 0) {
 			qDebug() << "无效的xml文件.";
+			return -1;
+		}
+		if (m_pMainStation->ReadOtherConfig(rootObj.value("otherInfo").toString()) < 0) {
+			qDebug() << "无效的json文件.";
 			return -1;
 		}
 		return 0;
@@ -116,11 +118,11 @@ namespace CTCDoc{
 		QObject::connect(socketTCP, &SocketTCP::recvData, m_pMainStation, &StationObject::onReciveData);
 		QObject::connect(m_pMainStation, &StationObject::SendDataToTCP, socketTCP, &SocketTCP::onSendData);
 
-		//命令清除
 		const StaFunBtnToolBar* pStaFunBtnToolBar = dynamic_cast<const StaFunBtnToolBar*>(m_pCTCMainWindow->StaFunBtnToolBar());
-		QObject::connect(pStaFunBtnToolBar, &StaFunBtnToolBar::OrderClear, m_pMainStation, &StationObject::onOrderClear);
+		//命令清除
+		QObject::connect(pStaFunBtnToolBar, &StationViewInterface::OrderClear, m_pMainStation, &StationObject::onOrderClear);
 		//命令下达
-		QObject::connect(pStaFunBtnToolBar, &StaFunBtnToolBar::OrderIssued, m_pMainStation, &StationObject::onOrderIssued);
+		QObject::connect(pStaFunBtnToolBar, &StationViewInterface::OrderIssued, m_pMainStation, &StationObject::onOrderIssued);
 	}
 
 	bool CTCObject::UserLogin()

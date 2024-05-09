@@ -1,6 +1,8 @@
 #include "UserLoginDlg.h"
 #include <QDebug>
 
+#pragma execution_character_set("utf-8")
+
 UserLoginDlg::UserLoginDlg(QWidget *parent)
 	: QDialog(parent)
 {

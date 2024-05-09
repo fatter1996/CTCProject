@@ -34,14 +34,16 @@ namespace Station {
             void DrawLight();
             //绘制文字
             void DrawText();
+            //鼠标是否在按钮上
+            bool IsMouseWheel(const QPoint& ptPos);
+            //初始化设备点击事件
+            void InitClickEvent();
+            //按钮点击事件
+            void OnButtonClick();
             //获取接近区段颜色
             QColor getTrackColor(int nIndex);
             //获取箭头颜色
             void getArrowColor();
-            //鼠标是否在按钮上
-            bool IsMouseWheel(const QPoint& ptPos);
-            //按钮点击事件
-            void OnButtonClick();
             //站场翻转
             void setVollover(const QPoint& ptBase);
             //状态重置
@@ -62,9 +64,9 @@ namespace Station {
             QPoint m_ptFCFZText;
             QPoint m_ptFZText;
 
-            uint m_nLempNum = 0;
+            uint m_nLampNum = 0;
             bool m_bLeave = false;
-            QPoint m_ptLempCenter;
+            QPoint m_ptLampCenter;
             QPoint m_ptInterUsed;
             QVector<StaLeaveTrack> m_vecStaLeaveTrack;
             QString m_strAutoBlockType;
@@ -73,6 +75,8 @@ namespace Station {
             QPoint m_ptZFZ_JS;
             QPoint m_ptJCFZ_JS;
             QPoint m_ptFCFZ_JS;
+
+            uint m_nSelectBtnType = 0x0;  //选中类型(0-未选中; 0x01-总辅助; 0x02-接车辅助; 0x04-发车辅助)
         };
     }
 }

@@ -10,9 +10,10 @@ namespace Station {
         StaProtocol::StaProtocol(QMap<QString, QVector<DeviceBase*>>& mapDeviceVector)
             : m_mapDeviceVector(mapDeviceVector)
         {
-            m_mapUnPackOrder.insert(0x40, [=](const QByteArray& dataAyyay) { return UnpackStaViewState(dataAyyay); });
+            m_mapUnPackOrder.insert(0x30, [=](const QByteArray& dataAyyay) { return UnpackStaViewState(dataAyyay); });
             m_mapUnPackOrder.insert(0x80, [=](const QByteArray& dataAyyay) { return UnpackLogin(dataAyyay); });
             m_mapUnPackOrder.insert(0x81, [=](const QByteArray& dataAyyay) { return UnpackCultivate(dataAyyay); });
+            m_mapUnPackOrder.insert(0x82, [=](const QByteArray& dataAyyay) { return UnpackPractice(dataAyyay); });
         }
 
         StaProtocol::~StaProtocol()
@@ -22,17 +23,22 @@ namespace Station {
 
         QByteArray StaProtocol::UnpackData(const QByteArray& dataAyyay)
         {
-            return m_mapUnPackOrder[dataAyyay[10] & 0xFF](dataAyyay);
+            if (m_mapUnPackOrder.contains(dataAyyay[10] & 0xFF)) {
+                return m_mapUnPackOrder[dataAyyay[10] & 0xFF](dataAyyay);
+            }
+            else {
+                return QByteArray();
+            }
         }
 
         QByteArray StaProtocol::UnpackLogin(const QByteArray& dataAyyay)
         {
-            return "";
+            return QByteArray();
         }
 
         QByteArray StaProtocol::UnpackStaViewState(const QByteArray& dataAyyay)
         {
-            int nFlag = 3 + 4;
+            int nFlag = 11;
             //道岔
             {
                 StaSwitch* pSwitch = nullptr;
@@ -81,8 +87,8 @@ namespace Station {
                 for (DeviceBase* pDevice : m_mapDeviceVector[SIGNALLAMP]) {
                     pSignal = dynamic_cast<StaSignal*>(pDevice);
                     //信号机表示信息
-                    if(dataAyyay[nFlag] & 0xc0)
-                        qDebug() << pSignal->getName() << (dataAyyay[nFlag] & 0xff);
+                    //if(dataAyyay[nFlag] & 0xc0)
+                    //    qDebug() << pSignal->getName() << (dataAyyay[nFlag] & 0xff);
                     pSignal->setState(dataAyyay[nFlag++] & 0xff);
                 }
             }
@@ -101,7 +107,7 @@ namespace Station {
                 StaConnection* pConnection = nullptr;
                 for (DeviceBase* pDevice : m_mapDeviceVector[CONNECTION]) {
                     pConnection = dynamic_cast<StaConnection*>(pDevice);
-                    qDebug() << pConnection->getName() << (dataAyyay[nFlag] & 0xff);
+                    //qDebug() << pConnection->getName() << (dataAyyay[nFlag] & 0xff);
                     pConnection->setArrowState(dataAyyay[nFlag] & 0x33);
                     pConnection->setState(dataAyyay[nFlag++] & 0xcc);
                 }
@@ -144,22 +150,57 @@ namespace Station {
             QString strMsg = QString(dataAyyay.mid(12, length));
             QStringList strOrders = strMsg.split("@");
             QByteArray byteToInterLock;
+            QStringList subList;
+            QStringList devList;
+            DeviceBase* pDevice = nullptr;
+            int nIndex = 0;
+
             for (QString strOrder : strOrders) {
-                QStringList subList = strOrder.split("-");
+                subList = strOrder.split("-");
                 if (subList[0] == "QDZY") {
                     byteToInterLock = subList[0].toLocal8Bit();
                 }
                 else if (subList[0] == "JLBL") {
-                    QStringList devList = subList[1].split(",");
+                    devList = subList[1].split(",");
+                    for (QString strName : devList) {
+                        pDevice = getDeviceByName(strName);
+                        nIndex++;
+                    }
                 }
             }
             return byteToInterLock;
+        }
+
+        QByteArray StaProtocol::UnpackPractice(const QByteArray& dataAyyay)
+        {
+            if (dataAyyay[11] == 0x01) {    //基础实训
+                if (dataAyyay[12] == 0x01) {    //试题下发
+                    int id = dataAyyay[13] & 0xFF;
+
+                }
+            }
+            else if (dataAyyay[11] == 0x02) {   //流程实训
+                if (dataAyyay[12] == 0x01) {    //试题下发
+
+                }
+            }
+            return QByteArray();
         }
 
         DeviceBase* StaProtocol::getDeviceByCode(uint nCode)
         {
             for (DeviceBase* pDevice : m_mapDeviceVector[ALLDEVICE]) {
                 if (pDevice->getCode() == nCode) {
+                    return pDevice;
+                }
+            }
+            return nullptr;
+        }
+
+        DeviceBase* StaProtocol::getDeviceByName(QString strName)
+        {
+            for (DeviceBase* pDevice : m_mapDeviceVector[ALLDEVICE]) {
+                if (pDevice->getName() == strName) {
                     return pDevice;
                 }
             }

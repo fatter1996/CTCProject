@@ -32,7 +32,7 @@ namespace Station {
             if (m_nType == 81) {
                 n_rcButton = QRect(QPoint(m_ptCenter.x() - 8, m_ptCenter.y() - 8), QPoint(m_ptCenter.x() + 8, m_ptCenter.y() + 8));
             }
-            else if (m_nType == 380) {
+            else if (m_nType == 380 || m_nType == 342) {
                 n_rcButton = QRect(p1, p2);
             }
         }
@@ -51,16 +51,25 @@ namespace Station {
             else if (m_nType == 380) {
                 DrawButton(m_pPainter, Scale(n_rcButton), COLOR_BTN_GREEN, m_nBtnState);
             } 
+            else if (m_nType == 342) {
+                DrawButton(m_pPainter, Scale(n_rcButton), COLOR_BTN_DEEPGRAY, m_nBtnState);
+            }
         }
 
         bool StaButton::Contains(const QPoint& ptPos)
         {
-            return n_rcButton.contains(ptPos);
+            if (CTCWindows::getCurrFunType() == CTCWindows::FunType::RouteBuild && (m_nType == 81 || m_nType == 380)) {
+                return n_rcButton.contains(ptPos); 
+            }
+            return false;
         }
         
         bool StaButton::IsMouseWheel(const QPoint& ptPos)
         {
-            if (CTCWindows::getCurrFunType() == CTCWindows::FunType::RouteBuild) {
+            if (CTCWindows::getCurrFunType() == CTCWindows::FunType::RouteBuild && (m_nType == 81 || m_nType == 380)) {
+                return n_rcButton.contains(ptPos);
+            }
+            else if (CTCWindows::getCurrFunType() == CTCWindows::FunType::FunBtn && m_nType == 342) {
                 return n_rcButton.contains(ptPos);
             }
             return false;
@@ -70,9 +79,9 @@ namespace Station {
         {
             m_mapClickEvent.insert(CTCWindows::FunType::RouteBuild, [&]() {
                 OnButtonClick();
-                if (m_nBtnState) {
-                    StationObject::AddSelectDevice(this);
-                }
+            });
+            m_mapClickEvent.insert(CTCWindows::FunType::FunBtn, [&]() {
+                OnButtonClick();
             });
         }
 
@@ -84,17 +93,33 @@ namespace Station {
 
             if (CTCWindows::getCurrFunType() == CTCWindows::FunType::RouteBuild) {
                 if (m_nType == 81 && m_nFirstBtnType == 0) {    //通过按钮
+                    CTCWindows::setOperObjType(CTCWindows::OperObjType::Though);
                     m_nBtnState |= true;
                     m_nFirstBtnType = 3;
-                    CTCWindows::setRouteType(3);
-                    return;
                 }
                 if (m_nType == 380 && m_nFirstBtnType == 1) {   //虚信号按钮
+                    CTCWindows::setOperObjType(CTCWindows::OperObjType::Flexibility);
                     m_nBtnState |= true;
                     m_nFirstBtnType = 1;
-                    CTCWindows::setRouteType(1);
-                    return;
                 }
+            }
+
+            if (CTCWindows::getCurrFunType() == CTCWindows::FunType::FunBtn) {
+                
+                if (m_nType == 342) {   //引导总锁
+                    if (m_nSX == 0) {   //下行
+                        CTCWindows::setOperObjType(CTCWindows::OperObjType::Descend);
+                    }
+                    else {  //上行
+                        CTCWindows::setOperObjType(CTCWindows::OperObjType::Ascend);
+                    }
+                    m_nFirstBtnType = 5;
+                }
+                m_nBtnState |= true;
+            }
+
+            if (m_nBtnState) {
+                StationObject::AddSelectDevice(this);
             }
         }
 

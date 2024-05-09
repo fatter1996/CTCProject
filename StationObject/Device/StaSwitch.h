@@ -50,6 +50,7 @@ namespace Station {
             uint getCQSwitchCode() { return m_nQ; }
             uint getDWSwitchCode() { return m_nD; }
             uint getFWSwitchCode() { return m_nF; }
+            uint getQDCode() { return m_nQDCode; }
 
         private:
             bool isSwitchSK();

@@ -10,7 +10,7 @@
 #include "BaseWndClass/StationLogDisp.h"
 
 namespace CTCWindows {
-	class CTCMainWindow : public QMainWindow, public StationViewInterface
+	class CTCMainWindow : public QMainWindow
 	{
 		Q_OBJECT
 	public:

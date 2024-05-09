@@ -13,20 +13,5 @@ namespace Station {
         {
 
         }
-
-        void StaText::Draw(const bool& isMulti)
-        {
-            return DeviceBase::Draw(isMulti);
-        }
-
-        void StaText::setVollover(const QPoint& ptBase)
-        {
-
-        }
-
-        void StaText::ResetDevState()
-        {
-
-        }
     }
 }

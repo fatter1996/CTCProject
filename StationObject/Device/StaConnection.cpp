@@ -46,7 +46,6 @@ namespace Station {
 
         void StaConnection::DrawLight()
         {
-            m_pPainter.setRenderHint(QPainter::Antialiasing, true);
             //½Ó½ü
             m_pPainter.setPen(QPen(COLOR_LIGHT_WHITE, 1));
             m_pPainter.setBrush((m_nState & 0x04) ? COLOR_LIGHT_RED : COLOR_LIGHT_BLACK);
@@ -59,7 +58,6 @@ namespace Station {
                 m_pPainter.setBrush((m_nState & 0x80) ? COLOR_LIGHT_RED : COLOR_LIGHT_BLACK);
                 m_pPainter.drawEllipse(Scale(m_rcAdjFileldLight));
             }
-            m_pPainter.setRenderHint(QPainter::Antialiasing, false);
         }
 
         void StaConnection::DrawText()

@@ -27,11 +27,12 @@ namespace Station {
 
         public:
             //初始化设备信息
-            void InitDeviceInfo(QXmlStreamReader* m_pDeviceInfoReader, const QString& strDeviceType);
-
+            void InitDeviceInfoFromXml(QXmlStreamReader* pDeviceInfoReader, const QString& strDeviceType);
+            void InitInitDeviceInfoFromJson(const QJsonObject& object, const QString& strKey);
         private:
             //读取设备属性
-            void ReadDeviceAttribute(QXmlStreamReader* m_pDeviceInfoReader);
+            void ReadDeviceAttributeFromXml(QXmlStreamReader* m_pDeviceInfoReader);
+            void ReadDeviceAttributeFromJson(const QJsonObject& lampObject, const QString& strKey);
             //绘制设备名称
             void DrawDeviceName();
             //设备点击事件
@@ -39,37 +40,49 @@ namespace Station {
 
         public:
             //命令清除
-            virtual void OrderClear();
+            virtual void OrderClear() {}
 
         protected:
             //初始化设备属性
-            virtual void InitDeviceAttribute();
+            virtual void InitDeviceAttribute() {}
             //站场绘制
             virtual void Draw(const bool& isMulti = false);
             //绘制设备选中虚线框
             virtual void DrawSelectRange();
+            //绘制培训提示信息
+            virtual void DrawCultivateTips() {}
             //判断鼠标是否在事件范围内
-            virtual bool Contains(const QPoint& ptPos);
+            virtual bool Contains(const QPoint& ptPos) {
+                return false;
+            }
             //初始化设备点击事件
-            virtual void InitClickEvent();
+            virtual void InitClickEvent() {}
             //获取设备名称颜色
-            virtual QPen getDeviceNameColor();
+            virtual QPen getDeviceNameColor() {
+                return QPen(Qt::white);
+            }
             //站场翻转
-            virtual void setVollover(const QPoint& ptBase) = 0;
+            virtual void setVollover(const QPoint& ptBase) {}
             //状态重置
-            virtual void ResetDevState() = 0;
+            virtual void ResetDevState() {}
 
         public:
-            void setState(const uint& nState);
+            void setState(const uint& nState) { m_nState = nState; }
             uint getType() { return m_nType; }
+            void setStrType(const QString& strType) { m_strType = strType; }
+            QString getStrType() { return m_strType; }
             QString getName() { return m_strName; }
             uint getCode() { return m_nCode; }
             void setRangeVisible(const bool& bRangeVisible) { m_bRangeVisible = bRangeVisible; }
             uint getState() { return m_nState; }
+            void setShowTips(int nTipsType) { 
+                m_bShowTips = true; 
+                m_nTipsType = nTipsType;
+            }
 
         public:
-            static bool getElapsed();
-            static void setElapsed();
+            static bool getElapsed() { return m_bElapsed; }
+            static void setElapsed() { m_bElapsed = !m_bElapsed; }
 
         public: //工具函数
             static QRect QStringToQRect(QString strRect);
@@ -87,7 +100,8 @@ namespace Station {
 
             //设备信息
             uint m_nType = 0;         //设备类型
-            QString m_strName;        //设备名称
+            QString m_strName;
+            QString m_strType;        //设备名称
             int m_nCode = -1;    //设备编号
             QPoint m_ptCenter;        //设备中心点
             uint m_nSX = 0;           //上下行咽喉 1:S 0:X
@@ -100,12 +114,13 @@ namespace Station {
 
             uint m_nState = 0;         //设备状态
             bool m_bRangeVisible = false; //是否高亮
-
-            static int m_rcWheelDevCode;
-
+            bool m_bShowTips = false; //是否显示提示内容 
+            int m_nTipsType = 0;    //0x01-列车按钮, 0x02-调车按钮, 高四位表示设备顺序
+            
         protected:
             static QPainter m_pPainter;    //绘制器
             static bool m_bElapsed;     //闪烁控制
+            static int m_rcWheelDevCode;
         };
 
 

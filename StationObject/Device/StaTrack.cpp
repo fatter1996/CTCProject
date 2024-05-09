@@ -121,6 +121,7 @@ namespace Station {
                 case static_cast<int>(CTCWindows::FunType::PoorRoute):          //分路不良
                 case static_cast<int>(CTCWindows::FunType::IdleConfirm): {      //确认空闲
                     m_mapClickEvent.insert(static_cast<CTCWindows::FunType>(i), [&]() {
+                        CTCWindows::setOperObjType(CTCWindows::OperObjType::Track);
                         StationObject::AddSelectDevice(this);
                     });
                     break;

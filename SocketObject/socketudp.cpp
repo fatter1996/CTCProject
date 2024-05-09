@@ -38,7 +38,6 @@ namespace Socket {
         while (m_pUdpSocket->hasPendingDatagrams()) {
             recvDataArray.resize(m_pUdpSocket->pendingDatagramSize());
             m_pUdpSocket->readDatagram(recvDataArray.data(), recvDataArray.size(), &clientAddress, &nPort);
-            //qDebug() << "接收数据：" << recvData.toHex();
             //发送信号
             if(recvDataArray.size() >= 16)
                 emit recvData(recvDataArray);
@@ -48,7 +47,7 @@ namespace Socket {
     //发送数据槽
     void SocketUDP::onSendData(const QByteArray& dataArray)
     {
-        m_pUdpSocket->writeDatagram(dataArray, m_hInterlockIp, m_nInterlockPort);
+        m_pUdpSocket->writeDatagram(dataArray, m_hServerIp, m_nServerPort);
     }
 
     void SocketUDP::timerEvent(QTimerEvent* event)
@@ -64,9 +63,9 @@ namespace Socket {
         m_nLocalPort = nPort;
     }
 
-    void SocketUDP::setInterlockAddress(const QHostAddress& hAddress, const quint16& nPort)
+    void SocketUDP::setServerAddress(const QHostAddress& hAddress, const quint16& nPort)
     {
-        m_hInterlockIp = hAddress;
-        m_nInterlockPort = nPort;
+        m_hServerIp = hAddress;
+        m_nServerPort = nPort;
     }
 }

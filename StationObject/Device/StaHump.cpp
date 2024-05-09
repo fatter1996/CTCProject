@@ -63,7 +63,6 @@ namespace Station {
 
         void StaHump::DrawLight()
         {
-            m_pPainter.setRenderHint(QPainter::Antialiasing, true);
             m_pPainter.setPen(QPen(COLOR_LIGHT_WHITE, 1));
 
             //ÇÐ¶ÏÍÆËÍ
@@ -79,8 +78,6 @@ namespace Station {
             m_pPainter.setPen(QPen(COLOR_TRACK_BLUE, 2));
             m_pPainter.setBrush((m_nState & 0x80) ? COLOR_LIGHT_RED : COLOR_LIGHT_BLACK);
             m_pPainter.drawEllipse(Scale(m_rcSignal));
-
-            m_pPainter.setRenderHint(QPainter::Antialiasing, false);
         }
 
         void StaHump::DrawText()
