@@ -4,7 +4,7 @@
 namespace Station {
     namespace Device {
 
-        StaTrack::StaTrack(QObject* parent)
+        StaTrack::StaTrack(QObject* pParent)
         {
             m_mapAttribute.insert("GD_Type", [&](const QString& strElement) { m_strTrackType = strElement; });
         }
@@ -14,11 +14,6 @@ namespace Station {
 
         }
 
-        bool StaTrack::eventFilter(QObject* obj, QEvent* event)
-        {
-            return StaSection::eventFilter(obj, event);
-        }
-
         void StaTrack::InitDeviceAttribute()
         {
             m_rcRespondRect = QRect(p1, p4);
@@ -26,6 +21,15 @@ namespace Station {
 
         void StaTrack::Draw(const bool& isMulti)
         {
+            if (m_strTrackType == "GD_QD" || m_strTrackType == "ZX_GD") {
+                m_bShowName = MainStation()->IsVisible(VisibleDev::trackName);
+            }
+            else if (m_strTrackType == "JJ_QD") {
+                m_bShowName = MainStation()->IsVisible(VisibleDev::sectionName);
+            }
+            else {
+                m_bShowName = MainStation()->IsVisible(VisibleDev::unswitchSectionName);
+            }
             //绘制股道底部的灰色区域
             DrawTrackBack();
             //绘制股道
@@ -90,15 +94,14 @@ namespace Station {
         {
             //股道虚线框
             DrawTrack(QPen(COLOR_TRACK_WHITE, 1, Qt::DashLine), true, 5);
-            return DeviceBase::DrawSelectRange();
+            //设备名称虚线框
+            m_pPainter.setPen(QPen(COLOR_TRACK_WHITE, 1, Qt::DashLine));
+            m_pPainter.setBrush(COLOR_TRACK_SELECT_BLUE);
+            m_pPainter.drawRect(Scale(OutSideRect(m_rcTextRect, 2, 0)));
         }
 
         void StaTrack::DrawInsulateNode()
         {
-            if (!m_bInsulateNodeChange) {
-                return;
-            }
-
             m_pPainter.setPen(QPen(COLOR_TRACK_BLUE, 2));
             m_pPainter.drawLine(Scale(QPoint(p1.x(), p1.y())), Scale(QPoint(p2.x(), p2.y()))); //绘制轨道区段左侧绝缘节
             m_pPainter.drawLine(Scale(QPoint(p3.x(), p3.y())), Scale(QPoint(p4.x(), p4.y()))); //绘制轨道区段右侧绝缘节
@@ -107,6 +110,19 @@ namespace Station {
         bool StaTrack::Contains(const QPoint& ptPos)
         {
             return m_rcTextRect.contains(ptPos) || m_rcRespondRect.contains(ptPos);
+        }
+
+        bool StaTrack::IsMouseWheel(const QPoint& ptPos)
+        {
+            if (CTCWindows::BaseWnd::StaFunBtnToolBar::getCurrFunType() == CTCWindows::FunType::RegionRelieve ||
+                CTCWindows::BaseWnd::StaFunBtnToolBar::getCurrFunType() == CTCWindows::FunType::Blockade ||
+                CTCWindows::BaseWnd::StaFunBtnToolBar::getCurrFunType() == CTCWindows::FunType::UnBlockade ||
+                CTCWindows::BaseWnd::StaFunBtnToolBar::getCurrFunType() == CTCWindows::FunType::RampUnlock ||
+                CTCWindows::BaseWnd::StaFunBtnToolBar::getCurrFunType() == CTCWindows::FunType::PoorRoute ||
+                CTCWindows::BaseWnd::StaFunBtnToolBar::getCurrFunType() == CTCWindows::FunType::IdleConfirm) {
+                return Contains(ptPos);
+            }
+            return false;
         }
 
         void StaTrack::InitClickEvent()
@@ -121,8 +137,9 @@ namespace Station {
                 case static_cast<int>(CTCWindows::FunType::PoorRoute):          //分路不良
                 case static_cast<int>(CTCWindows::FunType::IdleConfirm): {      //确认空闲
                     m_mapClickEvent.insert(static_cast<CTCWindows::FunType>(i), [&]() {
-                        CTCWindows::setOperObjType(CTCWindows::OperObjType::Track);
-                        StationObject::AddSelectDevice(this);
+                        CTCWindows::BaseWnd::StaFunBtnToolBar::setOperObjType(CTCWindows::OperObjType::Track);
+                        MainStation()->AddSelectDevice(this);
+                        MainStation()->setDevSelected();
                     });
                     break;
                 }

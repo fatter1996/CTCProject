@@ -10,7 +10,7 @@ namespace Socket {
     {
         Q_OBJECT
     public:
-        explicit ServerTCP(QObject* parent = nullptr);
+        explicit ServerTCP(QObject* pParent = nullptr);
         ~ServerTCP();
 
     public:

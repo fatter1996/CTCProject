@@ -1,7 +1,7 @@
 ﻿#include "servertcp.h"
 
 namespace Socket {
-    ServerTCP::ServerTCP(QObject* parent) : QObject(parent)
+    ServerTCP::ServerTCP(QObject* pParent) : QObject(pParent)
     {
         pTcpServer = new QTcpServer(this);
     }

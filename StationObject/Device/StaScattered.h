@@ -3,19 +3,14 @@
 
 namespace Station {
     namespace Device {
-        //场联
+        //零散
         class StaScattered : public StaDistant
         {
         public:
-            explicit StaScattered(QObject* parent = nullptr);
+            explicit StaScattered(QObject* pParent = nullptr);
             ~StaScattered();
 
         private:
-            virtual bool eventFilter(QObject* obj, QEvent* event);
-
-        private:
-            //站场绘制
-            void Draw(const bool& isMulti = false);
             //绘制信号灯
             void DrawLight();
             //绘制文字

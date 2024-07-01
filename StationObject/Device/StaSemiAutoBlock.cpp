@@ -6,7 +6,7 @@
 namespace Station {
     namespace Device {
 
-        StaSemiAutoBlock::StaSemiAutoBlock(QObject* parent) : DeviceArrow(m_mapAttribute)
+        StaSemiAutoBlock::StaSemiAutoBlock(QObject* pParent) : DeviceArrow(m_mapAttribute)
         {
             m_mapAttribute.insert("BS_Text", [&](const QString& strElement) { m_ptBSText = QStringToQPoint(strElement); });
             m_mapAttribute.insert("FY_Text", [&](const QString& strElement) { m_ptFYText = QStringToQPoint(strElement); });
@@ -28,7 +28,7 @@ namespace Station {
                 m_rcSGBtn = QStringToQRect(strElement);
                 m_rcSGBtn.setWidth(17);
                 m_rcSGBtn.setHeight(17);
-                });
+            });
 
             m_mapAttribute.insert("BSType", [&](const QString& strElement) { m_nBlockType = strElement.toUInt(); });
         }
@@ -36,11 +36,6 @@ namespace Station {
         StaSemiAutoBlock::~StaSemiAutoBlock()
         {
 
-        }
-
-        bool StaSemiAutoBlock::eventFilter(QObject* obj, QEvent* event)
-        {
-            return DeviceBase::eventFilter(obj, event);
         }
 
         void StaSemiAutoBlock::Draw(const bool& isMulti)
@@ -76,9 +71,14 @@ namespace Station {
             m_pPainter.drawText(Scale(QRect(m_ptSGText, fontMetrics.size(Qt::TextSingleLine, "ÊÂ¹Ê"))), "ÊÂ¹Ê", QTextOption(Qt::AlignCenter));
         }
 
+        bool StaSemiAutoBlock::Contains(const QPoint& ptPos)
+        {
+            return m_rcBSBtn.contains(ptPos) || m_rcFYBtn.contains(ptPos) || m_rcSGBtn.contains(ptPos);
+        }
+
         bool StaSemiAutoBlock::IsMouseWheel(const QPoint& ptPos)
         {
-            if (CTCWindows::getCurrFunType() == CTCWindows::FunType::FunBtn) {
+            if (CTCWindows::BaseWnd::StaFunBtnToolBar::getCurrFunType() == CTCWindows::FunType::FunBtn) {
                 if (m_rcBSBtn.contains(ptPos)) {
                     m_nSelectBtnType = 0x01;
                     return true;
@@ -98,23 +98,22 @@ namespace Station {
         void StaSemiAutoBlock::InitClickEvent()
         {
             m_mapClickEvent.insert(CTCWindows::FunType::FunBtn, [&]() {
-                OnButtonClick();
-                });
+                OnButtonClick(this);
+            });
         }
 
-        void StaSemiAutoBlock::OnButtonClick()
+        void StaSemiAutoBlock::SetBtnState()
         {
-            if (m_nBtnState != 0) {
-                return;
-            }
-
-            if (CTCWindows::getCurrFunType() == CTCWindows::FunType::FunBtn) {
-                m_nBtnState |= m_nSelectBtnType;
+            if (CTCWindows::BaseWnd::StaFunBtnToolBar::getCurrFunType() == CTCWindows::FunType::FunBtn) {
+                m_nBtnState = m_nSelectBtnType;
                 m_nFirstBtnType = 5;
-            }
-
-            if (m_nBtnState) {
-                StationObject::AddSelectDevice(this);
+                switch (m_nBtnState)
+                {
+                case 0x01: CTCWindows::BaseWnd::StaFunBtnToolBar::setOperObjType(CTCWindows::OperObjType::Blockage);       break;
+                case 0x02: CTCWindows::BaseWnd::StaFunBtnToolBar::setOperObjType(CTCWindows::OperObjType::Restoration);       break;
+                case 0x04: CTCWindows::BaseWnd::StaFunBtnToolBar::setOperObjType(CTCWindows::OperObjType::Accident);    break;
+                default: break;
+                }
             }
         }
 
@@ -122,7 +121,7 @@ namespace Station {
         {
             QColor& cColor1 = m_cColor1;
             QColor& cColor2 = m_cColor2;
-            if (m_nSX) {
+            if (m_bUpDown) {
                 cColor2 = m_cColor1;
                 cColor1 = m_cColor2;
             }
@@ -135,22 +134,12 @@ namespace Station {
             default:   cColor1 = COLOR_LIGHT_BLACK;  break;
             }
             switch (m_nArrowState & 0xf0) {
-            case 0x10: cColor2 = COLOR_LIGHT_YELLOW; break;
+            case 0x10: cColor2 = COLOR_LIGHT_YELLOW; break; 
             case 0x20: cColor2 = COLOR_LIGHT_GREEN;  break;
             case 0x40: cColor2 = COLOR_LIGHT_RED;    break;
             case 0x80: cColor2 = COLOR_LIGHT_RED;    break;
             default:   cColor2 = COLOR_LIGHT_BLACK;  break;
             }
-        }
-
-        bool StaSemiAutoBlock::IsMouseWheel(const QPoint& ptPos)
-        {
-            return false;
-        }
-
-        void StaSemiAutoBlock::OnButtonClick()
-        {
-        
         }
 
         void StaSemiAutoBlock::setVollover(const QPoint& ptBase)

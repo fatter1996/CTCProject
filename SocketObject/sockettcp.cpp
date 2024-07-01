@@ -4,7 +4,7 @@
 #include <ws2tcpip.h>
 
 namespace Socket {
-    SocketTCP::SocketTCP(QObject* parent) : QObject(parent)
+    SocketTCP::SocketTCP(QObject* pParent) : QObject(pParent)
     {
         m_pTcpSocket = new QTcpSocket(this);
         int socketDescriptor = m_pTcpSocket->socketDescriptor();
@@ -33,7 +33,7 @@ namespace Socket {
 
     bool SocketTCP::InitClient()
     {
-       if (m_pTcpSocket->bind(QHostAddress::Any, m_nLocalPort)) {
+       if (1/*m_pTcpSocket->bind(QHostAddress::Any, m_nLocalPort)*/) {
            qDebug() << QString("Init TCP socket %1:%2 succeeded!").arg(m_hLocalIp.toString()).arg(m_nLocalPort);
            //连接
            m_pTcpSocket->setSocketOption(QAbstractSocket::KeepAliveOption, 1);

@@ -4,7 +4,7 @@
 
 namespace Station {
     namespace Device {
-        StaSwitchSection::StaSwitchSection(QObject* parent)
+        StaSwitchSection::StaSwitchSection(QObject* pParent)
         {
             m_mapAttribute.insert("m_nChildNum", [&](const QString& strElement) { m_nChildNum = strElement.toUInt(); });
             m_mapAttribute.insert("m_nChild", [&](const QString& strElement) {
@@ -31,7 +31,7 @@ namespace Station {
 
 
 
-        StaPermillSix::StaPermillSix(QObject* parent)
+        StaPermillSix::StaPermillSix(QObject* pParent)
         {
             m_mapAttribute.insert("p1", [&](const QString& strElement) { p1 = QStringToQPoint(strElement); });
             m_mapAttribute.insert("p2", [&](const QString& strElement) { p2 = QStringToQPoint(strElement); });
@@ -44,7 +44,10 @@ namespace Station {
 
         void StaPermillSix::Draw(const bool& isMulti)
         {
-            DrawPermillSix();
+            if (MainStation()->IsVisible(VisibleDev::permillSix)) {
+                DrawPermillSix();
+            }
+            
             return DeviceBase::Draw(isMulti);
         }
         

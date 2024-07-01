@@ -4,15 +4,21 @@
 #include "ui_StationLogDispTKY.h"
 
 namespace CTCWindows {
-	class StationLogDispTKY : public StationLogDisp
-	{
-		Q_OBJECT
+	namespace CARS {
+		class StationLogDispTKY : public BaseWnd::StationLogDisp
+		{
+			Q_OBJECT
 
-	public:
-		StationLogDispTKY(QWidget* parent = nullptr);
-		~StationLogDispTKY();
+		public:
+			StationLogDispTKY(QWidget* parent = nullptr);
+			~StationLogDispTKY();
 
-	private:
-		Ui::StationLogDispTKYClass ui;
-	};
+		public:
+			void InitTrafficLogTableHead();
+			void AddTrafficLogTable();
+
+		private:
+			Ui::StationLogDispTKY ui;
+		};
+	}
 }

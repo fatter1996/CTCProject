@@ -7,8 +7,12 @@ namespace Station {
         class StaText : public DeviceBase
         {
         public:
-            explicit StaText(QObject* parent = nullptr);
+            explicit StaText(QObject* pParent = nullptr);
             ~StaText();
+
+        public:
+            //’æ≥°ªÊ÷∆
+            void Draw(const bool& isMulti = false);
 
         private:
             bool m_bIsTitle = false;

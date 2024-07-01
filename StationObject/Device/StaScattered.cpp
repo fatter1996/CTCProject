@@ -6,11 +6,11 @@
 namespace Station {
     namespace Device {
 
-        StaScattered::StaScattered(QObject* parent)
+        StaScattered::StaScattered(QObject* pParent)
         {
             m_mapAttribute.insert("mRsbjRect", [&](const QString& strElement) { 
-                m_rcFuseAlarmText = QStringToQRect(strElement); 
-                m_rcFuseAlarmLamp = getLampRectByTextRect(m_rcFuseAlarmText); 
+                m_rcFuseAlarmText = QStringToQRect(strElement);
+                m_rcFuseAlarmLamp = getLampRectByTextRect(m_rcFuseAlarmText);
             });
 
             m_mapAttribute.insert("mZFdyRect", [&](const QString& strElement) {
@@ -62,7 +62,7 @@ namespace Station {
             });
 
             m_mapAttribute.insert("SGDTDJ", [&](const QString& strElement) { m_strSGDTDJ = strElement; });
-            m_mapAttribute.insert("SGDTDJ_bus", [&](const QString& strElement) { m_nSGDTDJ = strElement.toInt(); });
+            m_mapAttribute.insert("SGDTDJ_bus", [&](const QString& strElement) {m_nSGDTDJ = strElement.toInt(); });
             m_mapAttribute.insert("XGDTDJ", [&](const QString& strElement) { m_strXGDTDJ = strElement; });
             m_mapAttribute.insert("XGDTDJ_bus", [&](const QString& strElement) { m_nXGDTDJ = strElement.toInt(); });
             m_mapAttribute.insert("trackType", [&](const QString& strElement) { m_strTrackType = strElement; });
@@ -73,18 +73,11 @@ namespace Station {
 
         }
 
-        bool StaScattered::eventFilter(QObject* obj, QEvent* event)
-        {
-            return DeviceBase::eventFilter(obj, event);
-        }
-    
-        void StaScattered::Draw(const bool& isMulti)
-        {
-            return DeviceBase::Draw(isMulti);
-        }
-
         void StaScattered::DrawLight()
         {
+            if (!MainStation()->IsVisible(VisibleDev::stateLemp)) {
+                return;
+            }
             m_pPainter.setPen(QPen(COLOR_LIGHT_WHITE, 1));
             //ÈÛË¿±¨¾¯
             m_pPainter.setBrush((m_nState & 0x01) ? COLOR_LIGHT_RED : COLOR_LIGHT_BLACK);
@@ -115,6 +108,9 @@ namespace Station {
 
         void StaScattered::DrawText()
         {
+            if (!MainStation()->IsVisible(VisibleDev::stateLempName)) {
+                return;
+            }
             QFont font;
             font.setFamily("Î¢ÈíÑÅºÚ");
             font.setPixelSize(Scale(m_nFontSize));//×ÖºÅ

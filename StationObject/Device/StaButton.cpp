@@ -5,26 +5,17 @@
 namespace Station {
     namespace Device {
 
-        StaButton::StaButton(QObject* parent)
+        StaButton::StaButton(QObject* pParent)
         {
-            m_mapAttribute.insert("p1", [=](const QString& strElement) { p1 = QStringToQPoint(strElement); });
-            m_mapAttribute.insert("p2", [=](const QString& strElement) { p2 = QStringToQPoint(strElement); });
-            m_mapAttribute.insert("m_nTZB", [=](const QString& strElement) { m_nTZB = strElement.toUInt(nullptr, 16); });
-            m_mapAttribute.insert("ButLong", [=](const QString& strElement) { m_nButLong = strElement.toUInt(); });
+            m_mapAttribute.insert("p1", [=](const QString& strElement) {p1 = QStringToQPoint(strElement); });
+            m_mapAttribute.insert("p2", [=](const QString& strElement) {p2 = QStringToQPoint(strElement); });
+            m_mapAttribute.insert("m_nTZB", [=](const QString& strElement) {m_nTZB = strElement.toUInt(nullptr, 16); });
+            m_mapAttribute.insert("ButLong", [=](const QString& strElement) {m_nButLong = strElement.toUInt(); });
         }
 
         StaButton::~StaButton()
         {
 
-        }
-
-        bool StaButton::eventFilter(QObject* obj, QEvent* event)
-        {
-            if (event->type() == QEvent::MouseMove) {
-                QMouseEvent* mouseEvent = dynamic_cast<QMouseEvent*>(event);
-                onMouseMoveToButton(mouseEvent->pos(), m_nCode);
-            }
-            return DeviceBase::eventFilter(obj, event);
         }
 
         void StaButton::InitDeviceAttribute()
@@ -39,7 +30,10 @@ namespace Station {
 
         void StaButton::Draw(const bool& isMulti)
         {
-            DrawStaButton();
+            if (MainStation()->IsVisible(VisibleDev::button)) {
+                DrawStaButton();
+            }
+            
             return DeviceBase::Draw(isMulti);
         }
 
@@ -58,18 +52,15 @@ namespace Station {
 
         bool StaButton::Contains(const QPoint& ptPos)
         {
-            if (CTCWindows::getCurrFunType() == CTCWindows::FunType::RouteBuild && (m_nType == 81 || m_nType == 380)) {
-                return n_rcButton.contains(ptPos); 
-            }
-            return false;
+            return n_rcButton.contains(ptPos); 
         }
         
         bool StaButton::IsMouseWheel(const QPoint& ptPos)
         {
-            if (CTCWindows::getCurrFunType() == CTCWindows::FunType::RouteBuild && (m_nType == 81 || m_nType == 380)) {
+            if (CTCWindows::BaseWnd::StaFunBtnToolBar::getCurrFunType() == CTCWindows::FunType::RouteBuild && (m_nType == 81 || m_nType == 380)) {
                 return n_rcButton.contains(ptPos);
             }
-            else if (CTCWindows::getCurrFunType() == CTCWindows::FunType::FunBtn && m_nType == 342) {
+            else if (CTCWindows::BaseWnd::StaFunBtnToolBar::getCurrFunType() == CTCWindows::FunType::FunBtn && m_nType == 342) {
                 return n_rcButton.contains(ptPos);
             }
             return false;
@@ -78,48 +69,40 @@ namespace Station {
         void StaButton::InitClickEvent()
         {
             m_mapClickEvent.insert(CTCWindows::FunType::RouteBuild, [&]() {
-                OnButtonClick();
+                OnButtonClick(this);
             });
             m_mapClickEvent.insert(CTCWindows::FunType::FunBtn, [&]() {
-                OnButtonClick();
+                OnButtonClick(this);
             });
         }
 
-        void StaButton::OnButtonClick()
+        void StaButton::SetBtnState()
         {
-            if (m_nBtnState != 0) { //同一信号机不能重复点击
-                return;
-            }
-
-            if (CTCWindows::getCurrFunType() == CTCWindows::FunType::RouteBuild) {
+            if (CTCWindows::BaseWnd::StaFunBtnToolBar::getCurrFunType() == CTCWindows::FunType::RouteBuild) {
                 if (m_nType == 81 && m_nFirstBtnType == 0) {    //通过按钮
-                    CTCWindows::setOperObjType(CTCWindows::OperObjType::Though);
-                    m_nBtnState |= true;
+                    CTCWindows::BaseWnd::StaFunBtnToolBar::setOperObjType(CTCWindows::OperObjType::Though);
+                    m_nBtnState = 1;
                     m_nFirstBtnType = 3;
                 }
                 if (m_nType == 380 && m_nFirstBtnType == 1) {   //虚信号按钮
-                    CTCWindows::setOperObjType(CTCWindows::OperObjType::Flexibility);
-                    m_nBtnState |= true;
+                    CTCWindows::BaseWnd::StaFunBtnToolBar::setOperObjType(CTCWindows::OperObjType::Flexibility);
+                    m_nBtnState = 1;
                     m_nFirstBtnType = 1;
                 }
             }
 
-            if (CTCWindows::getCurrFunType() == CTCWindows::FunType::FunBtn) {
+            if (CTCWindows::BaseWnd::StaFunBtnToolBar::getCurrFunType() == CTCWindows::FunType::FunBtn) {
                 
                 if (m_nType == 342) {   //引导总锁
-                    if (m_nSX == 0) {   //下行
-                        CTCWindows::setOperObjType(CTCWindows::OperObjType::Descend);
+                    if (m_bUpDown == 0) {   //下行
+                        CTCWindows::BaseWnd::StaFunBtnToolBar::setOperObjType(CTCWindows::OperObjType::Descend);
                     }
                     else {  //上行
-                        CTCWindows::setOperObjType(CTCWindows::OperObjType::Ascend);
+                        CTCWindows::BaseWnd::StaFunBtnToolBar::setOperObjType(CTCWindows::OperObjType::Ascend);
                     }
                     m_nFirstBtnType = 5;
                 }
-                m_nBtnState |= true;
-            }
-
-            if (m_nBtnState) {
-                StationObject::AddSelectDevice(this);
+                m_nBtnState = 1;
             }
         }
 

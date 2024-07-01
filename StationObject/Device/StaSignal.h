@@ -9,33 +9,30 @@ namespace Station {
     namespace Device {
 
         enum class SignalState : int {
-            DS = 0x00U,		//断丝
-            B = 0x01U,		//白灯
-            A = 0x02U,		//蓝灯
-            L = 0x03U,		//绿灯
-            H = 0x04U,		//红灯
-            U = 0x05U,		//黄灯
-            UU = 0x06U,		//双黄
-            LL = 0x07U,		//双绿
-            HB = 0x08U,		//引导(红白)
-            LU = 0x0AU,		//绿黄
-            U2 = 0x09U,		//2黄
-            BS = 0x0BU,		//白闪
-            US = 0x0CU,		//黄闪
-            LS = 0x0DU,		//绿闪
-            HS = 0x0EU,		//红闪
-            USU = 0x0FU		//黄闪黄
+            DS = 0x00U,	//断丝
+            B,          //白灯
+            A,          //蓝灯
+            L,          //绿灯
+            H,          //红灯
+            U,          //黄灯
+            UU,		    //双黄
+            LL,		    //双绿
+            HB,		    //引导(红白)
+            U2,		    //2黄
+            LU,		    //绿黄
+            BS,		    //白闪
+            US,		    //黄闪
+            LS,		    //绿闪
+            HS,		    //红闪
+            USU		    //黄闪黄
         };
 
         //信号机
         class StaSignal : public DeviceBase, public DeviceBtn
         {
         public:
-            explicit StaSignal(QObject* parent = nullptr);
+            explicit StaSignal(QObject* pParent = nullptr);
             ~StaSignal();
-
-        private:
-            virtual bool eventFilter(QObject* obj, QEvent* event);
 
         private:
             //初始化设备属性
@@ -64,12 +61,12 @@ namespace Station {
             void InitSignalLightColor();
             //获取信号灯颜色
             void GetSignalLightColor();
-            //鼠标是否在按钮上
+            //鼠标是否在设备上
             bool IsMouseWheel(const QPoint& ptPos);
             //初始化设备点击事件
             void InitClickEvent();
-            //按钮点击事件
-            void OnButtonClick();
+            //设置按钮属性
+            void SetBtnState();
             //命令清除
             void OrderClear();
             //站场翻转
@@ -94,11 +91,11 @@ namespace Station {
             bool m_bSingleDeng = true;
             bool m_bMD = true;
 
-            bool bShowBtn = true; //是否显示按钮
             uint m_nSelectType = 0x0;  //选中类型(0-未选中; 0x01-选中信号机名称; 0x02-选中列车按钮; 0x04-选中调车按钮; 0x08-选中通过按钮; 0x1f-选中信号机灯位)
             uint m_nLightNum = 0;   //灯位个数
             DeviceBase* m_pRelatedBtn = nullptr; //关联通过按钮
 
+            QRect m_rcLightTotal;   //灯位总范围
             QRect m_rcLight1;    //灯位1范围
             QRect m_rcLight2;    //灯位2范围
             QColor m_cLightColor1;

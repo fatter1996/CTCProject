@@ -4,7 +4,7 @@
 namespace Station {
     namespace Device {
 
-        StaLocomotive::StaLocomotive(QObject* parent)
+        StaLocomotive::StaLocomotive(QObject* pParent)
         {
             m_mapAttribute.insert("bsdRect", [&](const QString& strElement) { m_rcLight = QStringToQRect(strElement); });
         }
@@ -12,11 +12,6 @@ namespace Station {
         StaLocomotive::~StaLocomotive()
         {
 
-        }
-
-        bool StaLocomotive::eventFilter(QObject* obj, QEvent* event)
-        {
-            return DeviceBase::eventFilter(obj, event);
         }
 
         void StaLocomotive::Draw(const bool& isMulti)

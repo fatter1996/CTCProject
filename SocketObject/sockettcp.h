@@ -11,7 +11,7 @@ namespace Socket {
     {
         Q_OBJECT
     public:
-        explicit SocketTCP(QObject* parent = nullptr);
+        explicit SocketTCP(QObject* pParent = nullptr);
         ~SocketTCP();
 
     public:

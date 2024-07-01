@@ -7,7 +7,7 @@ namespace Station {
         class StaSwitchSection : public DeviceBase {
             Q_OBJECT
         public:
-            explicit StaSwitchSection(QObject* parent = nullptr);
+            explicit StaSwitchSection(QObject* pParent = nullptr);
             ~StaSwitchSection();
 
         private:
@@ -28,7 +28,7 @@ namespace Station {
         class StaPermillSix : public DeviceBase {
             Q_OBJECT
         public:
-            explicit StaPermillSix(QObject* parent = nullptr);
+            explicit StaPermillSix(QObject* pParent = nullptr);
             ~StaPermillSix();
 
         private:

@@ -1,4 +1,4 @@
-#include "StaAutoBlock.h"
+ï»¿#include "StaAutoBlock.h"
 #include "Global.h"
 
 #pragma execution_character_set("utf-8")
@@ -6,7 +6,7 @@
 namespace Station {
     namespace Device {
 
-        StaAutoBlock::StaAutoBlock(QObject* parent) : DeviceArrow(m_mapAttribute)
+        StaAutoBlock::StaAutoBlock(QObject* pParent) : DeviceArrow(m_mapAttribute)
         {
             m_mapAttribute.insert("ZFZ1_rect", [&](const QString& strElement) {
                 m_rcZFZBtn = QStringToQRect(strElement);
@@ -78,11 +78,6 @@ namespace Station {
 
         }
 
-        bool StaAutoBlock::eventFilter(QObject* obj, QEvent* event)
-        {
-            return DeviceBase::eventFilter(obj, event);
-        }
-
         void StaAutoBlock::InitDeviceAttribute()
         {
             if (m_rcFZLight.x() < p11.x()) {
@@ -103,35 +98,20 @@ namespace Station {
                 p26.setX(p26.x() - 48);
                 p27.setX(p27.x() - 48);
             }
-            //if (m_nSX) {
-            //    p11.setX(p11.x() + 48);
-            //    p12.setX(p12.x() + 48);
-            //    p13.setX(p13.x() + 48);
-            //    p14.setX(p14.x() + 48);
-            //    p15.setX(p15.x() + 48);
-            //    p16.setX(p16.x() + 48);
-            //    p17.setX(p17.x() + 48);
-            //}
-            //else {
-            //    p21.setX(p21.x() - 48);
-            //    p22.setX(p22.x() - 48);
-            //    p23.setX(p23.x() - 48);
-            //    p24.setX(p24.x() - 48);
-            //    p25.setX(p25.x() - 48);
-            //    p26.setX(p26.x() - 48);
-            //    p27.setX(p27.x() - 48);
-            //}
         }
 
         void StaAutoBlock::Draw(const bool& isMulti)
         {
+            m_bShowName = MainStation()->IsVisible(VisibleDev::direction);
             DrawArrow(m_pPainter);
             DrawButton(m_pPainter, Scale(m_rcZFZBtn), COLOR_BTN_DEEPGRAY, m_nBtnState & 0x01);
             DrawButton(m_pPainter, Scale(m_rcJCFZBtn), COLOR_BTN_DEEPGRAY, m_nBtnState & 0x02);
             DrawButton(m_pPainter, Scale(m_rcFCFZBtn), COLOR_BTN_DEEPGRAY, m_nBtnState & 0x04);
             
-            for (StaLeaveTrack& track : m_vecStaLeaveTrack) {
-                DrawLeaveTrack(track);
+            if (MainStation()->IsVisible(VisibleDev::sectionName)) {
+                for (StaLeaveTrack& track : m_vecStaLeaveTrack) {
+                    DrawLeaveTrack(track);
+                }
             }
 
             return StaDistant::Draw(isMulti);
@@ -140,29 +120,29 @@ namespace Station {
         void StaAutoBlock::DrawLeaveTrack(const StaLeaveTrack& track)
         {
             QFont font;
-            font.setFamily("Î¢ÈíÑÅºÚ");
-            font.setPixelSize(Scale(m_nFontSize));//×ÖºÅ
+            font.setFamily("å¾®è½¯é›…é»‘");
+            font.setPixelSize(Scale(m_nFontSize));//å­—å·
             QFontMetrics  fontMetrics(font);
-            m_pPainter.setFont(font);//ÉèÖÃ×ÖÌå
+            m_pPainter.setFont(font);//è®¾ç½®å­—ä½“
 
-            //»æÖÆ¹ÉµÀÃû³Æ
+            //ç»˜åˆ¶è‚¡é“åç§°
             m_pPainter.setPen(Qt::white);
             m_pPainter.drawText(Scale(QRect(track.m_ptName, fontMetrics.size(Qt::TextSingleLine, track.m_strName))), track.m_strName, QTextOption(Qt::AlignCenter));
-            //»æÖÆ¹ÉµÀ
+            //ç»˜åˆ¶è‚¡é“
             m_pPainter.setPen(QPen(getTrackColor(track.m_nIndex), Scale(TRACK_WIDTH), Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
             m_pPainter.drawLine(Scale(QPoint(track.m_rcTrack.left(), m_ptInterUsed.y())),
                 Scale(QPoint(track.m_rcTrack.right(), m_ptInterUsed.y())));
-            //»æÖÆ¾øÔµ½Ú
+            //ç»˜åˆ¶ç»ç¼˜èŠ‚
             m_pPainter.setPen(QPen(COLOR_TRACK_BLUE, 2));
-            m_pPainter.drawLine(Scale(track.m_rcTrack.topLeft()), Scale(track.m_rcTrack.bottomLeft())); //»æÖÆ¹ìµÀÇø¶Î×ó²à¾øÔµ½Ú
-            m_pPainter.drawLine(Scale(track.m_rcTrack.topRight()), Scale(track.m_rcTrack.bottomRight())); //»æÖÆ¹ìµÀÇø¶ÎÓÒ²à¾øÔµ½Ú
+            m_pPainter.drawLine(Scale(track.m_rcTrack.topLeft()), Scale(track.m_rcTrack.bottomLeft())); //ç»˜åˆ¶è½¨é“åŒºæ®µå·¦ä¾§ç»ç¼˜èŠ‚
+            m_pPainter.drawLine(Scale(track.m_rcTrack.topRight()), Scale(track.m_rcTrack.bottomRight())); //ç»˜åˆ¶è½¨é“åŒºæ®µå³ä¾§ç»ç¼˜èŠ‚
         }
 
         void StaAutoBlock::DrawLight()
         {
             m_pPainter.setPen(QPen(COLOR_LIGHT_WHITE, 1));
 
-            //¸¨Öú±ÕÈûµÆ
+            //è¾…åŠ©é—­å¡ç¯
             QColor color;
             if (m_nState & 0x40) {
                 color = COLOR_LIGHT_WHITE;
@@ -177,25 +157,30 @@ namespace Station {
         void StaAutoBlock::DrawText()
         {
             QFont font;
-            font.setFamily("Î¢ÈíÑÅºÚ");
-            font.setPixelSize(Scale(m_nFontSize));//×ÖºÅ
-            m_pPainter.setFont(font);//ÉèÖÃ×ÖÌå
+            font.setFamily("å¾®è½¯é›…é»‘");
+            font.setPixelSize(Scale(m_nFontSize));//å­—å·
+            m_pPainter.setFont(font);//è®¾ç½®å­—ä½“
             m_pPainter.setPen(Qt::white);
 
             QFontMetrics  fontMetrics(font);
-            //×Ü¸¨Öú
-            m_pPainter.drawText(Scale(QRect(m_ptZFZText, fontMetrics.size(Qt::TextSingleLine, "×Ü¸¨Öú"))), "×Ü¸¨Öú", QTextOption(Qt::AlignCenter));
-            //½Ó³µ¸¨Öú
-            m_pPainter.drawText(Scale(QRect(m_ptJCFZText, fontMetrics.size(Qt::TextSingleLine, "½Ó³µ¸¨Öú"))), "½Ó³µ¸¨Öú", QTextOption(Qt::AlignCenter));
-            //·¢³µ¸¨Öú
-            m_pPainter.drawText(Scale(QRect(m_ptFCFZText, fontMetrics.size(Qt::TextSingleLine, "·¢³µ¸¨Öú"))), "·¢³µ¸¨Öú", QTextOption(Qt::AlignCenter));
-            //·¢³µ¸¨Öú
-            m_pPainter.drawText(Scale(QRect(m_ptFZText, fontMetrics.size(Qt::TextSingleLine, "¸¨Öú°ìÀí"))), "¸¨Öú°ìÀí", QTextOption(Qt::AlignCenter));
+            //æ€»è¾…åŠ©
+            m_pPainter.drawText(Scale(QRect(m_ptZFZText, fontMetrics.size(Qt::TextSingleLine, "æ€»è¾…åŠ©"))), "æ€»è¾…åŠ©", QTextOption(Qt::AlignCenter));
+            //æ¥è½¦è¾…åŠ©
+            m_pPainter.drawText(Scale(QRect(m_ptJCFZText, fontMetrics.size(Qt::TextSingleLine, "æ¥è½¦è¾…åŠ©"))), "æ¥è½¦è¾…åŠ©", QTextOption(Qt::AlignCenter));
+            //å‘è½¦è¾…åŠ©
+            m_pPainter.drawText(Scale(QRect(m_ptFCFZText, fontMetrics.size(Qt::TextSingleLine, "å‘è½¦è¾…åŠ©"))), "å‘è½¦è¾…åŠ©", QTextOption(Qt::AlignCenter));
+            //å‘è½¦è¾…åŠ©
+            m_pPainter.drawText(Scale(QRect(m_ptFZText, fontMetrics.size(Qt::TextSingleLine, "è¾…åŠ©åŠç†"))), "è¾…åŠ©åŠç†", QTextOption(Qt::AlignCenter));
+        }
+
+        bool StaAutoBlock::Contains(const QPoint& ptPos)
+        {
+            return m_rcZFZBtn.contains(ptPos) || m_rcJCFZBtn.contains(ptPos) || m_rcFCFZBtn.contains(ptPos);
         }
 
         bool StaAutoBlock::IsMouseWheel(const QPoint& ptPos)
         {
-            if (CTCWindows::getCurrFunType() == CTCWindows::FunType::FunBtn) {
+            if (CTCWindows::BaseWnd::StaFunBtnToolBar::getCurrFunType() == CTCWindows::FunType::FunBtn) {
                 if (m_rcZFZBtn.contains(ptPos)) {
                     m_nSelectBtnType = 0x01;
                     return true;
@@ -215,23 +200,22 @@ namespace Station {
         void StaAutoBlock::InitClickEvent()
         {
             m_mapClickEvent.insert(CTCWindows::FunType::FunBtn, [&]() {
-                OnButtonClick();
+                OnButtonClick(this);
             });
         }
 
-        void StaAutoBlock::OnButtonClick()
+        void StaAutoBlock::SetBtnState()
         {
-            if (m_nBtnState != 0) {
-                return;
-            }
-
-            if (CTCWindows::getCurrFunType() == CTCWindows::FunType::FunBtn) {
-                m_nBtnState |= m_nSelectBtnType;
+            if (CTCWindows::BaseWnd::StaFunBtnToolBar::getCurrFunType() == CTCWindows::FunType::FunBtn) {
+                m_nBtnState = m_nSelectBtnType;
                 m_nFirstBtnType = 5;
-            }
-
-            if (m_nBtnState) {
-                StationObject::AddSelectDevice(this);
+                switch (m_nBtnState)
+                {
+                case 0x01 : CTCWindows::BaseWnd::StaFunBtnToolBar::setOperObjType(CTCWindows::OperObjType::TotalAux);       break;
+                case 0x02: CTCWindows::BaseWnd::StaFunBtnToolBar::setOperObjType(CTCWindows::OperObjType::PickUpAux);       break;
+                case 0x04: CTCWindows::BaseWnd::StaFunBtnToolBar::setOperObjType(CTCWindows::OperObjType::DepartureAux);    break;
+                default: break;
+                }
             }
         }
 

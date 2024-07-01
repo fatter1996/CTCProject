@@ -7,11 +7,8 @@ namespace Station {
         class StaEndLine : public DeviceBase
         {
         public:
-            explicit StaEndLine(QObject* parent = nullptr);
+            explicit StaEndLine(QObject* pParent = nullptr);
             ~StaEndLine();
-
-        private:
-            virtual bool eventFilter(QObject* obj, QEvent* event);
 
         private:
             //’æ≥°ªÊ÷∆

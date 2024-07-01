@@ -1,14 +1,16 @@
 #include "StationMultiDispKSK.h"
 
 namespace CTCWindows {
-	StationMultiDispKSK::StationMultiDispKSK(QWidget* parent)
-		: StationMultiDisp(parent)
-	{
-		ui.setupUi(this);
-	}
+	namespace CASCO {
+		StationMultiDispKSK::StationMultiDispKSK(QWidget* parent)
+			: StationMultiDisp(parent)
+		{
+			ui.setupUi(this);
+		}
 
-	StationMultiDispKSK::~StationMultiDispKSK()
-	{
-	
+		StationMultiDispKSK::~StationMultiDispKSK()
+		{
+
+		}
 	}
 }

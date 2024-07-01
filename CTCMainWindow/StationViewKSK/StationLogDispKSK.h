@@ -4,15 +4,17 @@
 #include "ui_StationLogDispKSK.h"
 
 namespace CTCWindows {
-	class StationLogDispKSK : public StationLogDisp
-	{
-		Q_OBJECT
+	namespace CASCO {
+		class StationLogDispKSK : public BaseWnd::StationLogDisp
+		{
+			Q_OBJECT
 
-	public:
-		StationLogDispKSK(QWidget* parent = nullptr);
-		~StationLogDispKSK();
+		public:
+			StationLogDispKSK(QWidget* parent = nullptr);
+			~StationLogDispKSK();
 
-	private:
-		Ui::StationLogDispKSKClass ui;
-	};
+		private:
+			Ui::StationLogDispKSK ui;
+		};
+	}
 }

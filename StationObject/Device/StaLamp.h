@@ -7,7 +7,7 @@ namespace Station {
         class StaLamp : public DeviceBase
         {
         public:
-            explicit StaLamp(QObject* parent = nullptr);
+            explicit StaLamp(QObject* pParent = nullptr);
             ~StaLamp();
 
         private:

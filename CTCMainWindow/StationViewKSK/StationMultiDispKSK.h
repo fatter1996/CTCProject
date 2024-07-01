@@ -4,15 +4,17 @@
 #include "ui_StationMultiDispKSK.h"
 
 namespace CTCWindows {
-	class StationMultiDispKSK : public StationMultiDisp
-	{
-		Q_OBJECT
+	namespace CASCO {
+		class StationMultiDispKSK : public BaseWnd::StationMultiDisp
+		{
+			Q_OBJECT
 
-	public:
-		StationMultiDispKSK(QWidget* parent = nullptr);
-		~StationMultiDispKSK();
+		public:
+			StationMultiDispKSK(QWidget* parent = nullptr);
+			~StationMultiDispKSK();
 
-	private:
-		Ui::StationMultiDispKSKClass ui;
-	};
+		private:
+			Ui::StationMultiDispKSK ui;
+		};
+	}
 }

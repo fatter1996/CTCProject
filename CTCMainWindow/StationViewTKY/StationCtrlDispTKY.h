@@ -5,25 +5,23 @@
 #include "ui_StationCtrlDispTKY.h"
 
 namespace CTCWindows {
-	class StationCtrlDispTKY : public StationCtrlDisp
-	{
-		Q_OBJECT
+	namespace CARS {
+		class StationCtrlDispTKY : public BaseWnd::StationCtrlDisp
+		{
+			Q_OBJECT
 
-	public:
-		StationCtrlDispTKY(QWidget* parent = nullptr);
-		~StationCtrlDispTKY();
+		public:
+			StationCtrlDispTKY(QWidget* parent = nullptr);
+			~StationCtrlDispTKY();
 
-	public:
-		void CreatStaFunBtnToolBar();
+		public:
+			void CreatStaFunBtnToolBar();
 
-	public:
-		QWidget* StaPaintView();
+		public:
+			QWidget* StaPaintView() { return ui.widget; }
 
-	public:
-		void timerEvent(QTimerEvent* event);
-
-	private:
-		Ui::StationCtrlDispTKYClass ui;
-		int m_nTimerId_500 = -1;
-	};
+		private:
+			Ui::StationCtrlDispTKY ui;
+		};
+	}
 }

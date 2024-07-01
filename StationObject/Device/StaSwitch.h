@@ -7,12 +7,9 @@ namespace Station {
         class StaSwitch : public StaSection
         {
         public:
-            explicit StaSwitch(QObject* parent = nullptr);
+            explicit StaSwitch(QObject* pParent = nullptr);
             ~StaSwitch();
 
-        private:
-            virtual bool eventFilter(QObject* obj, QEvent* event);
-        
         private:
             //初始化设备属性
             void InitDeviceAttribute();
@@ -31,8 +28,12 @@ namespace Station {
             void DrawInsulateNode();
             //绘制道岔状态
             void DrawSwitchState();
+            //绘制培训提示信息
+            void DrawCultivateTips();
             //判断鼠标是否在高亮显示范围内
             bool Contains(const QPoint& ptPos);
+            //鼠标是否在设备上
+            bool IsMouseWheel(const QPoint& ptPos);
             //初始化设备点击事件
             void InitClickEvent();
              //站场翻转

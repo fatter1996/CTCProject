@@ -1,6 +1,7 @@
 ﻿#pragma once
 #include "StationObject/StationObject.h"
-#include <QDebug>
+#include "CTCMainWindow/CTCMainWindow.h"
+#include "HttpObject/HttpClient.h"
 //设备类型
 #define ALLDEVICE		"Device"		//全部设备
 #define SWITCH			"DC"			//道岔
@@ -108,4 +109,22 @@
 #define COLOR_LIGHT_YELLOW				QColor("#FFFF33")
 #define COLOR_LIGHT_WHITE				QColor("#FCFCFC")
 #define COLOR_LIGHT_BLUE				QColor("#4876FF")
+
+#define PASSENGE_TYPE		0x01
+#define FREIGH_TYPE			0x02
+#define TRAIN_TYPE			0x03
+
+
+namespace CTCWindows {
+	void SetMainWindow(CTCMainWindow* pMainWindow);
+	CTCMainWindow* MainWindow();
+}
+
+namespace Station {
+	void SetMainStation(MainStationObject* pStation);
+	MainStationObject* MainStation();
+
+	void InsterTrainType(int nType, int nIndex, QString strtype);
+}
+
 

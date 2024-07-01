@@ -6,19 +6,15 @@ namespace CTCWindows {
 	{
 		Q_OBJECT
 	public:
-		StationViewInterface() {}
+		StationViewInterface(QWidget* pParent = nullptr) {}
 		virtual ~StationViewInterface() = default; // 虚析构函数
 
-	public:
-		virtual void FunBtnStateReset() = 0;
+	public slots:
+		virtual void onFunBtnStateReset() {}
 
 	signals:
 		void OrderClear();
+		void SelectDeviceClear();
 		void OrderIssued();
-
-	public slots:
-		virtual void onOrderClear(); //命令清除
-		virtual void onOrderIssued(); //命令下达
-
 	};
 }

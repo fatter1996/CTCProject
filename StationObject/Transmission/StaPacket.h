@@ -10,10 +10,12 @@ namespace Station {
             ~StaPacket();
 
         public:
-            QByteArray PackOrder(int nStationId, int nTargetCode, int nOrderType = 0);
+            QByteArray PackOrder(int nTargetCode, int nOrderType = 0);
             QByteArray PackUserLogin();
             QByteArray PackStaOperation();
             QByteArray PackCultivate();
+            QByteArray PackSubject();
+            QByteArray PackSubjectToInterLock(int nType, QByteArray btToInterLock);
 
         private:
             QMap<int, std::function<QByteArray()>> m_mapPackOrder;

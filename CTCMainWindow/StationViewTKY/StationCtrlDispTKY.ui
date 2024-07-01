@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>StationCtrlDispTKYClass</class>
- <widget class="QWidget" name="StationCtrlDispTKYClass">
+ <class>StationCtrlDispTKY</class>
+ <widget class="QWidget" name="StationCtrlDispTKY">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -12,6 +12,9 @@
   </property>
   <property name="windowTitle">
    <string>StationCtrlDispTKY</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true"/>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <property name="spacing">

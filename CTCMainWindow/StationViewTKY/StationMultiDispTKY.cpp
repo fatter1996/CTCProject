@@ -1,12 +1,15 @@
 #include "StationMultiDispTKY.h"
 
 namespace CTCWindows {
-	StationMultiDispTKY::StationMultiDispTKY(QWidget* parent)
-		: StationMultiDisp(parent)
-	{
-		ui.setupUi(this);
-	}
+	namespace CARS {
+		StationMultiDispTKY::StationMultiDispTKY(QWidget* parent)
+			: StationMultiDisp(parent)
+		{
+			ui.setupUi(this);
+		}
 
-	StationMultiDispTKY::~StationMultiDispTKY()
-	{}
+		StationMultiDispTKY::~StationMultiDispTKY()
+		{
+		}
+	}
 }

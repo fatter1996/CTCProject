@@ -7,11 +7,8 @@ namespace Station {
         class StaTrack : public StaSection
         {
         public:
-            explicit StaTrack(QObject* parent = nullptr);
+            explicit StaTrack(QObject* pParent = nullptr);
             ~StaTrack();
-
-        private:
-            virtual bool eventFilter(QObject* obj, QEvent* event);
 
         private:
             //初始化设备属性
@@ -30,6 +27,8 @@ namespace Station {
             void DrawInsulateNode();
             //判断鼠标是否在高亮显示范围内
             bool Contains(const QPoint& ptPos);
+            //鼠标是否在设备上
+            bool IsMouseWheel(const QPoint& ptPos);
             //初始化设备点击事件
             void InitClickEvent();
             //站场翻转

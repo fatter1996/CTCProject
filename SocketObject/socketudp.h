@@ -11,13 +11,12 @@ namespace Socket {
     {
         Q_OBJECT
     public:
-        explicit SocketUDP(QObject* parent = nullptr);
+        explicit SocketUDP(QObject* pParent = nullptr);
         ~SocketUDP();
 
     public:
         //初始化端口
         bool InitSocket();
-        void timerEvent(QTimerEvent* event);
 
     public:
         void setLocalAddress(const QHostAddress& hAddress, const quint16& nPort);
@@ -38,7 +37,6 @@ namespace Socket {
         QUdpSocket* m_pUdpSocket = nullptr;
 
     private:
-        int nTimerId = -1;
         QHostAddress m_hLocalIp;
         uint m_nLocalPort = 0;
         QHostAddress m_hServerIp;

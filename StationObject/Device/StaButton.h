@@ -7,11 +7,8 @@ namespace Station {
         class StaButton : public DeviceBase, public DeviceBtn
         {
         public:
-            explicit StaButton(QObject* parent = nullptr);
+            explicit StaButton(QObject* pParent = nullptr);
             ~StaButton();
-
-        private:
-            virtual bool eventFilter(QObject* obj, QEvent* event);
 
         private:
             //初始化设备属性
@@ -22,12 +19,12 @@ namespace Station {
             void DrawStaButton();
             //判断鼠标是否在事件范围内
             bool Contains(const QPoint& ptPos);
-            //鼠标是否在按钮上
+            //鼠标是否在设备上
             bool IsMouseWheel(const QPoint& ptPos);
             //初始化设备点击事件
             void InitClickEvent();
             //按钮点击事件
-            void OnButtonClick();
+            void SetBtnState();
             //命令清除
             void OrderClear();
             //站场翻转

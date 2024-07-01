@@ -4,7 +4,7 @@
 namespace Station {
     namespace Device {
 
-        StaDerailer::StaDerailer(QObject* parent)
+        StaDerailer::StaDerailer(QObject* pParent)
         {
             m_mapAttribute.insert("m_RelayDCnode", [&](const QString& strElement) { m_nRelayDCnode = strElement.toInt(nullptr, 16); });
             m_mapAttribute.insert("ISDD", [&](const QString& strElement) { m_bISDD = strElement.toInt(); });
@@ -17,11 +17,6 @@ namespace Station {
         StaDerailer::~StaDerailer()
         {
 
-        }
-
-        bool StaDerailer::eventFilter(QObject* obj, QEvent* event)
-        {
-            return DeviceBase::eventFilter(obj, event);
         }
 
         void StaDerailer::Draw(const bool& isMulti)

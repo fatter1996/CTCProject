@@ -7,11 +7,8 @@ namespace Station {
         class StaConnection : public StaDistant, public DeviceArrow, public DeviceBtn
         {
         public:
-            explicit StaConnection(QObject* parent = nullptr);
+            explicit StaConnection(QObject* pParent = nullptr);
             ~StaConnection();
-
-        private:
-            virtual bool eventFilter(QObject* obj, QEvent* event);
 
         private:
             //站场绘制
@@ -22,10 +19,14 @@ namespace Station {
             void DrawText();
             //获取箭头颜色
             void getArrowColor();
-            //鼠标是否在按钮上
+            //判断鼠标是否在事件范围内
+            bool Contains(const QPoint& ptPos);
+            //鼠标是否在设备上
             bool IsMouseWheel(const QPoint& ptPos);
-            //按钮点击事件
-            void OnButtonClick();
+            //初始化设备点击事件
+            void InitClickEvent();
+            //设置按钮属性
+            void SetBtnState();
             //站场翻转
             void setVollover(const QPoint& ptBase);
             //状态重置

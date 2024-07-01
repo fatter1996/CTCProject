@@ -5,7 +5,7 @@
 
 namespace Station {
     namespace Device {
-        StaConnection::StaConnection(QObject* parent) : DeviceArrow(m_mapAttribute)
+        StaConnection::StaConnection(QObject* pParent) : DeviceArrow(m_mapAttribute)
         {
             m_mapAttribute.insert("flag", [&](const QString& strElement) { m_nFlag = strElement.toInt(); });
             m_mapAttribute.insert("Pxh", [&](const QString& strElement) { m_ptSignal = QStringToQPoint(strElement); });
@@ -28,11 +28,6 @@ namespace Station {
         StaConnection::~StaConnection()
         {
 
-        }
-
-        bool StaConnection::eventFilter(QObject* obj, QEvent* event)
-        {
-            return DeviceBase::eventFilter(obj, event);
         }
 
         void StaConnection::Draw(const bool& isMulti)
@@ -74,7 +69,7 @@ namespace Station {
             //接近
             m_pPainter.drawText(Scale(QRect(m_ptNear, fontMetrics.size(Qt::TextSingleLine, "接近"))), "接近", QTextOption(Qt::AlignCenter));
             
-            if (m_nSX) {
+            if (m_bUpDown) {
                 //信号
                 m_pPainter.drawText(Scale(QRect(m_ptSignal, fontMetrics.size(Qt::TextSingleLine, "信号"))), "信号", QTextOption(Qt::AlignCenter));
                 //照查  
@@ -122,7 +117,7 @@ namespace Station {
                 cColor2 = COLOR_LIGHT_BLACK;
             }
 
-            if (m_nSX) {
+            if (m_bUpDown) {
                 m_cColor1 = cColor1;
                 m_cColor2 = cColor2;
             }
@@ -132,14 +127,33 @@ namespace Station {
             }
         }
 
+        bool StaConnection::Contains(const QPoint& ptPos)
+        {
+            return m_rcAllowBtn.contains(ptPos);
+        }
+
         bool StaConnection::IsMouseWheel(const QPoint& ptPos)
         {
+            if (CTCWindows::BaseWnd::StaFunBtnToolBar::getCurrFunType() == CTCWindows::FunType::FunBtn) {
+                return m_rcAllowBtn.contains(ptPos);
+            }
             return false;
         }
 
-        void StaConnection::OnButtonClick()
+        void StaConnection::InitClickEvent()
         {
-        
+            m_mapClickEvent.insert(CTCWindows::FunType::FunBtn, [&]() {
+                OnButtonClick(this);
+            });
+        }
+
+        void StaConnection::SetBtnState()
+        {
+            if (CTCWindows::BaseWnd::StaFunBtnToolBar::getCurrFunType() == CTCWindows::FunType::FunBtn) {
+                m_nBtnState = 1;
+                m_nFirstBtnType = 5;
+                CTCWindows::BaseWnd::StaFunBtnToolBar::setOperObjType(CTCWindows::OperObjType::Allow);
+            }
         }
 
         void StaConnection::setVollover(const QPoint& ptBase)

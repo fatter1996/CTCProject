@@ -3,7 +3,7 @@
 
 namespace Station {
     namespace Device {
-        StaEndLine::StaEndLine(QObject* parent)
+        StaEndLine::StaEndLine(QObject* pParent)
         {
             m_mapAttribute.insert("p1", [&](const QString& strElement) { p1 = QStringToQPoint(strElement); });
             m_mapAttribute.insert("p2", [&](const QString& strElement) { p2 = QStringToQPoint(strElement); });
@@ -19,14 +19,11 @@ namespace Station {
 
         }
 
-        bool StaEndLine::eventFilter(QObject* obj, QEvent* event)
-        {
-            return DeviceBase::eventFilter(obj, event);
-        }
-
         void StaEndLine::Draw(const bool& isMulti)
         {
-            DrawEndLine();
+            if (MainStation()->IsVisible(VisibleDev::endMarker)) {
+                DrawEndLine();
+            }
             return DeviceBase::Draw(isMulti);
         }
 

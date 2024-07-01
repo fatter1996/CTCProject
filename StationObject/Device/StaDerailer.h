@@ -7,11 +7,8 @@ namespace Station {
         class StaDerailer : public DeviceBase
         {
         public:
-            explicit StaDerailer(QObject* parent = nullptr);
+            explicit StaDerailer(QObject* pParent = nullptr);
             ~StaDerailer();
-
-        private:
-            virtual bool eventFilter(QObject* obj, QEvent* event);
 
         private:
             //’æ≥°ªÊ÷∆

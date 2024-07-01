@@ -5,18 +5,19 @@
 #include "ui_StaFunBtnToolBarTKY.h"
 
 namespace CTCWindows {
-	class StaFunBtnToolBarTKY : public StaFunBtnToolBar
-	{
-		Q_OBJECT
+	namespace CARS {
+		class StaFunBtnToolBarTKY : public BaseWnd::StaFunBtnToolBar
+		{
+			Q_OBJECT
+		public:
+			StaFunBtnToolBarTKY(QWidget* parent = nullptr);
+			~StaFunBtnToolBarTKY();
 
-	public:
-		StaFunBtnToolBarTKY(QWidget* parent = nullptr);
-		~StaFunBtnToolBarTKY();
+		public slots:
+			void onFunBtnStateReset();
 
-	public:
-		void FunBtnStateReset();
-
-	private:
-		Ui::StaFunBtnToolBarTKYClass ui;
-	};
+		private:
+			Ui::StaFunBtnToolBarTKY ui;
+		};
+	}
 }

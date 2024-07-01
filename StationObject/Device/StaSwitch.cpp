@@ -9,7 +9,7 @@
 namespace Station {
     namespace Device {
 
-        StaSwitch::StaSwitch(QObject* parent)
+        StaSwitch::StaSwitch(QObject* pParent)
         {
             m_mapAttribute.insert("m_nQDCode", [&](const QString& strElement) { m_nQDCode = strElement.toUInt(nullptr, 16); });
             m_mapAttribute.insert("m_nCxjy", [&](const QString& strElement) { m_nCxjy = strElement.toUInt(); });
@@ -35,11 +35,6 @@ namespace Station {
             
         }
 
-        bool StaSwitch::eventFilter(QObject* obj, QEvent* event)
-        {
-            return StaSection::eventFilter(obj, event);
-        }
-
         void StaSwitch::InitDeviceAttribute()
         {
             //三角函数求出岔心坐标
@@ -62,6 +57,7 @@ namespace Station {
 
         void StaSwitch::Draw(const bool& isMulti)
         {
+            m_bShowName = MainStation()->IsVisible(VisibleDev::switchName);
             //绘制股道
             DrawTrack(QPen(getTrackColor(), Scale(TRACK_WIDTH), Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin), m_nSwitchState | SWITCH_DRAW_CQ);
             DrawTrack(QPen(COLOR_TRACK_BLUE, Scale(TRACK_WIDTH), Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin), 0x07 ^ (m_nSwitchState | SWITCH_DRAW_CQ));
@@ -170,7 +166,10 @@ namespace Station {
             m_rcDevRect = QRect(QPoint(minX - 10, minY - 10), QPoint(maxX + 10, maxY + 10));
             m_pPainter.drawRect(Scale(m_rcDevRect));
 
-            return DeviceBase::DrawSelectRange();
+            //设备名称虚线框
+            m_pPainter.setPen(QPen(COLOR_TRACK_WHITE, 1, Qt::DashLine));
+            m_pPainter.setBrush(COLOR_TRACK_SELECT_BLUE);
+            m_pPainter.drawRect(Scale(OutSideRect(m_rcTextRect, 2, 0)));
         }
 
         void StaSwitch::DrawInsulateNode()
@@ -225,9 +224,56 @@ namespace Station {
             }
         }
 
+        //绘制培训提示信息
+        void StaSwitch::DrawCultivateTips()
+        {
+            m_pPainter.setPen(QPen(COLOR_TRACK_YELLOW, 2));
+            m_pPainter.setBrush(COLOR_LIGHT_BLACK);
+
+            QFont font;
+            font.setFamily("微软雅黑");
+            font.setPixelSize(Scale(14));//字号
+            QRect rcTips = QRect(m_ptCenter.x() - 12, m_ptCenter.y() - 12, 24, 24);
+            QString strTips;
+            //道岔 0x01-道岔单操,0x02-道岔单锁,0x04-道岔封锁,0x08-分路不良,
+            if (m_nTipsType & 0x01) {
+                strTips = QString("使用功能按钮或右键菜单将%1道岔设为\"%2\"").arg(m_strName).arg(m_nSwitchState == 0x01 ? "定位" : "反位");
+            }
+            if (m_nTipsType & 0x02) {
+                strTips = QString("使用功能按钮或右键菜单将%1道岔\"%2\"").arg(m_strName).arg(m_nSwitchState & SWITCH_STATE_LOCK ? "单锁" : "解锁");
+            }
+            if (m_nTipsType & 0x04) {
+                strTips = QString("使用功能按钮或右键菜单将%1道岔\"%2\"").arg(m_strName).arg(m_nSwitchState & SWITCH_STATE_BLOCK ? "封锁" : "解封");
+            }
+            if (m_nTipsType & 0x08) {
+                strTips = QString("使用功能按钮或右键菜单将%1道岔设为\"分路不良\"").arg(m_strName);
+            }
+            m_pPainter.drawRect(Scale(rcTips));
+
+            m_pPainter.setFont(font);//设置字体
+            m_pPainter.setPen(COLOR_TRACK_YELLOW);
+            QRect rcTipsText = QRect(rcTips.x() - 72, rcTips.y() + 36, rcTips.width() + 144, 20);
+            m_pPainter.drawText(Scale(rcTipsText), strTips);
+        }
+
         bool StaSwitch::Contains(const QPoint& ptPos)
         {
             return m_rcTextRect.contains(ptPos) || m_rcRespondRect.contains(ptPos);
+        }
+
+        //鼠标是否在设备上
+        bool StaSwitch::IsMouseWheel(const QPoint& ptPos)
+        {
+            if (CTCWindows::BaseWnd::StaFunBtnToolBar::getCurrFunType() == CTCWindows::FunType::RegionRelieve ||
+                CTCWindows::BaseWnd::StaFunBtnToolBar::getCurrFunType() == CTCWindows::FunType::TotalPosition ||
+                CTCWindows::BaseWnd::StaFunBtnToolBar::getCurrFunType() == CTCWindows::FunType::TotalReverse ||
+                CTCWindows::BaseWnd::StaFunBtnToolBar::getCurrFunType() == CTCWindows::FunType::SingleLock ||
+                CTCWindows::BaseWnd::StaFunBtnToolBar::getCurrFunType() == CTCWindows::FunType::SingleUnlock ||
+                CTCWindows::BaseWnd::StaFunBtnToolBar::getCurrFunType() == CTCWindows::FunType::Blockade ||
+                CTCWindows::BaseWnd::StaFunBtnToolBar::getCurrFunType() == CTCWindows::FunType::UnBlockade) {
+                return Contains(ptPos);
+            }
+            return false;
         }
 
         void StaSwitch::InitClickEvent()
@@ -243,8 +289,9 @@ namespace Station {
                 case static_cast<int>(CTCWindows::FunType::Blockade):           //封锁
                 case static_cast<int>(CTCWindows::FunType::UnBlockade): {       //解封
                     m_mapClickEvent.insert(static_cast<CTCWindows::FunType>(i), [&]() {
-                        CTCWindows::setOperObjType(CTCWindows::OperObjType::Switch);
-                        StationObject::AddSelectDevice(this);
+                        CTCWindows::BaseWnd::StaFunBtnToolBar::setOperObjType(CTCWindows::OperObjType::Switch);
+                        MainStation()->AddSelectDevice(this);
+                        MainStation()->setDevSelected();
                     });
                     break;
                 }

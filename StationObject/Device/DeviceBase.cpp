@@ -12,36 +12,33 @@ namespace Station {
         int DeviceBase::m_rcWheelDevCode = -1;
         QPainter DeviceBase::m_pPainter;
         bool DeviceBase::m_bElapsed = false;
+        int DeviceBase::m_nWheelDevCode = -1;
 
-        DeviceBase::DeviceBase(QObject* parent)
+        DeviceBase::DeviceBase(QObject* pParent)
         {
-            
+            m_pParent = pParent;
             m_mapAttribute.insert("m_nType", [&](const QString& strElement) { m_nType = strElement.toUInt(); });
             m_mapAttribute.insert("m_strName", [&](const QString& strElement) { m_strName = strElement; });
             m_mapAttribute.insert("m_nCode", [&](const QString& strElement) { m_nCode = strElement.toInt(nullptr, 16); });
 
-            m_mapAttribute.insert("m_textRect", [&](const QString& strElement) { 
-                m_rcTextRect = QStringToQRect(strElement); 
-
+            m_mapAttribute.insert("m_textRect", [&](const QString& strElement) {
+                m_rcTextRect = QStringToQRect(strElement);
                 QFont font;
                 font.setFamily("微软雅黑");
                 font.setPixelSize(Scale(m_nFontSize));//字号
-
                 QFontMetrics  fontMetrics(font);
                 m_rcTextRect = QRect(m_rcTextRect.topLeft(), fontMetrics.size(Qt::TextSingleLine, m_strName));
             });
-            m_mapAttribute.insert("pName", [&](const QString& strElement) { 
-                m_ptName = QStringToQPoint(strElement); 
-
+            m_mapAttribute.insert("pName", [&](const QString& strElement) {
+                m_ptName = QStringToQPoint(strElement);
                 QFont font;
                 font.setFamily("微软雅黑");
                 font.setPixelSize(Scale(m_nFontSize));//字号
-
                 QFontMetrics  fontMetrics(font);
                 m_rcTextRect = QRect(m_ptName, fontMetrics.size(Qt::TextSingleLine, m_strName));
             });
 
-            m_mapAttribute.insert("m_nSX", [&](const QString& strElement) { m_nSX = strElement.toUInt(); });
+            m_mapAttribute.insert("m_nSX", [&](const QString& strElement) { m_bUpDown = strElement.toUInt(); });
             m_mapAttribute.insert("FontHeight", [&](const QString& strElement) { m_nFontSize = strElement.toUInt(); });
             m_mapAttribute.insert("center", [&](const QString& strElement) { m_ptCenter = QStringToQPoint(strElement); });
             m_mapAttribute.insert("InterlockBus", [&](const QString& strElement) { m_nInterlockBus = strElement.toInt(); });
@@ -64,26 +61,27 @@ namespace Station {
 
             if (event->type() == QEvent::MouseMove) {
                 QMouseEvent* mouseEvent = dynamic_cast<QMouseEvent*>(event);
-                if ((m_nCode != -1) && Contains(mouseEvent->pos()) && (m_rcWheelDevCode == -1 || m_rcWheelDevCode == m_nCode)) {
-                    m_bRangeVisible = true;
-                    m_rcWheelDevCode = m_nCode;
-                }
-                else {
-                    m_bRangeVisible = false;
-                    if (m_rcWheelDevCode == m_nCode) {
-                        m_rcWheelDevCode = -1;
-                    }
-                }
+                onMouseMoveToDevice(mouseEvent->pos());
+                //if (Contains(mouseEvent->pos()) && (m_rcWheelDevCode == -1 || m_rcWheelDevCode == m_nCode)) {
+                //    m_bRangeVisible = true;
+                //    m_rcWheelDevCode = m_nCode;
+                //}
+                //else {
+                //    m_bRangeVisible = false;
+                //    if (m_rcWheelDevCode == m_nCode) {
+                //        m_rcWheelDevCode = -1;
+                //    }
+                //}
             }
 
             if (event->type() == QEvent::MouseButtonRelease) {  //鼠标点击事件
                 QMouseEvent* mouseEvent = dynamic_cast<QMouseEvent*>(event);
-                if (StationObject::IsAllowStaOperation() && Contains(mouseEvent->pos())) {
+                if (MainStation()->IsAllowStaOperation() && Contains(mouseEvent->pos())) {
                     if (mouseEvent->button() == Qt::LeftButton) {   //鼠标左键点击事件
                         onDeviceClick();
                     }
                     else if (mouseEvent->button() == Qt::RightButton) {   //鼠标右键点击事件
-                        onDeviceClick();
+                        //onDeviceClick();
                     }
                 }
             }
@@ -158,25 +156,40 @@ namespace Station {
                 DrawSelectRange();
             }
             //绘制设备名称
-            DrawDeviceName();
+            if (m_bShowName) {
+                DrawDeviceName();
+            }
             //绘制培训提示信息
             if (m_bShowTips) {
                 DrawCultivateTips();
             }
         }
 
-        void DeviceBase::DrawSelectRange()
+        void DeviceBase::onMouseMoveToDevice(const QPoint& ptPos)
         {
-            //设备名称虚线框
-            m_pPainter.setPen(QPen(COLOR_TRACK_WHITE, 1, Qt::DashLine));
-            m_pPainter.setBrush(COLOR_TRACK_SELECT_BLUE);
-            m_pPainter.drawRect(Scale(OutSideRect(m_rcTextRect, 2, 0)));
+            if ((m_nCode != -1) && Contains(ptPos) && (m_rcWheelDevCode == -1 || m_rcWheelDevCode == m_nCode)) {
+                m_bRangeVisible = true;
+                m_rcWheelDevCode = m_nCode;
+            }
+            else {
+                m_bRangeVisible = false;
+                if (m_rcWheelDevCode == m_nCode) {
+                    m_rcWheelDevCode = -1;
+                }
+            }
+
+            if (m_rcWheelDevCode == -1) {
+                QApplication::restoreOverrideCursor();
+            }
+            else if (MainStation()->IsAllowStaOperation() && IsMouseWheel(ptPos) && (!MainStation()->getDevSelected())) {
+                QApplication::setOverrideCursor(QCursor(Qt::PointingHandCursor));
+            }
         }
 
         void DeviceBase::onDeviceClick()
         {
-            if (m_mapClickEvent.contains(CTCWindows::getCurrFunType())) {
-                m_mapClickEvent[CTCWindows::getCurrFunType()]();
+            if (m_mapClickEvent.contains(CTCWindows::BaseWnd::StaFunBtnToolBar::getCurrFunType())) {
+                m_mapClickEvent[CTCWindows::BaseWnd::StaFunBtnToolBar::getCurrFunType()]();
             }
         }
 
@@ -202,25 +215,35 @@ namespace Station {
             return (value + nOffset) * StationObject::getDiploid(1);
         }
 
-        QPoint DeviceBase::Scale(const QPoint& pt, const bool bOutSide, const bool bTopLine)
+        QPoint DeviceBase::Scale(const QPoint& pt, QObject* pParent, const bool bOutSide, const bool bTopLine)
         {
+            QPoint ptOffset;
+            if (pParent) {
+                ptOffset = dynamic_cast<StationObject*>(pParent)->getOffset();
+            }
+            
             if (!bOutSide) {
-                return QPoint(Scale(pt.x(), StationObject::getOffset().x()), Scale(pt.y(), StationObject::getOffset().y()));
+                return QPoint(Scale(pt.x(), ptOffset.x()), Scale(pt.y(), ptOffset.y()));
             }
             else {
                 if (bTopLine) {
-                    return QPoint(Scale(pt.x(), StationObject::getOffset().x()), Scale(pt.y() - TRACK_WIDTH / 2, StationObject::getOffset().y()) + 1);
+                    return QPoint(Scale(pt.x(), ptOffset.x()), Scale(pt.y() - TRACK_WIDTH / 2, ptOffset.y()) + 1);
                 }
                 else {
-                    return QPoint(Scale(pt.x(), StationObject::getOffset().x()), Scale(pt.y() + TRACK_WIDTH / 2, StationObject::getOffset().y()));
+                    return QPoint(Scale(pt.x(), ptOffset.x()), Scale(pt.y() + TRACK_WIDTH / 2, ptOffset.y()));
                 } 
             }
         }
 
-        QRect DeviceBase::Scale(const QRect& rect)
+        QRect DeviceBase::Scale(const QRect& rect, QObject* pParent)
         {
-            return QRect(Scale(rect.x(), StationObject::getOffset().x()),
-                    Scale(rect.y(), StationObject::getOffset().y()),
+            QPoint ptOffset;
+            if (pParent) {
+                ptOffset = dynamic_cast<StationObject*>(pParent)->getOffset();
+            }
+
+            return QRect(Scale(rect.x(), ptOffset.x()),
+                    Scale(rect.y(), ptOffset.y()),
                     Scale(rect.width()), Scale(rect.height()));
         }
 
@@ -231,17 +254,17 @@ namespace Station {
         
 
 
-        StaSection::StaSection(QObject* parent)
+        StaSection::StaSection(QObject* pParent)
         {
-            m_mapAttribute.insert("m_nZ", [&](QString strElement) { m_nZ = strElement.toUInt(); });
-            m_mapAttribute.insert("p1", [&](QString strElement) { p1 = QStringToQPoint(strElement); });
-            m_mapAttribute.insert("p2", [&](QString strElement) { p2 = QStringToQPoint(strElement); });
-            m_mapAttribute.insert("p3", [&](QString strElement) { p3 = QStringToQPoint(strElement); });
-            m_mapAttribute.insert("p4", [&](QString strElement) { p4 = QStringToQPoint(strElement); });
-            m_mapAttribute.insert("p12", [&](QString strElement) { p12 = QStringToQPoint(strElement); });
-            m_mapAttribute.insert("p34", [&](QString strElement) { p34 = QStringToQPoint(strElement); });
-            m_mapAttribute.insert("pz12", [&](QString strElement) { pz12 = QStringToQPoint(strElement); });
-            m_mapAttribute.insert("pz34", [&](QString strElement) { pz34 = QStringToQPoint(strElement); });
+            m_mapAttribute.insert("m_nZ", [&](const QString& strElement) { m_nZ = strElement.toUInt(); });
+            m_mapAttribute.insert("p1", [&](const QString& strElement) { p1 = QStringToQPoint(strElement); });
+            m_mapAttribute.insert("p2", [&](const QString& strElement) { p2 = QStringToQPoint(strElement); });
+            m_mapAttribute.insert("p3", [&](const QString& strElement) { p3 = QStringToQPoint(strElement); });
+            m_mapAttribute.insert("p4", [&](const QString& strElement) { p4 = QStringToQPoint(strElement); });
+            m_mapAttribute.insert("p12", [&](const QString& strElement) { p12 = QStringToQPoint(strElement); });
+            m_mapAttribute.insert("p34", [&](const QString& strElement) { p34 = QStringToQPoint(strElement); });
+            m_mapAttribute.insert("pz12", [&](const QString& strElement) { pz12 = QStringToQPoint(strElement); });
+            m_mapAttribute.insert("pz34", [&](const QString& strElement) { pz34 = QStringToQPoint(strElement); });
         }
 
         StaSection::~StaSection()
@@ -254,7 +277,7 @@ namespace Station {
             //绘制股道外边缘
             DrawDeviceOutSide();
             //绘制绝缘节
-            if (m_bShowInsulateNode) {
+            if (MainStation()->IsVisible(VisibleDev::insulationNode)) {
                 DrawInsulateNode();
             }
             return DeviceBase::Draw(isMulti);
@@ -286,7 +309,7 @@ namespace Station {
                         ptEndTemp.setY(ptEndTemp.y() + 1);
                     }
                 }
-                m_pPainter.drawLine(Scale(ptStartTemp, bOutSide, true), Scale(ptEndTemp, bOutSide, true));
+                m_pPainter.drawLine(Scale(ptStartTemp, m_pParent, bOutSide, true), Scale(ptEndTemp, m_pParent, bOutSide, true));
                 ptStartTemp = QPoint(ptStart.x() - nOffset * b / c, ptStart.y() + nOffset * a / c);
                 ptEndTemp = QPoint(ptEnd.x() - nOffset * b / c, ptEnd.y() + nOffset * a / c);
                 if (b != 0) {  //微调位置,以免产生空隙
@@ -295,7 +318,7 @@ namespace Station {
                         ptEndTemp.setX(ptEndTemp.x() + 2);
                     }
                 }
-                m_pPainter.drawLine(Scale(ptStartTemp, bOutSide, false), Scale(ptEndTemp, bOutSide, false));
+                m_pPainter.drawLine(Scale(ptStartTemp, m_pParent, bOutSide, false), Scale(ptEndTemp, m_pParent, bOutSide, false));
             }
             else {
                 m_pPainter.drawLine(Scale(ptStart), Scale(ptEnd));
@@ -375,19 +398,34 @@ namespace Station {
             pPainter.setRenderHint(QPainter::Antialiasing, false);
         }
 
-        void DeviceBtn::onMouseMoveToButton(const QPoint& ptPos, const int& nCode)
+        void DeviceBtn::OnButtonClick(DeviceBase* pDevice)
         {
-            if (StationObject::IsAllowStaOperation() &&  IsMouseWheel(ptPos)) {
-                QApplication::setOverrideCursor(QCursor(Qt::PointingHandCursor));
-                m_nSelectDevCode = nCode;
+            if (m_nBtnState != 0) {
+                return;
             }
-            else if (m_nSelectDevCode == nCode) {
-                m_nSelectDevCode = -1;
-            }
-            if (m_nSelectDevCode == -1) {
-                QApplication::restoreOverrideCursor();
+
+            SetBtnState();
+
+            if (m_nBtnState) {
+                MainStation()->AddSelectDevice(pDevice);
+                MainStation()->setDevSelected();
             }
         }
+
+        //void DeviceBtn::onMouseMoveToButton(const QPoint& ptPos, const int& nCode)
+        //{
+        //    if (StationObject::IsAllowStaOperation() &&  IsMouseWheel(ptPos)) {
+        //        QApplication::setOverrideCursor(QCursor(Qt::PointingHandCursor));
+        //        m_nSelectDevCode = nCode;
+        //    }
+        //    else if (m_nSelectDevCode == nCode) {   //鼠标离开时清空
+        //        m_nSelectDevCode = -1;
+        //    }
+        //
+        //    if (m_nSelectDevCode == -1) {
+        //        QApplication::restoreOverrideCursor();
+        //    }
+        //}
 
         void DeviceBtn::BtnStateReset() 
         { 
@@ -396,24 +434,23 @@ namespace Station {
         }
 
 
-
-        DeviceArrow::DeviceArrow(QMap<QString, std::function<void(const QString&)>>& m_mapAttribute)
+        DeviceArrow::DeviceArrow(QMap<QString, std::function<void(const QString& strElement)>> mapAttribute)
         {
-            m_mapAttribute.insert("p11", [&](const QString& strElement) { p11 = DeviceBase::QStringToQPoint(strElement); });
-            m_mapAttribute.insert("p12", [&](const QString& strElement) { p12 = DeviceBase::QStringToQPoint(strElement); });
-            m_mapAttribute.insert("p13", [&](const QString& strElement) { p13 = DeviceBase::QStringToQPoint(strElement); });
-            m_mapAttribute.insert("p14", [&](const QString& strElement) { p14 = DeviceBase::QStringToQPoint(strElement); });
-            m_mapAttribute.insert("p15", [&](const QString& strElement) { p15 = DeviceBase::QStringToQPoint(strElement); });
-            m_mapAttribute.insert("p16", [&](const QString& strElement) { p16 = DeviceBase::QStringToQPoint(strElement); });
-            m_mapAttribute.insert("p17", [&](const QString& strElement) { p17 = DeviceBase::QStringToQPoint(strElement); });
-
-            m_mapAttribute.insert("p21", [&](const QString& strElement) { p21 = DeviceBase::QStringToQPoint(strElement); });
-            m_mapAttribute.insert("p22", [&](const QString& strElement) { p22 = DeviceBase::QStringToQPoint(strElement); });
-            m_mapAttribute.insert("p23", [&](const QString& strElement) { p23 = DeviceBase::QStringToQPoint(strElement); });
-            m_mapAttribute.insert("p24", [&](const QString& strElement) { p24 = DeviceBase::QStringToQPoint(strElement); });
-            m_mapAttribute.insert("p25", [&](const QString& strElement) { p25 = DeviceBase::QStringToQPoint(strElement); });
-            m_mapAttribute.insert("p26", [&](const QString& strElement) { p26 = DeviceBase::QStringToQPoint(strElement); });
-            m_mapAttribute.insert("p27", [&](const QString& strElement) { p27 = DeviceBase::QStringToQPoint(strElement); });
+            mapAttribute.insert("p11", [&](const QString& strElement) { p11 = DeviceBase::QStringToQPoint(strElement); });
+            mapAttribute.insert("p12", [&](const QString& strElement) { p12 = DeviceBase::QStringToQPoint(strElement); });
+            mapAttribute.insert("p13", [&](const QString& strElement) { p13 = DeviceBase::QStringToQPoint(strElement); });
+            mapAttribute.insert("p14", [&](const QString& strElement) { p14 = DeviceBase::QStringToQPoint(strElement); });
+            mapAttribute.insert("p15", [&](const QString& strElement) { p15 = DeviceBase::QStringToQPoint(strElement); });
+            mapAttribute.insert("p16", [&](const QString& strElement) { p16 = DeviceBase::QStringToQPoint(strElement); });
+            mapAttribute.insert("p17", [&](const QString& strElement) { p17 = DeviceBase::QStringToQPoint(strElement); });
+            
+            mapAttribute.insert("p21", [&](const QString& strElement) { p21 = DeviceBase::QStringToQPoint(strElement); });
+            mapAttribute.insert("p22", [&](const QString& strElement) { p22 = DeviceBase::QStringToQPoint(strElement); });
+            mapAttribute.insert("p23", [&](const QString& strElement) { p23 = DeviceBase::QStringToQPoint(strElement); });
+            mapAttribute.insert("p24", [&](const QString& strElement) { p24 = DeviceBase::QStringToQPoint(strElement); });
+            mapAttribute.insert("p25", [&](const QString& strElement) { p25 = DeviceBase::QStringToQPoint(strElement); });
+            mapAttribute.insert("p26", [&](const QString& strElement) { p26 = DeviceBase::QStringToQPoint(strElement); });
+            mapAttribute.insert("p27", [&](const QString& strElement) { p27 = DeviceBase::QStringToQPoint(strElement); });
         }
 
         DeviceArrow::~DeviceArrow()
@@ -443,8 +480,7 @@ namespace Station {
         }
 
 
-
-        StaDistant::StaDistant(QObject* parent)
+        StaDistant::StaDistant(QObject* pParent)
         {
             m_mapAttribute.insert("RelayQD", [&](const QString& strElement) { m_strRelayQD = strElement; });
             m_mapAttribute.insert("CJ_qModule", [&](const QString& strElement) { m_strCJ_qModule = strElement; });

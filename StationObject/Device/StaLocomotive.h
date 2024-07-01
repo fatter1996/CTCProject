@@ -7,11 +7,8 @@ namespace Station {
         class StaLocomotive : public StaDistant
         {
         public:
-            explicit StaLocomotive(QObject* parent = nullptr);
+            explicit StaLocomotive(QObject* pParent = nullptr);
             ~StaLocomotive();
-
-        private:
-            virtual bool eventFilter(QObject* obj, QEvent* event);
 
         private:
             //’æ≥°ªÊ÷∆

@@ -7,11 +7,8 @@ namespace Station {
         class StaBraidLine : public StaDistant
         {
         public:
-            explicit StaBraidLine(QObject* parent = nullptr);
+            explicit StaBraidLine(QObject* pParent = nullptr);
             ~StaBraidLine();
-
-        private:
-            virtual bool eventFilter(QObject* obj, QEvent* event);
 
         private:
             //’æ≥°ªÊ÷∆

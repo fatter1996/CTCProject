@@ -2,10 +2,9 @@
 #pragma execution_character_set("utf-8")
 
 namespace Socket {
-    SocketUDP::SocketUDP(QObject* parent) : QObject(parent)
+    SocketUDP::SocketUDP(QObject* pParent) : QObject(pParent)
     {
         m_pUdpSocket = new QUdpSocket();
-        nTimerId = startTimer(1000);
     }
 
     SocketUDP::~SocketUDP()
@@ -48,13 +47,6 @@ namespace Socket {
     void SocketUDP::onSendData(const QByteArray& dataArray)
     {
         m_pUdpSocket->writeDatagram(dataArray, m_hServerIp, m_nServerPort);
-    }
-
-    void SocketUDP::timerEvent(QTimerEvent* event)
-    {
-        if (nTimerId == event->timerId()) {
-            //SendData("HellowWorld!");
-        }
     }
 
     void SocketUDP::setLocalAddress(const QHostAddress& hAddress, const quint16& nPort)

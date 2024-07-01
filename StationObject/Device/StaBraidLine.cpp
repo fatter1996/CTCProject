@@ -5,7 +5,7 @@
 
 namespace Station {
     namespace Device {
-        StaBraidLine::StaBraidLine(QObject* parent)
+        StaBraidLine::StaBraidLine(QObject* pParent)
         {
             m_mapAttribute.insert("TYFCBSD_rect", [&](const QString& strElement) { m_rcAllowLamp = QStringToQRect(strElement); });
             m_mapAttribute.insert("TYFCText_rect", [&](const QString& strElement) { m_rcAllowText = QStringToQRect(strElement); });
@@ -14,11 +14,6 @@ namespace Station {
         StaBraidLine::~StaBraidLine()
         {
 
-        }
-
-        bool StaBraidLine::eventFilter(QObject* obj, QEvent* event)
-        {
-            return DeviceBase::eventFilter(obj, event);
         }
 
         void StaBraidLine::Draw(const bool& isMulti)

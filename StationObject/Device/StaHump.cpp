@@ -1,11 +1,11 @@
-#include "StaHump.h"
+ï»¿#include "StaHump.h"
 #include "Global.h"
 
 #pragma execution_character_set("utf-8")
 
 namespace Station {
     namespace Device {
-        StaHump::StaHump(QObject* parent)
+        StaHump::StaHump(QObject* pParent)
         {
             m_mapAttribute.insert("p1", [&](const QString& strElement) { p1 = QStringToQPoint(strElement); });
             m_mapAttribute.insert("p2", [&](const QString& strElement) { p2 = QStringToQPoint(strElement); });
@@ -37,11 +37,6 @@ namespace Station {
 
         }
 
-        bool StaHump::eventFilter(QObject* obj, QEvent* event)
-        {
-            return DeviceBase::eventFilter(obj, event);
-        }
-
         void StaHump::Draw(const bool& isMulti)
         {
             DrawHump();
@@ -65,16 +60,16 @@ namespace Station {
         {
             m_pPainter.setPen(QPen(COLOR_LIGHT_WHITE, 1));
 
-            //ÇĞ¶ÏÍÆËÍ
+            //åˆ‡æ–­æ¨é€
             m_pPainter.setBrush((m_nState & 0x10) ? COLOR_LIGHT_RED : COLOR_LIGHT_BLACK);
             m_pPainter.drawEllipse(Scale(m_rcCutOff));
-            //ÕÕ²é
+            //ç…§æŸ¥
             m_pPainter.setBrush((m_nState & 0x20) ? COLOR_LIGHT_RED : COLOR_LIGHT_BLACK);
             m_pPainter.drawEllipse(Scale(m_rcTakeLook));
-            //ÔÊĞíÍÆËÍ
+            //å…è®¸æ¨é€
             m_pPainter.setBrush((m_nState & 0x40) ? COLOR_LIGHT_RED : COLOR_LIGHT_BLACK);
             m_pPainter.drawEllipse(Scale(m_rcAllow));
-            //ĞÅºÅ
+            //ä¿¡å·
             m_pPainter.setPen(QPen(COLOR_TRACK_BLUE, 2));
             m_pPainter.setBrush((m_nState & 0x80) ? COLOR_LIGHT_RED : COLOR_LIGHT_BLACK);
             m_pPainter.drawEllipse(Scale(m_rcSignal));
@@ -83,29 +78,48 @@ namespace Station {
         void StaHump::DrawText()
         {
             QFont font;
-            font.setFamily("Î¢ÈíÑÅºÚ");
-            font.setPixelSize(Scale(m_nFontSize));//×ÖºÅ
+            font.setFamily("å¾®è½¯é›…é»‘");
+            font.setPixelSize(Scale(m_nFontSize));//å­—å·
 
-            m_pPainter.setFont(font);//ÉèÖÃ×ÖÌå
+            m_pPainter.setFont(font);//è®¾ç½®å­—ä½“
             m_pPainter.setPen(Qt::white);
 
             QFontMetrics  fontMetrics(font);
-            //ÇĞ¶ÏÍÆËÍ
-            m_pPainter.drawText(Scale(QRect(m_ptCutOff, fontMetrics.size(Qt::TextSingleLine, "ÇĞ¶ÏÍÆËÍ"))), "ÇĞ¶ÏÍÆËÍ", QTextOption(Qt::AlignCenter));
-            //ÔÊĞíÍÆËÍ
-            m_pPainter.drawText(Scale(QRect(m_ptAllow, fontMetrics.size(Qt::TextSingleLine, "ÔÊĞíÍÆËÍ"))), "ÔÊĞíÍÆËÍ", QTextOption(Qt::AlignCenter));
-            //ÕÕ²é  
-            m_pPainter.drawText(Scale(QRect(m_ptTakeLook, fontMetrics.size(Qt::TextSingleLine, "ÕÕ²é"))), "ÕÕ²é", QTextOption(Qt::AlignCenter));
+            //åˆ‡æ–­æ¨é€
+            m_pPainter.drawText(Scale(QRect(m_ptCutOff, fontMetrics.size(Qt::TextSingleLine, "åˆ‡æ–­æ¨é€"))), "åˆ‡æ–­æ¨é€", QTextOption(Qt::AlignCenter));
+            //å…è®¸æ¨é€
+            m_pPainter.drawText(Scale(QRect(m_ptAllow, fontMetrics.size(Qt::TextSingleLine, "å…è®¸æ¨é€"))), "å…è®¸æ¨é€", QTextOption(Qt::AlignCenter));
+            //ç…§æŸ¥  
+            m_pPainter.drawText(Scale(QRect(m_ptTakeLook, fontMetrics.size(Qt::TextSingleLine, "ç…§æŸ¥"))), "ç…§æŸ¥", QTextOption(Qt::AlignCenter));
+        }
+
+        bool StaHump::Contains(const QPoint& ptPos)
+        {
+            return m_rcButton.contains(ptPos);
         }
 
         bool StaHump::IsMouseWheel(const QPoint& ptPos)
         {
+            if (CTCWindows::BaseWnd::StaFunBtnToolBar::getCurrFunType() == CTCWindows::FunType::FunBtn) {
+                return m_rcButton.contains(ptPos);
+            }
             return false;
         }
 
-        void StaHump::OnButtonClick()
+        void StaHump::InitClickEvent()
         {
+            m_mapClickEvent.insert(CTCWindows::FunType::FunBtn, [&]() {
+                OnButtonClick(this);
+            });
+        }
 
+        void StaHump::SetBtnState()
+        {
+            if (CTCWindows::BaseWnd::StaFunBtnToolBar::getCurrFunType() == CTCWindows::FunType::FunBtn) {
+                m_nBtnState = 1;
+                m_nFirstBtnType = 5;
+                CTCWindows::BaseWnd::StaFunBtnToolBar::setOperObjType(CTCWindows::OperObjType::Hump);
+            }
         }
 
         void StaHump::setVollover(const QPoint& ptBase)
