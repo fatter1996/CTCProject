@@ -1,0 +1,28 @@
+{
+    "staName": "标准站",
+    "stationType": 1,
+    "comAddress": {
+        "#localAddress": "本地通信地址",
+        "localIp2": "169.254.193.57",
+        "localIp": "192.168.31.86",
+        "localPortUDP": 8099,
+        "localPortTCP": 8077,
+        "#serverAddress": "服务终端通信地址",
+        "serverIp2": "169.254.193.57",
+        "serverIp": "192.168.31.10",
+        "serverPortUDP": 3355,
+        "serverPortTCP": 3366,
+        "#HttpServerAddress": "Http服务通信地址",
+        "HttpServerIp": "192.168.31.122",
+        "HttpServerIp2": "169.254.43.105",
+        "HttpServerPort": 8080
+    },
+    "deviceInfo": "Station.xml",
+    "otherInfo": "OtherConfig.json",
+    "multiStation": [
+        {
+            "deviceInfo": "Station.xml",
+            "otherInfo": "OtherConfig.json"
+        }
+    ]
+}

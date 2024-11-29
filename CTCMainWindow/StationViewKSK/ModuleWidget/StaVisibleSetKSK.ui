@@ -1,0 +1,431 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>StaVisibleSetKSK</class>
+ <widget class="QWidget" name="StaVisibleSetKSK">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>338</width>
+    <height>268</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>StaVisibleSetKSK</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout" stretch="4,0">
+   <property name="spacing">
+    <number>8</number>
+   </property>
+   <property name="leftMargin">
+    <number>16</number>
+   </property>
+   <property name="topMargin">
+    <number>8</number>
+   </property>
+   <property name="rightMargin">
+    <number>16</number>
+   </property>
+   <property name="bottomMargin">
+    <number>8</number>
+   </property>
+   <item>
+    <layout class="QGridLayout" name="gridLayout">
+     <property name="spacing">
+      <number>8</number>
+     </property>
+     <item row="0" column="0">
+      <widget class="QCheckBox" name="entrySignalName">
+       <property name="minimumSize">
+        <size>
+         <width>96</width>
+         <height>24</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>96</width>
+         <height>24</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>进站信号机</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="2">
+      <widget class="QCheckBox" name="stateLempName">
+       <property name="minimumSize">
+        <size>
+         <width>96</width>
+         <height>24</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>96</width>
+         <height>24</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>报警灯</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="0">
+      <widget class="QCheckBox" name="sectionSignalName">
+       <property name="minimumSize">
+        <size>
+         <width>96</width>
+         <height>24</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>96</width>
+         <height>24</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>区间信号机</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="0">
+      <widget class="QCheckBox" name="stationName">
+       <property name="minimumSize">
+        <size>
+         <width>96</width>
+         <height>24</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>96</width>
+         <height>24</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>站名</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="2">
+      <widget class="QCheckBox" name="occludeLempName">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>96</width>
+         <height>24</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>96</width>
+         <height>24</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>半自动闭塞</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0">
+      <widget class="QCheckBox" name="shuntSignalName">
+       <property name="minimumSize">
+        <size>
+         <width>96</width>
+         <height>24</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>96</width>
+         <height>24</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>调车信号机</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QCheckBox" name="exitSignalName">
+       <property name="minimumSize">
+        <size>
+         <width>96</width>
+         <height>24</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>96</width>
+         <height>24</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>出站信号机</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="QCheckBox" name="trackName">
+       <property name="minimumSize">
+        <size>
+         <width>96</width>
+         <height>24</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>96</width>
+         <height>24</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>股道</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="QCheckBox" name="unswitchSectionName">
+       <property name="minimumSize">
+        <size>
+         <width>96</width>
+         <height>24</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>96</width>
+         <height>24</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>无岔区段</string>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="0">
+      <widget class="QCheckBox" name="direction">
+       <property name="minimumSize">
+        <size>
+         <width>96</width>
+         <height>24</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>96</width>
+         <height>24</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>方向</string>
+       </property>
+      </widget>
+     </item>
+     <item row="6" column="0">
+      <widget class="QCheckBox" name="routeWndFrame">
+       <property name="minimumSize">
+        <size>
+         <width>96</width>
+         <height>24</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>96</width>
+         <height>24</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>进路窗外框</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1">
+      <widget class="QCheckBox" name="sectionName">
+       <property name="minimumSize">
+        <size>
+         <width>96</width>
+         <height>24</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>96</width>
+         <height>24</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>区间轨道</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="1">
+      <widget class="QCheckBox" name="switchName">
+       <property name="minimumSize">
+        <size>
+         <width>96</width>
+         <height>24</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>96</width>
+         <height>24</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>道岔</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="1">
+      <widget class="QCheckBox" name="switchSectionName">
+       <property name="minimumSize">
+        <size>
+         <width>96</width>
+         <height>24</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>96</width>
+         <height>24</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>道岔区段</string>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="1">
+      <widget class="QCheckBox" name="squeezeLamp">
+       <property name="minimumSize">
+        <size>
+         <width>96</width>
+         <height>24</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>96</width>
+         <height>24</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>挤岔报警灯</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="2">
+      <widget class="QCheckBox" name="text">
+       <property name="minimumSize">
+        <size>
+         <width>96</width>
+         <height>24</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>96</width>
+         <height>24</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>一般文字</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="2">
+      <widget class="QCheckBox" name="insulationNode">
+       <property name="minimumSize">
+        <size>
+         <width>96</width>
+         <height>24</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>96</width>
+         <height>24</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>绝缘节</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="2">
+      <widget class="QCheckBox" name="button">
+       <property name="minimumSize">
+        <size>
+         <width>96</width>
+         <height>24</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>96</width>
+         <height>24</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>按钮</string>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="2">
+      <widget class="QCheckBox" name="counter">
+       <property name="minimumSize">
+        <size>
+         <width>96</width>
+         <height>24</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>96</width>
+         <height>24</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>计数器</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <widget class="QPushButton" name="confirmBtn">
+       <property name="minimumSize">
+        <size>
+         <width>72</width>
+         <height>24</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>72</width>
+         <height>24</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>确定</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <resources/>
+ <connections/>
+</ui>

@@ -1,0 +1,44 @@
+<RCC>
+    <qresource prefix="/CTCProject">
+        <file>icon/CASCO/adjacent.png</file>
+        <file>icon/CASCO/agree.png</file>
+        <file>icon/CASCO/allTrain.png</file>
+        <file>icon/CASCO/amplify.png</file>
+        <file>icon/CASCO/diagram.png</file>
+        <file>icon/CASCO/downward.png</file>
+        <file>icon/CASCO/find.png</file>
+        <file>icon/CASCO/findLog.png</file>
+        <file>icon/CASCO/flash.png</file>
+        <file>icon/CASCO/forecast.png</file>
+        <file>icon/CASCO/help.png</file>
+        <file>icon/CASCO/history.png</file>
+        <file>icon/CASCO/multi.png</file>
+        <file>icon/CASCO/newTrain.png</file>
+        <file>icon/CASCO/nodes.png</file>
+        <file>icon/CASCO/plan.png</file>
+        <file>icon/CASCO/preview.png</file>
+        <file>icon/CASCO/print.png</file>
+        <file>icon/CASCO/reduce.png</file>
+        <file>icon/CASCO/return.png</file>
+        <file>icon/CASCO/revert.png</file>
+        <file>icon/CASCO/revert2.png</file>
+        <file>icon/CASCO/shunt.png</file>
+        <file>icon/CASCO/shuntBtn.png</file>
+        <file>icon/CASCO/station.png</file>
+        <file>icon/CASCO/text.png</file>
+        <file>icon/CASCO/textAmplify.png</file>
+        <file>icon/CASCO/textReduce.png</file>
+        <file>icon/CASCO/textRevert.png</file>
+        <file>icon/CASCO/textSet.png</file>
+        <file>icon/CASCO/trainBtn.png</file>
+        <file>icon/CASCO/trainNum.png</file>
+        <file>icon/CASCO/upward.png</file>
+        <file>icon/CASCO/user.png</file>
+        <file>icon/CASCO/view.png</file>
+        <file>icon/mouseEnlarge.png</file>
+        <file>icon/mouseNarrow.png</file>
+        <file>icon/trainHand.png</file>
+        <file>icon/icon.ico</file>
+        <file>icon/icon-64.png</file>
+    </qresource>
+</RCC>

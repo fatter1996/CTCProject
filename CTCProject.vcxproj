@@ -1,0 +1,296 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="16.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{193EFCCE-A6FA-4731-A56E-EAE4F6C71C83}</ProjectGuid>
+    <Keyword>QtVS_v304</Keyword>
+    <WindowsTargetPlatformVersion Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">10.0.19041.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">10.0.19041.0</WindowsTargetPlatformVersion>
+    <QtMsBuild Condition="'$(QtMsBuild)'=='' OR !Exists('$(QtMsBuild)\qt.targets')">$(MSBuildProjectDirectory)\QtMsBuild</QtMsBuild>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Condition="Exists('$(QtMsBuild)\qt_defaults.props')">
+    <Import Project="$(QtMsBuild)\qt_defaults.props" />
+  </ImportGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="QtSettings">
+    <QtModules>core;network;gui;widgets;concurrent</QtModules>
+    <QtBuildConfig>debug</QtBuildConfig>
+    <QtInstall>5.14.2_msvc2017_64</QtInstall>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'" Label="QtSettings">
+    <QtModules>core;network;gui;widgets;websockets;concurrent</QtModules>
+    <QtBuildConfig>release</QtBuildConfig>
+    <QtInstall>5.14.2_msvc2017_64</QtInstall>
+  </PropertyGroup>
+  <Target Name="QtMsBuildNotFound" BeforeTargets="CustomBuild;ClCompile" Condition="!Exists('$(QtMsBuild)\qt.targets') or !Exists('$(QtMsBuild)\qt.props')">
+    <Message Importance="High" Text="QtMsBuild: could not locate qt.targets, qt.props; project may not build correctly." />
+  </Target>
+  <ImportGroup Label="ExtensionSettings" />
+  <ImportGroup Label="Shared" />
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(QtMsBuild)\Qt.props" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(QtMsBuild)\Qt.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <IncludePath>D:\MyWorkProject\CTCProject-master;D:\MyWorkProject\CTCProject-master\CTCMainWindow;D:\MyWorkProject\CTCProject-master\CTCMainWindow\BaseWndClass;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <IncludePath>D:\MyWorkProject\CTCProject-master\CTCMainWindow\BaseWndClass;D:\MyWorkProject\CTCProject-master\CTCMainWindow;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Link>
+      <AdditionalDependencies>ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <ClCompile>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <LanguageStandard_C>stdc17</LanguageStandard_C>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Link>
+      <AdditionalDependencies>ws2_32.lib;%(AdditionalDependencies);$(Qt_LIBS_)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="Configuration">
+    <ClCompile>
+      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <Optimization>Disabled</Optimization>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'" Label="Configuration">
+    <ClCompile>
+      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <DebugInformationFormat>None</DebugInformationFormat>
+      <Optimization>MaxSpeed</Optimization>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="CTCMainWindow\BaseWndClass\CTCMainWindow.cpp" />
+    <ClCompile Include="CTCMainWindow\BaseWndClass\ModuleWidget\StaDispatchOrder.cpp" />
+    <ClCompile Include="CTCMainWindow\BaseWndClass\ModuleWidget\StaFunBtnToolBar.cpp" />
+    <ClCompile Include="CTCMainWindow\BaseWndClass\ModuleWidget\StaRoutePlan.cpp" />
+    <ClCompile Include="CTCMainWindow\BaseWndClass\ModuleWidget\StaVisibleSet.cpp" />
+    <ClCompile Include="CTCMainWindow\BaseWndClass\StationView\StationCtrlDisp.cpp" />
+    <ClCompile Include="CTCMainWindow\BaseWndClass\StationView\StationLogDisp.cpp" />
+    <ClCompile Include="CTCMainWindow\BaseWndClass\StationView\StationMultiDisp.cpp" />
+    <ClCompile Include="CTCMainWindow\CommonWidget\AuxiliaryMenuWnd.cpp" />
+    <ClCompile Include="CTCMainWindow\CommonWidget\DispatchOrderSign.cpp" />
+    <ClCompile Include="CTCMainWindow\CommonWidget\LeadSealDlg.cpp" />
+    <ClCompile Include="CTCMainWindow\CommonWidget\ModeChangeRow.cpp" />
+    <ClCompile Include="CTCMainWindow\CommonWidget\ModeChangeWnd.cpp" />
+    <ClCompile Include="CTCMainWindow\CommonWidget\PointReport.cpp" />
+    <ClCompile Include="CTCMainWindow\CommonWidget\StagePlanSign.cpp" />
+    <ClCompile Include="CTCMainWindow\CommonWidget\TrafficMsgLog.cpp" />
+    <ClCompile Include="CTCMainWindow\CommonWidget\UserLoginDlg.cpp" />
+    <ClCompile Include="CTCMainWindow\CustomControl\RichTableView.cpp" />
+    <ClCompile Include="CTCMainWindow\CustomControl\TableView.cpp" />
+    <ClCompile Include="CTCMainWindow\StationViewKSK\ModuleWidget\StaDispatchOrderKSK.cpp" />
+    <ClCompile Include="CTCMainWindow\StationViewKSK\ModuleWidget\StaFunBtnToolBarKSK.cpp" />
+    <ClCompile Include="CTCMainWindow\StationViewKSK\ModuleWidget\StaRoutePlanKSK.cpp" />
+    <ClCompile Include="CTCMainWindow\StationViewKSK\ModuleWidget\StaVisibleSetKSK.cpp" />
+    <ClCompile Include="CTCMainWindow\StationViewKSK\StationViewKSK.cpp" />
+    <ClCompile Include="CTCMainWindow\StationViewKSK\StationView\StationCtrlDispKSK.cpp" />
+    <ClCompile Include="CTCMainWindow\StationViewKSK\StationView\StationLogDispKSK.cpp" />
+    <ClCompile Include="CTCMainWindow\StationViewKSK\StationView\StationMultiDispKSK.cpp" />
+    <ClCompile Include="CTCMainWindow\StationViewTH\ModuleWidget\StaFunBtnToolBarTH.cpp" />
+    <ClCompile Include="CTCMainWindow\StationViewTH\ModuleWidget\StaRoutePlanTH.cpp" />
+    <ClCompile Include="CTCMainWindow\StationViewTH\StationViewTH.cpp" />
+    <ClCompile Include="CTCMainWindow\StationViewTH\StationView\StationCtrlDispTH.cpp" />
+    <ClCompile Include="CTCMainWindow\StationViewTH\StationView\StationMultiDispTH.cpp" />
+    <ClCompile Include="CTCMainWindow\StationViewTKY\ModuleWidget\StaDispatchOrderTKY.cpp" />
+    <ClCompile Include="CTCMainWindow\StationViewTKY\ModuleWidget\StaFunBtnToolBarTKY.cpp" />
+    <ClCompile Include="CTCMainWindow\StationViewTKY\ModuleWidget\StaRoutePlanTKY.cpp" />
+    <ClCompile Include="CTCMainWindow\StationViewTKY\ModuleWidget\StaVisibleSetTKY.cpp" />
+    <ClCompile Include="CTCMainWindow\StationViewTKY\StationViewTKY.cpp" />
+    <ClCompile Include="CTCMainWindow\StationViewTKY\StationView\StationCtrlDispTKY.cpp" />
+    <ClCompile Include="CTCMainWindow\StationViewTKY\StationView\StationLogDispTKY.cpp" />
+    <ClCompile Include="CTCMainWindow\StationViewTKY\StationView\StationMultiDispTKY.cpp" />
+    <ClCompile Include="CTCObject\CTCObject.cpp" />
+    <ClCompile Include="CultivateObject\Subject.cpp" />
+    <ClCompile Include="Global.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="SocketObject\HttpClient.cpp" />
+    <ClCompile Include="SocketObject\servertcp.cpp" />
+    <ClCompile Include="SocketObject\sockettcp.cpp" />
+    <ClCompile Include="SocketObject\socketudp.cpp" />
+    <ClCompile Include="StationObject\Device\DeviceBase.cpp" />
+    <ClCompile Include="StationObject\Device\StaAutoBlock.cpp" />
+    <ClCompile Include="StationObject\Device\StaBraidLine.cpp" />
+    <ClCompile Include="StationObject\Device\StaButton.cpp" />
+    <ClCompile Include="StationObject\Device\StaConnection.cpp" />
+    <ClCompile Include="StationObject\Device\StaDerailer.cpp" />
+    <ClCompile Include="StationObject\Device\StaEndLine.cpp" />
+    <ClCompile Include="StationObject\Device\StaHump.cpp" />
+    <ClCompile Include="StationObject\Device\StaLamp.cpp" />
+    <ClCompile Include="StationObject\Device\StaLocomotive.cpp" />
+    <ClCompile Include="StationObject\Device\StaOthers.cpp" />
+    <ClCompile Include="StationObject\Device\StaScattered.cpp" />
+    <ClCompile Include="StationObject\Device\StaSemiAutoBlock.cpp" />
+    <ClCompile Include="StationObject\Device\StaSignal.cpp" />
+    <ClCompile Include="StationObject\Device\StaSwitch.cpp" />
+    <ClCompile Include="StationObject\Device\StaText.cpp" />
+    <ClCompile Include="StationObject\Device\StaTrack.cpp" />
+    <ClCompile Include="StationObject\StationObject.cpp" />
+    <ClCompile Include="StationObject\Transmission\StaPacket.cpp" />
+    <ClCompile Include="StationObject\Transmission\StaProtocol.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="CTCMainWindow\StationViewTKY\StationView\StationMultiDispTKY.h" />
+    <QtMoc Include="CTCMainWindow\StationViewTKY\StationView\StationLogDispTKY.h" />
+    <QtMoc Include="CTCMainWindow\StationViewTKY\StationView\StationCtrlDispTKY.h" />
+    <QtMoc Include="CTCMainWindow\StationViewTKY\ModuleWidget\StaVisibleSetTKY.h" />
+    <QtMoc Include="CTCMainWindow\StationViewTKY\ModuleWidget\StaRoutePlanTKY.h" />
+    <QtMoc Include="CTCMainWindow\StationViewTKY\ModuleWidget\StaFunBtnToolBarTKY.h" />
+    <QtMoc Include="CTCMainWindow\StationViewTKY\ModuleWidget\StaDispatchOrderTKY.h" />
+    <QtMoc Include="CTCMainWindow\StationViewTKY\StationViewTKY.h" />
+    <QtMoc Include="CTCMainWindow\CustomControl\TableView.h" />
+    <QtMoc Include="CTCMainWindow\CustomControl\RichTableView.h" />
+    <QtMoc Include="CTCMainWindow\CommonWidget\UserLoginDlg.h" />
+    <QtMoc Include="CTCMainWindow\CommonWidget\TrafficMsgLog.h" />
+    <QtMoc Include="CTCMainWindow\CommonWidget\PointReport.h" />
+    <QtMoc Include="CTCMainWindow\CommonWidget\LeadSealDlg.h" />
+    <QtMoc Include="CTCMainWindow\BaseWndClass\ModuleWidget\StaFunBtnToolBar.h" />
+    <QtMoc Include="CTCMainWindow\BaseWndClass\StationView\StationMultiDisp.h" />
+    <QtMoc Include="CTCMainWindow\BaseWndClass\StationView\StationLogDisp.h" />
+    <QtMoc Include="CTCMainWindow\BaseWndClass\StationView\StationCtrlDisp.h" />
+    <QtMoc Include="CTCMainWindow\BaseWndClass\ModuleWidget\StaVisibleSet.h" />
+    <QtMoc Include="CTCMainWindow\BaseWndClass\ModuleWidget\StaRoutePlan.h" />
+    <QtMoc Include="CTCMainWindow\BaseWndClass\ModuleWidget\StaDispatchOrder.h" />
+    <QtMoc Include="CTCMainWindow\BaseWndClass\CTCMainWindow.h" />
+    <QtMoc Include="CTCMainWindow\StationViewKSK\StationViewKSK.h" />
+    <QtMoc Include="CTCMainWindow\StationViewKSK\StationView\StationCtrlDispKSK.h" />
+    <QtMoc Include="CTCMainWindow\StationViewKSK\ModuleWidget\StaFunBtnToolBarKSK.h" />
+    <QtMoc Include="CTCMainWindow\StationViewKSK\ModuleWidget\StaRoutePlanKSK.h" />
+    <QtMoc Include="CTCMainWindow\StationViewKSK\ModuleWidget\StaVisibleSetKSK.h" />
+    <QtMoc Include="CTCMainWindow\StationViewKSK\StationView\StationLogDispKSK.h" />
+    <QtMoc Include="CTCMainWindow\CommonWidget\DispatchOrderSign.h" />
+    <QtMoc Include="CTCMainWindow\CommonWidget\StagePlanSign.h" />
+    <ClInclude Include="Config.h" />
+    <QtMoc Include="CTCMainWindow\StationViewKSK\StationView\StationMultiDispKSK.h" />
+    <QtMoc Include="CTCMainWindow\CommonWidget\AuxiliaryMenuWnd.h" />
+    <QtMoc Include="CTCMainWindow\CommonWidget\ModeChangeRow.h" />
+    <QtMoc Include="CTCMainWindow\CommonWidget\ModeChangeWnd.h" />
+    <QtMoc Include="CTCMainWindow\StationViewKSK\ModuleWidget\StaDispatchOrderKSK.h" />
+    <QtMoc Include="CTCMainWindow\StationViewTH\StationViewTH.h" />
+    <QtMoc Include="CTCMainWindow\StationViewTH\ModuleWidget\StaFunBtnToolBarTH.h" />
+    <QtMoc Include="CTCMainWindow\StationViewTH\ModuleWidget\StaRoutePlanTH.h" />
+    <QtMoc Include="CTCMainWindow\StationViewTH\StationView\StationCtrlDispTH.h" />
+    <QtMoc Include="CTCMainWindow\StationViewTH\StationView\StationMultiDispTH.h" />
+    <ClInclude Include="CTCObject\CTCObject.h" />
+    <ClInclude Include="CultivateObject\Subject.h" />
+    <ClInclude Include="Global.h" />
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="SocketObject\HttpClient.h" />
+    <ClInclude Include="StationObject\Device\StaAutoBlock.h" />
+    <ClInclude Include="StationObject\Device\StaBraidLine.h" />
+    <ClInclude Include="StationObject\Device\StaButton.h" />
+    <ClInclude Include="StationObject\Device\StaConnection.h" />
+    <ClInclude Include="StationObject\Device\StaDerailer.h" />
+    <ClInclude Include="StationObject\Device\StaDevice.h" />
+    <ClInclude Include="StationObject\Device\StaEndLine.h" />
+    <ClInclude Include="StationObject\Device\StaHump.h" />
+    <ClInclude Include="StationObject\Device\StaLamp.h" />
+    <ClInclude Include="StationObject\Device\StaLocomotive.h" />
+    <ClInclude Include="StationObject\Device\StaScattered.h" />
+    <ClInclude Include="StationObject\Device\StaSemiAutoBlock.h" />
+    <ClInclude Include="StationObject\Device\StaSignal.h" />
+    <ClInclude Include="StationObject\Device\StaSwitch.h" />
+    <ClInclude Include="StationObject\Device\StaText.h" />
+    <ClInclude Include="StationObject\Device\StaTrack.h" />
+    <ClInclude Include="StationObject\GlobalStruct.h" />
+    <QtMoc Include="StationObject\StationObject.h" />
+    <ClInclude Include="StationObject\Transmission\StaPacket.h" />
+    <ClInclude Include="StationObject\Transmission\StaProtocol.h" />
+    <QtMoc Include="StationObject\Device\StaOthers.h" />
+    <QtMoc Include="StationObject\Device\DeviceBase.h" />
+    <QtMoc Include="SocketObject\socketudp.h" />
+    <QtMoc Include="SocketObject\sockettcp.h" />
+    <QtMoc Include="SocketObject\servertcp.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtUic Include="CTCMainWindow\CommonWidget\AuxiliaryMenuWnd.ui" />
+    <QtUic Include="CTCMainWindow\CommonWidget\DispatchOrderSign.ui" />
+    <QtUic Include="CTCMainWindow\CommonWidget\LeadSealDlg.ui" />
+    <QtUic Include="CTCMainWindow\CommonWidget\ModeChangeRow.ui" />
+    <QtUic Include="CTCMainWindow\CommonWidget\ModeChangeWnd.ui" />
+    <QtUic Include="CTCMainWindow\CommonWidget\PointReport.ui" />
+    <QtUic Include="CTCMainWindow\CommonWidget\StagePlanSign.ui" />
+    <QtUic Include="CTCMainWindow\CommonWidget\TrafficMsgLog.ui" />
+    <QtUic Include="CTCMainWindow\CommonWidget\UserLoginDlg.ui" />
+    <QtUic Include="CTCMainWindow\StationViewKSK\ModuleWidget\StaDispatchOrderKSK.ui" />
+    <QtUic Include="CTCMainWindow\StationViewKSK\ModuleWidget\StaFunBtnToolBarKSK.ui" />
+    <QtUic Include="CTCMainWindow\StationViewKSK\ModuleWidget\StaRoutePlanKSK.ui" />
+    <QtUic Include="CTCMainWindow\StationViewKSK\ModuleWidget\StaVisibleSetKSK.ui" />
+    <QtUic Include="CTCMainWindow\StationViewKSK\StationViewKSK.ui" />
+    <QtUic Include="CTCMainWindow\StationViewKSK\StationView\StationCtrlDispKSK.ui" />
+    <QtUic Include="CTCMainWindow\StationViewKSK\StationView\StationLogDispKSK.ui" />
+    <QtUic Include="CTCMainWindow\StationViewKSK\StationView\StationMultiDispKSK.ui" />
+    <QtUic Include="CTCMainWindow\StationViewTH\ModuleWidget\StaFunBtnToolBarTH.ui" />
+    <QtUic Include="CTCMainWindow\StationViewTH\ModuleWidget\StaRoutePlanTH.ui" />
+    <QtUic Include="CTCMainWindow\StationViewTH\StationViewTH.ui" />
+    <QtUic Include="CTCMainWindow\StationViewTH\StationView\StationCtrlDispTH.ui" />
+    <QtUic Include="CTCMainWindow\StationViewTH\StationView\StationMultiDispTH.ui" />
+    <QtUic Include="CTCMainWindow\StationViewTKY\ModuleWidget\StaDispatchOrderTKY.ui" />
+    <QtUic Include="CTCMainWindow\StationViewTKY\ModuleWidget\StaFunBtnToolBarTKY.ui" />
+    <QtUic Include="CTCMainWindow\StationViewTKY\ModuleWidget\StaRoutePlanTKY.ui" />
+    <QtUic Include="CTCMainWindow\StationViewTKY\ModuleWidget\StaVisibleSetTKY.ui" />
+    <QtUic Include="CTCMainWindow\StationViewTKY\StationViewTKY.ui" />
+    <QtUic Include="CTCMainWindow\StationViewTKY\StationView\StationCtrlDispTKY.ui" />
+    <QtUic Include="CTCMainWindow\StationViewTKY\StationView\StationLogDispTKY.ui" />
+    <QtUic Include="CTCMainWindow\StationViewTKY\StationView\StationMultiDispTKY.ui" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtRcc Include="Resource.qrc" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="cpp.hint" />
+    <None Include="CTCMainWindow\StationViewTH\StationView\StationCtrlDispTH.cpp.bak" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="CTCProject.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="icon\icon.ico" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">
+    <Import Project="$(QtMsBuild)\qt.targets" />
+  </ImportGroup>
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

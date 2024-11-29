@@ -1,0 +1,597 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="Global.cpp" />
+    <ClCompile Include="CTCObject\CTCObject.cpp">
+      <Filter>CTCObject</Filter>
+    </ClCompile>
+    <ClCompile Include="SocketObject\socketudp.cpp">
+      <Filter>SocketObject</Filter>
+    </ClCompile>
+    <ClCompile Include="SocketObject\sockettcp.cpp">
+      <Filter>SocketObject</Filter>
+    </ClCompile>
+    <ClCompile Include="SocketObject\servertcp.cpp">
+      <Filter>SocketObject</Filter>
+    </ClCompile>
+    <ClCompile Include="SocketObject\HttpClient.cpp">
+      <Filter>SocketObject</Filter>
+    </ClCompile>
+    <ClCompile Include="StationObject\Device\StaAutoBlock.cpp">
+      <Filter>StationObject\Device</Filter>
+    </ClCompile>
+    <ClCompile Include="StationObject\Device\StaBraidLine.cpp">
+      <Filter>StationObject\Device</Filter>
+    </ClCompile>
+    <ClCompile Include="StationObject\Device\StaButton.cpp">
+      <Filter>StationObject\Device</Filter>
+    </ClCompile>
+    <ClCompile Include="StationObject\Device\StaConnection.cpp">
+      <Filter>StationObject\Device</Filter>
+    </ClCompile>
+    <ClCompile Include="StationObject\Device\StaDerailer.cpp">
+      <Filter>StationObject\Device</Filter>
+    </ClCompile>
+    <ClCompile Include="StationObject\Device\StaEndLine.cpp">
+      <Filter>StationObject\Device</Filter>
+    </ClCompile>
+    <ClCompile Include="StationObject\Device\StaHump.cpp">
+      <Filter>StationObject\Device</Filter>
+    </ClCompile>
+    <ClCompile Include="StationObject\Device\StaLamp.cpp">
+      <Filter>StationObject\Device</Filter>
+    </ClCompile>
+    <ClCompile Include="StationObject\Device\StaLocomotive.cpp">
+      <Filter>StationObject\Device</Filter>
+    </ClCompile>
+    <ClCompile Include="StationObject\Device\StaOthers.cpp">
+      <Filter>StationObject\Device</Filter>
+    </ClCompile>
+    <ClCompile Include="StationObject\Device\StaScattered.cpp">
+      <Filter>StationObject\Device</Filter>
+    </ClCompile>
+    <ClCompile Include="StationObject\Device\StaSemiAutoBlock.cpp">
+      <Filter>StationObject\Device</Filter>
+    </ClCompile>
+    <ClCompile Include="StationObject\Device\StaSignal.cpp">
+      <Filter>StationObject\Device</Filter>
+    </ClCompile>
+    <ClCompile Include="StationObject\Device\StaSwitch.cpp">
+      <Filter>StationObject\Device</Filter>
+    </ClCompile>
+    <ClCompile Include="StationObject\Device\StaText.cpp">
+      <Filter>StationObject\Device</Filter>
+    </ClCompile>
+    <ClCompile Include="StationObject\Device\StaTrack.cpp">
+      <Filter>StationObject\Device</Filter>
+    </ClCompile>
+    <ClCompile Include="StationObject\Device\DeviceBase.cpp">
+      <Filter>StationObject\Device</Filter>
+    </ClCompile>
+    <ClCompile Include="StationObject\StationObject.cpp">
+      <Filter>StationObject</Filter>
+    </ClCompile>
+    <ClCompile Include="StationObject\Transmission\StaProtocol.cpp">
+      <Filter>StationObject\Transmission</Filter>
+    </ClCompile>
+    <ClCompile Include="StationObject\Transmission\StaPacket.cpp">
+      <Filter>StationObject\Transmission</Filter>
+    </ClCompile>
+    <ClCompile Include="CultivateObject\Subject.cpp">
+      <Filter>CultivateObject</Filter>
+    </ClCompile>
+    <ClCompile Include="CTCMainWindow\BaseWndClass\CTCMainWindow.cpp">
+      <Filter>CTCMainWindow\BaseWndClass</Filter>
+    </ClCompile>
+    <ClCompile Include="CTCMainWindow\BaseWndClass\ModuleWidget\StaVisibleSet.cpp">
+      <Filter>CTCMainWindow\BaseWndClass\ModuleWidget</Filter>
+    </ClCompile>
+    <ClCompile Include="CTCMainWindow\BaseWndClass\ModuleWidget\StaRoutePlan.cpp">
+      <Filter>CTCMainWindow\BaseWndClass\ModuleWidget</Filter>
+    </ClCompile>
+    <ClCompile Include="CTCMainWindow\BaseWndClass\ModuleWidget\StaDispatchOrder.cpp">
+      <Filter>CTCMainWindow\BaseWndClass\ModuleWidget</Filter>
+    </ClCompile>
+    <ClCompile Include="CTCMainWindow\BaseWndClass\StationView\StationLogDisp.cpp">
+      <Filter>CTCMainWindow\BaseWndClass\StationView</Filter>
+    </ClCompile>
+    <ClCompile Include="CTCMainWindow\BaseWndClass\StationView\StationCtrlDisp.cpp">
+      <Filter>CTCMainWindow\BaseWndClass\StationView</Filter>
+    </ClCompile>
+    <ClCompile Include="CTCMainWindow\BaseWndClass\ModuleWidget\StaFunBtnToolBar.cpp">
+      <Filter>CTCMainWindow\BaseWndClass\ModuleWidget</Filter>
+    </ClCompile>
+    <ClCompile Include="CTCMainWindow\CustomControl\RichTableView.cpp">
+      <Filter>CTCMainWindow\CustomControl</Filter>
+    </ClCompile>
+    <ClCompile Include="CTCMainWindow\CustomControl\TableView.cpp">
+      <Filter>CTCMainWindow\CustomControl</Filter>
+    </ClCompile>
+    <ClCompile Include="CTCMainWindow\StationViewTKY\StationViewTKY.cpp">
+      <Filter>CTCMainWindow\StationViewTKY</Filter>
+    </ClCompile>
+    <ClCompile Include="CTCMainWindow\StationViewTKY\ModuleWidget\StaDispatchOrderTKY.cpp">
+      <Filter>CTCMainWindow\StationViewTKY\ModuleWidget</Filter>
+    </ClCompile>
+    <ClCompile Include="CTCMainWindow\StationViewTKY\ModuleWidget\StaFunBtnToolBarTKY.cpp">
+      <Filter>CTCMainWindow\StationViewTKY\ModuleWidget</Filter>
+    </ClCompile>
+    <ClCompile Include="CTCMainWindow\StationViewTKY\ModuleWidget\StaRoutePlanTKY.cpp">
+      <Filter>CTCMainWindow\StationViewTKY\ModuleWidget</Filter>
+    </ClCompile>
+    <ClCompile Include="CTCMainWindow\StationViewTKY\ModuleWidget\StaVisibleSetTKY.cpp">
+      <Filter>CTCMainWindow\StationViewTKY\ModuleWidget</Filter>
+    </ClCompile>
+    <ClCompile Include="CTCMainWindow\StationViewTKY\StationView\StationCtrlDispTKY.cpp">
+      <Filter>CTCMainWindow\StationViewTKY\StationView</Filter>
+    </ClCompile>
+    <ClCompile Include="CTCMainWindow\StationViewTKY\StationView\StationLogDispTKY.cpp">
+      <Filter>CTCMainWindow\StationViewTKY\StationView</Filter>
+    </ClCompile>
+    <ClCompile Include="CTCMainWindow\StationViewTKY\StationView\StationMultiDispTKY.cpp">
+      <Filter>CTCMainWindow\StationViewTKY\StationView</Filter>
+    </ClCompile>
+    <ClCompile Include="CTCMainWindow\StationViewKSK\StationViewKSK.cpp">
+      <Filter>CTCMainWindow\StationViewKSK</Filter>
+    </ClCompile>
+    <ClCompile Include="CTCMainWindow\StationViewKSK\StationView\StationCtrlDispKSK.cpp">
+      <Filter>CTCMainWindow\StationViewKSK\StationView</Filter>
+    </ClCompile>
+    <ClCompile Include="CTCMainWindow\StationViewKSK\ModuleWidget\StaFunBtnToolBarKSK.cpp">
+      <Filter>CTCMainWindow\StationViewKSK\ModuleWidget</Filter>
+    </ClCompile>
+    <ClCompile Include="CTCMainWindow\StationViewKSK\ModuleWidget\StaRoutePlanKSK.cpp">
+      <Filter>CTCMainWindow\StationViewKSK\ModuleWidget</Filter>
+    </ClCompile>
+    <ClCompile Include="CTCMainWindow\StationViewKSK\ModuleWidget\StaVisibleSetKSK.cpp">
+      <Filter>CTCMainWindow\StationViewKSK\ModuleWidget</Filter>
+    </ClCompile>
+    <ClCompile Include="CTCMainWindow\StationViewKSK\StationView\StationLogDispKSK.cpp">
+      <Filter>CTCMainWindow\StationViewKSK\StationView</Filter>
+    </ClCompile>
+    <ClCompile Include="CTCMainWindow\StationViewKSK\StationView\StationMultiDispKSK.cpp">
+      <Filter>CTCMainWindow\StationViewKSK\StationView</Filter>
+    </ClCompile>
+    <ClCompile Include="CTCMainWindow\BaseWndClass\StationView\StationMultiDisp.cpp">
+      <Filter>CTCMainWindow\BaseWndClass\StationView</Filter>
+    </ClCompile>
+    <ClCompile Include="CTCMainWindow\CommonWidget\AuxiliaryMenuWnd.cpp">
+      <Filter>CTCMainWindow\CommonWidget\SourceFiles</Filter>
+    </ClCompile>
+    <ClCompile Include="CTCMainWindow\CommonWidget\DispatchOrderSign.cpp">
+      <Filter>CTCMainWindow\CommonWidget\SourceFiles</Filter>
+    </ClCompile>
+    <ClCompile Include="CTCMainWindow\CommonWidget\LeadSealDlg.cpp">
+      <Filter>CTCMainWindow\CommonWidget\SourceFiles</Filter>
+    </ClCompile>
+    <ClCompile Include="CTCMainWindow\CommonWidget\PointReport.cpp">
+      <Filter>CTCMainWindow\CommonWidget\SourceFiles</Filter>
+    </ClCompile>
+    <ClCompile Include="CTCMainWindow\CommonWidget\StagePlanSign.cpp">
+      <Filter>CTCMainWindow\CommonWidget\SourceFiles</Filter>
+    </ClCompile>
+    <ClCompile Include="CTCMainWindow\CommonWidget\TrafficMsgLog.cpp">
+      <Filter>CTCMainWindow\CommonWidget\SourceFiles</Filter>
+    </ClCompile>
+    <ClCompile Include="CTCMainWindow\CommonWidget\UserLoginDlg.cpp">
+      <Filter>CTCMainWindow\CommonWidget\SourceFiles</Filter>
+    </ClCompile>
+    <ClCompile Include="CTCMainWindow\CommonWidget\ModeChangeRow.cpp">
+      <Filter>CTCMainWindow\CommonWidget</Filter>
+    </ClCompile>
+    <ClCompile Include="CTCMainWindow\CommonWidget\ModeChangeWnd.cpp">
+      <Filter>CTCMainWindow\CommonWidget</Filter>
+    </ClCompile>
+    <ClCompile Include="CTCMainWindow\StationViewKSK\ModuleWidget\StaDispatchOrderKSK.cpp">
+      <Filter>CTCMainWindow\StationViewKSK\ModuleWidget</Filter>
+    </ClCompile>
+    <ClCompile Include="CTCMainWindow\StationViewTH\StationViewTH.cpp">
+      <Filter>CTCMainWindow\StationViewTH</Filter>
+    </ClCompile>
+    <ClCompile Include="CTCMainWindow\StationViewTH\ModuleWidget\StaFunBtnToolBarTH.cpp">
+      <Filter>CTCMainWindow\StationViewTH\ModuleWidget</Filter>
+    </ClCompile>
+    <ClCompile Include="CTCMainWindow\StationViewTH\ModuleWidget\StaRoutePlanTH.cpp">
+      <Filter>CTCMainWindow\StationViewTH\ModuleWidget</Filter>
+    </ClCompile>
+    <ClCompile Include="CTCMainWindow\StationViewTH\StationView\StationCtrlDispTH.cpp">
+      <Filter>CTCMainWindow\StationViewTH\StationView</Filter>
+    </ClCompile>
+    <ClCompile Include="CTCMainWindow\StationViewTH\StationView\StationMultiDispTH.cpp">
+      <Filter>CTCMainWindow\StationViewTH\StationView</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Global.h" />
+    <ClInclude Include="CTCObject\CTCObject.h">
+      <Filter>CTCObject</Filter>
+    </ClInclude>
+    <ClInclude Include="SocketObject\HttpClient.h">
+      <Filter>SocketObject</Filter>
+    </ClInclude>
+    <ClInclude Include="StationObject\Device\StaAutoBlock.h">
+      <Filter>StationObject\Device</Filter>
+    </ClInclude>
+    <ClInclude Include="StationObject\Device\StaBraidLine.h">
+      <Filter>StationObject\Device</Filter>
+    </ClInclude>
+    <ClInclude Include="StationObject\Device\StaButton.h">
+      <Filter>StationObject\Device</Filter>
+    </ClInclude>
+    <ClInclude Include="StationObject\Device\StaConnection.h">
+      <Filter>StationObject\Device</Filter>
+    </ClInclude>
+    <ClInclude Include="StationObject\Device\StaDerailer.h">
+      <Filter>StationObject\Device</Filter>
+    </ClInclude>
+    <ClInclude Include="StationObject\Device\StaDevice.h">
+      <Filter>StationObject\Device</Filter>
+    </ClInclude>
+    <ClInclude Include="StationObject\Device\StaEndLine.h">
+      <Filter>StationObject\Device</Filter>
+    </ClInclude>
+    <ClInclude Include="StationObject\Device\StaHump.h">
+      <Filter>StationObject\Device</Filter>
+    </ClInclude>
+    <ClInclude Include="StationObject\Device\StaLamp.h">
+      <Filter>StationObject\Device</Filter>
+    </ClInclude>
+    <ClInclude Include="StationObject\Device\StaLocomotive.h">
+      <Filter>StationObject\Device</Filter>
+    </ClInclude>
+    <ClInclude Include="StationObject\Device\StaScattered.h">
+      <Filter>StationObject\Device</Filter>
+    </ClInclude>
+    <ClInclude Include="StationObject\Device\StaSemiAutoBlock.h">
+      <Filter>StationObject\Device</Filter>
+    </ClInclude>
+    <ClInclude Include="StationObject\Device\StaSignal.h">
+      <Filter>StationObject\Device</Filter>
+    </ClInclude>
+    <ClInclude Include="StationObject\Device\StaSwitch.h">
+      <Filter>StationObject\Device</Filter>
+    </ClInclude>
+    <ClInclude Include="StationObject\Device\StaText.h">
+      <Filter>StationObject\Device</Filter>
+    </ClInclude>
+    <ClInclude Include="StationObject\Device\StaTrack.h">
+      <Filter>StationObject\Device</Filter>
+    </ClInclude>
+    <ClInclude Include="StationObject\GlobalStruct.h">
+      <Filter>StationObject</Filter>
+    </ClInclude>
+    <ClInclude Include="StationObject\Transmission\StaProtocol.h">
+      <Filter>StationObject\Transmission</Filter>
+    </ClInclude>
+    <ClInclude Include="StationObject\Transmission\StaPacket.h">
+      <Filter>StationObject\Transmission</Filter>
+    </ClInclude>
+    <ClInclude Include="CultivateObject\Subject.h">
+      <Filter>CultivateObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Config.h" />
+    <ClInclude Include="resource.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CTCObject">
+      <UniqueIdentifier>{6200556e-3f89-4ef4-a700-f2b73a4974d9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SocketObject">
+      <UniqueIdentifier>{4775fef2-d98b-43a1-8cfb-11056ef57e71}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="StationObject">
+      <UniqueIdentifier>{bfd81585-8de6-42c4-b282-3ce9c28d1e33}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="StationObject\Device">
+      <UniqueIdentifier>{9053ffec-168d-4ce1-803f-68e40c4faabf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="StationObject\Transmission">
+      <UniqueIdentifier>{2ceced9f-8187-4467-9f71-a9ba080f74ec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="CultivateObject">
+      <UniqueIdentifier>{b11ca8fe-00ad-4fca-b4b1-e53216bef9e0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="CTCMainWindow">
+      <UniqueIdentifier>{01e87369-c775-45f9-a3b4-91a879a45693}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="CTCMainWindow\BaseWndClass">
+      <UniqueIdentifier>{e3623804-7e48-43d3-9053-77867bb88c19}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="CTCMainWindow\BaseWndClass\ModuleWidget">
+      <UniqueIdentifier>{1c0f182d-a544-409b-8641-ef7bf056dc27}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="CTCMainWindow\BaseWndClass\StationView">
+      <UniqueIdentifier>{3cad8ee8-c298-4928-bd01-11aa87b04079}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="CTCMainWindow\CommonWidget">
+      <UniqueIdentifier>{b8d995c7-9c01-4698-a03c-fcd59f3b0eb7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="CTCMainWindow\CustomControl">
+      <UniqueIdentifier>{550a9875-60bc-4e78-ba41-453a846b2adc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="CTCMainWindow\StationViewTKY">
+      <UniqueIdentifier>{1c658184-5ee3-486c-a8d2-28a1cfc06832}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="CTCMainWindow\StationViewTKY\ModuleWidget">
+      <UniqueIdentifier>{c95cf03e-103a-4da8-a589-d9362934cb20}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="CTCMainWindow\StationViewTKY\StationView">
+      <UniqueIdentifier>{c1e49e79-d775-4b48-a1c6-50f0890680c4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="CTCMainWindow\StationViewKSK">
+      <UniqueIdentifier>{bc109222-bad2-41a4-a376-1a59ce25b90d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="CTCMainWindow\StationViewKSK\StationView">
+      <UniqueIdentifier>{006d7541-1753-4899-a64f-63ae6d31f072}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="CTCMainWindow\StationViewKSK\ModuleWidget">
+      <UniqueIdentifier>{570965b3-0c88-4d22-965d-8021bea66544}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="CTCMainWindow\CommonWidget\HeaderFiles">
+      <UniqueIdentifier>{39ba0210-5689-4d00-8835-afb4e777be6e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="CTCMainWindow\CommonWidget\SourceFiles">
+      <UniqueIdentifier>{d81d6604-821d-4f94-9919-27758ce59e5f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="CTCMainWindow\CommonWidget\FormFiles">
+      <UniqueIdentifier>{fe44cc30-2f8a-4ee5-b4de-c47882b3dd08}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="CTCMainWindow\StationViewTH">
+      <UniqueIdentifier>{17b039a1-ac04-4672-9af2-cb7e3244903c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="CTCMainWindow\StationViewTH\ModuleWidget">
+      <UniqueIdentifier>{dc6c54eb-dafc-424b-97a2-92a4deb59c7a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="CTCMainWindow\StationViewTH\StationView">
+      <UniqueIdentifier>{40397c2b-c43f-4c43-bac7-7569ad14609e}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="SocketObject\socketudp.h">
+      <Filter>SocketObject</Filter>
+    </QtMoc>
+    <QtMoc Include="SocketObject\sockettcp.h">
+      <Filter>SocketObject</Filter>
+    </QtMoc>
+    <QtMoc Include="SocketObject\servertcp.h">
+      <Filter>SocketObject</Filter>
+    </QtMoc>
+    <QtMoc Include="StationObject\Device\StaOthers.h">
+      <Filter>StationObject\Device</Filter>
+    </QtMoc>
+    <QtMoc Include="StationObject\Device\DeviceBase.h">
+      <Filter>StationObject\Device</Filter>
+    </QtMoc>
+    <QtMoc Include="StationObject\StationObject.h">
+      <Filter>StationObject</Filter>
+    </QtMoc>
+    <QtMoc Include="CTCMainWindow\BaseWndClass\CTCMainWindow.h">
+      <Filter>CTCMainWindow\BaseWndClass</Filter>
+    </QtMoc>
+    <QtMoc Include="CTCMainWindow\BaseWndClass\ModuleWidget\StaVisibleSet.h">
+      <Filter>CTCMainWindow\BaseWndClass\ModuleWidget</Filter>
+    </QtMoc>
+    <QtMoc Include="CTCMainWindow\BaseWndClass\ModuleWidget\StaRoutePlan.h">
+      <Filter>CTCMainWindow\BaseWndClass\ModuleWidget</Filter>
+    </QtMoc>
+    <QtMoc Include="CTCMainWindow\BaseWndClass\ModuleWidget\StaDispatchOrder.h">
+      <Filter>CTCMainWindow\BaseWndClass\ModuleWidget</Filter>
+    </QtMoc>
+    <QtMoc Include="CTCMainWindow\BaseWndClass\StationView\StationMultiDisp.h">
+      <Filter>CTCMainWindow\BaseWndClass\StationView</Filter>
+    </QtMoc>
+    <QtMoc Include="CTCMainWindow\BaseWndClass\StationView\StationLogDisp.h">
+      <Filter>CTCMainWindow\BaseWndClass\StationView</Filter>
+    </QtMoc>
+    <QtMoc Include="CTCMainWindow\BaseWndClass\StationView\StationCtrlDisp.h">
+      <Filter>CTCMainWindow\BaseWndClass\StationView</Filter>
+    </QtMoc>
+    <QtMoc Include="CTCMainWindow\BaseWndClass\ModuleWidget\StaFunBtnToolBar.h">
+      <Filter>CTCMainWindow\BaseWndClass\ModuleWidget</Filter>
+    </QtMoc>
+    <QtMoc Include="CTCMainWindow\CustomControl\RichTableView.h">
+      <Filter>CTCMainWindow\CustomControl</Filter>
+    </QtMoc>
+    <QtMoc Include="CTCMainWindow\CustomControl\TableView.h">
+      <Filter>CTCMainWindow\CustomControl</Filter>
+    </QtMoc>
+    <QtMoc Include="CTCMainWindow\StationViewTKY\StationViewTKY.h">
+      <Filter>CTCMainWindow\StationViewTKY</Filter>
+    </QtMoc>
+    <QtMoc Include="CTCMainWindow\StationViewTKY\ModuleWidget\StaDispatchOrderTKY.h">
+      <Filter>CTCMainWindow\StationViewTKY\ModuleWidget</Filter>
+    </QtMoc>
+    <QtMoc Include="CTCMainWindow\StationViewTKY\ModuleWidget\StaFunBtnToolBarTKY.h">
+      <Filter>CTCMainWindow\StationViewTKY\ModuleWidget</Filter>
+    </QtMoc>
+    <QtMoc Include="CTCMainWindow\StationViewTKY\ModuleWidget\StaRoutePlanTKY.h">
+      <Filter>CTCMainWindow\StationViewTKY\ModuleWidget</Filter>
+    </QtMoc>
+    <QtMoc Include="CTCMainWindow\StationViewTKY\ModuleWidget\StaVisibleSetTKY.h">
+      <Filter>CTCMainWindow\StationViewTKY\ModuleWidget</Filter>
+    </QtMoc>
+    <QtMoc Include="CTCMainWindow\StationViewTKY\StationView\StationCtrlDispTKY.h">
+      <Filter>CTCMainWindow\StationViewTKY\StationView</Filter>
+    </QtMoc>
+    <QtMoc Include="CTCMainWindow\StationViewTKY\StationView\StationLogDispTKY.h">
+      <Filter>CTCMainWindow\StationViewTKY\StationView</Filter>
+    </QtMoc>
+    <QtMoc Include="CTCMainWindow\StationViewTKY\StationView\StationMultiDispTKY.h">
+      <Filter>CTCMainWindow\StationViewTKY\StationView</Filter>
+    </QtMoc>
+    <QtMoc Include="CTCMainWindow\StationViewKSK\StationViewKSK.h">
+      <Filter>CTCMainWindow\StationViewKSK</Filter>
+    </QtMoc>
+    <QtMoc Include="CTCMainWindow\StationViewKSK\StationView\StationCtrlDispKSK.h">
+      <Filter>CTCMainWindow\StationViewKSK\StationView</Filter>
+    </QtMoc>
+    <QtMoc Include="CTCMainWindow\StationViewKSK\ModuleWidget\StaFunBtnToolBarKSK.h">
+      <Filter>CTCMainWindow\StationViewKSK\ModuleWidget</Filter>
+    </QtMoc>
+    <QtMoc Include="CTCMainWindow\StationViewKSK\ModuleWidget\StaRoutePlanKSK.h">
+      <Filter>CTCMainWindow\StationViewKSK\ModuleWidget</Filter>
+    </QtMoc>
+    <QtMoc Include="CTCMainWindow\StationViewKSK\ModuleWidget\StaVisibleSetKSK.h">
+      <Filter>CTCMainWindow\StationViewKSK\ModuleWidget</Filter>
+    </QtMoc>
+    <QtMoc Include="CTCMainWindow\StationViewKSK\StationView\StationLogDispKSK.h">
+      <Filter>CTCMainWindow\StationViewKSK\StationView</Filter>
+    </QtMoc>
+    <QtMoc Include="CTCMainWindow\StationViewKSK\StationView\StationMultiDispKSK.h">
+      <Filter>CTCMainWindow\StationViewKSK\StationView</Filter>
+    </QtMoc>
+    <QtMoc Include="CTCMainWindow\CommonWidget\AuxiliaryMenuWnd.h">
+      <Filter>CTCMainWindow\CommonWidget\HeaderFiles</Filter>
+    </QtMoc>
+    <QtMoc Include="CTCMainWindow\CommonWidget\DispatchOrderSign.h">
+      <Filter>CTCMainWindow\CommonWidget\HeaderFiles</Filter>
+    </QtMoc>
+    <QtMoc Include="CTCMainWindow\CommonWidget\LeadSealDlg.h">
+      <Filter>CTCMainWindow\CommonWidget\HeaderFiles</Filter>
+    </QtMoc>
+    <QtMoc Include="CTCMainWindow\CommonWidget\PointReport.h">
+      <Filter>CTCMainWindow\CommonWidget\HeaderFiles</Filter>
+    </QtMoc>
+    <QtMoc Include="CTCMainWindow\CommonWidget\StagePlanSign.h">
+      <Filter>CTCMainWindow\CommonWidget\HeaderFiles</Filter>
+    </QtMoc>
+    <QtMoc Include="CTCMainWindow\CommonWidget\TrafficMsgLog.h">
+      <Filter>CTCMainWindow\CommonWidget\HeaderFiles</Filter>
+    </QtMoc>
+    <QtMoc Include="CTCMainWindow\CommonWidget\UserLoginDlg.h">
+      <Filter>CTCMainWindow\CommonWidget\HeaderFiles</Filter>
+    </QtMoc>
+    <QtMoc Include="CTCMainWindow\CommonWidget\ModeChangeRow.h">
+      <Filter>CTCMainWindow\CommonWidget</Filter>
+    </QtMoc>
+    <QtMoc Include="CTCMainWindow\CommonWidget\ModeChangeWnd.h">
+      <Filter>CTCMainWindow\CommonWidget</Filter>
+    </QtMoc>
+    <QtMoc Include="CTCMainWindow\StationViewKSK\ModuleWidget\StaDispatchOrderKSK.h">
+      <Filter>CTCMainWindow\StationViewKSK\ModuleWidget</Filter>
+    </QtMoc>
+    <QtMoc Include="CTCMainWindow\StationViewTH\StationViewTH.h">
+      <Filter>CTCMainWindow\StationViewTH</Filter>
+    </QtMoc>
+    <QtMoc Include="CTCMainWindow\StationViewTH\ModuleWidget\StaFunBtnToolBarTH.h">
+      <Filter>CTCMainWindow\StationViewTH\ModuleWidget</Filter>
+    </QtMoc>
+    <QtMoc Include="CTCMainWindow\StationViewTH\ModuleWidget\StaRoutePlanTH.h">
+      <Filter>CTCMainWindow\StationViewTH\ModuleWidget</Filter>
+    </QtMoc>
+    <QtMoc Include="CTCMainWindow\StationViewTH\StationView\StationCtrlDispTH.h">
+      <Filter>CTCMainWindow\StationViewTH\StationView</Filter>
+    </QtMoc>
+    <QtMoc Include="CTCMainWindow\StationViewTH\StationView\StationMultiDispTH.h">
+      <Filter>CTCMainWindow\StationViewTH\StationView</Filter>
+    </QtMoc>
+  </ItemGroup>
+  <ItemGroup>
+    <QtUic Include="CTCMainWindow\StationViewTKY\StationViewTKY.ui">
+      <Filter>CTCMainWindow\StationViewTKY</Filter>
+    </QtUic>
+    <QtUic Include="CTCMainWindow\StationViewTKY\ModuleWidget\StaDispatchOrderTKY.ui">
+      <Filter>CTCMainWindow\StationViewTKY\ModuleWidget</Filter>
+    </QtUic>
+    <QtUic Include="CTCMainWindow\StationViewTKY\ModuleWidget\StaFunBtnToolBarTKY.ui">
+      <Filter>CTCMainWindow\StationViewTKY\ModuleWidget</Filter>
+    </QtUic>
+    <QtUic Include="CTCMainWindow\StationViewTKY\ModuleWidget\StaRoutePlanTKY.ui">
+      <Filter>CTCMainWindow\StationViewTKY\ModuleWidget</Filter>
+    </QtUic>
+    <QtUic Include="CTCMainWindow\StationViewTKY\ModuleWidget\StaVisibleSetTKY.ui">
+      <Filter>CTCMainWindow\StationViewTKY\ModuleWidget</Filter>
+    </QtUic>
+    <QtUic Include="CTCMainWindow\StationViewTKY\StationView\StationCtrlDispTKY.ui">
+      <Filter>CTCMainWindow\StationViewTKY\StationView</Filter>
+    </QtUic>
+    <QtUic Include="CTCMainWindow\StationViewTKY\StationView\StationLogDispTKY.ui">
+      <Filter>CTCMainWindow\StationViewTKY\StationView</Filter>
+    </QtUic>
+    <QtUic Include="CTCMainWindow\StationViewTKY\StationView\StationMultiDispTKY.ui">
+      <Filter>CTCMainWindow\StationViewTKY\StationView</Filter>
+    </QtUic>
+    <QtUic Include="CTCMainWindow\StationViewKSK\StationViewKSK.ui">
+      <Filter>CTCMainWindow\StationViewKSK</Filter>
+    </QtUic>
+    <QtUic Include="CTCMainWindow\StationViewKSK\StationView\StationCtrlDispKSK.ui">
+      <Filter>CTCMainWindow\StationViewKSK\StationView</Filter>
+    </QtUic>
+    <QtUic Include="CTCMainWindow\StationViewKSK\ModuleWidget\StaFunBtnToolBarKSK.ui">
+      <Filter>CTCMainWindow\StationViewKSK\ModuleWidget</Filter>
+    </QtUic>
+    <QtUic Include="CTCMainWindow\StationViewKSK\ModuleWidget\StaRoutePlanKSK.ui">
+      <Filter>CTCMainWindow\StationViewKSK\ModuleWidget</Filter>
+    </QtUic>
+    <QtUic Include="CTCMainWindow\StationViewKSK\ModuleWidget\StaVisibleSetKSK.ui">
+      <Filter>CTCMainWindow\StationViewKSK\ModuleWidget</Filter>
+    </QtUic>
+    <QtUic Include="CTCMainWindow\StationViewKSK\StationView\StationLogDispKSK.ui">
+      <Filter>CTCMainWindow\StationViewKSK\StationView</Filter>
+    </QtUic>
+    <QtUic Include="CTCMainWindow\StationViewKSK\StationView\StationMultiDispKSK.ui">
+      <Filter>CTCMainWindow\StationViewKSK\StationView</Filter>
+    </QtUic>
+    <QtUic Include="CTCMainWindow\CommonWidget\AuxiliaryMenuWnd.ui">
+      <Filter>CTCMainWindow\CommonWidget\FormFiles</Filter>
+    </QtUic>
+    <QtUic Include="CTCMainWindow\CommonWidget\DispatchOrderSign.ui">
+      <Filter>CTCMainWindow\CommonWidget\FormFiles</Filter>
+    </QtUic>
+    <QtUic Include="CTCMainWindow\CommonWidget\LeadSealDlg.ui">
+      <Filter>CTCMainWindow\CommonWidget\FormFiles</Filter>
+    </QtUic>
+    <QtUic Include="CTCMainWindow\CommonWidget\PointReport.ui">
+      <Filter>CTCMainWindow\CommonWidget\FormFiles</Filter>
+    </QtUic>
+    <QtUic Include="CTCMainWindow\CommonWidget\StagePlanSign.ui">
+      <Filter>CTCMainWindow\CommonWidget\FormFiles</Filter>
+    </QtUic>
+    <QtUic Include="CTCMainWindow\CommonWidget\TrafficMsgLog.ui">
+      <Filter>CTCMainWindow\CommonWidget\FormFiles</Filter>
+    </QtUic>
+    <QtUic Include="CTCMainWindow\CommonWidget\UserLoginDlg.ui">
+      <Filter>CTCMainWindow\CommonWidget\FormFiles</Filter>
+    </QtUic>
+    <QtUic Include="CTCMainWindow\CommonWidget\ModeChangeRow.ui">
+      <Filter>CTCMainWindow\CommonWidget</Filter>
+    </QtUic>
+    <QtUic Include="CTCMainWindow\CommonWidget\ModeChangeWnd.ui">
+      <Filter>CTCMainWindow\CommonWidget</Filter>
+    </QtUic>
+    <QtUic Include="CTCMainWindow\StationViewKSK\ModuleWidget\StaDispatchOrderKSK.ui">
+      <Filter>CTCMainWindow\StationViewKSK\ModuleWidget</Filter>
+    </QtUic>
+    <QtUic Include="CTCMainWindow\StationViewTH\StationViewTH.ui">
+      <Filter>CTCMainWindow\StationViewTH</Filter>
+    </QtUic>
+    <QtUic Include="CTCMainWindow\StationViewTH\ModuleWidget\StaFunBtnToolBarTH.ui">
+      <Filter>CTCMainWindow\StationViewTH\ModuleWidget</Filter>
+    </QtUic>
+    <QtUic Include="CTCMainWindow\StationViewTH\ModuleWidget\StaRoutePlanTH.ui">
+      <Filter>CTCMainWindow\StationViewTH\ModuleWidget</Filter>
+    </QtUic>
+    <QtUic Include="CTCMainWindow\StationViewTH\StationView\StationCtrlDispTH.ui">
+      <Filter>CTCMainWindow\StationViewTH\StationView</Filter>
+    </QtUic>
+    <QtUic Include="CTCMainWindow\StationViewTH\StationView\StationMultiDispTH.ui">
+      <Filter>CTCMainWindow\StationViewTH\StationView</Filter>
+    </QtUic>
+  </ItemGroup>
+  <ItemGroup>
+    <QtRcc Include="Resource.qrc" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="cpp.hint" />
+    <None Include="CTCMainWindow\StationViewTH\StationView\StationCtrlDispTH.cpp.bak">
+      <Filter>CTCMainWindow\StationViewTH\StationView</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="CTCProject.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="icon\icon.ico" />
+  </ItemGroup>
+</Project>
