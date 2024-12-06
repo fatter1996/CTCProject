@@ -78,6 +78,12 @@ namespace CTCWindows {
 
             virtual void InitAuxiliaryMenu(AuxiliaryMenuWnd* pAuxiliary) = 0;
             void ButtonClicked(FunType eSelectType);
+            void timerEvent(QTimerEvent* event) override;
+
+        public:
+            static FunType getCurrFunType() { return m_SelectFunType; }
+            static void setOperObjType(OperObjType eType) { m_nOperObjType = eType; }
+            static OperObjType getOperObjType() { return m_nOperObjType; }
 
         public slots:
             void onButtonClicked(QAbstractButton* pButton);
@@ -96,10 +102,8 @@ namespace CTCWindows {
             QPushButton* m_pCommandIssuedBtn = nullptr;
             QPushButton* m_pRouteBuildBtn = nullptr;
 
-        public:
-            static FunType getCurrFunType() { return m_SelectFunType; }
-            static void setOperObjType(OperObjType eType) { m_nOperObjType = eType; }
-            static OperObjType getOperObjType() { return m_nOperObjType; }
+        private:
+            int m_nTimerID_500 = -1;
 
         protected:
             static FunType m_SelectFunType;

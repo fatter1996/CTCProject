@@ -296,7 +296,7 @@ namespace Station {
                         CTCWindows::BaseWnd::StaFunBtnToolBar::setOperObjType(CTCWindows::OperObjType::Switch);
                         MainStation()->AddSelectDevice(this);
                     });
-                    break;
+                break;
                 }
                 }
             }

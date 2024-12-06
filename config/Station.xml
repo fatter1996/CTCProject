@@ -29,7 +29,7 @@
     <m_XX_OUT_NUM>0</m_XX_OUT_NUM>
     <STATELENGTH>0</STATELENGTH>
     <CBI_COMM_FREQUENCE>250</CBI_COMM_FREQUENCE>
-    <STATION_ID>1</STATION_ID>
+    <STATION_ID>100</STATION_ID>
   </HEAD>
   <DEVICE>
     <DC>
@@ -220,8 +220,8 @@
       <p14>0,0</p14>
       <center>1271,365</center>
       <m_nXHDType>22</m_nXHDType>
-      <m_textRect>-991265,-99330,-991287,-99345</m_textRect>
-      <m_nSX>0</m_nSX>
+      <m_textRect>1265,335,1280,350</m_textRect>
+      <m_nSX>1</m_nSX>
       <radius>7</radius>
       <SignalType>0</SignalType>
       <D_B_C_Signal>0</D_B_C_Signal>
@@ -248,8 +248,8 @@
       <p14>0,0</p14>
       <center>1271,420</center>
       <m_nXHDType>22</m_nXHDType>
-      <m_textRect>1265,385,1280,400</m_textRect>
-      <m_nSX>0</m_nSX>
+      <m_textRect>1265,390,1280,405</m_textRect>
+      <m_nSX>1</m_nSX>
       <radius>7</radius>
       <SignalType>0</SignalType>
       <D_B_C_Signal>0</D_B_C_Signal>
@@ -276,8 +276,8 @@
       <p14>0,0</p14>
       <center>1271,497</center>
       <m_nXHDType>22</m_nXHDType>
-      <m_textRect>1265,507,1272,522</m_textRect>
-      <m_nSX>0</m_nSX>
+      <m_textRect>1265,505,1272,520</m_textRect>
+      <m_nSX>1</m_nSX>
       <radius>7</radius>
       <SignalType>0</SignalType>
       <D_B_C_Signal>0</D_B_C_Signal>
@@ -304,8 +304,8 @@
       <p14>0,0</p14>
       <center>1271,552</center>
       <m_nXHDType>22</m_nXHDType>
-      <m_textRect>1265,572,1280,587</m_textRect>
-      <m_nSX>0</m_nSX>
+      <m_textRect>1265,565,1280,580</m_textRect>
+      <m_nSX>1</m_nSX>
       <radius>7</radius>
       <SignalType>0</SignalType>
       <D_B_C_Signal>0</D_B_C_Signal>
@@ -909,14 +909,14 @@
       <m_textRect>-99281,-99542,-99333,-99557</m_textRect>
       <ZFZ1_rect>220,680,237,681</ZFZ1_rect>
       <ZFZ2_rect>220,685,237,686</ZFZ2_rect>
-      <FFZ1_rect>275,680,292,681</FFZ1_rect>
-      <FFZ2_rect>275,685,292,686</FFZ2_rect>
-      <JFZ1_rect>330,680,347,681</JFZ1_rect>
-      <JFZ2_rect>330,685,347,686</JFZ2_rect>
+      <FFZ1_rect>295,680,292,681</FFZ1_rect>
+      <FFZ2_rect>295,685,292,686</FFZ2_rect>
+      <JFZ1_rect>370,680,347,681</JFZ1_rect>
+      <JFZ2_rect>370,685,347,686</JFZ2_rect>
       <FZBSD_rect>232,625,243,636</FZBSD_rect>
       <ZFZ_Text>210,700</ZFZ_Text>
-      <FFZ_Text>260,700</FFZ_Text>
-      <JFZ_Text>316,700</JFZ_Text>
+      <FFZ_Text>280,700</FFZ_Text>
+      <JFZ_Text>355,700</JFZ_Text>
       <FZ_Text>226,610</FZ_Text>
       <p11>530,675</p11>
       <p12>538,667</p12>
@@ -955,17 +955,17 @@
       <m_nType>250</m_nType>
       <m_nCode>0x28</m_nCode>
       <FontHeight>12</FontHeight>
-      <m_textRect>1436,232,1496,247</m_textRect>
-      <ZFZ1_rect>1360,68,1547,85</ZFZ1_rect>
-      <ZFZ2_rect>1360,68,1547,85</ZFZ2_rect>
-      <FFZ1_rect>1250,68,1447,85</FFZ1_rect>
-      <FFZ2_rect>1250,68,1447,85</FFZ2_rect>
-      <JFZ1_rect>1305,68,1497,85</JFZ1_rect>
-      <JFZ2_rect>1305,68,1497,85</JFZ2_rect>
+      <m_textRect>-991451,-99542,-991496,-99557</m_textRect>
+      <ZFZ1_rect>1412,68,1547,85</ZFZ1_rect>
+      <ZFZ2_rect>1412,68,1547,85</ZFZ2_rect>
+      <FFZ1_rect>1252,68,1447,85</FFZ1_rect>
+      <FFZ2_rect>1252,68,1447,85</FFZ2_rect>
+      <JFZ1_rect>1332,68,1497,85</JFZ1_rect>
+      <JFZ2_rect>1332,68,1497,85</JFZ2_rect>
       <FZBSD_rect>1532,80,1543,91</FZBSD_rect>
-      <ZFZ_Text>1350,90</ZFZ_Text>
+      <ZFZ_Text>1403,90</ZFZ_Text>
       <FFZ_Text>1235,90</FFZ_Text>
-      <JFZ_Text>1290,90</JFZ_Text>
+      <JFZ_Text>1318,90</JFZ_Text>
       <FZ_Text>1356,125</FZ_Text>
       <p11>1140,25</p11>
       <p12>1148,17</p12>
@@ -1004,17 +1004,17 @@
       <m_nType>250</m_nType>
       <m_nCode>0x29</m_nCode>
       <FontHeight>12</FontHeight>
-      <m_textRect>1441,392,1493,407</m_textRect>
-      <ZFZ1_rect>1360,170,1547,326</ZFZ1_rect>
-      <ZFZ2_rect>1360,170,1547,331</ZFZ2_rect>
-      <FFZ1_rect>1250,170,1447,326</FFZ1_rect>
-      <FFZ2_rect>1250,170,1447,331</FFZ2_rect>
-      <JFZ1_rect>1305,170,1497,326</JFZ1_rect>
-      <JFZ2_rect>1305,170,1497,331</JFZ2_rect>
+      <m_textRect>-991451,-99542,-991496,-99557</m_textRect>
+      <ZFZ1_rect>1412,170,1547,326</ZFZ1_rect>
+      <ZFZ2_rect>1412,170,1547,331</ZFZ2_rect>
+      <FFZ1_rect>1252,170,1447,326</FFZ1_rect>
+      <FFZ2_rect>1252,170,1447,331</FFZ2_rect>
+      <JFZ1_rect>1332,170,1497,326</JFZ1_rect>
+      <JFZ2_rect>1332,170,1497,331</JFZ2_rect>
       <FZBSD_rect>1532,180,1543,91</FZBSD_rect>
-      <ZFZ_Text>1350,190</ZFZ_Text>
+      <ZFZ_Text>1403,190</ZFZ_Text>
       <FFZ_Text>1235,190</FFZ_Text>
-      <JFZ_Text>1290,190</JFZ_Text>
+      <JFZ_Text>1318,190</JFZ_Text>
       <FZ_Text>1356,225</FZ_Text>
       <p11>1140,155</p11>
       <p12>1148,147</p12>
@@ -1054,16 +1054,16 @@
       <m_nCode>0x2a</m_nCode>
       <FontHeight>12</FontHeight>
       <m_textRect>-991451,-99542,-991496,-99557</m_textRect>
-      <ZFZ1_rect>1380,735,1547,616</ZFZ1_rect>
-      <ZFZ2_rect>1380,740,1547,621</ZFZ2_rect>
-      <FFZ1_rect>1270,735,1447,616</FFZ1_rect>
-      <FFZ2_rect>1270,740,1447,621</FFZ2_rect>
-      <JFZ1_rect>1325,735,1497,616</JFZ1_rect>
-      <JFZ2_rect>1325,740,1497,621</JFZ2_rect>
+      <ZFZ1_rect>1410,735,1547,616</ZFZ1_rect>
+      <ZFZ2_rect>1410,740,1547,621</ZFZ2_rect>
+      <FFZ1_rect>1280,735,1447,616</FFZ1_rect>
+      <FFZ2_rect>1280,740,1447,621</FFZ2_rect>
+      <JFZ1_rect>1345,735,1497,616</JFZ1_rect>
+      <JFZ2_rect>1345,740,1497,621</JFZ2_rect>
       <FZBSD_rect>1582,570,1543,581</FZBSD_rect>
-      <ZFZ_Text>1372,755</ZFZ_Text>
-      <FFZ_Text>1255,755</FFZ_Text>
-      <JFZ_Text>1310,755</JFZ_Text>
+      <ZFZ_Text>1402,755</ZFZ_Text>
+      <FFZ_Text>1265,755</FFZ_Text>
+      <JFZ_Text>1330,755</JFZ_Text>
       <FZ_Text>1376,555</FZ_Text>
       <p11>1140,655</p11>
       <p12>1148,647</p12>
@@ -1109,16 +1109,16 @@
       <m_nCode>0x2b</m_nCode>
       <FontHeight>12</FontHeight>
       <m_textRect>-991391,-99702,-991493,-99717</m_textRect>
-      <ZFZ1_rect>1380,845,1547,856</ZFZ1_rect>
-      <ZFZ2_rect>1380,850,1547,861</ZFZ2_rect>
-      <FFZ1_rect>1270,845,1447,856</FFZ1_rect>
-      <FFZ2_rect>1270,850,1447,861</FFZ2_rect>
-      <JFZ1_rect>1325,845,1497,856</JFZ1_rect>
-      <JFZ2_rect>1325,850,1497,861</JFZ2_rect>
+      <ZFZ1_rect>1410,845,1547,856</ZFZ1_rect>
+      <ZFZ2_rect>1410,850,1547,861</ZFZ2_rect>
+      <FFZ1_rect>1280,845,1447,856</FFZ1_rect>
+      <FFZ2_rect>1280,850,1447,861</FFZ2_rect>
+      <JFZ1_rect>1345,845,1497,856</JFZ1_rect>
+      <JFZ2_rect>1345,850,1497,861</JFZ2_rect>
       <FZBSD_rect>1382,730,1543,741</FZBSD_rect>
-      <ZFZ_Text>1372,865</ZFZ_Text>
-      <FFZ_Text>1255,865</FFZ_Text>
-      <JFZ_Text>1310,865</JFZ_Text>
+      <ZFZ_Text>1402,865</ZFZ_Text>
+      <FFZ_Text>1265,865</FFZ_Text>
+      <JFZ_Text>1330,865</JFZ_Text>
       <FZ_Text>1386,95</FZ_Text>
       <p11>1140,785</p11>
       <p12>1148,777</p12>

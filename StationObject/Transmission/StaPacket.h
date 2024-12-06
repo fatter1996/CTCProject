@@ -13,6 +13,7 @@ namespace Station {
             QByteArray PackOrder(int nTargetCode, int nOrderType = 0, int nAttr1 = -1, int nAttr2 = -1, QByteArray btAttr3 = QByteArray());
 
         private:
+            QByteArray PackDeviceOnline(int nType);
             QByteArray PackUserLogin();
             QByteArray PackStaOperation(int nCurrFunType, int nOperObjType);
             QByteArray PackCultivate();

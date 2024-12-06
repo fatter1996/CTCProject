@@ -40,5 +40,16 @@
         <file>icon/trainHand.png</file>
         <file>icon/icon.ico</file>
         <file>icon/icon-64.png</file>
+        <file>icon/TKY/enlarge.png</file>
+        <file>icon/TKY/log.png</file>
+        <file>icon/TKY/narrow.png</file>
+        <file>icon/TKY/revert.png</file>
+        <file>icon/TKY/set.png</file>
+        <file>icon/TKY/stas.png</file>
+        <file>icon/TKY/staTable.png</file>
+        <file>icon/TKY/staView.png</file>
+        <file>icon/TKY/textEnlarge.png</file>
+        <file>icon/TKY/textNarrow.png</file>
+        <file>icon/TKY/textRevert.png</file>
     </qresource>
 </RCC>

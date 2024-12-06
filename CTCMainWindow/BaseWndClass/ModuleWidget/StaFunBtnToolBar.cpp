@@ -11,7 +11,7 @@ namespace CTCWindows {
 		StaFunBtnToolBar::StaFunBtnToolBar(QWidget* parent)
 			: QWidget(parent)
 		{
-			
+			m_nTimerID_500 = startTimer(500);
 		}
 
 		StaFunBtnToolBar::~StaFunBtnToolBar()
@@ -44,7 +44,19 @@ namespace CTCWindows {
 			default:
 				break;
 			}
-			emit OrderClear();
+			Station::MainStation()->ClearDevice();
+		}
+
+		void StaFunBtnToolBar::timerEvent(QTimerEvent* event)
+		{
+			if (event->timerId() == m_nTimerID_500) {
+				if (m_pCommandClearBtn) {
+					m_pCommandClearBtn->setEnabled(Station::MainStation()->getSelectDevice().size());
+				}
+				if (m_pCommandIssuedBtn) {
+					m_pCommandIssuedBtn->setEnabled(Station::MainStation()->IsAllowStaOperation());
+				}
+			}
 		}
 
 		void StaFunBtnToolBar::onAuxiliaryMenuBtnClicked()
@@ -73,13 +85,7 @@ namespace CTCWindows {
 			for (QAbstractButton* pButton : m_pButtonGroup->buttons()) {
 				pButton->setEnabled(Station::MainStation()->IsAllowStaOperation());
 			}
-			if (m_pCommandClearBtn) {
-				m_pCommandClearBtn->setEnabled(Station::MainStation()->getSelectDevice().size());
-			}
-			if (m_pCommandIssuedBtn) {
-				m_pCommandIssuedBtn->setEnabled(Station::MainStation()->IsAllowStaOperation());
-			}
-
+			
 			if (Station::MainStation()->IsAllowStaOperation()) {
 				if (m_pRouteBuildBtn) {
 					m_pRouteBuildBtn->setChecked(true);

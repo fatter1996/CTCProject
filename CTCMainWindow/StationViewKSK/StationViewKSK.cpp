@@ -89,6 +89,7 @@ namespace CTCWindows {
 					connect(pMenuInfo->addNewSubAction("显示系统信息窗口", 2, 2, true, true, false), &QAction::triggered, [&](bool bChecked) {});
 					connect(pMenuInfo->addNewSubAction("显示进路序列管理窗口", 2, 3, true, true, true), &QAction::triggered, [=](bool bChecked) {
 						ShowStaRoutePlanWnd(bChecked);
+						m_pRoutePlanAction = pMenuBarInfo2->getSubActionByIndex(2, 0, 3)->m_pAction;
 					});
 				}
 				pMenuBarInfo2->addNewAction("站场图", 1, 1); {

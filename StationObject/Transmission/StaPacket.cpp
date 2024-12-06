@@ -7,6 +7,7 @@ namespace Station {
         StaPacket::StaPacket()
         {
             m_mapPackOrder = {
+                { 0x2A, [&](int nAttr1, int nAttr2, QByteArray) { return PackDeviceOnline(nAttr1); }},
                 { 0x40, [&](int nAttr1, int nAttr2, QByteArray) { return PackStaOperation(nAttr1, nAttr2); }},
                 { 0x80, [&](int, int, QByteArray) { return PackUserLogin(); }},
                 { 0x81, [&](int, int, QByteArray) { return PackCultivate(); }},
@@ -43,6 +44,13 @@ namespace Station {
             byteOrder.append(QByteArray::fromHex("fefefefe"));
             byteOrder[4] = byteOrder.length() & 0xff;
             byteOrder[5] = byteOrder.length() >> 8;
+            return byteOrder;
+        }
+
+        QByteArray StaPacket::PackDeviceOnline(int nType)
+        {
+            QByteArray byteOrder;
+            byteOrder.append(nType);
             return byteOrder;
         }
 

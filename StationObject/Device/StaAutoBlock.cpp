@@ -269,7 +269,6 @@ namespace Station {
 
         void StaAutoBlock::DrawRoutePreviewWnd()
         {
-            m_pPainter.setPen(QPen(COLOR_LIGHT_WHITE, 1));
             QFont font = m_pPainter.font();
             font.setPointSizeF(14);
             m_pPainter.setFont(font);
@@ -288,11 +287,14 @@ namespace Station {
             }
             int nIndex = 0;
             StaTrain* pTrain = nullptr;
+            
             while (nIndex < 3) {
+                m_pPainter.setPen(QPen(COLOR_LIGHT_WHITE, 1));
                 m_pPainter.drawRect(Scale(rcTeainNum[nIndex]));
                 if (nIndex < vecTrainRoute.size()) {
                     pTrain = MainStation()->getStaTrainById(vecTrainRoute[nIndex]->m_nTrainId);
-                    m_pPainter.drawText(Scale(rcTeainNum[nIndex]), pTrain->m_strTrainNum);
+                    m_pPainter.setPen(QPen(COLOR_LIGHT_RED, 1));
+                    m_pPainter.drawText(Scale(rcTeainNum[nIndex]), pTrain->m_strTrainNum + "  T", QTextOption(Qt::AlignCenter));
                 }
                 nIndex++;
             }

@@ -82,6 +82,7 @@
 #define	 TARGET_TEACHER		0xBB		//教师机
 #define	 TARGET_CTC			0xCC		//CTC
 #define	 TARGET_CULTIVATE	0xDD		//培训软件
+#define	 TARGET_SERVER	0xEE		//通信服务
 
 //自定义颜色
 #define COLOR_TRACK_DEEPBLUE			QColor("#202040")

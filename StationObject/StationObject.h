@@ -40,7 +40,7 @@ namespace Station {
         void InitDeviceEventFilter(QWidget* pWidget);
         int ReadStationInfo(const QString& filePath); //解析"station.xml"
         void InitStaDevice();   //站场设备初始化
-        int ReadOtherConfig(const QString& filePath); //解析"OtherConfig.json"
+        int ReadOtherConfig(const QString& filePath); //解析"DeviceConfig.json"
         void SetVisible(VisibleDev devType, bool bVisible);
         bool IsVisible(VisibleDev devType);
 
@@ -94,6 +94,7 @@ namespace Station {
         void timerEvent(QTimerEvent* event) override;
 
     public:
+        void OnLine();
         void SelectStationOrder();    //查询命令信息(调度命令,阶段计划,进路序列,车辆信息,行车日志等)
         void SelectStaLimits();    //查询权限信息
         void SelectStaStagePlan();   //查询阶段计划
@@ -129,6 +130,7 @@ namespace Station {
         void CompareResult(const QByteArray& dataAyyay);
 
         void StationReset();
+        void ClearDevice();
 
     public:
         QVector<Device::DeviceBase*>& getSelectDevice() { return m_vecSelectDevice; }

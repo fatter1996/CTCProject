@@ -350,7 +350,7 @@ namespace CTCWindows {
 								
 								pSubTrainRoute->m_nRouteState = 1;
 								if (Http::HttpClient::UpdataRouteState(pTrainRoute->m_nRouteId, pSubTrainRoute->m_nRouteState, btResult)) {
-									MainStation()->TrainRouteList().removeOne(pTrainRoute);
+									//MainStation()->TrainRouteList().removeOne(pTrainRoute);
 								}
 							}
 						}
@@ -359,7 +359,7 @@ namespace CTCWindows {
 							QByteArray btResult;
 							pTrainRoute->m_nRouteState = 1;
 							if (Http::HttpClient::UpdataRouteState(pTrainRoute->m_nRouteId, pTrainRoute->m_nRouteState, btResult)) {
-								MainStation()->TrainRouteList().removeOne(pTrainRoute);
+								//MainStation()->TrainRouteList().removeOne(pTrainRoute);
 							}
 						}
 					}

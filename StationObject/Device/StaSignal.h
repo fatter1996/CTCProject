@@ -80,6 +80,8 @@ namespace Station {
             void setRelatedBtn(const DeviceBase* pDevice) { m_pRelatedBtn = const_cast<DeviceBase*>(pDevice); }
             bool IsIsHaveBSQ() const { return m_bIsIsHaveBSQ; }
             void setBSQState(const uint& nBSQState) { m_nBSQState = nBSQState; }
+            void setDirection(const QString& strDirection) { m_strDirection = strDirection; }
+            QString getDirection() const { return m_strDirection; }
         private:
             QPointF p12, p7, p8, p9, p10, p13, p14; //绘制坐标
             uint m_nXHDType = 0; //信号机类型
@@ -92,6 +94,7 @@ namespace Station {
             bool m_bHigh = true;
             bool m_bSingleDeng = true;
             bool m_bMD = true;
+            QString m_strDirection;
 
             uint m_nSelectType = 0x0;  //选中类型(0-未选中; 0x01-选中信号机名称; 0x02-选中列车按钮; 0x04-选中调车按钮; 0x08-选中通过按钮; 0x1f-选中信号机灯位)
             uint m_nLightNum = 0;   //灯位个数

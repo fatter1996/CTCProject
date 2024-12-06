@@ -176,7 +176,8 @@
       </font>
      </property>
      <property name="styleSheet">
-      <string notr="true">background-color: rgb(250, 250, 250);</string>
+      <string notr="true">background-color: rgb(250, 250, 250);
+color: rgb(255, 0, 0);</string>
      </property>
      <property name="text">
       <string>引导按钮</string>
@@ -213,7 +214,8 @@
       </font>
      </property>
      <property name="styleSheet">
-      <string notr="true">background-color: rgb(250, 250, 250);</string>
+      <string notr="true">background-color: rgb(250, 250, 250);
+color: rgb(255, 0, 0);</string>
      </property>
      <property name="text">
       <string>引导总锁</string>
@@ -250,7 +252,8 @@
       </font>
      </property>
      <property name="styleSheet">
-      <string notr="true">background-color: rgb(250, 250, 250);</string>
+      <string notr="true">background-color: rgb(250, 250, 250);
+color: rgb(255, 0, 0);</string>
      </property>
      <property name="text">
       <string>总人解</string>
@@ -287,7 +290,8 @@
       </font>
      </property>
      <property name="styleSheet">
-      <string notr="true">background-color: rgb(250, 250, 250);</string>
+      <string notr="true">background-color: rgb(250, 250, 250);
+color: rgb(255, 0, 0);</string>
      </property>
      <property name="text">
       <string>区故解</string>
@@ -546,7 +550,8 @@
       </font>
      </property>
      <property name="styleSheet">
-      <string notr="true">background-color: rgb(250, 250, 250);</string>
+      <string notr="true">background-color: rgb(250, 250, 250);
+color: rgb(255, 0, 0);</string>
      </property>
      <property name="text">
       <string>功能按钮</string>

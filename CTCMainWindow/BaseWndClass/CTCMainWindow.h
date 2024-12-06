@@ -149,5 +149,6 @@ namespace CTCWindows {
 		ViewFlag m_eViewFlag = ViewFlag::StationView;
 		MouseState m_eMouseState = MouseState::Default;
 		MenuSyncAction m_stuMenuSyncAction;
+		QAction* m_pRoutePlanAction = nullptr;
 	};
 }

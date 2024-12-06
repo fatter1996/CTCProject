@@ -466,6 +466,7 @@ namespace Station {
                     QByteArray btResult;
                     if (Http::HttpClient::ChangeTriggerType(dataAyyay[12], dataAyyay[13], btResult)) {
                         pTrainRoute->m_nRouteState = dataAyyay[13];
+                        emit Station::MainStation()->TrainRouteUpData();
                     }
                 }
             }

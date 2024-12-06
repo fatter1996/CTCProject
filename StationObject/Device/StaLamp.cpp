@@ -19,12 +19,11 @@ namespace Station {
 
         void StaLamp::InitDeviceAttribute()
         {
-            int width = m_rcLamp.width();
-            int height = m_rcLamp.height();
-            m_rcLamp.setX(m_rcTextRect.x() + ((m_rcTextRect.width() - m_rcLamp.width()) / 2));
-            //m_rcLamp.setY(m_rcTextRect.y() - 24);
-            m_rcLamp.setWidth(width);
-            m_rcLamp.setHeight(height);
+            int width = m_rcTextRect.width();
+            int height = m_rcTextRect.height();
+            m_rcTextRect.setX(m_rcLamp.x() + ((m_rcLamp.width() - m_rcTextRect.width()) / 2));
+            m_rcTextRect.setWidth(width);
+            m_rcTextRect.setHeight(height);
         }
 
         void StaLamp::Draw(bool isMulti)
@@ -39,9 +38,51 @@ namespace Station {
             m_pPainter.setRenderHint(QPainter::Antialiasing, true);
             m_pPainter.setPen(QPen(COLOR_LIGHT_WHITE, 2));
 
-            m_pPainter.setBrush((m_nState & 0x10) ? COLOR_LIGHT_RED : COLOR_LIGHT_BLACK);
-            m_pPainter.drawEllipse(Scale(m_rcLamp));
+            m_nState &= 0xF0;
+            if (m_nType == 508 || m_nType == 509) {
+                m_nState |= 3;
+            }
+            if (m_nType >= 501 && m_nType <= 506) {
+                if (MainStation()->getStaLimits(Station::Limits::ExStaControl)) {
+                    if (m_nType == 501) {
+                        m_nState |= 2;
+                    }
+                }
+                else {
+                    if (m_nType == 502) {
+                        m_nState |= 3;
+                    }
+                    if (m_nType == 503) {
+                        m_nState |= 1;
+                    }
+                    if (m_nType >= 504 && m_nType <= 507) {
+                        if (m_nType - 504 == MainStation()->getStaLimits(Station::Limits::ControlMode)) {
+                            m_nState |= 1;
+                        }
+                        if (m_nType - 504 == MainStation()->getStaLimits(Station::Limits::ApplyControlMode)) {
+                            m_nState |= 3;
+                        }
+                    }
+                }
+            }
+            QColor cColor;
+            switch (m_nState & 0x0F)
+            {
+            case 1:  cColor = COLOR_LIGHT_GREEN;  break;
+            case 2:  cColor = COLOR_LIGHT_RED;    break;
+            case 3:  cColor = COLOR_LIGHT_YELLOW; break;
+            case 4:  cColor = COLOR_LIGHT_GREEN;  break;
+            default: cColor = Qt::NoBrush;        break;
+            }
+
+            if (m_nState & 0x20) {
+                m_pPainter.setBrush(m_bElapsed ? cColor : Qt::NoBrush);
+            }
+            else {
+                m_pPainter.setBrush(cColor);
+            }
             
+            m_pPainter.drawEllipse(Scale(m_rcLamp));
             m_pPainter.setRenderHint(QPainter::Antialiasing, false);
         }
     }

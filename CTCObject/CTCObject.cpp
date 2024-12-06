@@ -68,6 +68,7 @@ namespace CTCDoc{
 			//m_pMainStation->SelectStationOrder();
 			m_pCTCMainWindow->MultiDisp()->InitMultiStation(m_vecMultiStation);
 			QtConcurrent::run(m_pMainStation, &MainStationObject::SelectStationOrder);
+			m_pMainStation->OnLine();
 		}
 		
 		return m_pCTCMainWindow;
@@ -106,11 +107,11 @@ namespace CTCDoc{
 		m_pHttpClient->setServerAddress(QHostAddress(addressObj.value("HttpServerIp").toString()), addressObj.value("HttpServerPort").toInt());
 
 		//解析站场设备
-		if (m_pMainStation->ReadStationInfo(rootObj.value("deviceInfo").toString()) < 0) {
+		if (m_pMainStation->ReadStationInfo(rootObj.value("stationInfo").toString()) < 0) {
 			qDebug() << "无效的xml文件.";
 			return -1;
 		}
-		if (m_pMainStation->ReadOtherConfig(rootObj.value("otherInfo").toString()) < 0) {
+		if (m_pMainStation->ReadOtherConfig(rootObj.value("deviceInfo").toString()) < 0) {
 			qDebug() << "无效的json文件.";
 			return -1;
 		}
@@ -182,10 +183,6 @@ namespace CTCDoc{
 		QObject::connect(m_pSocketUDP, &Socket::SocketUDP::recvData, m_pMainStation, &MainStationObject::onReciveData);
 		QObject::connect(m_pMainStation, &MainStationObject::SendDataToUDP, m_pSocketUDP, &Socket::SocketUDP::onSendData);
 		QObject::connect(m_pSocketTCP, &Socket::SocketTCP::recvData, m_pMainStation, &MainStationObject::onReciveData);
-		//QObject::connect(m_pMainStation, &MainStationObject::SendDataToTCP, this, [&](const QByteArray& btArray) {
-		//	m_pMainStation->CompareResult(btArray);
-		//	m_pSocketTCP->onSendData(btArray);
-		//}, Qt::DirectConnection);
 		QObject::connect(m_pMainStation, &MainStationObject::SendDataToTCP, m_pSocketTCP, &Socket::SocketTCP::onSendData, Qt::DirectConnection);
 	}
 

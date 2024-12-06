@@ -1,4 +1,5 @@
 #include "Global.h"
+#include "../StationObject/Device/StaDevice.h"
 #include <QJsonObject>
 #pragma execution_character_set("utf-8")
 
@@ -165,14 +166,55 @@ namespace Station {
             m_nSignalCode = pTrafficLog->m_nDepartSignalCode;
             m_strSignal = pTrafficLog->m_strDepartSignal;
         }
+
+        //进路方向
+        Device::StaSignal* pSignal = dynamic_cast<Device::StaSignal*>(MainStation()->getDeviceByCode(m_nSignalCode));
+        m_strDirection = pSignal->getDirection();
+        if (pSignal->getSXThroat()) {
+            if (m_bArrivaRoute) {   //接车
+                m_strDirection = pSignal->getDirection() + "<--";
+            }
+            else {  //发车
+                m_strDirection = pSignal->getDirection() + "-->";
+            }
+        }
+        else {
+            if (m_bArrivaRoute) {   //接车
+                m_strDirection = "-->" + pSignal->getDirection();
+            }
+            else {  //发车
+                m_strDirection = "<--" + pSignal->getDirection();
+            }
+        }
+        
+
+        //进路描述
+        QString strSignalName;
+        Device::DeviceBase* pArrivaSignal = MainStation()->getDeviceByCode(m_nSignalCode);
         if (m_strTrack == "") {
             m_strRouteDescrip.append(pTrafficLog->m_strArrivaSignal);
             m_strRouteDescrip.append(",");
             m_strRouteDescrip.append(pTrafficLog->m_strDepartSignal);
-            return;
         }
-        //进路描述
-        SetRouteDescrip();
+        else {
+            for (Device::DeviceBase* pSignal : MainStation()->getDeviceVectorByType(SIGNALLAMP)) {
+                if (pSignal->getSXThroat() == pArrivaSignal->getSXThroat() && (pSignal->getAttr() & SIGNAL_FCXH) &&
+                    pSignal->getName().mid(1) == m_strTrack.left(m_strTrack.indexOf("G"))) {
+                    strSignalName = pSignal->getName();
+                    break;
+                }
+            }
+            if (m_bArrivaRoute) {   //接车
+                m_strRouteDescrip.append(m_strSignal);
+                m_strRouteDescrip.append(",");
+                m_strRouteDescrip.append(strSignalName);
+            }
+            else {  //发车
+                m_strRouteDescrip.append(strSignalName);
+                m_strRouteDescrip.append(",");
+                m_strRouteDescrip.append(m_strSignal);
+            }
+        }
     }
 
     QString StaTrainRoute::getStateStr()
@@ -189,35 +231,6 @@ namespace Station {
         }
     }
 
-    void StaTrainRoute::SetRouteDescrip()
-    {
-        QString strSignalName;
-        Device::DeviceBase* pArrivaSignal = MainStation()->getDeviceByCode(m_nSignalCode);
-        if (m_strTrack == "") {
-        
-        }
-        else {
-            for (Device::DeviceBase* pSignal : MainStation()->getDeviceVectorByType(SIGNALLAMP)) {
-                if (pSignal->getSXThroat() == pArrivaSignal->getSXThroat() && (pSignal->getAttr() & SIGNAL_FCXH) &&
-                    pSignal->getName().mid(1) == m_strTrack.left(m_strTrack.indexOf("G"))) {
-                    strSignalName = pSignal->getName();
-                    break;
-                }
-            }
-        }
-        
-        
-        if (m_bArrivaRoute) {   //接车
-            m_strRouteDescrip.append(m_strSignal);
-            m_strRouteDescrip.append(",");
-            m_strRouteDescrip.append(strSignalName);
-        }
-        else {  //发车
-            m_strRouteDescrip.append(strSignalName);
-            m_strRouteDescrip.append(",");
-            m_strRouteDescrip.append(m_strSignal);
-        }
-    }
 
     void StaTrainRoute::Init(StaTrainRoute* pTrainRoute, const QJsonObject& subObj)
     {

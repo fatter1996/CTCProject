@@ -17,12 +17,12 @@
         "HttpServerIp2": "169.254.43.105",
         "HttpServerPort": 8080
     },
-    "deviceInfo": "Station.xml",
-    "otherInfo": "OtherConfig.json",
+    "stationInfo": "Station.xml",
+    "deviceInfo": "DeviceConfig.json",
     "multiStation": [
         {
-            "deviceInfo": "Station.xml",
-            "otherInfo": "OtherConfig.json"
+            "stationInfo": "Station.xml",
+            "deviceInfo": "DeviceConfig.json"
         }
     ]
 }

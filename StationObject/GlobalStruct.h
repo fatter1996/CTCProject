@@ -180,7 +180,6 @@ namespace Station {
 	public:
 		static void Init(StaTrainRoute* pTrainRoute, const QJsonObject& subObj);
 		QString getStateStr();
-		void SetRouteDescrip();
 	};
 
 	struct StaTrainDispatch : public StaOrder	//机车调度命令

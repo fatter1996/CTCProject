@@ -279,7 +279,6 @@ namespace CTCWindows {
 				path.setFillRule(Qt::WindingFill);
 				
 				path.addRoundedRect(QRect(4, 4, pWidget->width() - 8, pWidget->height() - 8), 4, 4);
-				qDebug() << path;
 				QPainter painter(pWidget);
 				painter.setRenderHint(QPainter::Antialiasing, true);
 				painter.fillPath(path, QBrush(QColor("#FAFAFA")));

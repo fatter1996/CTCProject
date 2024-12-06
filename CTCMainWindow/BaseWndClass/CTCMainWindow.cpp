@@ -79,6 +79,9 @@ namespace CTCWindows {
             QAbstractButton* pCloseBtn = m_pPlanDock->findChild<QAbstractButton*>("qt_dockwidget_closebutton");
             if (pCloseBtn) {
                 connect(pCloseBtn, &QAbstractButton::clicked, [&]() {
+                    if (m_pRoutePlanAction) {
+                        m_pRoutePlanAction->setChecked(false);
+                    }
                     m_vecMenuBarInfo[1]->getSubActionByIndex(2, 0, 3)->m_pAction->setChecked(false);
                 });
             }
