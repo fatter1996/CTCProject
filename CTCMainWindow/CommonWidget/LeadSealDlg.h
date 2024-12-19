@@ -7,7 +7,7 @@
 #define PASSWORD	"123"
 
 namespace CTCWindows {
-	enum class KeyInputType {
+	enum class KeyInputType : int {
 		LeadSeal = 1,	//铅封窗口
 
 		AddTrain = 10,			//添加车次

@@ -179,6 +179,7 @@ namespace Station {
 
 	public:
 		static void Init(StaTrainRoute* pTrainRoute, const QJsonObject& subObj);
+		void ChangeTrack(int nCode, const QString& strName );
 		QString getStateStr();
 	};
 

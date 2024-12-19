@@ -93,7 +93,7 @@ namespace Station {
             QPointF m_ptJCFZ_JS;
             QPointF m_ptFCFZ_JS;
 
-            uint m_nSelectBtnType = 0x0;  //选中类型(0-未选中; 0x01-总辅助; 0x02-接车辅助; 0x04-发车辅助)
+            uint m_nSelectBtnType = 0x0;  //选中类型(0-未选中; 0x01-总辅助; 0x02-接车辅助; 0x04-发车辅助; 0x08-辅助改方)
             QString m_strDirection;
             QMap<QString, StaBlockLamp> m_mapBlockLamp;
             QPointF m_ptRouteWnd;

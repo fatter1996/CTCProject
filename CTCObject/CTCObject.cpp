@@ -19,7 +19,6 @@ namespace CTCDoc{
 	{
 		m_pSocketTCP = new Socket::SocketTCP;
 		m_pSocketUDP = new Socket::SocketUDP;
-		m_pHttpClient = new Http::HttpClient;
 
 		StationObject::InitCreatDeviceMap();
 		m_pMainStation = new MainStationObject;
@@ -104,14 +103,14 @@ namespace CTCDoc{
 		m_pSocketUDP->setServerAddress(QHostAddress(addressObj.value("serverIp").toString()), addressObj.value("serverPortUDP").toInt());
 		m_pSocketTCP->setLocalAddress(QHostAddress(addressObj.value("localIp").toString()), addressObj.value("localPortTCP").toInt());
 		m_pSocketTCP->setServerAddress(QHostAddress(addressObj.value("serverIp").toString()), addressObj.value("serverPortTCP").toInt());
-		m_pHttpClient->setServerAddress(QHostAddress(addressObj.value("HttpServerIp").toString()), addressObj.value("HttpServerPort").toInt());
+		Http::HttpClient::setServerAddress(QHostAddress(addressObj.value("HttpServerIp").toString()), addressObj.value("HttpServerPort").toInt());
 
 		//解析站场设备
 		if (m_pMainStation->ReadStationInfo(rootObj.value("stationInfo").toString()) < 0) {
 			qDebug() << "无效的xml文件.";
 			return -1;
 		}
-		if (m_pMainStation->ReadOtherConfig(rootObj.value("deviceInfo").toString()) < 0) {
+		if (m_pMainStation->ReadDeviceConfig(rootObj.value("deviceInfo").toString()) < 0) {
 			qDebug() << "无效的json文件.";
 			return -1;
 		}
@@ -122,11 +121,13 @@ namespace CTCDoc{
 			subObj = value.toObject();
 			StationObject* pStation = new StationObject;
 			//解析站场设备
-			if (pStation->ReadStationInfo(subObj.value("deviceInfo").toString()) < 0) {
+			if (pStation->ReadStationInfo(subObj.value("stationInfo").toString()) < 0) {
 				qDebug() << "无效的xml文件.";
 				continue;
 			}
-			if (pStation->ReadOtherConfig(subObj.value("otherInfo").toString()) < 0) {
+			QString str = subObj.value("otherInfo").toString();
+			QString str2 = rootObj.value("multiStation").toString();
+			if (pStation->ReadDeviceConfig(subObj.value("deviceInfo").toString()) < 0) {
 				qDebug() << "无效的json文件.";
 				continue;
 			}

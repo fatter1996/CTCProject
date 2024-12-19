@@ -54,13 +54,11 @@ namespace Socket {
             killTimer(m_nTimer);
             m_nTimer = -1;
         }
-        emit connected(m_hServerIp, m_nServerPort);
     }
 
     void SocketTCP::onDisconnected()
     {
         qDebug() << QString("TCP disconnected from %1:%2 !").arg(m_hServerIp.toString()).arg(m_nServerPort);
-        emit disconnected(m_hServerIp, m_nServerPort);
         m_nTimer = startTimer(1000);
     }
 

@@ -2,7 +2,6 @@
 #include "BaseWndClass/CTCMainWindow.h"
 #include "SocketObject/socketudp.h"
 #include "SocketObject/sockettcp.h"
-#include "SocketObject/HttpClient.h"
 #include "StationObject/StationObject.h"
 
 namespace CTCDoc {
@@ -27,7 +26,6 @@ namespace CTCDoc {
         //通信
         Socket::SocketUDP* m_pSocketUDP = nullptr;
         Socket::SocketTCP* m_pSocketTCP = nullptr;
-        Http::HttpClient* m_pHttpClient = nullptr;
         //站间透明
         QVector<Station::StationObject*> m_vecMultiStation;
     };

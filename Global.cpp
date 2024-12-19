@@ -217,6 +217,32 @@ namespace Station {
         }
     }
 
+    void StaTrainRoute::ChangeTrack(int nCode, const QString& strName)
+    {
+        m_nTrackCode = nCode;
+        m_strTrack = strName;
+
+        QString strSignalName;
+        Device::DeviceBase* pArrivaSignal = MainStation()->getDeviceByCode(m_nSignalCode);
+        for (Device::DeviceBase* pSignal : MainStation()->getDeviceVectorByType(SIGNALLAMP)) {
+            if (pSignal->getSXThroat() == pArrivaSignal->getSXThroat() && (pSignal->getAttr() & SIGNAL_FCXH) &&
+                pSignal->getName().mid(1) == m_strTrack.left(m_strTrack.indexOf("G"))) {
+                strSignalName = pSignal->getName();
+                break;
+            }
+        }
+        if (m_bArrivaRoute) {   //接车
+            m_strRouteDescrip.append(m_strSignal);
+            m_strRouteDescrip.append(",");
+            m_strRouteDescrip.append(strSignalName);
+        }
+        else {  //发车
+            m_strRouteDescrip.append(strSignalName);
+            m_strRouteDescrip.append(",");
+            m_strRouteDescrip.append(m_strSignal);
+        }
+    }
+
     QString StaTrainRoute::getStateStr()
     {
         switch (m_nRouteState)

@@ -286,7 +286,7 @@ namespace Station {
 
         QRectF DeviceBase::OutSideRect(const QRectF& rect, int rx, int ry)
         {
-            return QRectF(rect.x() - rx, rect.y() - ry, rect.width() + 2 * rx, rect.height() + 2 * ry);
+            return QRectF(rect.x() - rx, rect.y() - ry, rect.width() + (2 * (qreal)rx), rect.height() + (2 * (qreal)ry));
         }
         
 
@@ -438,7 +438,7 @@ namespace Station {
 
         void DeviceBtn::OnButtonClick(DeviceBase* pDevice)
         {
-            if (m_nBtnState != 0) {
+            if ((m_nBtnState & 0x0F) != 0) {
                 return;
             }
 
@@ -451,7 +451,7 @@ namespace Station {
 
         void DeviceBtn::BtnStateReset() 
         { 
-            m_nBtnState = 0; 
+            m_nBtnState &= 0xF0; 
             m_nFirstBtnType = 0; 
         }
 

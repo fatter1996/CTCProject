@@ -8,13 +8,11 @@
 #pragma execution_character_set("utf-8")
 
 namespace Http {
-	HttpClient* HttpClient::m_pHttpClient = nullptr;
+	QHostAddress HttpClient::m_hServerIp;
+	uint HttpClient::m_nServerPort = 0;
 
 	HttpClient::HttpClient()
 	{
-		if (!m_pHttpClient) {
-			m_pHttpClient = this;
-		}
 	}
 
 	HttpClient::~HttpClient()
@@ -115,25 +113,25 @@ namespace Http {
 			.arg(pStagePlan->m_nExitSignalCode)
 			.arg(pStagePlan->m_tDepartTime.toString(Qt::ISODate));
 
-		return m_pHttpClient->PostRequest("/stagePlan/saveStagePlan", strContent, btResult);
+		return PostRequest("/stagePlan/saveStagePlan", strContent, btResult);
 	}
 
 	bool HttpClient::SelectStaStagePlan(QByteArray& btResult)
 	{
 		QString strContent = QString("stationId=%1").arg(Station::MainStation()->getStationId());
-		return m_pHttpClient->PostRequest("/stagePlan/selectStagePlanList", strContent, btResult);
+		return PostRequest("/stagePlan/selectStagePlanList", strContent, btResult);
 	}
 
 	bool HttpClient::DeleteStaStagePlan(int nPlanId, QByteArray& btResult)
 	{
 		QString strContent = QString("planId=%1").arg(nPlanId);
-		return m_pHttpClient->PostRequest("/stagePlan/deleteStagePlan", strContent, btResult);
+		return PostRequest("/stagePlan/deleteStagePlan", strContent, btResult);
 	}
 
 	bool HttpClient::ClearStaStagePlan(QByteArray& btResult)
 	{
 		QString strContent = QString("stationId=%1").arg(Station::MainStation()->getStationId());
-		return m_pHttpClient->PostRequest("/stagePlan/clearStagePlanData", strContent, btResult);
+		return PostRequest("/stagePlan/clearStagePlanData", strContent, btResult);
 	}
 
 	bool HttpClient::AddStaTrain(Station::StaTrain* pTrain, QByteArray& btResult)
@@ -157,58 +155,58 @@ namespace Http {
 			.arg(pTrain->m_bImportant)
 			.arg(pTrain->m_nTrainId);
 
-		return m_pHttpClient->PostRequest("/trainProperty/saveTrainProperty", strContent, btResult);
+		return PostRequest("/trainProperty/saveTrainProperty", strContent, btResult);
 	}
 
 	bool HttpClient::SelectStaTrainList(QByteArray& btResult)
 	{
 		QString strContent = QString("stationId=%1").arg(Station::MainStation()->getStationId());
-		return m_pHttpClient->PostRequest("/trainProperty/selectTrainPropertyList", strContent, btResult);
+		return PostRequest("/trainProperty/selectTrainPropertyList", strContent, btResult);
 	}
 
 	bool HttpClient::SelectStaTrain(int nTrainId, QByteArray& btResult)
 	{
 		QString strContent = QString("stationId=%1&trainId=%2")
 			.arg(Station::MainStation()->getStationId()).arg(nTrainId);
-		return m_pHttpClient->PostRequest("/trainProperty/selectTrainPropertyByTrainIdAndStationId", strContent, btResult);
+		return PostRequest("/trainProperty/selectTrainPropertyByTrainIdAndStationId", strContent, btResult);
 	}
 
 	bool HttpClient::DeleteStaTrain(int nTrainId, QByteArray& btResult)
 	{
 		QString strContent = QString("trainId=%1").arg(nTrainId);
-		return m_pHttpClient->PostRequest("/trainProperty/deleteTrainProperty", strContent, btResult);
+		return PostRequest("/trainProperty/deleteTrainProperty", strContent, btResult);
 	}
 
 	bool HttpClient::ChangeTrainNum(int nTrainId, QString strTrainNum, QByteArray& btResult)
 	{
 		QString strContent = QString("trainId=%1&trainNum=%2")
 			.arg(nTrainId).arg(strTrainNum);
-		return m_pHttpClient->PostRequest("/trainProperty/updateTrainProperty", strContent, btResult);
+		return PostRequest("/trainProperty/updateTrainProperty", strContent, btResult);
 	}
 
 	bool HttpClient::SetTrainRunState(int nTrainId, bool bRunning, QByteArray& btResult)
 	{
 		QString strContent = QString("trainId=%1&isRun=%2").arg(nTrainId).arg(bRunning);
-		return m_pHttpClient->PostRequest("/trainProperty/updateTrainProperty ", strContent, btResult);
+		return PostRequest("/trainProperty/updateTrainProperty ", strContent, btResult);
 	}
 
 	bool HttpClient::UpdataTrainPos(int nTrainId, int nPosCode, QByteArray& btResult)
 	{
 		QString strContent = QString("trainId=%1&posCode=%2").arg(nTrainId).arg(nPosCode);
-		return m_pHttpClient->PostRequest("/trainProperty/updateTrainProperty ", strContent, btResult);
+		return PostRequest("/trainProperty/updateTrainProperty ", strContent, btResult);
 	}
 
 	bool HttpClient::ChangeTrainAttr(int nTrainId, int nSpeed, QString strLocomotive, bool bElectric, QByteArray& btResult)
 	{
 		QString strContent = QString("trainId=%1&speed=%2&strLocomotive=%3&electric=%4")
 			.arg(nTrainId).arg(nSpeed).arg(strLocomotive).arg(bElectric);
-		return m_pHttpClient->PostRequest("/trainProperty/updateTrainProperty ", strContent, btResult);
+		return PostRequest("/trainProperty/updateTrainProperty ", strContent, btResult);
 	}
 
 	bool HttpClient::ClearStaTrain(QByteArray& btResult)
 	{
 		QString strContent = QString("stationId=%1").arg(Station::MainStation()->getStationId());
-		return m_pHttpClient->PostRequest("/trainProperty/clearTrainPropertyData", strContent, btResult);
+		return PostRequest("/trainProperty/clearTrainPropertyData", strContent, btResult);
 	}
 
 	bool HttpClient::AddStaTrainRoute(Station::StaTrainRoute* pTrainRoute, QByteArray& btResult)
@@ -236,53 +234,53 @@ namespace Http {
 			.arg(strSubRouteId.left(strSubRouteId.length() - 1))
 			.arg(pTrainRoute->m_nLogId);
 
-		return m_pHttpClient->PostRequest("/trainRouteSequence/saveTrainRouteSequence", strContent, btResult);
+		return PostRequest("/trainRouteSequence/saveTrainRouteSequence", strContent, btResult);
 	}
 
 	bool HttpClient::SelectStaTrainRoute(QByteArray& btResult)
 	{
 		QString strContent = QString("stationId=%1").arg(Station::MainStation()->getStationId());
-		return m_pHttpClient->PostRequest("/trainRouteSequence/selectTrainRouteSequenceList", strContent, btResult);
+		return PostRequest("/trainRouteSequence/selectTrainRouteSequenceList", strContent, btResult);
 	}
 
 	bool HttpClient::UpdataRouteState(int nRouteId, int nState, QByteArray& btResult)
 	{
 		QString strContent = QString("routeId=%1&routeState=%2")
 			.arg(nRouteId).arg(nState);
-		return m_pHttpClient->PostRequest("/trainRouteSequence/updateTrainRouteSequence", strContent, btResult);
+		return PostRequest("/trainRouteSequence/updateTrainRouteSequence", strContent, btResult);
 	}
 
 	bool HttpClient::ChangeRouteTrack(int nRouteId, int nTrackCode, QByteArray& btResult)
 	{
 		QString strContent = QString("routeId=%1&trackCode=%2")
 			.arg(nRouteId).arg(nTrackCode);
-		return m_pHttpClient->PostRequest("/trainRouteSequence/updateTrainRouteSequence", strContent, btResult);
+		return PostRequest("/trainRouteSequence/updateTrainRouteSequence", strContent, btResult);
 	}
 
 	bool HttpClient::ChangeTriggerType(int nRouteId, int nTriggerType, QByteArray& btResult)
 	{
 		QString strContent = QString("routeId=%1&autoTouch=%2")
 			.arg(nRouteId).arg(nTriggerType);
-		return m_pHttpClient->PostRequest("/trainRouteSequence/updateTrainRouteSequence", strContent, btResult);
+		return PostRequest("/trainRouteSequence/updateTrainRouteSequence", strContent, btResult);
 	}
 
 	bool HttpClient::ChangeRoute(int nRouteId, QString strRoute, QByteArray& btResult)
 	{
 		QString strContent = QString("routeId=%1&routeDepict=%2")
 			.arg(nRouteId).arg(strRoute);
-		return m_pHttpClient->PostRequest("/trainRouteSequence/updateTrainRouteSequence", strContent, btResult);
+		return PostRequest("/trainRouteSequence/updateTrainRouteSequence", strContent, btResult);
 	}
 
 	bool HttpClient::DeleteStaTrainRoute(int nRouteId, QByteArray& btResult)
 	{
 		QString strContent = QString("routeId=%1").arg(nRouteId);
-		return m_pHttpClient->PostRequest("/trainRouteSequence/deleteTrainRouteSequence", strContent, btResult);
+		return PostRequest("/trainRouteSequence/deleteTrainRouteSequence", strContent, btResult);
 	}
 
 	bool HttpClient::ClearStaTrainRoute(QByteArray& btResult)
 	{
 		QString strContent = QString("stationId=%1").arg(Station::MainStation()->getStationId());
-		return m_pHttpClient->PostRequest("/trainRouteSequence/clearTrainRouteSequenceData", strContent, btResult);
+		return PostRequest("/trainRouteSequence/clearTrainRouteSequenceData", strContent, btResult);
 	}
 
 	bool HttpClient::AddStaDispatchOrder(Station::StaDispatchOrder* pDispatchOrder, QByteArray& btResult)
@@ -304,31 +302,31 @@ namespace Http {
 			.arg(pDispatchOrder->m_tSignTime.toString(Qt::ISODate))
 			.arg(pDispatchOrder->m_bImportant)
 			.arg(pDispatchOrder->m_nStateDisOrder);
-		return m_pHttpClient->PostRequest("/dispatchingOrder/saveDisPatchingOrderData", strContent, btResult);
+		return PostRequest("/dispatchingOrder/saveDisPatchingOrderData", strContent, btResult);
 	}
 
 	bool HttpClient::SelectStaDispatchOrder(QByteArray& btResult)
 	{
 		QString strContent = QString("stationId=%1").arg(Station::MainStation()->getStationId());
-		return m_pHttpClient->PostRequest("/dispatchingOrder/selectDispatchingOrderList", strContent, btResult);
+		return PostRequest("/dispatchingOrder/selectDispatchingOrderList", strContent, btResult);
 	}
 
 	bool HttpClient::SignForDispatchOrder(int nOrderId, QByteArray& btResult)
 	{
 		QString strContent = QString("orderId=%1&stateDisOrder=1").arg(nOrderId);
-		return m_pHttpClient->PostRequest("/dispatchingOrder/updateDispatchingOrder", strContent, btResult);
+		return PostRequest("/dispatchingOrder/updateDispatchingOrder", strContent, btResult);
 	}
 
 	bool  HttpClient::DeleteDispatchOrder(int nOrderId, QByteArray& btResult)
 	{
 		QString strContent = QString("orderId=%1").arg(nOrderId);
-		return m_pHttpClient->PostRequest("/dispatchingOrder/deleteDispatchingOrder", strContent, btResult);
+		return PostRequest("/dispatchingOrder/deleteDispatchingOrder", strContent, btResult);
 	}
 
 	bool HttpClient::ClearStaDispatchOrder(QByteArray& btResult)
 	{
 		QString strContent = QString("stationId=%1").arg(Station::MainStation()->getStationId());
-		return m_pHttpClient->PostRequest("/dispatchingOrder/clearDispatchingOrde", strContent, btResult);
+		return PostRequest("/dispatchingOrder/clearDispatchingOrde", strContent, btResult);
 	}
 
 	bool HttpClient::AddStaTrainDispatch(Station::StaTrainDispatch* pTrainDispatch, QByteArray& btResult)
@@ -341,13 +339,13 @@ namespace Http {
 			.arg(pTrainDispatch->m_strLocomotive)
 			.arg(pTrainDispatch->m_tRecv.toString(Qt::ISODate))
 			.arg(pTrainDispatch->m_nState);
-		return m_pHttpClient->PostRequest("/dispatchingOrderTrain/saveDisPatchingOrderTrainData", strContent, btResult);
+		return PostRequest("/dispatchingOrderTrain/saveDisPatchingOrderTrainData", strContent, btResult);
 	}
 
 	bool HttpClient::SelectStaTrainDispatch(int nDispatchOrderId, QByteArray& btResult)
 	{
 		QString strContent = QString("orderId=%1").arg(nDispatchOrderId);
-		return m_pHttpClient->PostRequest("/dispatchingOrderTrain/selectDispatchingOrderTrainList", strContent, btResult);
+		return PostRequest("/dispatchingOrderTrain/selectDispatchingOrderTrainList", strContent, btResult);
 	}
 
 	bool HttpClient::ModifyStaTrainDispatch(Station::StaTrainDispatch* pTrainDispatch, QByteArray& btResult)
@@ -356,19 +354,19 @@ namespace Http {
 			.arg(pTrainDispatch->m_nOrderId)
 			.arg(pTrainDispatch->m_strTrainNum)
 			.arg(pTrainDispatch->m_strLocomotive);
-		return m_pHttpClient->PostRequest("/dispatchingOrderTrain/updateDispatchingOrderTrain", strContent, btResult);
+		return PostRequest("/dispatchingOrderTrain/updateDispatchingOrderTrain", strContent, btResult);
 	}
 
 	bool HttpClient::DeleteStaTrainDispatch(Station::StaTrainDispatch* pTrainDispatch, QByteArray& btResult)
 	{
 		QString strContent = QString("orderId=%1").arg(pTrainDispatch->m_nOrderId);
-		return m_pHttpClient->PostRequest("/dispatchingOrderTrain/deleteDispatchingOrderTrain", strContent, btResult);
+		return PostRequest("/dispatchingOrderTrain/deleteDispatchingOrderTrain", strContent, btResult);
 	}
 
 	bool HttpClient::ClearStaTrainDispatch(QByteArray& btResult)
 	{
 		QString strContent = QString("stationId=%1").arg(Station::MainStation()->getStationId());
-		return m_pHttpClient->PostRequest("/dispatchingOrderTrain/clearDispatchingOrderTrainData", strContent, btResult);
+		return PostRequest("/dispatchingOrderTrain/clearDispatchingOrderTrainData", strContent, btResult);
 	}
 
 	bool HttpClient::AddStaTrafficLog(Station::StaTrafficLog* pTrafficLog, QByteArray& btResult)
@@ -446,45 +444,45 @@ namespace Http {
 			.arg(pTrafficLog->m_strTrainPosStatus)
 			.arg(pTrafficLog->m_strProc)
 			.arg(pTrafficLog->m_strTrainArr);
-		return m_pHttpClient->PostRequest("/trainLog/insertTrainLogData", strContent, btResult);
+		return PostRequest("/trainLog/insertTrainLogData", strContent, btResult);
 	}
 
 	bool HttpClient::SelectStaTrafficLog(QByteArray& btResult)
 	{
 		QString strContent = QString("stationId=%1").arg(Station::MainStation()->getStationId());
-		return m_pHttpClient->PostRequest("/trainLog/selectTrainLogList", strContent, btResult);
+		return PostRequest("/trainLog/selectTrainLogList", strContent, btResult);
 	}
 
 	bool HttpClient::UpdataRouteId(int nLogId, int nArrivalRouteId, int nDepartRouteId, QByteArray& btResult)
 	{
 		QString strContent = QString("id=%1&arrivalRouteId=%2&departRouteId=%3")
 			.arg(nLogId).arg(nArrivalRouteId).arg(nDepartRouteId);
-		return m_pHttpClient->PostRequest("/trainLog/updateTrainLogData", strContent, btResult);
+		return PostRequest("/trainLog/updateTrainLogData", strContent, btResult);
 	}
 
 	bool HttpClient::UpdataPointReportTime(int nLogId, QString strPointType, QDateTime tPointTime, QByteArray& btResult)
 	{
 		QString strContent = QString("id=%1&%2=%3")
 			.arg(nLogId).arg(strPointType).arg(tPointTime.toString(Qt::ISODate));
-		return m_pHttpClient->PostRequest("/trainLog/updateTrainLogData", strContent, btResult);
+		return PostRequest("/trainLog/updateTrainLogData", strContent, btResult);
 	}
 
 	bool HttpClient::DeleteStaTrafficLog(int nLogId, QByteArray& btResult)
 	{
 		QString strContent = QString("id=%1").arg(nLogId);
-		return m_pHttpClient->PostRequest("/trainLog/deleteTrainLogList", strContent, btResult);
+		return PostRequest("/trainLog/deleteTrainLogList", strContent, btResult);
 	}
 
 	bool HttpClient::ClearStaTrafficLog(QByteArray& btResult)
 	{
 		QString strContent = QString("stationId=%1").arg(Station::MainStation()->getStationId());
-		return m_pHttpClient->PostRequest("/trainLog/clearTrainLogData", strContent, btResult);
+		return PostRequest("/trainLog/clearTrainLogData", strContent, btResult);
 	}
 
 	bool HttpClient::SelectStaLimits(QByteArray& btResult)
 	{
 		QString strContent = QString("deptId=%1").arg(Station::MainStation()->getStationId());
-		return m_pHttpClient->PostRequest("/system/dept/selectStationById", strContent, btResult);
+		return PostRequest("/system/dept/selectStationById", strContent, btResult);
 	}
 
 	bool HttpClient::UpdataStaLimits(Station::Limits eType, int nLimits, QByteArray& btResult)
@@ -503,6 +501,6 @@ namespace Http {
 		QString strContent = QString("deptId=%1&%2=%3")
 			.arg(Station::MainStation()->getStationId())
 			.arg(strType).arg(nLimits);
-		return m_pHttpClient->PostRequest("/system/dept/updateStationInfo", strContent, btResult);
+		return PostRequest("/system/dept/updateStationInfo", strContent, btResult);
 	}
 }

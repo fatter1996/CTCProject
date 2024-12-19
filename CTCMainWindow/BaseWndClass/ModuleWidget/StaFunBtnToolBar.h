@@ -62,7 +62,8 @@ namespace CTCWindows {
         TotalAux = 0x41,  //总辅助
         PickUpAux,        //接车辅助
         DepartureAux,     //发车辅助
-        DirectionChange,  //改方          
+        DirectionChange,  //改方   
+        TotalAuxUp,       //总辅助吸起
         Allow = 0x51,     //允许操动道岔
         Hump              //驼峰
     };

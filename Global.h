@@ -100,6 +100,7 @@
 #define COLOR_BTN_WHITE					QColor("#FAFAFA")
 #define COLOR_BTN_GRAY					QColor("#666666")
 #define COLOR_BTN_DEEPGRAY				QColor("#A6A6A6")
+#define COLOR_BTN_YELLOW				QColor("#FFFF33")
 #define COLOR_BTN_GREEN					QColor("#458B00")
 #define COLOR_BTN_GREEN_TG				QColor("#00EE00")
 #define COLOR_BTN_BLUE					QColor("#0000EE")

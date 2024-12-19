@@ -40,7 +40,7 @@ namespace Station {
         void InitDeviceEventFilter(QWidget* pWidget);
         int ReadStationInfo(const QString& filePath); //解析"station.xml"
         void InitStaDevice();   //站场设备初始化
-        int ReadOtherConfig(const QString& filePath); //解析"DeviceConfig.json"
+        int ReadDeviceConfig(const QString& filePath); //解析"DeviceConfig.json"
         void SetVisible(VisibleDev devType, bool bVisible);
         bool IsVisible(VisibleDev devType);
 

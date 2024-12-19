@@ -240,7 +240,7 @@ namespace Station {
                     pStaStagePlan->m_strArrivalTrack = "";
                     pStaStagePlan->m_strDepartTrack = "";
                 }
-                //QtConcurrent::run(MainStation(), &MainStationObject::AddNewStagePlan, pStaStagePlan);
+                QtConcurrent::run(MainStation(), &MainStationObject::AddNewStagePlan, pStaStagePlan);
                 MainStation()->AddNewStagePlan(pStaStagePlan);
             }
             return QByteArray();

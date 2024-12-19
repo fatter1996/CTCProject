@@ -38,29 +38,29 @@ namespace Station {
             m_pPainter.setRenderHint(QPainter::Antialiasing, true);
             m_pPainter.setPen(QPen(COLOR_LIGHT_WHITE, 2));
 
-            m_nState &= 0xF0;
-            if (m_nType == 508 || m_nType == 509) {
-                m_nState |= 3;
+            m_nState = 0;
+            if (m_nType == 508 || m_nType == 509 || m_nType == 511) {
+                m_nState = 1;
             }
             if (m_nType >= 501 && m_nType <= 506) {
                 if (MainStation()->getStaLimits(Station::Limits::ExStaControl)) {
                     if (m_nType == 501) {
-                        m_nState |= 2;
+                        m_nState = 0x01;
                     }
                 }
                 else {
                     if (m_nType == 502) {
-                        m_nState |= 3;
+                        m_nState = 0x03;
                     }
                     if (m_nType == 503) {
-                        m_nState |= 1;
+                        m_nState = 0x01;
                     }
                     if (m_nType >= 504 && m_nType <= 507) {
                         if (m_nType - 504 == MainStation()->getStaLimits(Station::Limits::ControlMode)) {
-                            m_nState |= 1;
+                            m_nState = 0x01;
                         }
                         if (m_nType - 504 == MainStation()->getStaLimits(Station::Limits::ApplyControlMode)) {
-                            m_nState |= 3;
+                            m_nState = 0x23;
                         }
                     }
                 }

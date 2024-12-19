@@ -26,10 +26,6 @@ namespace Socket {
     signals:
         //接收数据信号
         void recvData(const QByteArray&, const QHostAddress&, const quint16&);
-        //断开链接信号
-        void disconnected(const QHostAddress&, const quint16&);
-        //链接成功信号
-        void connected(const QHostAddress&, const quint16&);
 
     public slots:
         //链接成功槽

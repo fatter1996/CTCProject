@@ -418,9 +418,7 @@ namespace CTCWindows {
 				QByteArray btResult;
 				for (StaTrainRoute* pRoute : vecTempRouteOrder) {
 					if (Http::HttpClient::ChangeRouteTrack(pRoute->m_nRouteId, pTrack->getCode(), btResult)) {
-						pRoute->m_nTrackCode = pTrack->getCode();
-						pRoute->m_strTrack = pTrack->getName();
-						pRoute->SetRouteDescrip();
+						pRoute->ChangeTrack(pTrack->getCode(), pTrack->getName());
 						MainStation()->SendPacketMsg(TARGET_INTERLOCK, 0x61, pRoute->m_nRouteId, 0x04);
 					}
 				}

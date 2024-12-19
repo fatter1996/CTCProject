@@ -184,10 +184,10 @@ namespace Station {
             m_bShowName = MainStation()->IsVisible(VisibleDev::direction);
             DrawArrow(m_pPainter);
             if (m_bMainStation) {
-                DrawButton(m_pPainter, Scale(m_rcZFZBtn), COLOR_BTN_DEEPGRAY, m_nBtnState & 0x01);
-                DrawButton(m_pPainter, Scale(m_rcJCFZBtn), COLOR_BTN_DEEPGRAY, m_nBtnState & 0x02);
-                DrawButton(m_pPainter, Scale(m_rcFCFZBtn), COLOR_BTN_DEEPGRAY, m_nBtnState & 0x04);
-                DrawButton(m_pPainter, Scale(m_rcGFBtn), COLOR_BTN_DEEPGRAY, m_nBtnState & 0x08);
+                DrawButton(m_pPainter, Scale(m_rcZFZBtn), m_nBtnState & 0x10 ? COLOR_BTN_YELLOW : COLOR_BTN_DEEPGRAY, m_nBtnState & 0x01);
+                DrawButton(m_pPainter, Scale(m_rcJCFZBtn), m_nBtnState & 0x20 ? COLOR_BTN_YELLOW : COLOR_BTN_DEEPGRAY, m_nBtnState & 0x02);
+                DrawButton(m_pPainter, Scale(m_rcFCFZBtn), m_nBtnState & 0x40 ? COLOR_BTN_YELLOW : COLOR_BTN_DEEPGRAY, m_nBtnState & 0x04);
+                DrawButton(m_pPainter, Scale(m_rcGFBtn), m_nBtnState & 0x80 ? COLOR_BTN_YELLOW : COLOR_BTN_DEEPGRAY, m_nBtnState & 0x08);
             }
             for (StaLeaveTrack& track : m_vecStaLeaveTrack) {
                 DrawLeaveTrack(track);
@@ -337,7 +337,10 @@ namespace Station {
         void StaAutoBlock::InitClickEvent()
         {
             m_mapClickEvent.insert(CTCWindows::FunType::FunBtn, [&]() {
-                OnButtonClick(this);
+                if (CTCWindows::LeadSealDlg::LeadSealPassword(CTCWindows::KeyInputType::LeadSeal)) {
+                    OnButtonClick(this);
+                }
+                
             });
         }
 
@@ -380,14 +383,19 @@ namespace Station {
         void StaAutoBlock::SetBtnState()
         {
             if (CTCWindows::BaseWnd::StaFunBtnToolBar::getCurrFunType() == CTCWindows::FunType::FunBtn) {
-                m_nBtnState = m_nSelectBtnType;
                 m_nFirstBtnType = 5;
-                switch (m_nBtnState)
+                qDebug() << "BtnState" << m_nBtnState << m_nSelectBtnType << (m_nBtnState ^ (m_nSelectBtnType << 4)) + m_nSelectBtnType;
+                m_nBtnState = m_nSelectBtnType;
+                m_nBtnState ^= m_nSelectBtnType << 4;
+                
+                switch (m_nBtnState & 0x1F)
                 {
                 case 0x01 : CTCWindows::BaseWnd::StaFunBtnToolBar::setOperObjType(CTCWindows::OperObjType::TotalAux);        break;
                 case 0x02 : CTCWindows::BaseWnd::StaFunBtnToolBar::setOperObjType(CTCWindows::OperObjType::PickUpAux);       break;
                 case 0x04 : CTCWindows::BaseWnd::StaFunBtnToolBar::setOperObjType(CTCWindows::OperObjType::DepartureAux);    break;
                 case 0x08 : CTCWindows::BaseWnd::StaFunBtnToolBar::setOperObjType(CTCWindows::OperObjType::DirectionChange); break;
+                case 0x11 : CTCWindows::BaseWnd::StaFunBtnToolBar::setOperObjType(CTCWindows::OperObjType::TotalAuxUp);      break;
+                    
                 default: break;
                 }
             }
@@ -413,8 +421,8 @@ namespace Station {
             }
 
             switch (m_nArrowState & 0x03) {
-            case 0x01: *cColor1 = COLOR_LIGHT_GREEN;    break;
-            case 0x02: *cColor1 = COLOR_LIGHT_YELLOW;   break;
+            case 0x01: *cColor1 = COLOR_LIGHT_YELLOW;   break;
+            case 0x02: *cColor1 = COLOR_LIGHT_GREEN;    break;
             default:   *cColor1 = COLOR_LIGHT_BLACK;    break;
             }
             switch (m_nArrowState & 0x0c) {

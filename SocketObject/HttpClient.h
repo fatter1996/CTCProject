@@ -11,11 +11,10 @@ namespace Http {
 		~HttpClient();
 
 	public:
-		void setServerAddress(const QHostAddress& hAddress, const quint16& nPort);
-		bool PostRequest(QString strUrl, QString strContent, QByteArray& btResult);
-		bool GetRequest(QString strUrl, QByteArray& btResult);
+		static void setServerAddress(const QHostAddress& hAddress, const quint16& nPort);
+		static bool PostRequest(QString strUrl, QString strContent, QByteArray& btResult);
+		static bool GetRequest(QString strUrl, QByteArray& btResult);
 
-	public:
 		//½×¶Î¼Æ»®
 		static bool AddStaStagePlan(Station::StaStagePlan* pStagePlan, QByteArray& btResult);
 		static bool SelectStaStagePlan(QByteArray& btResult);
@@ -64,10 +63,7 @@ namespace Http {
 		static bool UpdataStaLimits(Station::Limits eType, int nLimits, QByteArray& btResult);
 
 	private:
-		QHostAddress m_hServerIp;
-		uint m_nServerPort = 0;
-
-	private:
-		static HttpClient* m_pHttpClient;
+		static QHostAddress m_hServerIp;
+		static uint m_nServerPort;
 	};
 }
