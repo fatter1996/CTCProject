@@ -70,14 +70,21 @@ namespace Station {
                 font.setPixelSize(Scale(m_nFontSize));//字号
                 QFontMetrics  fontMetrics(font);
                 m_rcTextRect = QRectF(m_rcTextRect.topLeft(), fontMetrics.size(Qt::TextSingleLine, m_strName));
+                if (m_strName == "6‰") {
+                    QSize size = fontMetrics.size(Qt::TextSingleLine, m_strName);
+                }
             });
             m_mapAttribute.insert("pName", [&](const QString& strElement) {
+                
                 m_ptName = QStringToQPointF(strElement);
                 QFont font;
                 font.setFamily("微软雅黑");
                 font.setPixelSize(Scale(m_nFontSize));//字号
                 QFontMetrics  fontMetrics(font);
                 m_rcTextRect = QRectF(m_ptName, fontMetrics.size(Qt::TextSingleLine, m_strName));
+                if (m_strName == "6‰") {
+                    QSize size = fontMetrics.size(Qt::TextSingleLine, m_strName);
+                }
             });
 
             m_mapAttribute.insert("m_nSX", [&](const QString& strElement) { m_bUpDown = strElement.toUInt(); });
@@ -193,7 +200,7 @@ namespace Station {
             QFontMetrics fm(font);
             int textWidth = fm.horizontalAdvance(m_strName);
             int textHeight = fm.height();
-
+            QSize sz = fm.size(Qt::TextSingleLine, m_strName);
             // 根据范围调整字体大小
             QRectF rcTextRect = Scale(m_rcTextRect);
             if (m_rcTextRect != QRectF()) {

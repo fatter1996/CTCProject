@@ -49,6 +49,9 @@ namespace Station {
             else if (m_nType == 380) {
                 DrawButton(m_pPainter, Scale(n_rcButton), COLOR_BTN_GREEN, m_nBtnState);
             } 
+            else if (m_nType == 381) {
+                DrawButton(m_pPainter, Scale(n_rcButton), COLOR_BTN_DEEPGRAY, m_nBtnState, 2);
+            }
             else {
                 DrawButton(m_pPainter, Scale(n_rcButton), COLOR_BTN_DEEPGRAY, m_nBtnState);
             }
@@ -88,7 +91,7 @@ namespace Station {
                     m_nBtnState = 1;
                     m_nFirstBtnType = 3;
                 }
-                if (m_nType == 380 && m_nFirstBtnType == 1) {   //虚信号按钮
+                if ((m_nType == 380 || m_nType == 381) && m_nFirstBtnType == 1) {   //虚信号按钮
                     CTCWindows::BaseWnd::StaFunBtnToolBar::setOperObjType(CTCWindows::OperObjType::Flexibility);
                     m_nBtnState = 1;
                     m_nFirstBtnType = 1;

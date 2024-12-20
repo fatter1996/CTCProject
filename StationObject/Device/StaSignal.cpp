@@ -60,7 +60,7 @@ namespace Station {
                 }
             }
             //引导按钮,仅可作为始端
-            if ((m_nAttr & SIGNAL_LCSD) && (m_nAttr & SIGNAL_JCXH || m_nAttr & SIGNAL_FCJLXH) && p13 != QPointF() && p14 != QPointF()) {
+            if ((m_nAttr & SIGNAL_LCSD) && (m_nAttr & SIGNAL_JCXH || m_nAttr & SIGNAL_FCXH || m_nAttr & SIGNAL_FCJLXH) && p13 != QPointF() && p14 != QPointF()) {
                 if ((m_nAttr & (SIGNAL_DCZD | SIGNAL_DCSD)) && (QRectF(p13, p14) == QRectF(p9, p10))) {
                     m_rcGuideBtn = QRectF(
                         QPointF((m_nAttr & SIGNAL_SYH) ? (p13.x() - 20) : (p13.x() + 20), p13.y()),
@@ -127,7 +127,7 @@ namespace Station {
                 DrawButton(m_pPainter, Scale(m_rcShuntBtn), COLOR_BTN_DEEPGRAY, m_nBtnState & BTNDOWN_SHUNT, 2);
             }
             //引导按钮,仅可作为始端
-            if ((m_nAttr & SIGNAL_LCSD) && (m_nAttr & SIGNAL_JCXH || m_nAttr & SIGNAL_FCJLXH) && m_rcGuideBtn != QRectF()) {
+            if (m_rcGuideBtn != QRectF()) {
                 DrawButton(m_pPainter, Scale(m_rcGuideBtn), COLOR_BTN_BLUE_YD, m_nBtnState & BTNDOWN_GUIDE);
             }
         }
