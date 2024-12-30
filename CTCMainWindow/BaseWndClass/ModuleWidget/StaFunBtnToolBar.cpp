@@ -30,7 +30,6 @@ namespace CTCWindows {
 			switch (m_SelectFunType)
 			{
 			case CTCWindows::FunType::GuideBtn:
-			case CTCWindows::FunType::TotalCancel:
 			case CTCWindows::FunType::GuideClock:
 			case CTCWindows::FunType::TotalRelieve:
 			case CTCWindows::FunType::RegionRelieve:

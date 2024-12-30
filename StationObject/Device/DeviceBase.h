@@ -57,7 +57,7 @@ namespace Station {
 
         public:
             //命令清除
-            virtual void OrderClear() {}
+            virtual void OrderClear(int nType = 0) {}
 
         protected:
             //初始化设备属性

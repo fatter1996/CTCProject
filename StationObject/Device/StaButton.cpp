@@ -59,16 +59,16 @@ namespace Station {
 
         bool StaButton::Contains(const QPoint& ptPos)
         {
-            return n_rcButton.contains(ptPos); 
+            return Scale(n_rcButton).contains(ptPos);
         }
         
         bool StaButton::IsMouseWheel(const QPoint& ptPos)
         {
             if (CTCWindows::BaseWnd::StaFunBtnToolBar::getCurrFunType() == CTCWindows::FunType::RouteBuild && (m_nType == 81 || m_nType == 380)) {
-                return n_rcButton.contains(ptPos);
+                return Scale(n_rcButton).contains(ptPos);
             }
             else if (CTCWindows::BaseWnd::StaFunBtnToolBar::getCurrFunType() == CTCWindows::FunType::FunBtn && m_nType == 342) {
-                return n_rcButton.contains(ptPos);
+                return Scale(n_rcButton).contains(ptPos);
             }
             return false;
         }
@@ -113,7 +113,7 @@ namespace Station {
             }
         }
 
-        void StaButton::OrderClear()
+        void StaButton::OrderClear(int nType)
         {
             BtnStateReset();
         }

@@ -131,6 +131,10 @@ namespace CTCWindows {
 		bool IsMultiStaView() const { return m_eViewFlag == ViewFlag::MultiStaView; }
 		void setMouseState(MouseState state) { m_eMouseState = state; }
 		MouseState getMouseState() const { return m_eMouseState; }
+		void SetShowToolbar(bool bShowBtn, bool bShowLabel) {
+			m_bShowToolbarBtn = bShowBtn;
+			m_bShowToolbarLabel = bShowLabel;
+		}
 
 	protected:
 		BaseWnd::StationCtrlDisp* m_pStationCtrl = nullptr;	//单站界面
@@ -150,5 +154,7 @@ namespace CTCWindows {
 		MouseState m_eMouseState = MouseState::Default;
 		MenuSyncAction m_stuMenuSyncAction;
 		QAction* m_pRoutePlanAction = nullptr;
+		bool m_bShowToolbarBtn = true;
+		bool m_bShowToolbarLabel = true;
 	};
 }

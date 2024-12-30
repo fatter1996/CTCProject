@@ -93,7 +93,7 @@ namespace CTCWindows {
             void onFunBtnStateReset();
 
         signals:
-            void OrderClear();
+            void OrderClear(int);
             void OrderIssued();
 
         protected:

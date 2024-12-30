@@ -107,6 +107,7 @@ namespace Station {
 		int m_nChangeLengh = 0; //»»³¤
 		int m_nWeight = 0; //×ÜÖØ
 		uint m_nEarlyOrLateTime = 0;
+		bool m_bDelete = false;
 
 	public:
 		StaTrain() {}

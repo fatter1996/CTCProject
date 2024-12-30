@@ -36,7 +36,7 @@ namespace CTCWindows {
 
 			QObject::connect(m_pButtonGroup, qOverload<QAbstractButton*>(&QButtonGroup::buttonClicked), this, &StaFunBtnToolBar::onButtonClicked);
 			//ÃüÁîÇå³ı
-			QObject::connect(m_pCommandClearBtn, &QPushButton::clicked, [&]() { emit OrderClear(); });
+			QObject::connect(m_pCommandClearBtn, &QPushButton::clicked, [&]() { emit OrderClear(1); });
 			//ÃüÁîÏÂ´ï
 			QObject::connect(m_pCommandIssuedBtn, &QPushButton::clicked, [&]() { emit OrderIssued(); });
 

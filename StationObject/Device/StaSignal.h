@@ -70,7 +70,7 @@ namespace Station {
             //设置按钮属性
             void SetBtnState() override;
             //命令清除
-            void OrderClear() override;
+            void OrderClear(int nType = 0) override;
             //站场翻转
             void setVollover(const QPointF& ptBase) override;
             //状态重置

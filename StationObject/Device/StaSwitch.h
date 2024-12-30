@@ -4,7 +4,7 @@
 namespace Station {
     namespace Device {
         //道岔
-        class StaSwitch : public StaSection
+        class StaSwitch : public StaSection, public DeviceTrain
         {
         public:
             explicit StaSwitch(QObject* pParent = nullptr);

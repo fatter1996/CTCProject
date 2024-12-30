@@ -123,7 +123,7 @@ namespace Station {
 
         bool StaTrack::Contains(const QPoint& ptPos)
         {
-            return m_rcTextRect.contains(ptPos) || m_rcRespondRect.contains(ptPos);
+            return Scale(m_rcTextRect).contains(ptPos) || Scale(m_rcRespondRect).contains(ptPos);
         }
 
         bool StaTrack::IsMouseWheel(const QPoint& ptPos)

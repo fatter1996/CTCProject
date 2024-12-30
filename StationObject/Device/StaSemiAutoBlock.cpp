@@ -78,21 +78,21 @@ namespace Station {
 
         bool StaSemiAutoBlock::Contains(const QPoint& ptPos)
         {
-            return m_rcBSBtn.contains(ptPos) || m_rcFYBtn.contains(ptPos) || m_rcSGBtn.contains(ptPos);
+            return Scale(m_rcBSBtn).contains(ptPos) || Scale(m_rcFYBtn).contains(ptPos) || Scale(m_rcSGBtn).contains(ptPos);
         }
 
         bool StaSemiAutoBlock::IsMouseWheel(const QPoint& ptPos)
         {
             if (CTCWindows::BaseWnd::StaFunBtnToolBar::getCurrFunType() == CTCWindows::FunType::FunBtn) {
-                if (m_rcBSBtn.contains(ptPos)) {
+                if (Scale(m_rcBSBtn).contains(ptPos)) {
                     m_nSelectBtnType = 0x01;
                     return true;
                 }
-                else if (m_rcFYBtn.contains(ptPos)) {
+                else if (Scale(m_rcFYBtn).contains(ptPos)) {
                     m_nSelectBtnType = 0x02;
                     return true;
                 }
-                else if (m_rcSGBtn.contains(ptPos)) {
+                else if (Scale(m_rcSGBtn).contains(ptPos)) {
                     m_nSelectBtnType = 0x04;
                     return true;
                 }
@@ -147,7 +147,7 @@ namespace Station {
             }
         }
 
-        void StaSemiAutoBlock::OrderClear()
+        void StaSemiAutoBlock::OrderClear(int nType)
         {
             BtnStateReset();
         }

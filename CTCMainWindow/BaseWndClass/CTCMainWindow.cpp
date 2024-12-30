@@ -91,6 +91,13 @@ namespace CTCWindows {
             m_pPlanDock->setAllowedAreas(Qt::BottomDockWidgetArea);
             addDockWidget(Qt::BottomDockWidgetArea, m_pPlanDock);
         }
+        if (!m_bShowToolbarBtn) {
+            m_pStationViewToolBar->hide();
+        }
+
+        if (!m_bShowToolbarLabel) {
+            m_pStateToolBar->hide();
+        }
     }
 
     void CTCMainWindow::MenuStateSync(int type, int nType)

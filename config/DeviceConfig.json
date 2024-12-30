@@ -23,75 +23,75 @@
         {
             "m_nType": 501,
             "m_strName": "非常站控",
-            "m_textRect": "440,80,480,100",
-            "m_lampRect": "452,62,468,78"
+            "m_textRect": "890,200,930,220",
+            "m_lampRect": "902,182,918,198"
         },
         {
             "m_nType": 502,
             "m_strName": "允许转回",
-            "m_textRect": "500,80,540,100",
-            "m_lampRect": "512,62,528,78"
+            "m_textRect": "950,200,990,220",
+            "m_lampRect": "962,182,978,198"
         },
         {
             "m_nType": 503,
             "m_strName": "分散自律",
-            "m_textRect": "560,80,600,100",
-            "m_lampRect": "572,62,588,78"
+            "m_textRect": "1010,200,1050,220",
+            "m_lampRect": "1022,182,1038,198"
         },
         {
             "m_nType": 507,
             "m_strName": "列控",
-            "m_textRect": "620,80,680,100",
-            "m_lampRect": "632,62,648,78"
+            "m_textRect": "1070,200,1110,220",
+            "m_lampRect": "1082,182,1098,198"
         },
         {
             "m_nType": 508,
             "m_strName": "A机工作",
-            "m_textRect": "320,130,360,150",
-            "m_lampRect": "332,112,348,128"
+            "m_textRect": "770,250,810,270",
+            "m_lampRect": "782,232,798,248"
         },
         {
             "m_nType": 509,
             "m_strName": "A机状态",
-            "m_textRect": "380,130,420,150",
-            "m_lampRect": "392,112,408,128"
+            "m_textRect": "830,250,870,270",
+            "m_lampRect": "842,232,858,248"
         },
         {
             "m_nType": 510,
             "m_strName": "B机工作",
-            "m_textRect": "440,130,480,150",
-            "m_lampRect": "452,112,468,128"
+            "m_textRect": "890,250,930,270",
+            "m_lampRect": "902,232,918,248"
         },
         {
             "m_nType": 511,
             "m_strName": "B机状态",
-            "m_textRect": "500,130,540,150",
-            "m_lampRect": "512,112,528,128"
+            "m_textRect": "950,250,990,270",
+            "m_lampRect": "962,232,978,248"
         },
         {
             "m_nType": 504,
             "m_strName": "中心控制",
-            "m_textRect": "560,130,600,150",
-            "m_lampRect": "572,112,588,128"
+            "m_textRect": "1010,250,1050,270",
+            "m_lampRect": "1022,232,1038,248"
         },
         {
             "m_nType": 505,
             "m_strName": "车站调车",
-            "m_textRect": "620,130,660,150",
-            "m_lampRect": "632,112,648,128"
+            "m_textRect": "1070,250,1110,270",
+            "m_lampRect": "1082,232,1098,248"
         },
         {
             "m_nType": 506,
             "m_strName": "车站操作",
-            "m_textRect": "680,130,720,150",
-            "m_lampRect": "692,112,708,128"
+            "m_textRect": "1130,250,1170,270",
+            "m_lampRect": "1142,232,1158,248"
         }
     ],
     "#AutoBlock": "自动闭塞",
     "AutoBlock": [
         {
             "#m_direction": "方向,如X,S,SN等",
-            "#m_nCode": "编号,xml文件中对应自动闭塞(<ZDBS>)的Code,需转为十进制数,如0x2A需转为42",
+            "#m_nCode": "编号,xml文件中对应自动闭塞(<ZDBS>)的Code",
             "##Allow": "允许发车",
             "#Allow": {
                 "m_textRect": "文字范围",
@@ -130,130 +130,96 @@
             },
             "#m_routePoint": "进路窗左上角坐标"
         },
-        {
-            "m_direction": "X",
-            "m_nCode": 38,
-            "m_routePoint": "560,190",
+		    {
+            "m_direction": "XGN",
+            "m_nCode": "0x77",
+            "m_routePoint": "400,110",
             "Allow": {
-                "m_textRect": "350,190, 430, 220",
-                "m_lampRect": "382, 176, 398, 192"
+                "m_textRect": "210,230, 290, 260",
+                "m_lampRect": "242, 210, 258, 226"
             },
             "Assisted": {
-                "m_textRect": "285,190, 365, 220",
-                "m_lampRect": "317, 176, 333, 192"
+                "m_textRect": "110,230, 190, 260",
+                "m_lampRect": "142, 210, 158, 226"
             },
+            "##Supervise": "监督区间",
             "Supervise": {
-                "m_textRect": "220,190, 300, 220",
-                "m_lampRect": "252, 176,268, 192"
+                "m_textRect": "20,230, 100, 260",
+                "m_lampRect": "52, 210,68, 226"
             },
+            "##Section": "XGN区间逻辑检查状态灯",
             "Section": {
-                "m_textRect": "390,350, 490, 370",
-                "m_lampRect": "432, 330, 448, 346"
+                "m_textRect": "0,350, 200, 380",
+                "m_lampRect": "82, 330, 98, 346"
+			      }
+        },
+		    {
+            "m_direction": "SG",
+            "m_nCode": "0x79",
+			      "m_routePoint": "1410,110",
+            "Allow": {
+                "m_textRect": "1620,230, 1700, 260",
+                "m_lampRect": "1642, 210, 1658, 226"
+            },
+            "Assisted": {
+                "m_textRect": "1710,230, 1790, 260",
+                "m_lampRect": "1732, 210, 1748, 226"
+            },
+            "##Supervise": "监督区间",
+            "Supervise": {
+                "m_textRect": "1800,230, 1880, 260",
+                "m_lampRect": "1822, 210, 1838, 226"
+            },
+            "##Section": "区间逻辑检查",
+            "Section": {
+                "m_textRect": "1500,390, 1700, 420",
+                "m_lampRect": "1582, 370, 1598, 386"
             }
         },
-        {
-            "m_direction": "SN",
-            "m_nCode": 41,
-            "m_routePoint": "1070,170",
+		    {
+            "m_direction": "XG",
+            "m_nCode": "0x78",
+            "m_routePoint": "410,730",
             "Allow": {
-                "m_textRect": "1220,140, 1300, 170",
-                "m_lampRect": "1252, 124, 1268, 140"
+                "m_textRect": "210,830, 290, 860",
+                "m_lampRect": "242, 810, 258, 826"
             },
             "Assisted": {
-                "m_textRect": "1300,140, 1380, 170",
-                "m_lampRect": "1332, 124, 1348, 140"
+                "m_textRect": "110,830, 190, 860",
+                "m_lampRect": "142, 810, 158, 826"
             },
+            "##Supervise": "XG监督区间",
             "Supervise": {
-                "m_textRect": "1380,140, 1460, 170",
-                "m_lampRect": "1412, 124,1428, 140"
+                "m_textRect": "20,830, 100, 860",
+                "m_lampRect": "52, 810,68, 826"
             },
+            "##Section": "XG区间逻辑检查状态灯",
             "Section": {
-                "m_textRect": "1085,290, 1195, 320",
-                "m_lampRect": "1132, 276, 1148, 292"
+                "m_textRect": "0,650, 200, 680",
+                "m_lampRect": "82, 630, 98, 646"
             }
         },
-        {
-            "m_direction": "XN",
-            "m_nCode": 39,
-            "m_routePoint": "549,700",
+		    {
+            "m_direction": "SGN",
+            "m_nCode": "0x7a",
+			      "m_routePoint": "1440,750",
             "Allow": {
-                "m_textRect": "338,650, 418, 680",
-                "m_lampRect": "370, 634, 386, 650"
+                "m_textRect": "1620,830, 1700, 860",
+                "m_lampRect": "1642, 810, 1658, 826"
             },
             "Assisted": {
-                "m_textRect": "260,650, 340, 680",
-                "m_lampRect": "295, 634, 311, 650"
+                "m_textRect": "1710,830, 1790, 860",
+                "m_lampRect": "1732, 810, 1748, 826"
             },
+            "##Supervise": "监督区间",
             "Supervise": {
-                "m_textRect": "185,650, 265, 680",
-                "m_lampRect": "220, 634,236, 650"
+                "m_textRect": "1800,830, 1880, 860",
+                "m_lampRect": "1822, 810, 1838, 826"
             },
+            "##Section": "区间逻辑检查",
             "Section": {
-                "m_textRect": "284,546, 394, 576",
-                "m_lampRect": "332, 530, 348, 546"
-            }
-        },
-        {
-            "m_direction": "S",
-            "m_nCode": 42,
-            "m_routePoint": "1070,670",
-            "Allow": {
-                "m_textRect": "1220, 704, 1300, 734",
-                "m_lampRect": "1252, 690, 1268, 706"
-            },
-            "Assisted": {
-                "m_textRect": "1285, 704, 1365, 734",
-                "m_lampRect": "1317, 690, 1333, 706"
-            },
-            "Supervise": {
-                "m_textRect": "1348, 704, 1428, 734",
-                "m_lampRect": "1382, 690, 1398, 706"
-            },
-            "Section": {
-                "m_textRect": "1090, 568, 1200, 598",
-                "m_lampRect": "1132, 550, 1148, 566"
-            }
-        },
-        {
-            "m_direction": "SM",
-            "m_nCode": 43,
-            "m_routePoint": "1070,820",
-            "Allow": {
-                "m_textRect": "1210, 814, 1300, 844",
-                "m_lampRect": "1252, 799, 1268, 815"
-            },
-            "Assisted": {
-                "m_textRect": "1290, 814, 1360, 844",
-                "m_lampRect": "1317, 799, 1333, 815"
-            },
-            "Supervise": {
-                "m_textRect": "1355, 814, 1440, 844",
-                "m_lampRect": "1382, 799, 1398, 815"
-            },
-            "Section": {
-                "m_textRect": "1090, 620, 1200, 650",
-                "m_lampRect": "1132, 602, 1148, 618"
-            }
-        },
-        {
-            "m_direction": "SMN",
-            "m_nCode": 40,
-            "m_routePoint": "1070,40",
-            "Allow": {
-                "m_textRect": "1220,40, 1300, 70",
-                "m_lampRect": "1252, 24,1268, 40"
-            },
-            "Assisted": {
-                "m_textRect": "1300,40, 1380, 70",
-                "m_lampRect": "1332, 24, 1348, 40"
-            },
-            "Supervise": {
-                "m_textRect": "1380,40, 1460, 70",
-                "m_lampRect": "1412, 24, 1428, 40"
-            },
-            "Section": {
-                "m_textRect": "1085,340, 1200, 370",
-                "m_lampRect": "1134, 324, 1150, 340"
+                "m_textRect": "1500,650, 1700, 680",
+                "m_lampRect": "1582, 630, 1598, 646"
             }
         }
     ],
@@ -276,24 +242,35 @@
         },
         {
             "m_nType": 540,
-            "m_nCode": 45,
-            "m_strName": "引导总锁",
-            "center": "1530,610",
-            "p1": "1522,574",
-            "p2": "1538,590",
+            "m_nCode": "0x7c",
+            "m_strName": "X引导总锁",
+            "center": "520,1310",
+            "p1": "512,1274",
+            "p2": "528,1290",
             "m_nSX": 0,
-            "m_textRect": "1500,595,1560,615",
+            "m_textRect": "990,900,1050,920",
+            "FontHeight": 14
+        },
+		{
+            "m_nType": 540,
+            "m_nCode": " 0x7d",
+            "m_strName": "S引导总锁",
+            "center": "620,1310",
+            "p1": "612,1274",
+            "p2": "628,1290",
+            "m_nSX": 1,
+            "m_textRect": "1090,900,1150,920",
             "FontHeight": 14
         },
         {
             "m_nType": 541,
-            "m_nCode": 46,
+            "m_nCode":  "0x7e",
             "m_strName": "故障通知",
-            "center": "1420,610",
-            "p1": "1412,574",
-            "p2": "1428,590",
-            "m_nSX": 1,
-            "m_textRect": "1390,595,1450,615",
+            "center": "420,1310",
+            "p1": "412,1274",
+            "p2": "428,1290",
+            "m_nSX": 0,
+            "m_textRect": "890,900,950,920",
             "FontHeight": 14
         }
     ],
@@ -307,40 +284,100 @@
         },
         {
             "m_nType": 510,
-            "m_strName": "X降级",
-            "m_textRect": "500, 360, 580, 390",
-            "m_lampRect": "532, 340, 548, 356"
+            "m_strName": "XGN限速",
+            "m_textRect": "200, 360, 280, 390",
+            "m_lampRect": "232, 340, 248, 356"
         },
         {
             "m_nType": 510,
-            "m_strName": "XN降级",
-            "m_textRect": "500, 580, 580, 610",
-            "m_lampRect": "532, 560, 548, 576"
+            "m_strName": "XG限速",
+            "m_textRect": "190,650, 270, 680",
+            "m_lampRect": "222, 630,238, 646"
         },
         {
             "m_nType": 510,
-            "m_strName": "SMN降级",
-            "m_textRect": "1260, 310, 1340, 340",
-            "m_lampRect": "1292, 290, 1308, 306"
+            "m_strName": "SG限速",
+            "m_textRect": "1730, 390, 1810, 420",
+            "m_lampRect": "1762, 370, 1778, 386"
         },
         {
             "m_nType": 510,
-            "m_strName": "SM降级",
-            "m_textRect": "1210, 610,1290, 640",
-            "m_lampRect": "1242, 590, 1258, 606"
+            "m_strName": "SGN限速",
+            "m_textRect": "1730, 650, 1810, 680",
+            "m_lampRect": "1762, 630, 1778, 646"
         },
         {
             "m_nType": 510,
-            "m_strName": "一体化轨道停电",
-            "m_textRect": "480, 640,560, 670",
-            "m_lampRect": "500, 620, 518, 636"
+            "m_strName": "15G停稳",
+            "m_textRect": "770,300,810,320",
+            "m_lampRect": "782,282,798,298"
         },
         {
             "m_nType": 510,
-            "m_strName": "上行侧线限速4",
-            "m_textRect": "580, 640,660, 670",
-            "m_lampRect": "600, 620, 618, 636"
-        }
+            "m_strName": "XIVG停稳",
+            "m_textRect": "830,300,870,320",
+            "m_lampRect": "842,282,858,298"
+        },
+        {
+            "m_nType": 510,
+            "m_strName": "VIIIG停稳",
+            "m_textRect": "890,300,930,320",
+            "m_lampRect": "902,282,918,298"
+        },
+        {
+            "m_nType": 510,
+            "m_strName": "12G停稳",
+            "m_textRect": "950,300,990,320",
+            "m_lampRect": "962,282,978,298"
+        },
+        {
+            "m_nType": 510,
+            "m_strName": "11G停稳",
+            "m_textRect": "1010,300,1050,320",
+            "m_lampRect": "1022,282,1038,298"
+        },
+        {
+            "m_nType": 510,
+            "m_strName": "10G停稳",
+            "m_textRect": "1070,300,1110,320",
+            "m_lampRect": "1082,282,1098,298"
+        },
+        {
+            "m_nType": 510,
+            "m_strName": "9G停稳",
+            "m_textRect": "1130,300,1170,320",
+            "m_lampRect": "1142,282,1158,298"
+        },
+		{
+            "m_nType": 510,
+            "m_strName": "205/207#安全线道岔不在定位",
+            "m_textRect": "350, 360, 430, 390",
+            "m_lampRect": "382, 340, 398, 356"
+        },
+		{
+            "m_nType": 510,
+            "m_strName": "上行侧线限速6",
+            "m_textRect": "550, 360, 630, 390",
+            "m_lampRect": "582, 340, 598, 356"
+        },
+		{
+            "m_nType": 510,
+            "m_strName": "下行侧线限速5",
+            "m_textRect": "1400,650, 1600, 680",
+            "m_lampRect": "1482, 630, 1498, 646"
+        },
+		{
+            "m_nType": 510,
+            "m_strName": "X轨道停电",
+            "m_textRect": "1200,850, 1400, 880",
+            "m_lampRect": "1282, 830, 1298, 846"
+        },
+		{
+            "m_nType": 510,
+            "m_strName": "S轨道停电",
+            "m_textRect": "1300,850, 1500, 880",
+            "m_lampRect": "1382, 830, 1398, 846"
+    }
     ],
     "#Neutral": "分相区",
     "Neutral": [
@@ -363,85 +400,50 @@
         {
             "Line": [
                 {
-                    "m_startPos": "330,320",
-                    "m_endPos": "430,320"
+                    "m_startPos": "10,420",
+                    "m_endPos": "110,420"
                 },
                 {
-                    "m_startPos": "380,320",
-                    "m_endPos": "380,420"
-                },
-                {
-                    "m_startPos": "430,490",
-                    "m_endPos": "430,590"
-                },
-                {
-                    "m_startPos": "380,590",
-                    "m_endPos": "480,590"
-                },
-                {
-                    "m_startPos": "1330,270",
-                    "m_endPos": "1430,270"
-                },
-                {
-                    "m_startPos": "1380,270",
-                    "m_endPos": "1380,370"
-                },
-                {
-                    "m_startPos": "1340,540",
-                    "m_endPos": "1340,640"
-                },
-                {
-                    "m_startPos": "1290,640",
-                    "m_endPos": "1390,640"
+                    "m_startPos": "60,420",
+                    "m_endPos": "60,480"
                 }
             ],
             "Text": [
                 {
+                    "m_strContent": "K4+515",
+                    "m_textRect": "960,140,1020,160"
+                },
+                {
+                    "m_strContent": "K3+202",
+                    "m_textRect": "120,430,280,450"
+                },
+				{
+                    "m_strContent": "K3+202",
+                    "m_textRect": "120,580,280,600"
+                },
+				{
+                    "m_strContent": "K5+689",
+                    "m_textRect": "1620,430,1780,450"
+                },
+				{
+                    "m_strContent": "K5+691",
+                    "m_textRect": "1620,610,1780,630"
+                },
+			    {
+                    "m_strContent": "K0+609-K1+610",
+                    "m_textRect": "10,400,130,420"
+                },
+			    {
                     "m_strContent": "分相区",
-                    "m_textRect": "350,280,410,300"
-                },
-                {
-                    "m_strContent": "K1964+860-K1964+692",
-                    "m_textRect": "300,300,460,320"
-                },
-                {
-                    "m_strContent": "分相区",
-                    "m_textRect": "400,620,460,640"
-                },
-                {
-                    "m_strContent": "K1964+609-K1964+438",
-                    "m_textRect": "340,600,520,620"
-                },
-                {
-                    "m_strContent": "分相区",
-                    "m_textRect": "1350,230,1410,250"
-                },
-                {
-                    "m_strContent": "K1+588-K1+935",
-                    "m_textRect": "1300,250,1460,270"
-                },
-                {
-                    "m_strContent": "分相区",
-                    "m_textRect": "1310,670,1370,690"
-                },
-                {
-                    "m_strContent": "K1+619-K1+968",
-                    "m_textRect": "1270,650,1430,680"
-                },
-                {
-                    "m_strContent": "K1+619-K1+968",
-                    "m_textRect": "1270,550,1430,580",
-                    "m_textColor": 3
+                    "m_textRect": "10,380,130,410"
                 }
             ]
         }
     ],
     "Direction": {
-        "X": "龙里北",
-        "XN": "龙里北",
+        "X": "小碧",
+        "XN": "小碧",
         "SMN": "白云北",
-        "SN": "贵阳",
-        "S": "贵阳",
-        "SM": "白云北"
+        "SN": "白云北"
     }
 }

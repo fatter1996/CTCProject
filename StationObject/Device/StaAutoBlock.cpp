@@ -149,6 +149,19 @@ namespace Station {
 
         }
 
+        void StaAutoBlock::timerEvent(QTimerEvent* event)
+        {
+            if (event->timerId() == m_nTimerIdJF) {
+                m_nBtnState &= (0xFF ^ 0x20);
+                killTimer(m_nTimerIdJF);
+            }
+            if (event->timerId() == m_nTimerIdFF) {
+                m_nBtnState &= (0xFF ^ 0x40);
+                killTimer(m_nTimerIdFF);
+            }
+            return DeviceBase::timerEvent(event);
+        }
+
         void StaAutoBlock::InitDeviceAttribute()
         {
             if (m_rcFZLight.x() < p11.x()) {
@@ -184,10 +197,10 @@ namespace Station {
             m_bShowName = MainStation()->IsVisible(VisibleDev::direction);
             DrawArrow(m_pPainter);
             if (m_bMainStation) {
-                DrawButton(m_pPainter, Scale(m_rcZFZBtn), m_nBtnState & 0x10 ? COLOR_BTN_YELLOW : COLOR_BTN_DEEPGRAY, m_nBtnState & 0x01);
-                DrawButton(m_pPainter, Scale(m_rcJCFZBtn), m_nBtnState & 0x20 ? COLOR_BTN_YELLOW : COLOR_BTN_DEEPGRAY, m_nBtnState & 0x02);
-                DrawButton(m_pPainter, Scale(m_rcFCFZBtn), m_nBtnState & 0x40 ? COLOR_BTN_YELLOW : COLOR_BTN_DEEPGRAY, m_nBtnState & 0x04);
-                DrawButton(m_pPainter, Scale(m_rcGFBtn), m_nBtnState & 0x80 ? COLOR_BTN_YELLOW : COLOR_BTN_DEEPGRAY, m_nBtnState & 0x08);
+                DrawButton(m_pPainter, Scale(m_rcZFZBtn), m_nBtnState & 0x10 ? COLOR_BTN_RED : COLOR_BTN_DEEPGRAY, m_nBtnState & 0x01);
+                DrawButton(m_pPainter, Scale(m_rcJCFZBtn), m_nBtnState & 0x20 ? COLOR_BTN_RED : COLOR_BTN_DEEPGRAY, m_nBtnState & 0x02);
+                DrawButton(m_pPainter, Scale(m_rcFCFZBtn), m_nBtnState & 0x40 ? COLOR_BTN_RED : COLOR_BTN_DEEPGRAY, m_nBtnState & 0x04);
+                DrawButton(m_pPainter, Scale(m_rcGFBtn), m_nBtnState & 0x80 ? COLOR_BTN_RED : COLOR_BTN_DEEPGRAY, m_nBtnState & 0x08);
             }
             for (StaLeaveTrack& track : m_vecStaLeaveTrack) {
                 DrawLeaveTrack(track);
@@ -302,25 +315,26 @@ namespace Station {
 
         bool StaAutoBlock::Contains(const QPoint& ptPos)
         {
-            return m_rcZFZBtn.contains(ptPos) || m_rcJCFZBtn.contains(ptPos) || m_rcFCFZBtn.contains(ptPos);
+            return Scale(m_rcZFZBtn).contains(ptPos) || Scale(m_rcJCFZBtn).contains(ptPos) || Scale(m_rcFCFZBtn).contains(ptPos)
+                || Scale(m_rcGFBtn).contains(ptPos);
         }
 
         bool StaAutoBlock::IsMouseWheel(const QPoint& ptPos)
         {
             if (CTCWindows::BaseWnd::StaFunBtnToolBar::getCurrFunType() == CTCWindows::FunType::FunBtn) {
-                if (m_rcZFZBtn.contains(ptPos)) {
+                if (Scale(m_rcZFZBtn).contains(ptPos)) {
                     m_nSelectBtnType = 0x01;
                     return true;
                 }
-                else if (m_rcJCFZBtn.contains(ptPos)) {
+                else if (Scale(m_rcJCFZBtn).contains(ptPos)) {
                     m_nSelectBtnType = 0x02;
                     return true;
                 }
-                else if (m_rcFCFZBtn.contains(ptPos)) {
+                else if (Scale(m_rcFCFZBtn).contains(ptPos)) {
                     m_nSelectBtnType = 0x04;
                     return true;
                 }
-                else if (m_rcGFBtn.contains(ptPos)) {
+                else if (Scale(m_rcGFBtn).contains(ptPos)) {
                     m_nSelectBtnType = 0x08;
                     return true;
                 }
@@ -385,19 +399,30 @@ namespace Station {
             if (CTCWindows::BaseWnd::StaFunBtnToolBar::getCurrFunType() == CTCWindows::FunType::FunBtn) {
                 m_nFirstBtnType = 5;
                 qDebug() << "BtnState" << m_nBtnState << m_nSelectBtnType << (m_nBtnState ^ (m_nSelectBtnType << 4)) + m_nSelectBtnType;
-                m_nBtnState = m_nSelectBtnType;
-                m_nBtnState ^= m_nSelectBtnType << 4;
+                m_nBtnState &= 0xF0;
+                m_nBtnState |= m_nSelectBtnType;
                 
-                switch (m_nBtnState & 0x1F)
+                
+                switch (m_nBtnState & 0x0F)
                 {
-                case 0x01 : CTCWindows::BaseWnd::StaFunBtnToolBar::setOperObjType(CTCWindows::OperObjType::TotalAux);        break;
-                case 0x02 : CTCWindows::BaseWnd::StaFunBtnToolBar::setOperObjType(CTCWindows::OperObjType::PickUpAux);       break;
-                case 0x04 : CTCWindows::BaseWnd::StaFunBtnToolBar::setOperObjType(CTCWindows::OperObjType::DepartureAux);    break;
-                case 0x08 : CTCWindows::BaseWnd::StaFunBtnToolBar::setOperObjType(CTCWindows::OperObjType::DirectionChange); break;
-                case 0x11 : CTCWindows::BaseWnd::StaFunBtnToolBar::setOperObjType(CTCWindows::OperObjType::TotalAuxUp);      break;
-                    
+                case 0x01: 
+                    CTCWindows::BaseWnd::StaFunBtnToolBar::setOperObjType((m_nBtnState & 0x10) ? 
+                        CTCWindows::OperObjType::TotalAuxUp : CTCWindows::OperObjType::TotalAux);         
+                    break;
+                case 0x02 : 
+                    CTCWindows::BaseWnd::StaFunBtnToolBar::setOperObjType(CTCWindows::OperObjType::PickUpAux);       
+                    m_nTimerIdJF = startTimer(25000);
+                    break;
+                case 0x04 : 
+                    CTCWindows::BaseWnd::StaFunBtnToolBar::setOperObjType(CTCWindows::OperObjType::DepartureAux);    
+                    m_nTimerIdFF = startTimer(25000);
+                    break;
+                case 0x08 : 
+                    CTCWindows::BaseWnd::StaFunBtnToolBar::setOperObjType(CTCWindows::OperObjType::DirectionChange); 
+                    break;
                 default: break;
                 }
+                m_nBtnState ^= m_nSelectBtnType << 4;
             }
         }
 
@@ -432,8 +457,13 @@ namespace Station {
             }
         }
 
-        void StaAutoBlock::OrderClear()
+        void StaAutoBlock::OrderClear(int nType)
         {
+            if (nType == 1) {
+                m_nBtnState ^= m_nSelectBtnType << 4;
+                killTimer(m_nTimerIdJF);
+                killTimer(m_nTimerIdFF);
+            }
             BtnStateReset();
         }
 

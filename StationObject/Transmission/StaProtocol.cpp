@@ -240,7 +240,7 @@ namespace Station {
                     pStaStagePlan->m_strArrivalTrack = "";
                     pStaStagePlan->m_strDepartTrack = "";
                 }
-                QtConcurrent::run(MainStation(), &MainStationObject::AddNewStagePlan, pStaStagePlan);
+                //QtConcurrent::run(MainStation(), &MainStationObject::AddNewStagePlan, pStaStagePlan);
                 MainStation()->AddNewStagePlan(pStaStagePlan);
             }
             return QByteArray();
@@ -357,52 +357,40 @@ namespace Station {
         QByteArray StaProtocol::UnpackTrain(const QByteArray& dataAyyay)
         {
             int nFlag = 13;
-            int nTrainNumLen = dataAyyay[nFlag++] & 0xFF;
-            QString strTrainNum = QString(dataAyyay.mid(14, nTrainNumLen));
-            nFlag += nTrainNumLen;
+            
             if (dataAyyay[11] == 0x01) {   //添加车次
-                StaTrain* pTrain = new StaTrain;
-                pTrain->m_nTrainId = dataAyyay[12];
-                pTrain->m_strTrainNum = strTrainNum;
-                pTrain->m_nPosCode = (dataAyyay[nFlag] & 0xFF) + (dataAyyay[nFlag + 1] & 0xFF) * 256;
-                nFlag += 2;
-                pTrain->m_bRight = dataAyyay[nFlag++];
-                pTrain->m_bElectric = dataAyyay[nFlag++];
-                pTrain->m_bFreightTrain = dataAyyay[nFlag++];
-                pTrain->m_nOverLimitLevel = dataAyyay[nFlag++];
-                pTrain->m_nSpeed = dataAyyay[nFlag++];
-                int nTrainTypeLen = dataAyyay[nFlag++] & 0xFF;
-                pTrain->m_strTrainType = QString(dataAyyay.mid(nFlag, nTrainNumLen));
-                nFlag += nTrainTypeLen;
-
                 QByteArray btResult;
-                int nTrainId = 1;
-                while (btResult != "") {
-                    if (Http::HttpClient::SelectStaTrain(nTrainId, btResult)) {
-                        nTrainId++;
+                if (Http::HttpClient::SelectStaTrain(dataAyyay[12] & 0xFF, btResult)) {
+                    QJsonParseError error;
+                    QJsonDocument josnDoc = QJsonDocument::fromJson(btResult, &error);
+                    if (josnDoc.isNull()) {
+                        qDebug() << "无效的JSON格式:" << error.errorString();
+                        return QByteArray();
                     }
-                }
-                pTrain->m_nTrainId = nTrainId;
-                if (Http::HttpClient::AddStaTrain(pTrain, btResult)) {
+                    StaTrain* pTrain = new StaTrain;
+                    StaTrain::Init(pTrain, josnDoc.object());
                     MainStation()->TrainList().append(pTrain);
-                    MainStation()->SendPacketMsg(TARGET_TEACHER, 0x60, pTrain->m_nTrainId, 0x07, pTrain->m_strTrainNum.toLocal8Bit());
                     DeviceBase* pDevice = MainStation()->getDeviceByCode(pTrain->m_nPosCode);
+                    if (!pDevice) {
+                        pDevice = MainStation()->getDeviceByCode(pTrain->m_nPosCode);
+                    }
                     if (pDevice && (pDevice->getStrType() == TRACK || pDevice->getStrType() == AUTOBLOCK)) {
                         dynamic_cast<Device::StaTrack*>(pDevice)->SetTrain(pTrain);
+                    }
+                    else {
+                        qDebug() << "未找到设备:" << pTrain->m_nPosCode;
                     }
                 }
             }
             else if (dataAyyay[11] == 0x02) {   //删除车次
                 QByteArray btResult;
-                if (Http::HttpClient::DeleteStaTrain(dataAyyay[12], btResult)) {
-                    StaTrain* pTrain = MainStation()->getStaTrainById(dataAyyay[12]);
-                    if (pTrain) {
-                        DeviceTrain* pDevice = dynamic_cast<DeviceTrain*>(MainStation()->getDeviceByCode(pTrain->m_nPosCode));
-                        if (pDevice) {
-                            pDevice->SetTrain(nullptr);
-                        }
-                        MainStation()->TrainList().removeOne(pTrain);
+                StaTrain* pTrain = MainStation()->getStaTrainById(dataAyyay[12]);
+                if (pTrain) {
+                    DeviceTrain* pDevice = dynamic_cast<DeviceTrain*>(MainStation()->getDeviceByCode(pTrain->m_nPosCode));
+                    if (pDevice) {
+                        pDevice->SetTrain(nullptr);
                     }
+                    MainStation()->TrainList().removeOne(pTrain);
                 }
             }
             else if (dataAyyay[11] == 0x03) {   //变更车次
@@ -411,46 +399,40 @@ namespace Station {
                 nFlag += nNewTrainNumLen;
                 StaTrain* pTrain = MainStation()->getStaTrainById(dataAyyay[12]);
                 if (pTrain) {
-                    QByteArray btResult;
-                    if (Http::HttpClient::ChangeTrainNum(dataAyyay[12], strTrainNum, btResult)) {
-                        pTrain->m_strTrainNum = strNewTrainNum;
-                    }
+                    pTrain->m_strTrainNum = strNewTrainNum;
                 }
             }
             else if (dataAyyay[11] == 0x04) {   //车次停稳
                 StaTrain* pTrain = MainStation()->getStaTrainById(dataAyyay[12]);
                 if (pTrain) {
-                    QByteArray btResult;
-                    if (Http::HttpClient::SetTrainRunState(dataAyyay[12], false, btResult)) {
-                        pTrain->m_bRunning = false;
-                    }
+                    pTrain->m_bRunning = false;
                 }
             }
             else if (dataAyyay[11] == 0x05) {   //车次启动
                 StaTrain* pTrain = MainStation()->getStaTrainById(dataAyyay[12]);
                 if (pTrain) {
-                    QByteArray btResult;
-                    if (Http::HttpClient::SetTrainRunState(dataAyyay[12], true, btResult)) {
-                        pTrain->m_bRunning = true;
-                    }
+                    pTrain->m_bRunning = true;
                 }
             }
             else if (dataAyyay[11] == 0x06) {   //更新位置
-                qDebug() << "UpdataPos";
                 StaTrain* pTrain = MainStation()->getStaTrainById(dataAyyay[12]);
                 if (pTrain) {
-                    DeviceBase* pDevice = MainStation()->getDeviceByCode(pTrain->m_nPosCode);
-                    DeviceTrain* pDeviceTrain = dynamic_cast<DeviceTrain*>(MainStation()->getDeviceByCode(pTrain->m_nPosCode));
-                    if (pDeviceTrain) {
+                    DeviceBase* pDeviceTrain = MainStation()->getSwitchBySectionCode(pTrain->m_nPosCode);
+                    if (!pDeviceTrain) {
+                        pDeviceTrain = MainStation()->getDeviceByCode(pTrain->m_nPosCode);
+                    }
+                    if (dynamic_cast<DeviceTrain*>(pDeviceTrain)) {
                         pTrain->m_nPosCode = (dataAyyay[nFlag] & 0xFF) + (dataAyyay[nFlag + 1] & 0xFF) * 256;
-                        DeviceBase* pNextDevice = MainStation()->getDeviceByCode(pTrain->m_nPosCode);
-                        qDebug() << "getDeviceByCode";
+                        DeviceBase* pNextDevice = MainStation()->getSwitchBySectionCode(pTrain->m_nPosCode);
+                        if (!pNextDevice) {
+                            pNextDevice = MainStation()->getDeviceByCode(pTrain->m_nPosCode);
+                        }
                         if (pNextDevice) {
-                            QByteArray btResult;
-                            qDebug() << "UpdataTrainPos";
-                            if (Http::HttpClient::UpdataTrainPos(dataAyyay[12], pNextDevice->getCode(), btResult)) {
-                                pDeviceTrain->MoveTo(dynamic_cast<DeviceTrain*>(pNextDevice));
+                            if (pNextDevice != pDeviceTrain) { 
+                                dynamic_cast<DeviceTrain*>(pDeviceTrain)->MoveTo(dynamic_cast<DeviceTrain*>(pNextDevice));
+                                qDebug() << "MoveTo" << pNextDevice->getName();
                             }
+                            
                         }
                     }
                 }

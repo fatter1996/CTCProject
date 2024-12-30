@@ -317,27 +317,27 @@ namespace Station {
         {
             StaButton* pButton = dynamic_cast<StaButton*>(m_pRelatedBtn);
 
-            if (m_rcTextRect.contains(ptPos)) {     //0x01-选中信号机名称
+            if (Scale(m_rcTextRect).contains(ptPos)) {     //0x01-选中信号机名称
                 m_nSelectType = 0x01;
                 return true;
             }
-            else if (m_rcTrainBtn.contains(ptPos)) {    //0x02-选中列车按钮
+            else if (Scale(m_rcTrainBtn).contains(ptPos)) {    //0x02-选中列车按钮
                 m_nSelectType = 0x02;
                 return true;
             }
-            else if (m_rcShuntBtn.contains(ptPos)) {    //0x04-选中调车按钮
+            else if (Scale(m_rcShuntBtn).contains(ptPos)) {    //0x04-选中调车按钮
                 m_nSelectType = 0x04;
                 return true;
             }
-            else if (pButton && pButton->getButtonRect().contains(ptPos)) {    //0x08-选中通过按钮
+            else if (pButton && Scale(pButton->getButtonRect()).contains(ptPos)) {    //0x08-选中通过按钮
                 m_nSelectType = 0x08;
                 return true;
             }
-            else if (m_rcGuideBtn.contains(ptPos)) {    //0x10-选中引导按钮
+            else if (Scale(m_rcGuideBtn).contains(ptPos)) {    //0x10-选中引导按钮
                 m_nSelectType = 0x10;
                 return true;
             }
-            else if (m_rcLightTotal.contains(ptPos)) {    //0x1f-选中信号机灯位
+            else if (Scale(m_rcLightTotal).contains(ptPos)) {    //0x1f-选中信号机灯位
                 m_nSelectType = 0x1f;
                 return true;
             }
@@ -346,27 +346,27 @@ namespace Station {
 
         bool StaSignal::IsMouseWheel(const QPoint& ptPos)
         {
-            //进路建立，可操作列车按钮，调车按钮和通过按钮
-            if (CTCWindows::BaseWnd::StaFunBtnToolBar::getCurrFunType() == CTCWindows::FunType::RouteBuild) {
-                return m_rcTrainBtn.contains(ptPos) || m_rcShuntBtn.contains(ptPos);
+            //进路建立，总取消,总人解,可操作列车按钮，调车按钮和通过按钮
+            if (CTCWindows::BaseWnd::StaFunBtnToolBar::getCurrFunType() == CTCWindows::FunType::RouteBuild ||
+                CTCWindows::BaseWnd::StaFunBtnToolBar::getCurrFunType() == CTCWindows::FunType::TotalCancel ||
+                CTCWindows::BaseWnd::StaFunBtnToolBar::getCurrFunType() == CTCWindows::FunType::TotalRelieve) {
+                return Scale(m_rcTrainBtn).contains(ptPos) || Scale(m_rcShuntBtn).contains(ptPos);
             }
             if (CTCWindows::BaseWnd::StaFunBtnToolBar::getCurrFunType() == CTCWindows::FunType::GuideBtn) {
-                return m_rcGuideBtn.contains(ptPos);
+                return Scale(m_rcGuideBtn).contains(ptPos);
             }
 
-            //信号重开,总取消,总人解,点灯,灭灯操作信号灯或设备名称
+            //信号重开,点灯,灭灯操作信号灯或设备名称
             if (CTCWindows::BaseWnd::StaFunBtnToolBar::getCurrFunType() == CTCWindows::FunType::SignalReopen ||
-                CTCWindows::BaseWnd::StaFunBtnToolBar::getCurrFunType() == CTCWindows::FunType::TotalCancel || 
-                CTCWindows::BaseWnd::StaFunBtnToolBar::getCurrFunType() == CTCWindows::FunType::TotalRelieve ||
                 CTCWindows::BaseWnd::StaFunBtnToolBar::getCurrFunType() == CTCWindows::FunType::Lighting ||
                 CTCWindows::BaseWnd::StaFunBtnToolBar::getCurrFunType() == CTCWindows::FunType::UnLighting) {
-                return m_rcLightTotal.contains(ptPos) || m_rcTextRect.contains(ptPos);
+                return Scale(m_rcLightTotal).contains(ptPos) || Scale(m_rcTextRect).contains(ptPos);
             }
 
             //封锁/解封 可操作列车按钮,调车按钮,信号灯
             if (CTCWindows::BaseWnd::StaFunBtnToolBar::getCurrFunType() == CTCWindows::FunType::Blockade ||
                 CTCWindows::BaseWnd::StaFunBtnToolBar::getCurrFunType() == CTCWindows::FunType::UnBlockade) {
-                return m_rcTrainBtn.contains(ptPos) || m_rcShuntBtn.contains(ptPos) || m_rcLightTotal.contains(ptPos);
+                return Scale(m_rcTrainBtn).contains(ptPos) || Scale(m_rcShuntBtn).contains(ptPos) || Scale(m_rcLightTotal).contains(ptPos);
             }
             return false;
         }
@@ -592,7 +592,7 @@ namespace Station {
             }
         }
 
-        void StaSignal::OrderClear()
+        void StaSignal::OrderClear(int nType)
         {
             BtnStateReset();
         }

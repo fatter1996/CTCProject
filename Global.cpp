@@ -280,7 +280,9 @@ namespace Station {
 
         QStringList strSubRoute = subObj.value("subRouteId").toString().split(',');
         for (QString strRouteId : strSubRoute) {
-            pTrainRoute->m_vecSubRouteId.append(strRouteId.toInt());
+            if (strRouteId.toInt() != 0) {
+                pTrainRoute->m_vecSubRouteId.append(strRouteId.toInt());
+            }
         }
     }
 

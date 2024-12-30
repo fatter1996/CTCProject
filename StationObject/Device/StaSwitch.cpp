@@ -262,7 +262,7 @@ namespace Station {
 
         bool StaSwitch::Contains(const QPoint& ptPos)
         {
-            return m_rcTextRect.contains(ptPos) || m_rcRespondRect.contains(ptPos);
+            return Scale(m_rcTextRect).contains(ptPos) || Scale(m_rcRespondRect).contains(ptPos);
         }
 
         //鼠标是否在设备上

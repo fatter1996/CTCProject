@@ -173,34 +173,36 @@ namespace Http {
 
 	bool HttpClient::DeleteStaTrain(int nTrainId, QByteArray& btResult)
 	{
-		QString strContent = QString("trainId=%1").arg(nTrainId);
+		QString strContent = QString("stationId=%1&trainId=%2").arg(Station::MainStation()->getStationId()).arg(nTrainId);
 		return PostRequest("/trainProperty/deleteTrainProperty", strContent, btResult);
 	}
 
 	bool HttpClient::ChangeTrainNum(int nTrainId, QString strTrainNum, QByteArray& btResult)
 	{
-		QString strContent = QString("trainId=%1&trainNum=%2")
-			.arg(nTrainId).arg(strTrainNum);
+		QString strContent = QString("stationId=%1&trainId=%2&trainNum=%3")
+			.arg(Station::MainStation()->getStationId()).arg(nTrainId).arg(strTrainNum);
 		return PostRequest("/trainProperty/updateTrainProperty", strContent, btResult);
 	}
 
 	bool HttpClient::SetTrainRunState(int nTrainId, bool bRunning, QByteArray& btResult)
 	{
-		QString strContent = QString("trainId=%1&isRun=%2").arg(nTrainId).arg(bRunning);
-		return PostRequest("/trainProperty/updateTrainProperty ", strContent, btResult);
+		QString strContent = QString("stationId=%1&trainId=%2&isRun=%3")
+			.arg(Station::MainStation()->getStationId()).arg(nTrainId).arg(bRunning);
+		return PostRequest("/trainProperty/updateTrainProperty", strContent, btResult);
 	}
 
 	bool HttpClient::UpdataTrainPos(int nTrainId, int nPosCode, QByteArray& btResult)
 	{
-		QString strContent = QString("trainId=%1&posCode=%2").arg(nTrainId).arg(nPosCode);
-		return PostRequest("/trainProperty/updateTrainProperty ", strContent, btResult);
+		QString strContent = QString("stationId=%1&trainId=%2&posCode=%3")
+			.arg(Station::MainStation()->getStationId()).arg(nTrainId).arg(nPosCode);
+		return PostRequest("/trainProperty/updateTrainProperty", strContent, btResult);
 	}
 
 	bool HttpClient::ChangeTrainAttr(int nTrainId, int nSpeed, QString strLocomotive, bool bElectric, QByteArray& btResult)
 	{
-		QString strContent = QString("trainId=%1&speed=%2&strLocomotive=%3&electric=%4")
-			.arg(nTrainId).arg(nSpeed).arg(strLocomotive).arg(bElectric);
-		return PostRequest("/trainProperty/updateTrainProperty ", strContent, btResult);
+		QString strContent = QString("stationId=%1&trainId=%2&speed=%3&strLocomotive=%4&electric=%5")
+			.arg(Station::MainStation()->getStationId()).arg(nTrainId).arg(nSpeed).arg(strLocomotive).arg(bElectric);
+		return PostRequest("/trainProperty/updateTrainProperty", strContent, btResult);
 	}
 
 	bool HttpClient::ClearStaTrain(QByteArray& btResult)

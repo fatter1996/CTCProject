@@ -28,7 +28,7 @@ namespace Station {
             //获取箭头颜色
             void getArrowColor() override;
             //命令清除
-            void OrderClear() override;
+            void OrderClear(int nType = 0) override;
             //站场翻转
             void setVollover(const QPointF& ptBase) override;
             //状态重置

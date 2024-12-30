@@ -59,6 +59,7 @@ namespace CTCDoc{
 		if (m_pCTCMainWindow) {
 			//初始化主界面
 			CTCWindows::SetMainWindow(m_pCTCMainWindow);
+			m_pCTCMainWindow->SetShowToolbar(m_bShowToolbarBtn, m_bShowToolbarLabel);
 			m_pCTCMainWindow->InitStattionView();
 			m_pCTCMainWindow->setFixedSize(m_pMainStation->getStaFixedSize());
 			m_pMainStation->InitDeviceEventFilter(m_pCTCMainWindow->StaPaintView());
@@ -97,6 +98,8 @@ namespace CTCDoc{
 		m_pMainStation->setStationName(rootObj.value("staName").toString());
 		//站场界面类型
 		m_nStationViewType = rootObj.value("stationType").toInt();
+		m_bShowToolbarBtn = rootObj.value("isShowToolBarBtn").toInt();
+		m_bShowToolbarLabel = rootObj.value("isShowToolBarLabel").toInt();
 		//通信地址
 		QJsonObject addressObj = rootObj.value("comAddress").toObject();
 		m_pSocketUDP->setLocalAddress(QHostAddress(addressObj.value("localIp").toString()), addressObj.value("localPortUDP").toInt());
@@ -104,7 +107,7 @@ namespace CTCDoc{
 		m_pSocketTCP->setLocalAddress(QHostAddress(addressObj.value("localIp").toString()), addressObj.value("localPortTCP").toInt());
 		m_pSocketTCP->setServerAddress(QHostAddress(addressObj.value("serverIp").toString()), addressObj.value("serverPortTCP").toInt());
 		Http::HttpClient::setServerAddress(QHostAddress(addressObj.value("HttpServerIp").toString()), addressObj.value("HttpServerPort").toInt());
-
+		
 		//解析站场设备
 		if (m_pMainStation->ReadStationInfo(rootObj.value("stationInfo").toString()) < 0) {
 			qDebug() << "无效的xml文件.";

@@ -48,7 +48,9 @@ namespace CTCWindows {
 							connect(pAction1, &QAction::triggered, Station::MainStation(), &Station::MainStationObject::onOrderIssued);
 							QAction* pAction2 = new QAction("ÃüÁîÇå³ý");
 							pMenu->addAction(pAction2);
-							connect(pAction2, &QAction::triggered, Station::MainStation(), &Station::MainStationObject::onOrderClear);
+							connect(pAction2, &QAction::triggered, []() {
+								Station::MainStation()->onOrderClear(1);
+							});
 						}
 						else {
 							QAction* pAction1 = new QAction("³µÕ¾Ñ¡Ôñ");

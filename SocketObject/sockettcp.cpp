@@ -70,6 +70,7 @@ namespace Socket {
     void SocketTCP::onSendData(const QByteArray& dataArray)
     {
         m_pTcpSocket->write(dataArray);
+        qDebug() << dataArray.toHex();
     }
 
     void SocketTCP::timerEvent(QTimerEvent* event)

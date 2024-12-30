@@ -98,13 +98,13 @@ namespace Station {
 
         bool StaHump::Contains(const QPoint& ptPos)
         {
-            return m_rcButton.contains(ptPos);
+            return Scale(m_rcButton).contains(ptPos);
         }
 
         bool StaHump::IsMouseWheel(const QPoint& ptPos)
         {
             if (CTCWindows::BaseWnd::StaFunBtnToolBar::getCurrFunType() == CTCWindows::FunType::FunBtn) {
-                return m_rcButton.contains(ptPos);
+                return Scale(m_rcButton).contains(ptPos);
             }
             return false;
         }

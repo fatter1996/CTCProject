@@ -293,6 +293,9 @@ namespace CTCWindows {
 
 		void StaRoutePlan::TrainRouteTableLeftMenu(const QModelIndex& index)
 		{
+			if (MainStation()->IsAllowStaOperation()) {
+				return;
+			}
 			StaTrainRoute* pTrainRoute = MainStation()->getStaTrainRouteByRowIndex(index.row());
 			if (!pTrainRoute) {
 				return;
@@ -310,6 +313,9 @@ namespace CTCWindows {
 
 		void StaRoutePlan::TrainRouteTableRightMenu(const QPoint& pt)
 		{
+			if (MainStation()->IsAllowStaOperation()) {
+				return;
+			}
 			QModelIndex index = m_pTrainRouteTable->indexAt(pt);
 			if (index.row() >= 0 && index.column() >= 0) {
 				StaTrainRoute* pTrainRoute = MainStation()->getStaTrainRouteByRowIndex(index.row());
@@ -435,7 +441,7 @@ namespace CTCWindows {
 
 			QByteArray btResult;
 			if (Http::HttpClient::ChangeTriggerType(pTrainRoute->m_nRouteId, bAutoTouch ? 1 : 2, btResult)) {
-				pTrainRoute->m_bAutoTouch = true;
+				pTrainRoute->m_bAutoTouch = bAutoTouch;
 			}
 			OnTrainRouteUpData();
 		}

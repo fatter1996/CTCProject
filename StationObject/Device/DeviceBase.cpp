@@ -565,7 +565,18 @@ namespace Station {
 
         void DeviceTrain::DrawTrain(QPainter& pPainter)
         {
+            if (m_bTrainLeave) {
+                m_pTrain = nullptr;
+                m_bTrainLeave = false;
+            }
             if (m_pTrain) {
+                if (m_pTrain->m_bDelete) {
+                    delete m_pTrain;
+                    m_pTrain = nullptr;
+                    m_bTrainLeave = false;
+                    return;
+                }
+
                 double nDiploid = 0;
                 if (m_bMainStation) {
                     nDiploid = MainStation()->getDiploid(DiploidRatio::StaTrainNumDiploid);
@@ -586,11 +597,6 @@ namespace Station {
                 }
             }
             else {
-                m_pTrain = nullptr;
-                m_bTrainLeave = false;
-            }
-
-            if (m_bTrainLeave) {
                 m_pTrain = nullptr;
                 m_bTrainLeave = false;
             }
@@ -802,8 +808,11 @@ namespace Station {
 
         void DeviceTrain::onMouseMoveToTrainFrame(const QPoint& ptPos)
         {
+            QRectF reMouse;  //鼠标判断区域略小于显示区域 以防与信号机按钮判定区域重合
             for (TrainFrame* pTrainFrame : m_vecTrainFrame) {
-                if (pTrainFrame->m_rcFrame.contains(ptPos)) {
+                reMouse = { pTrainFrame->m_rcFrame.x(), pTrainFrame->m_rcFrame.y() - 10, 
+                    pTrainFrame->m_rcFrame.width(), pTrainFrame->m_rcFrame.height() - 20 };
+                if (Scale(reMouse).contains(ptPos)) {
                     CTCWindows::MainWindow()->setMouseState(CTCWindows::MouseState::AddTrain);
                     if (!pTrainFrame->m_bContains) {
                         m_nInTrainFrame++;
@@ -824,7 +833,7 @@ namespace Station {
 
         void DeviceTrain::MoveTo(DeviceTrain* pNext)
         {
-            if (pNext) {
+            if (pNext && m_pTrain) {
                 qDebug() << "MoveTo";
                 pNext->SetTrain(m_pTrain);
                 m_bTrainLeave = true;

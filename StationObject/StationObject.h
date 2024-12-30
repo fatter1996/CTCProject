@@ -54,12 +54,14 @@ namespace Station {
         void setStationName(const QString& strName) { m_strStationName = strName; }
         Device::DeviceBase* getDeviceByCode(const uint& nCode);
         Device::DeviceBase* getDeviceByName(const QString& strName);
+        Device::DeviceBase* getSwitchBySectionCode(int nCode);
         QSize getStaFixedSize(); //获取站场实际大小
         uint getStationId() const { return m_nStationId; }
         QString getStationName() const { return m_strStationName; }
         QPoint getOffset() const { return m_ptOffset; }
         bool IsMainStation() const { return m_bMainStation; }
         QWidget* ShowWidget() const { return m_pShowWidget; }
+
     public:
         static void InitCreatDeviceMap();
 
@@ -130,7 +132,7 @@ namespace Station {
         void CompareResult(const QByteArray& dataAyyay);
 
         void StationReset();
-        void ClearDevice();
+        void ClearDevice(int nType = 0);
 
     public:
         QVector<Device::DeviceBase*>& getSelectDevice() { return m_vecSelectDevice; }
@@ -171,7 +173,7 @@ namespace Station {
     public slots:
         void onReciveData(const QByteArray& dataAyyay);
         void onOrderIssued();
-        void onOrderClear();
+        void onOrderClear(int nType = 0);
         void onUserLogin(QString strUserName, QString strPassword);
 
     signals:
