@@ -17,209 +17,213 @@
                 "B机状态": 511
             },
             "#m_strName": "501",
-            "#m_textRect": "文字范围, 所有范围都是左上角坐标加宽高",
-            "#m_lampRect": "灯范围"
+            "#pName": "文字坐标",
+            "#m_ptLamp": "灯坐标"
         },
         {
             "m_nType": 501,
             "m_strName": "非常站控",
-            "m_textRect": "890,200,930,220",
-            "m_lampRect": "902,182,918,198"
+            "pName": "890,200",
+            "m_ptLamp": "902,182"
         },
         {
             "m_nType": 502,
             "m_strName": "允许转回",
-            "m_textRect": "950,200,990,220",
-            "m_lampRect": "962,182,978,198"
+            "pName": "950,200",
+            "m_ptLamp": "962,182"
         },
         {
             "m_nType": 503,
             "m_strName": "分散自律",
-            "m_textRect": "1010,200,1050,220",
-            "m_lampRect": "1022,182,1038,198"
+            "pName": "1010,200",
+            "m_ptLamp": "1022,182"
         },
         {
             "m_nType": 507,
             "m_strName": "列控",
-            "m_textRect": "1070,200,1110,220",
-            "m_lampRect": "1082,182,1098,198"
+            "pName": "1070,200",
+            "m_ptLamp": "1082,182"
         },
         {
             "m_nType": 508,
             "m_strName": "A机工作",
-            "m_textRect": "770,250,810,270",
-            "m_lampRect": "782,232,798,248"
+            "pName": "770,250",
+            "m_ptLamp": "782,232"
         },
         {
             "m_nType": 509,
             "m_strName": "A机状态",
-            "m_textRect": "830,250,870,270",
-            "m_lampRect": "842,232,858,248"
+            "pName": "830,250",
+            "m_ptLamp": "842,232"
         },
         {
             "m_nType": 510,
             "m_strName": "B机工作",
-            "m_textRect": "890,250,930,270",
-            "m_lampRect": "902,232,918,248"
+            "pName": "890,250",
+            "m_ptLamp": "902,232"
         },
         {
             "m_nType": 511,
             "m_strName": "B机状态",
-            "m_textRect": "950,250,990,270",
-            "m_lampRect": "962,232,978,248"
+            "pName": "950,250",
+            "m_ptLamp": "962,232"
         },
         {
             "m_nType": 504,
             "m_strName": "中心控制",
-            "m_textRect": "1010,250,1050,270",
-            "m_lampRect": "1022,232,1038,248"
+            "pName": "1010,250",
+            "m_ptLamp": "1022,232"
         },
         {
             "m_nType": 505,
             "m_strName": "车站调车",
-            "m_textRect": "1070,250,1110,270",
-            "m_lampRect": "1082,232,1098,248"
+            "pName": "1070,250",
+            "m_ptLamp": "1082,232"
         },
         {
             "m_nType": 506,
             "m_strName": "车站操作",
-            "m_textRect": "1130,250,1170,270",
-            "m_lampRect": "1142,232,1158,248"
+            "pName": "1130,250",
+            "m_ptLamp": "1142,232"
         }
     ],
     "#AutoBlock": "自动闭塞",
     "AutoBlock": [
         {
-            "#m_direction": "方向,如X,S,SN等",
-            "#m_nCode": "编号,xml文件中对应自动闭塞(<ZDBS>)的Code",
-            "##Allow": "允许发车",
-            "#Allow": {
-                "m_textRect": "文字范围",
-                "m_lampRect": "灯范围"
+            "#m_strName": "设备名称",
+            "#m_textRect": "设备名称坐标",
+            "#m_nType": "设备类型,固定250",
+            "#m_nCode": "编号,不能与其他设备Code重复",
+            "m_nSX": "上下行, 1-上行,0-下行",
+            "#m_Direction": "方向,如X,S,SN等(关联信号机名称)",
+            "#m_ArrowPoint": "箭头坐标",
+            "#m_RoutePoint": "进路窗左上角坐标",
+            "#m_FrameRect": "外框范围",
+            "#m_Button": {
+                "##ZFZ": "总辅助",
+                "#ZFZ": {
+                    "pName": "文字坐标",
+                    "m_ptBtn": "按钮坐标",
+                    "m_ptCountdown": "倒计时显示坐标",
+                    "m_textColor": "字体颜色,(0-白,1-红,2-黄,3-绿)"
+                },
+                "##JCFZ": "接车辅助,内容同上",
+                "##FCFZ": "发车辅助,内容同上",
+                "##YXGF": "允许改方,内容同上"
+
             },
-            "##Assisted": "辅助办理",
-            "#Assisted": {
-                "m_textRect": "文字范围",
-                "m_lampRect": "灯范围"
-            },
-            "##Supervise": "监督区间",
-            "#Supervise": {
-                "m_textRect": "文字范围",
-                "m_lampRect": "灯范围"
-            },
-            "##Section": "区间逻辑检查",
-            "#Section": {
-                "m_textRect": "文字范围",
-                "m_lampRect": "灯范围"
-            },
-            "Allow": {
-                "m_textRect": "文字范围",
-                "m_lampRect": "灯范围"
-            },
-            "Assisted": {
-                "m_textRect": "文字范围",
-                "m_lampRect": "灯范围"
-            },
-            "Supervise": {
-                "m_textRect": "文字范围",
-                "m_lampRect": "灯范围"
-            },
-            "Section": {
-                "m_textRect": "文字范围",
-                "m_lampRect": "灯范围"
-            },
-            "#m_routePoint": "进路窗左上角坐标"
-        },
-		    {
-            "m_direction": "XGN",
-            "m_nCode": "0x77",
-            "m_routePoint": "400,110",
-            "Allow": {
-                "m_textRect": "210,230, 290, 260",
-                "m_lampRect": "242, 210, 258, 226"
-            },
-            "Assisted": {
-                "m_textRect": "110,230, 190, 260",
-                "m_lampRect": "142, 210, 158, 226"
-            },
-            "##Supervise": "监督区间",
-            "Supervise": {
-                "m_textRect": "20,230, 100, 260",
-                "m_lampRect": "52, 210,68, 226"
-            },
-            "##Section": "XGN区间逻辑检查状态灯",
-            "Section": {
-                "m_textRect": "0,350, 200, 380",
-                "m_lampRect": "82, 330, 98, 346"
-			      }
-        },
-		    {
-            "m_direction": "SG",
-            "m_nCode": "0x79",
-			      "m_routePoint": "1410,110",
-            "Allow": {
-                "m_textRect": "1620,230, 1700, 260",
-                "m_lampRect": "1642, 210, 1658, 226"
-            },
-            "Assisted": {
-                "m_textRect": "1710,230, 1790, 260",
-                "m_lampRect": "1732, 210, 1748, 226"
-            },
-            "##Supervise": "监督区间",
-            "Supervise": {
-                "m_textRect": "1800,230, 1880, 260",
-                "m_lampRect": "1822, 210, 1838, 226"
-            },
-            "##Section": "区间逻辑检查",
-            "Section": {
-                "m_textRect": "1500,390, 1700, 420",
-                "m_lampRect": "1582, 370, 1598, 386"
+            "#m_Lamp": {
+                "##Allow": "允许发车",
+                "#Allow": {
+                    "pName": "文字坐标",
+                    "m_ptLamp": "灯光坐标",
+                    "m_textColor": "字体颜色,(0-白,1-红,2-黄,3-绿)"
+                },
+                "##Assisted": "辅助办理,内容同上",
+                "##Supervise": "监督区间,内容同上",
+                "##Section": "区间逻辑检查,内容同上"
             }
         },
-		    {
-            "m_direction": "XG",
-            "m_nCode": "0x78",
-            "m_routePoint": "410,730",
-            "Allow": {
-                "m_textRect": "210,830, 290, 860",
-                "m_lampRect": "242, 810, 258, 826"
-            },
-            "Assisted": {
-                "m_textRect": "110,830, 190, 860",
-                "m_lampRect": "142, 810, 158, 826"
-            },
-            "##Supervise": "XG监督区间",
-            "Supervise": {
-                "m_textRect": "20,830, 100, 860",
-                "m_lampRect": "52, 810,68, 826"
-            },
-            "##Section": "XG区间逻辑检查状态灯",
-            "Section": {
-                "m_textRect": "0,650, 200, 680",
-                "m_lampRect": "82, 630, 98, 646"
-            }
-        },
-		    {
-            "m_direction": "SGN",
+        {
+            "m_strName": "S",
+            "m_textRect": "200,100",
+            "m_nType": 250,
             "m_nCode": "0x7a",
-			      "m_routePoint": "1440,750",
-            "Allow": {
-                "m_textRect": "1620,830, 1700, 860",
-                "m_lampRect": "1642, 810, 1658, 826"
+            "m_nSX": 1,
+            "m_Direction": "S",
+            "m_ArrowPoint": "260,100",
+            "m_RoutePoint": "400,200",
+            "m_FrameRect": "180,100,260,180",
+            "m_textColor": 2,
+            "m_Button": {
+                "ZFZ": {
+                    "pName": "200,140",
+                    "m_ptBtn": "200,160",
+                    "m_textColor": 2
+                },
+                "JCFZ": {
+                    "pName": "260,140",
+                    "m_ptBtn": "260,160",
+                    "m_textColor": 2
+                },
+                "FCFZ": {
+                    "pName": "320,140",
+                    "m_ptBtn": "320,160",
+                    "m_textColor": 2
+                },
+                "YXGF": {
+                    "pName": "360,140",
+                    "m_ptBtn": "360,160",
+                    "m_textColor": 2
+                }
             },
-            "Assisted": {
-                "m_textRect": "1710,830, 1790, 860",
-                "m_lampRect": "1732, 810, 1748, 826"
+            "m_Lamp": {
+                "Allow": {
+                    "pName": "200,200",
+                    "m_ptLamp": "200,220"
+                },
+                "Assisted": {
+                    "pName": "240,200",
+                    "m_ptLamp": "240,220"
+                },
+                "Supervise": {
+                    "pName": "280,200",
+                    "m_ptLamp": "280,220"
+                },
+                "Section": {
+                    "pName": "320,200",
+                    "m_ptLamp": "320,220"
+                }
+            }
+        }
+    ],
+    "#SemiAutoBlock": "半自动闭塞",
+    "SemiAutoBlock": [
+        {
+            "#m_nCode": "编号,与Station.txt中BS对应设备相同",
+            "m_nSX": "上下行, 1-上行,0-下行",
+            "#m_Direction": "方向,如X,S,SN等(关联信号机名称)",
+            "#m_ArrowPoint": "箭头坐标",
+            "#m_FrameRect": "外框范围",
+            "#m_Button": {
+                "##BS": "闭塞",
+                "#BS": {
+                    "pName": "文字坐标",
+                    "m_ptBtn": "按钮坐标",
+                    "m_ptCountdown": "倒计时显示坐标",
+                    "m_textColor": "字体颜色,(0-白,1-红,2-黄,3-绿)"
+                },
+                "##SG": "事故,内容同上",
+                "##FY": "复原,内容同上"
             },
-            "##Supervise": "监督区间",
-            "Supervise": {
-                "m_textRect": "1800,830, 1880, 860",
-                "m_lampRect": "1822, 810, 1838, 826"
+            "#m_Lamp": {
+
+            }
+        },
+        {
+            "m_nCode": "0x73",
+            "m_nSX": 1,
+            "m_Direction": "SJ",
+            "m_ArrowPoint": "800,100",
+            "m_FrameRect": "780,80,960,160",
+            "m_textColor": 2,
+            "m_Button": {
+                "BS": {
+                    "pName": "800,120",
+                    "m_ptBtn": "800,140"
+                },
+                "SG": {
+                    "pName": "850,120",
+                    "m_ptBtn": "850,140",
+                    "m_textColor": 2
+                },
+                "FY": {
+                    "pName": "900,120",
+                    "m_ptBtn": "900,140"
+                }
             },
-            "##Section": "区间逻辑检查",
-            "Section": {
-                "m_textRect": "1500,650, 1700, 680",
-                "m_lampRect": "1582, 630, 1598, 646"
+            "m_Lamp": {
+
             }
         }
     ],
@@ -237,40 +241,40 @@
             "#p1": "按钮左上角坐标",
             "#p2": "按钮右下角坐标",
             "#m_nSX": "上下行: 0-S,1-X",
-            "#m_textRect": "文字范围",
+            "#pName": "文字范围",
             "#FontHeight": "字体大小,默认14"
         },
         {
             "m_nType": 540,
             "m_nCode": "0x7c",
             "m_strName": "X引导总锁",
-            "center": "520,1310",
-            "p1": "512,1274",
-            "p2": "528,1290",
+            "center": "1020,900",
+            "p1": "1015,880",
+            "p2": "1030,895",
             "m_nSX": 0,
-            "m_textRect": "990,900,1050,920",
+            "pName": "990,900,1050,920",
             "FontHeight": 14
         },
-		{
+        {
             "m_nType": 540,
             "m_nCode": " 0x7d",
             "m_strName": "S引导总锁",
-            "center": "620,1310",
-            "p1": "612,1274",
-            "p2": "628,1290",
+            "center": "1120,900",
+            "p1": "1115,880",
+            "p2": "1130,895",
             "m_nSX": 1,
-            "m_textRect": "1090,900,1150,920",
+            "pName": "1090,900,1150,920",
             "FontHeight": 14
         },
         {
             "m_nType": 541,
-            "m_nCode":  "0x7e",
+            "m_nCode": "0x7e",
             "m_strName": "故障通知",
-            "center": "420,1310",
-            "p1": "412,1274",
-            "p2": "428,1290",
+            "center": "920,900",
+            "p1": "915,880",
+            "p2": "930,895",
             "m_nSX": 0,
-            "m_textRect": "890,900,950,920",
+            "pName": "890,900,950,920",
             "FontHeight": 14
         }
     ],
@@ -279,105 +283,122 @@
         {
             "#m_nType": "类型,暂定统一为510",
             "#m_strName": "名称",
-            "#m_textRect": "文字范围",
+            "#pName": "文字范围",
             "#m_lampRect": "灯范围"
         },
         {
             "m_nType": 510,
             "m_strName": "XGN限速",
-            "m_textRect": "200, 360, 280, 390",
+            "pName": "200, 360, 280, 390",
             "m_lampRect": "232, 340, 248, 356"
         },
         {
             "m_nType": 510,
             "m_strName": "XG限速",
-            "m_textRect": "190,650, 270, 680",
+            "pName": "190,650, 270, 680",
             "m_lampRect": "222, 630,238, 646"
         },
         {
             "m_nType": 510,
             "m_strName": "SG限速",
-            "m_textRect": "1730, 390, 1810, 420",
+            "pName": "1730, 390, 1810, 420",
             "m_lampRect": "1762, 370, 1778, 386"
         },
         {
             "m_nType": 510,
             "m_strName": "SGN限速",
-            "m_textRect": "1730, 650, 1810, 680",
+            "pName": "1730, 650, 1810, 680",
             "m_lampRect": "1762, 630, 1778, 646"
         },
         {
             "m_nType": 510,
             "m_strName": "15G停稳",
-            "m_textRect": "770,300,810,320",
+            "pName": "770,300,810,320",
             "m_lampRect": "782,282,798,298"
         },
         {
             "m_nType": 510,
             "m_strName": "XIVG停稳",
-            "m_textRect": "830,300,870,320",
+            "pName": "830,300,870,320",
             "m_lampRect": "842,282,858,298"
         },
         {
             "m_nType": 510,
             "m_strName": "VIIIG停稳",
-            "m_textRect": "890,300,930,320",
+            "pName": "890,300,930,320",
             "m_lampRect": "902,282,918,298"
         },
         {
             "m_nType": 510,
             "m_strName": "12G停稳",
-            "m_textRect": "950,300,990,320",
+            "pName": "950,300,990,320",
             "m_lampRect": "962,282,978,298"
         },
         {
             "m_nType": 510,
             "m_strName": "11G停稳",
-            "m_textRect": "1010,300,1050,320",
+            "pName": "1010,300,1050,320",
             "m_lampRect": "1022,282,1038,298"
         },
         {
             "m_nType": 510,
             "m_strName": "10G停稳",
-            "m_textRect": "1070,300,1110,320",
+            "pName": "1070,300,1110,320",
             "m_lampRect": "1082,282,1098,298"
         },
         {
             "m_nType": 510,
             "m_strName": "9G停稳",
-            "m_textRect": "1130,300,1170,320",
+            "pName": "1130,300,1170,320",
             "m_lampRect": "1142,282,1158,298"
         },
-		{
+        {
             "m_nType": 510,
             "m_strName": "205/207#安全线道岔不在定位",
-            "m_textRect": "350, 360, 430, 390",
+            "pName": "350, 360, 430, 390",
             "m_lampRect": "382, 340, 398, 356"
         },
-		{
+        {
             "m_nType": 510,
             "m_strName": "上行侧线限速6",
-            "m_textRect": "550, 360, 630, 390",
+            "pName": "550, 360, 630, 390",
             "m_lampRect": "582, 340, 598, 356"
         },
-		{
+        {
             "m_nType": 510,
             "m_strName": "下行侧线限速5",
-            "m_textRect": "1400,650, 1600, 680",
+            "pName": "1400,650, 1600, 680",
             "m_lampRect": "1482, 630, 1498, 646"
         },
-		{
+        {
             "m_nType": 510,
             "m_strName": "X轨道停电",
-            "m_textRect": "1200,850, 1400, 880",
+            "pName": "1200,850, 1400, 880",
             "m_lampRect": "1282, 830, 1298, 846"
         },
-		{
+        {
             "m_nType": 510,
             "m_strName": "S轨道停电",
-            "m_textRect": "1300,850, 1500, 880",
+            "pName": "1300,850, 1500, 880",
             "m_lampRect": "1382, 830, 1398, 846"
-    }
+        }
+    ],
+    "#PermillSix": "千分之六",
+    "PermillSix": [
+        {
+            "#m_strName": "设备名称:6‰",
+            "#pName": "设备名称坐标",
+            "#p1": "横线起始坐标",
+            "#center": "两条线相交坐标",
+            "#p2": "斜线起始坐标"
+        },
+        {
+            "m_strName": "6‰",
+            "pName": "1055,765",
+            "p1": "1040,780",
+            "center": "1090,780",
+            "p2": "1120,810"
+        }
     ],
     "#Neutral": "分相区",
     "Neutral": [
@@ -393,7 +414,8 @@
             "#Text": [
                 {
                     "m_strContent": "文字内容",
-                    "m_textRect": "文字范围"
+                    "pName": "文字范围",
+                    "m_textColor": "字体颜色,(0-白,1-红,2-黄,3-绿)"
                 }
             ]
         },
@@ -411,33 +433,52 @@
             "Text": [
                 {
                     "m_strContent": "K4+515",
-                    "m_textRect": "960,140,1020,160"
+                    "pName": "960,140,1020,160"
                 },
                 {
                     "m_strContent": "K3+202",
-                    "m_textRect": "120,430,280,450"
+                    "pName": "120,430,280,450"
                 },
-				{
+                {
                     "m_strContent": "K3+202",
-                    "m_textRect": "120,580,280,600"
+                    "pName": "120,580,280,600"
                 },
-				{
+                {
                     "m_strContent": "K5+689",
-                    "m_textRect": "1620,430,1780,450"
+                    "pName": "1620,430,1780,450"
                 },
-				{
+                {
                     "m_strContent": "K5+691",
-                    "m_textRect": "1620,610,1780,630"
+                    "pName": "1620,610,1780,630"
                 },
-			    {
+                {
                     "m_strContent": "K0+609-K1+610",
-                    "m_textRect": "10,400,130,420"
+                    "pName": "-10,400,140,420"
                 },
-			    {
+                {
                     "m_strContent": "分相区",
-                    "m_textRect": "10,380,130,410"
+                    "pName": "-10,380,140,410"
                 }
             ]
+        }
+    ],
+    "#Mark": "标记(站台,信号楼等)",
+    "Mark": [
+        {
+            "#m_nType": "类型,具体值如下",
+            "#m_nTypeValue": {
+                "U型站台": 601,
+                "n型站台": 602,
+                "朝北信号楼": 611,
+                "朝南信号楼": 612
+            },
+            "#m_Color": "颜色(0-白,1-红,2-黄,3-绿)",
+            "#m_Rect": "显示范围"
+        },
+        {
+            "m_nType": 611,
+            "m_Color": 3,
+            "m_Rect": "540, 200, 600, 240"
         }
     ],
     "Direction": {

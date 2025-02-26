@@ -44,11 +44,13 @@ namespace Station {
         public:
             //初始化设备信息
             void InitDeviceInfoFromXml(QXmlStreamReader* pDeviceInfoReader, const QString& strDeviceType);
-            void InitInitDeviceInfoFromJson(const QJsonObject& object, const QString& strKey);
+            void InitDeviceInfoFromTxt(QStringList& strInfoList, const QString& strDeviceType);
+            void InitDeviceInfoFromJson(const QJsonObject& object);
         private:
             //读取设备属性
             void ReadDeviceAttributeFromXml(QXmlStreamReader* m_pDeviceInfoReader);
             void ReadDeviceAttributeFromJson(const QJsonObject& lampObject, const QString& strKey);
+            void ReadDeviceAttributeFromTxt(const QString& strKey, const QString& strValue);
             //绘制设备名称
             void DrawDeviceName();
             //设备点击事件
@@ -106,8 +108,8 @@ namespace Station {
             static void setElapsed() { m_bElapsed = !m_bElapsed; }
 
         public: //工具函数
-            static QRectF QStringToQRectF(QString strRect);
-            static QPointF QStringToQPointF(QString strRect);
+            static QRectF QStringToQRectF(const QString& strRect);
+            static QPointF QStringToQPointF(const QString& strPoint);
 
             QRectF OutSideRect(const QRectF& rect, int rx, int ry);
 
@@ -223,6 +225,7 @@ namespace Station {
             void setArrowState(const uint& nState) { m_nArrowState = nState; }
 
         protected:
+            QPointF ptArrow;
             QPointF p11, p12, p13, p14, p15, p16, p17;
             QPointF p21, p22, p23, p24, p25, p26, p27;
 
@@ -235,6 +238,25 @@ namespace Station {
 
         class StaDistant : public DeviceBase {
             Q_OBJECT
+        public:
+            struct StaBlockBtn
+            {
+                QString m_strName;
+                QRectF m_rcName;
+                QRectF m_rcBtn;
+                QPointF m_ptCountdown;
+                QColor m_cTextColor;
+            };
+
+            struct StaBlockLamp
+            {
+                QString m_strName;
+                QRectF m_rcName;
+                QRectF m_rcLamp;
+                uint m_nState = 0;
+                QColor m_cTextColor;
+            };
+
         public:
             explicit StaDistant(QObject* pParent = nullptr);
             ~StaDistant();

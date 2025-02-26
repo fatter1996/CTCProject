@@ -3,7 +3,7 @@
     <m_picWidth>1920</m_picWidth>
     <m_picHeight>1080</m_picHeight>
     <m_COMM_CHNL_NUM>2</m_COMM_CHNL_NUM>
-    <m_QDNUM>59</m_QDNUM>
+    <m_QDNUM>45</m_QDNUM>
     <m_GDNUM>0</m_GDNUM>
     <m_DCNUM>28</m_DCNUM>
     <m_TGQNUM>0</m_TGQNUM>
@@ -36,7 +36,7 @@
       <m_nType>23</m_nType>
       <m_strName>201</m_strName>
       <m_nCode>0x0</m_nCode>
-      <m_nQDCode>0x53</m_nQDCode>
+      <m_nQDCode>0x45</m_nQDCode>
       <m_nCxjy>16</m_nCxjy>
       <m_nDSCode>2</m_nDSCode>
       <InterlockBus>0</InterlockBus>
@@ -67,15 +67,15 @@
       <isSafetySwitch>0</isSafetySwitch>
       <FontHeight>12</FontHeight>
       <attr>0x20010</attr>
-      <m_nCQ>83</m_nCQ>
+      <m_nCQ>69</m_nCQ>
       <m_nDW>3</m_nDW>
-      <m_nFW>105</m_nFW>
+      <m_nFW>91</m_nFW>
     </DC>
     <DC>
       <m_nType>21</m_nType>
       <m_strName>203</m_strName>
       <m_nCode>0x1</m_nCode>
-      <m_nQDCode>0x54</m_nQDCode>
+      <m_nQDCode>0x46</m_nQDCode>
       <m_nCxjy>0</m_nCxjy>
       <m_nDSCode>2</m_nDSCode>
       <InterlockBus>0</InterlockBus>
@@ -106,15 +106,15 @@
       <isSafetySwitch>0</isSafetySwitch>
       <FontHeight>12</FontHeight>
       <attr>0x20010</attr>
-      <m_nCQ>84</m_nCQ>
+      <m_nCQ>70</m_nCQ>
       <m_nDW>39</m_nDW>
-      <m_nFW>105</m_nFW>
+      <m_nFW>91</m_nFW>
     </DC>
     <DC>
       <m_nType>23</m_nType>
       <m_strName>205</m_strName>
       <m_nCode>0x2</m_nCode>
-      <m_nQDCode>0x55</m_nQDCode>
+      <m_nQDCode>0x47</m_nQDCode>
       <m_nCxjy>0</m_nCxjy>
       <m_nDSCode>2</m_nDSCode>
       <InterlockBus>0</InterlockBus>
@@ -145,15 +145,15 @@
       <isSafetySwitch>0</isSafetySwitch>
       <FontHeight>12</FontHeight>
       <attr>0x20010</attr>
-      <m_nCQ>85</m_nCQ>
+      <m_nCQ>71</m_nCQ>
       <m_nDW>9</m_nDW>
-      <m_nFW>106</m_nFW>
+      <m_nFW>92</m_nFW>
     </DC>
     <DC>
       <m_nType>21</m_nType>
       <m_strName>207</m_strName>
       <m_nCode>0x3</m_nCode>
-      <m_nQDCode>0x56</m_nQDCode>
+      <m_nQDCode>0x48</m_nQDCode>
       <m_nCxjy>16</m_nCxjy>
       <m_nDSCode>2</m_nDSCode>
       <InterlockBus>0</InterlockBus>
@@ -184,15 +184,15 @@
       <isSafetySwitch>0</isSafetySwitch>
       <FontHeight>12</FontHeight>
       <attr>0x20010</attr>
-      <m_nCQ>86</m_nCQ>
+      <m_nCQ>72</m_nCQ>
       <m_nDW>0</m_nDW>
-      <m_nFW>106</m_nFW>
+      <m_nFW>92</m_nFW>
     </DC>
     <DC>
       <m_nType>22</m_nType>
       <m_strName>211</m_strName>
       <m_nCode>0x4</m_nCode>
-      <m_nQDCode>0x57</m_nQDCode>
+      <m_nQDCode>0x49</m_nQDCode>
       <m_nCxjy>0</m_nCxjy>
       <m_nDSCode>2</m_nDSCode>
       <InterlockBus>0</InterlockBus>
@@ -223,15 +223,15 @@
       <isSafetySwitch>0</isSafetySwitch>
       <FontHeight>12</FontHeight>
       <attr>0x10010</attr>
-      <m_nCQ>87</m_nCQ>
-      <m_nDW>86</m_nDW>
-      <m_nFW>107</m_nFW>
+      <m_nCQ>73</m_nCQ>
+      <m_nDW>72</m_nDW>
+      <m_nFW>93</m_nFW>
     </DC>
     <DC>
       <m_nType>24</m_nType>
       <m_strName>209</m_strName>
       <m_nCode>0x5</m_nCode>
-      <m_nQDCode>0x54</m_nQDCode>
+      <m_nQDCode>0x46</m_nQDCode>
       <m_nCxjy>16</m_nCxjy>
       <m_nDSCode>2</m_nDSCode>
       <InterlockBus>0</InterlockBus>
@@ -262,15 +262,15 @@
       <isSafetySwitch>0</isSafetySwitch>
       <FontHeight>12</FontHeight>
       <attr>0x10010</attr>
-      <m_nCQ>84</m_nCQ>
+      <m_nCQ>70</m_nCQ>
       <m_nDW>6</m_nDW>
-      <m_nFW>107</m_nFW>
+      <m_nFW>93</m_nFW>
     </DC>
     <DC>
       <m_nType>22</m_nType>
       <m_strName>215</m_strName>
       <m_nCode>0x6</m_nCode>
-      <m_nQDCode>0x58</m_nQDCode>
+      <m_nQDCode>0x4a</m_nQDCode>
       <m_nCxjy>16</m_nCxjy>
       <m_nDSCode>2</m_nDSCode>
       <InterlockBus>0</InterlockBus>
@@ -301,15 +301,15 @@
       <isSafetySwitch>0</isSafetySwitch>
       <FontHeight>12</FontHeight>
       <attr>0x10010</attr>
-      <m_nCQ>88</m_nCQ>
+      <m_nCQ>74</m_nCQ>
       <m_nDW>5</m_nDW>
-      <m_nFW>108</m_nFW>
+      <m_nFW>94</m_nFW>
     </DC>
     <DC>
       <m_nType>24</m_nType>
       <m_strName>213</m_strName>
       <m_nCode>0x7</m_nCode>
-      <m_nQDCode>0x59</m_nQDCode>
+      <m_nQDCode>0x4b</m_nQDCode>
       <m_nCxjy>0</m_nCxjy>
       <m_nDSCode>2</m_nDSCode>
       <InterlockBus>0</InterlockBus>
@@ -340,15 +340,15 @@
       <isSafetySwitch>0</isSafetySwitch>
       <FontHeight>12</FontHeight>
       <attr>0x10010</attr>
-      <m_nCQ>89</m_nCQ>
+      <m_nCQ>75</m_nCQ>
       <m_nDW>11</m_nDW>
-      <m_nFW>108</m_nFW>
+      <m_nFW>94</m_nFW>
     </DC>
     <DC>
       <m_nType>24</m_nType>
       <m_strName>217</m_strName>
       <m_nCode>0x8</m_nCode>
-      <m_nQDCode>0x57</m_nQDCode>
+      <m_nQDCode>0x49</m_nQDCode>
       <m_nCxjy>0</m_nCxjy>
       <m_nDSCode>2</m_nDSCode>
       <InterlockBus>0</InterlockBus>
@@ -379,15 +379,15 @@
       <isSafetySwitch>0</isSafetySwitch>
       <FontHeight>12</FontHeight>
       <attr>0x10010</attr>
-      <m_nCQ>87</m_nCQ>
-      <m_nDW>94</m_nDW>
+      <m_nCQ>73</m_nCQ>
+      <m_nDW>80</m_nDW>
       <m_nFW>9</m_nFW>
     </DC>
     <DC>
       <m_nType>22</m_nType>
       <m_strName>219</m_strName>
       <m_nCode>0x9</m_nCode>
-      <m_nQDCode>0x5a</m_nQDCode>
+      <m_nQDCode>0x4c</m_nQDCode>
       <m_nCxjy>0</m_nCxjy>
       <m_nDSCode>2</m_nDSCode>
       <InterlockBus>0</InterlockBus>
@@ -418,7 +418,7 @@
       <isSafetySwitch>0</isSafetySwitch>
       <FontHeight>12</FontHeight>
       <attr>0x10010</attr>
-      <m_nCQ>90</m_nCQ>
+      <m_nCQ>76</m_nCQ>
       <m_nDW>2</m_nDW>
       <m_nFW>8</m_nFW>
     </DC>
@@ -426,7 +426,7 @@
       <m_nType>23</m_nType>
       <m_strName>221</m_strName>
       <m_nCode>0xa</m_nCode>
-      <m_nQDCode>0x58</m_nQDCode>
+      <m_nQDCode>0x4a</m_nQDCode>
       <m_nCxjy>0</m_nCxjy>
       <m_nDSCode>2</m_nDSCode>
       <InterlockBus>0</InterlockBus>
@@ -457,15 +457,15 @@
       <isSafetySwitch>0</isSafetySwitch>
       <FontHeight>12</FontHeight>
       <attr>0x20010</attr>
-      <m_nCQ>88</m_nCQ>
-      <m_nDW>96</m_nDW>
+      <m_nCQ>74</m_nCQ>
+      <m_nDW>82</m_nDW>
       <m_nFW>11</m_nFW>
     </DC>
     <DC>
       <m_nType>21</m_nType>
       <m_strName>223</m_strName>
       <m_nCode>0xb</m_nCode>
-      <m_nQDCode>0x5b</m_nQDCode>
+      <m_nQDCode>0x4d</m_nQDCode>
       <m_nCxjy>0</m_nCxjy>
       <m_nDSCode>2</m_nDSCode>
       <InterlockBus>0</InterlockBus>
@@ -496,7 +496,7 @@
       <isSafetySwitch>0</isSafetySwitch>
       <FontHeight>12</FontHeight>
       <attr>0x20010</attr>
-      <m_nCQ>91</m_nCQ>
+      <m_nCQ>77</m_nCQ>
       <m_nDW>7</m_nDW>
       <m_nFW>10</m_nFW>
     </DC>
@@ -504,7 +504,7 @@
       <m_nType>23</m_nType>
       <m_strName>225</m_strName>
       <m_nCode>0xc</m_nCode>
-      <m_nQDCode>0x5b</m_nQDCode>
+      <m_nQDCode>0x4d</m_nQDCode>
       <m_nCxjy>48</m_nCxjy>
       <m_nDSCode>1</m_nDSCode>
       <InterlockBus>0</InterlockBus>
@@ -535,15 +535,15 @@
       <isSafetySwitch>0</isSafetySwitch>
       <FontHeight>12</FontHeight>
       <attr>0x20000</attr>
-      <m_nCQ>91</m_nCQ>
-      <m_nDW>111</m_nDW>
-      <m_nFW>110</m_nFW>
+      <m_nCQ>77</m_nCQ>
+      <m_nDW>97</m_nDW>
+      <m_nFW>96</m_nFW>
     </DC>
     <DC>
       <m_nType>23</m_nType>
       <m_strName>235</m_strName>
       <m_nCode>0xd</m_nCode>
-      <m_nQDCode>0x5c</m_nQDCode>
+      <m_nQDCode>0x4e</m_nQDCode>
       <m_nCxjy>40</m_nCxjy>
       <m_nDSCode>1</m_nDSCode>
       <InterlockBus>0</InterlockBus>
@@ -574,15 +574,15 @@
       <isSafetySwitch>0</isSafetySwitch>
       <FontHeight>12</FontHeight>
       <attr>0x20000</attr>
-      <m_nCQ>92</m_nCQ>
-      <m_nDW>112</m_nDW>
-      <m_nFW>93</m_nFW>
+      <m_nCQ>78</m_nCQ>
+      <m_nDW>98</m_nDW>
+      <m_nFW>79</m_nFW>
     </DC>
     <DC>
       <m_nType>23</m_nType>
       <m_strName>237</m_strName>
       <m_nCode>0xe</m_nCode>
-      <m_nQDCode>0x5d</m_nQDCode>
+      <m_nQDCode>0x4f</m_nQDCode>
       <m_nCxjy>8</m_nCxjy>
       <m_nDSCode>1</m_nDSCode>
       <InterlockBus>0</InterlockBus>
@@ -613,7 +613,7 @@
       <isSafetySwitch>0</isSafetySwitch>
       <FontHeight>12</FontHeight>
       <attr>0x20000</attr>
-      <m_nCQ>93</m_nCQ>
+      <m_nCQ>79</m_nCQ>
       <m_nDW>33</m_nDW>
       <m_nFW>34</m_nFW>
     </DC>
@@ -621,7 +621,7 @@
       <m_nType>24</m_nType>
       <m_strName>227</m_strName>
       <m_nCode>0xf</m_nCode>
-      <m_nQDCode>0x5e</m_nQDCode>
+      <m_nQDCode>0x50</m_nQDCode>
       <m_nCxjy>0</m_nCxjy>
       <m_nDSCode>2</m_nDSCode>
       <InterlockBus>0</InterlockBus>
@@ -652,7 +652,7 @@
       <isSafetySwitch>0</isSafetySwitch>
       <FontHeight>12</FontHeight>
       <attr>0x10010</attr>
-      <m_nCQ>94</m_nCQ>
+      <m_nCQ>80</m_nCQ>
       <m_nDW>29</m_nDW>
       <m_nFW>16</m_nFW>
     </DC>
@@ -660,7 +660,7 @@
       <m_nType>22</m_nType>
       <m_strName>229</m_strName>
       <m_nCode>0x10</m_nCode>
-      <m_nQDCode>0x5f</m_nQDCode>
+      <m_nQDCode>0x51</m_nQDCode>
       <m_nCxjy>0</m_nCxjy>
       <m_nDSCode>2</m_nDSCode>
       <InterlockBus>0</InterlockBus>
@@ -691,15 +691,15 @@
       <isSafetySwitch>0</isSafetySwitch>
       <FontHeight>12</FontHeight>
       <attr>0x10010</attr>
-      <m_nCQ>95</m_nCQ>
-      <m_nDW>90</m_nDW>
+      <m_nCQ>81</m_nCQ>
+      <m_nDW>76</m_nDW>
       <m_nFW>15</m_nFW>
     </DC>
     <DC>
       <m_nType>23</m_nType>
       <m_strName>231</m_strName>
       <m_nCode>0x11</m_nCode>
-      <m_nQDCode>0x60</m_nQDCode>
+      <m_nQDCode>0x52</m_nQDCode>
       <m_nCxjy>0</m_nCxjy>
       <m_nDSCode>2</m_nDSCode>
       <InterlockBus>0</InterlockBus>
@@ -730,15 +730,15 @@
       <isSafetySwitch>0</isSafetySwitch>
       <FontHeight>12</FontHeight>
       <attr>0x20010</attr>
-      <m_nCQ>96</m_nCQ>
+      <m_nCQ>82</m_nCQ>
       <m_nDW>30</m_nDW>
-      <m_nFW>109</m_nFW>
+      <m_nFW>95</m_nFW>
     </DC>
     <DC>
       <m_nType>21</m_nType>
       <m_strName>233</m_strName>
       <m_nCode>0x12</m_nCode>
-      <m_nQDCode>0x61</m_nQDCode>
+      <m_nQDCode>0x53</m_nQDCode>
       <m_nCxjy>16</m_nCxjy>
       <m_nDSCode>2</m_nDSCode>
       <InterlockBus>0</InterlockBus>
@@ -769,15 +769,15 @@
       <isSafetySwitch>0</isSafetySwitch>
       <FontHeight>12</FontHeight>
       <attr>0x20010</attr>
-      <m_nCQ>97</m_nCQ>
-      <m_nDW>111</m_nDW>
-      <m_nFW>109</m_nFW>
+      <m_nCQ>83</m_nCQ>
+      <m_nDW>97</m_nDW>
+      <m_nFW>95</m_nFW>
     </DC>
     <DC>
       <m_nType>21</m_nType>
       <m_strName>218</m_strName>
       <m_nCode>0x13</m_nCode>
-      <m_nQDCode>0x62</m_nQDCode>
+      <m_nQDCode>0x54</m_nQDCode>
       <m_nCxjy>0</m_nCxjy>
       <m_nDSCode>1</m_nDSCode>
       <InterlockBus>0</InterlockBus>
@@ -808,7 +808,7 @@
       <isSafetySwitch>0</isSafetySwitch>
       <FontHeight>12</FontHeight>
       <attr>0x10020000</attr>
-      <m_nCQ>98</m_nCQ>
+      <m_nCQ>84</m_nCQ>
       <m_nDW>41</m_nDW>
       <m_nFW>40</m_nFW>
     </DC>
@@ -816,7 +816,7 @@
       <m_nType>22</m_nType>
       <m_strName>216</m_strName>
       <m_nCode>0x14</m_nCode>
-      <m_nQDCode>0x63</m_nQDCode>
+      <m_nQDCode>0x55</m_nQDCode>
       <m_nCxjy>8</m_nCxjy>
       <m_nDSCode>1</m_nDSCode>
       <InterlockBus>0</InterlockBus>
@@ -847,7 +847,7 @@
       <isSafetySwitch>0</isSafetySwitch>
       <FontHeight>12</FontHeight>
       <attr>0x10010000</attr>
-      <m_nCQ>99</m_nCQ>
+      <m_nCQ>85</m_nCQ>
       <m_nDW>42</m_nDW>
       <m_nFW>43</m_nFW>
     </DC>
@@ -855,7 +855,7 @@
       <m_nType>22</m_nType>
       <m_strName>214</m_strName>
       <m_nCode>0x15</m_nCode>
-      <m_nQDCode>0x64</m_nQDCode>
+      <m_nQDCode>0x56</m_nQDCode>
       <m_nCxjy>40</m_nCxjy>
       <m_nDSCode>1</m_nDSCode>
       <InterlockBus>0</InterlockBus>
@@ -886,15 +886,15 @@
       <isSafetySwitch>0</isSafetySwitch>
       <FontHeight>12</FontHeight>
       <attr>0x10010000</attr>
-      <m_nCQ>100</m_nCQ>
-      <m_nDW>114</m_nDW>
-      <m_nFW>99</m_nFW>
+      <m_nCQ>86</m_nCQ>
+      <m_nDW>100</m_nDW>
+      <m_nFW>85</m_nFW>
     </DC>
     <DC>
       <m_nType>22</m_nType>
       <m_strName>210</m_strName>
       <m_nCode>0x16</m_nCode>
-      <m_nQDCode>0x65</m_nQDCode>
+      <m_nQDCode>0x57</m_nQDCode>
       <m_nCxjy>32</m_nCxjy>
       <m_nDSCode>1</m_nDSCode>
       <InterlockBus>0</InterlockBus>
@@ -925,15 +925,15 @@
       <isSafetySwitch>0</isSafetySwitch>
       <FontHeight>12</FontHeight>
       <attr>0x10010000</attr>
-      <m_nCQ>101</m_nCQ>
-      <m_nDW>113</m_nDW>
-      <m_nFW>100</m_nFW>
+      <m_nCQ>87</m_nCQ>
+      <m_nDW>99</m_nDW>
+      <m_nFW>86</m_nFW>
     </DC>
     <DC>
       <m_nType>21</m_nType>
       <m_strName>212</m_strName>
       <m_nCode>0x17</m_nCode>
-      <m_nQDCode>0x66</m_nQDCode>
+      <m_nQDCode>0x58</m_nQDCode>
       <m_nCxjy>0</m_nCxjy>
       <m_nDSCode>1</m_nDSCode>
       <InterlockBus>0</InterlockBus>
@@ -965,14 +965,14 @@
       <FontHeight>12</FontHeight>
       <attr>0x10020000</attr>
       <m_nCQ>25</m_nCQ>
-      <m_nDW>68</m_nDW>
-      <m_nFW>69</m_nFW>
+      <m_nDW>54</m_nDW>
+      <m_nFW>55</m_nFW>
     </DC>
     <DC>
       <m_nType>24</m_nType>
       <m_strName>208</m_strName>
       <m_nCode>0x18</m_nCode>
-      <m_nQDCode>0x65</m_nQDCode>
+      <m_nQDCode>0x57</m_nQDCode>
       <m_nCxjy>0</m_nCxjy>
       <m_nDSCode>2</m_nDSCode>
       <InterlockBus>0</InterlockBus>
@@ -1003,7 +1003,7 @@
       <isSafetySwitch>0</isSafetySwitch>
       <FontHeight>12</FontHeight>
       <attr>0x10010010</attr>
-      <m_nCQ>101</m_nCQ>
+      <m_nCQ>87</m_nCQ>
       <m_nDW>27</m_nDW>
       <m_nFW>25</m_nFW>
     </DC>
@@ -1011,7 +1011,7 @@
       <m_nType>22</m_nType>
       <m_strName>206</m_strName>
       <m_nCode>0x19</m_nCode>
-      <m_nQDCode>0x66</m_nQDCode>
+      <m_nQDCode>0x58</m_nQDCode>
       <m_nCxjy>0</m_nCxjy>
       <m_nDSCode>2</m_nDSCode>
       <InterlockBus>0</InterlockBus>
@@ -1042,7 +1042,7 @@
       <isSafetySwitch>0</isSafetySwitch>
       <FontHeight>12</FontHeight>
       <attr>0x10010010</attr>
-      <m_nCQ>102</m_nCQ>
+      <m_nCQ>88</m_nCQ>
       <m_nDW>23</m_nDW>
       <m_nFW>24</m_nFW>
     </DC>
@@ -1050,7 +1050,7 @@
       <m_nType>23</m_nType>
       <m_strName>204</m_strName>
       <m_nCode>0x1a</m_nCode>
-      <m_nQDCode>0x67</m_nQDCode>
+      <m_nQDCode>0x59</m_nQDCode>
       <m_nCxjy>0</m_nCxjy>
       <m_nDSCode>2</m_nDSCode>
       <InterlockBus>0</InterlockBus>
@@ -1081,7 +1081,7 @@
       <isSafetySwitch>0</isSafetySwitch>
       <FontHeight>12</FontHeight>
       <attr>0x10020010</attr>
-      <m_nCQ>103</m_nCQ>
+      <m_nCQ>89</m_nCQ>
       <m_nDW>44</m_nDW>
       <m_nFW>27</m_nFW>
     </DC>
@@ -1089,7 +1089,7 @@
       <m_nType>21</m_nType>
       <m_strName>202</m_strName>
       <m_nCode>0x1b</m_nCode>
-      <m_nQDCode>0x68</m_nQDCode>
+      <m_nQDCode>0x5a</m_nQDCode>
       <m_nCxjy>0</m_nCxjy>
       <m_nDSCode>2</m_nDSCode>
       <InterlockBus>0</InterlockBus>
@@ -1120,7 +1120,7 @@
       <isSafetySwitch>0</isSafetySwitch>
       <FontHeight>12</FontHeight>
       <attr>0x10020010</attr>
-      <m_nCQ>104</m_nCQ>
+      <m_nCQ>90</m_nCQ>
       <m_nDW>24</m_nDW>
       <m_nFW>26</m_nFW>
     </DC>
@@ -1148,7 +1148,7 @@
       <safeLamp>XHD_HD</safeLamp>
       <isHigh>0</isHigh>
       <SingleDeng>0</SingleDeng>
-      <attr>0x6010640c</attr>
+      <attr>0x6080640c</attr>
       <FontHeight>12</FontHeight>
       <isMD>0</isMD>
     </XHD>
@@ -1176,7 +1176,7 @@
       <safeLamp>XHD_HD</safeLamp>
       <isHigh>0</isHigh>
       <SingleDeng>0</SingleDeng>
-      <attr>0x6010640c</attr>
+      <attr>0x6090640c</attr>
       <FontHeight>12</FontHeight>
       <isMD>0</isMD>
     </XHD>
@@ -1204,7 +1204,7 @@
       <safeLamp>XHD_HD</safeLamp>
       <isHigh>0</isHigh>
       <SingleDeng>0</SingleDeng>
-      <attr>0x6010640c</attr>
+      <attr>0x6080640c</attr>
       <FontHeight>12</FontHeight>
       <isMD>0</isMD>
     </XHD>
@@ -1232,7 +1232,7 @@
       <safeLamp>XHD_HD</safeLamp>
       <isHigh>0</isHigh>
       <SingleDeng>0</SingleDeng>
-      <attr>0x6010640c</attr>
+      <attr>0x6000640c</attr>
       <FontHeight>12</FontHeight>
       <isMD>0</isMD>
     </XHD>
@@ -1260,7 +1260,7 @@
       <safeLamp>XHD_HD</safeLamp>
       <isHigh>0</isHigh>
       <SingleDeng>0</SingleDeng>
-      <attr>0x6010640c</attr>
+      <attr>0x6080640c</attr>
       <FontHeight>12</FontHeight>
       <isMD>0</isMD>
     </XHD>
@@ -1288,7 +1288,7 @@
       <safeLamp>XHD_HD</safeLamp>
       <isHigh>0</isHigh>
       <SingleDeng>0</SingleDeng>
-      <attr>0x6010640c</attr>
+      <attr>0x6080640c</attr>
       <FontHeight>12</FontHeight>
       <isMD>0</isMD>
     </XHD>
@@ -1316,7 +1316,7 @@
       <safeLamp>XHD_HD</safeLamp>
       <isHigh>0</isHigh>
       <SingleDeng>0</SingleDeng>
-      <attr>0x6010640c</attr>
+      <attr>0x6080640c</attr>
       <FontHeight>12</FontHeight>
       <isMD>0</isMD>
     </XHD>
@@ -1344,7 +1344,7 @@
       <safeLamp>XHD_HD</safeLamp>
       <isHigh>0</isHigh>
       <SingleDeng>0</SingleDeng>
-      <attr>0x7010640c</attr>
+      <attr>0x7080640c</attr>
       <FontHeight>12</FontHeight>
       <isMD>0</isMD>
     </XHD>
@@ -1372,7 +1372,7 @@
       <safeLamp>XHD_HD</safeLamp>
       <isHigh>0</isHigh>
       <SingleDeng>0</SingleDeng>
-      <attr>0x7010640c</attr>
+      <attr>0x7080640c</attr>
       <FontHeight>12</FontHeight>
       <isMD>0</isMD>
     </XHD>
@@ -1400,7 +1400,7 @@
       <safeLamp>XHD_HD</safeLamp>
       <isHigh>0</isHigh>
       <SingleDeng>0</SingleDeng>
-      <attr>0x7010640c</attr>
+      <attr>0x7080640c</attr>
       <FontHeight>12</FontHeight>
       <isMD>0</isMD>
     </XHD>
@@ -1484,7 +1484,7 @@
       <safeLamp>XHD_HD</safeLamp>
       <isHigh>0</isHigh>
       <SingleDeng>0</SingleDeng>
-      <attr>0x7010640c</attr>
+      <attr>0x7080640c</attr>
       <FontHeight>12</FontHeight>
       <isMD>0</isMD>
     </XHD>
@@ -1512,7 +1512,7 @@
       <safeLamp>XHD_HD</safeLamp>
       <isHigh>0</isHigh>
       <SingleDeng>0</SingleDeng>
-      <attr>0x7010640c</attr>
+      <attr>0x7080640c</attr>
       <FontHeight>12</FontHeight>
       <isMD>0</isMD>
     </XHD>
@@ -1540,7 +1540,7 @@
       <safeLamp>XHD_HD</safeLamp>
       <isHigh>0</isHigh>
       <SingleDeng>0</SingleDeng>
-      <attr>0x7010640c</attr>
+      <attr>0x7080640c</attr>
       <FontHeight>12</FontHeight>
       <isMD>0</isMD>
     </XHD>
@@ -1568,7 +1568,7 @@
       <safeLamp>XHD_HD</safeLamp>
       <isHigh>0</isHigh>
       <SingleDeng>0</SingleDeng>
-      <attr>0x7010640c</attr>
+      <attr>0x7080640c</attr>
       <FontHeight>12</FontHeight>
       <isMD>0</isMD>
     </XHD>
@@ -1634,9 +1634,10 @@
       <m_nCode>0x2e</m_nCode>
       <InterlockBus>0</InterlockBus>
       <Module_Code>2A01</Module_Code>
+	  <GD_Type>GD_QD</GD_Type>
       <m_nZ>0</m_nZ>
       <m_nSX>1</m_nSX>
-      <m_textRect>909,394,939,409</m_textRect>
+      <m_textRect>930,394,960,409</m_textRect>
       <p1>875,410</p1>
       <p2>875,420</p2>
       <p3>1220,410</p3>
@@ -1645,8 +1646,8 @@
       <p34>1220,415</p34>
       <pz12>905,415</pz12>
       <pz34>965,415</pz34>
-      <center>917,415</center>
-      <attr>0x0d</attr>
+      <center>1040,415</center>
+      <attr>0xd</attr>
       <FontHeight>12</FontHeight>
     </GD>
     <GD>
@@ -1655,9 +1656,10 @@
       <m_nCode>0x2f</m_nCode>
       <InterlockBus>0</InterlockBus>
       <Module_Code>2A02</Module_Code>
+	  <GD_Type>ZX_GD</GD_Type>
       <m_nZ>0</m_nZ>
       <m_nSX>1</m_nSX>
-      <m_textRect>909,464,946,479</m_textRect>
+      <m_textRect>930,464,960,479</m_textRect>
       <p1>875,480</p1>
       <p2>875,490</p2>
       <p3>1220,480</p3>
@@ -1666,8 +1668,8 @@
       <p34>1220,485</p34>
       <pz12>905,485</pz12>
       <pz34>965,485</pz34>
-      <center>917,485</center>
-      <attr>0x0d</attr>
+      <center>1040,485</center>
+      <attr>0xd</attr>
       <FontHeight>12</FontHeight>
     </GD>
     <GD>
@@ -1676,9 +1678,10 @@
       <m_nCode>0x30</m_nCode>
       <InterlockBus>0</InterlockBus>
       <Module_Code>2A03</Module_Code>
+	  <GD_Type>ZX_GD</GD_Type>
       <m_nZ>0</m_nZ>
       <m_nSX>1</m_nSX>
-      <m_textRect>909,534,954,549</m_textRect>
+      <m_textRect>930,534,960,549</m_textRect>
       <p1>875,550</p1>
       <p2>875,560</p2>
       <p3>1220,550</p3>
@@ -1687,8 +1690,8 @@
       <p34>1220,555</p34>
       <pz12>905,555</pz12>
       <pz34>965,555</pz34>
-      <center>917,555</center>
-      <attr>0x0d</attr>
+      <center>1040,555</center>
+      <attr>0xd</attr>
       <FontHeight>12</FontHeight>
     </GD>
     <GD>
@@ -1697,9 +1700,10 @@
       <m_nCode>0x31</m_nCode>
       <InterlockBus>0</InterlockBus>
       <Module_Code>2A04</Module_Code>
+	  <GD_Type>GD_QD</GD_Type>
       <m_nZ>0</m_nZ>
       <m_nSX>1</m_nSX>
-      <m_textRect>909,604,939,619</m_textRect>
+      <m_textRect>920,604,950,619</m_textRect>
       <p1>875,620</p1>
       <p2>875,630</p2>
       <p3>1170,620</p3>
@@ -1708,8 +1712,8 @@
       <p34>1170,625</p34>
       <pz12>905,625</pz12>
       <pz34>965,625</pz34>
-      <center>917,625</center>
-      <attr>0x0d</attr>
+      <center>1020,625</center>
+      <attr>0xd</attr>
       <FontHeight>12</FontHeight>
     </GD>
     <GD>
@@ -1718,9 +1722,10 @@
       <m_nCode>0x32</m_nCode>
       <InterlockBus>0</InterlockBus>
       <Module_Code>2B01</Module_Code>
+	  <GD_Type>GD_QD</GD_Type>
       <m_nZ>0</m_nZ>
       <m_nSX>1</m_nSX>
-      <m_textRect>909,674,939,689</m_textRect>
+      <m_textRect>920,674,950,689</m_textRect>
       <p1>875,690</p1>
       <p2>875,700</p2>
       <p3>1170,690</p3>
@@ -1729,8 +1734,8 @@
       <p34>1170,695</p34>
       <pz12>905,695</pz12>
       <pz34>965,695</pz34>
-      <center>917,695</center>
-      <attr>0x0d</attr>
+      <center>1020,695</center>
+      <attr>0xd</attr>
       <FontHeight>12</FontHeight>
     </GD>
     <GD>
@@ -1739,9 +1744,10 @@
       <m_nCode>0x33</m_nCode>
       <InterlockBus>0</InterlockBus>
       <Module_Code>2B02</Module_Code>
+	  <GD_Type>GD_QD</GD_Type>
       <m_nZ>0</m_nZ>
       <m_nSX>1</m_nSX>
-      <m_textRect>909,744,939,759</m_textRect>
+      <m_textRect>920,744,950,759</m_textRect>
       <p1>875,760</p1>
       <p2>875,770</p2>
       <p3>1175,760</p3>
@@ -1750,8 +1756,8 @@
       <p34>1175,765</p34>
       <pz12>905,765</pz12>
       <pz34>965,765</pz34>
-      <center>917,765</center>
-      <attr>0x0d</attr>
+      <center>1020,765</center>
+      <attr>0xd</attr>
       <FontHeight>12</FontHeight>
     </GD>
     <GD>
@@ -1760,9 +1766,10 @@
       <m_nCode>0x34</m_nCode>
       <InterlockBus>0</InterlockBus>
       <Module_Code>2B03</Module_Code>
+	  <GD_Type>GD_QD</GD_Type>
       <m_nZ>0</m_nZ>
       <m_nSX>1</m_nSX>
-      <m_textRect>914,814,936,829</m_textRect>
+      <m_textRect>920,814,950,829</m_textRect>
       <p1>875,830</p1>
       <p2>875,840</p2>
       <p3>1175,830</p3>
@@ -1771,308 +1778,14 @@
       <p34>1175,835</p34>
       <pz12>905,835</pz12>
       <pz34>965,835</pz34>
-      <center>917,835</center>
-      <attr>0x0d</attr>
-      <FontHeight>12</FontHeight>
-    </GD>
-    <GD>
-      <m_nType>1</m_nType>
-      <m_strName>15G2</m_strName>
-      <m_nCode>0x35</m_nCode>
-      <InterlockBus>0</InterlockBus>
-      <Module_Code>2B04</Module_Code>
-      <m_nZ>0</m_nZ>
-      <m_nSX>1</m_nSX>
-      <m_textRect>-9991004,-999394,-9991034,-999409</m_textRect>
-      <p1>-999960,410</p1>
-      <p2>-999960,420</p2>
-      <p3>-9991080,410</p3>
-      <p4>-9991080,420</p4>
-      <p12>-999960,415</p12>
-      <p34>-9991080,415</p34>
-      <pz12>-999990,415</pz12>
-      <pz34>-9991050,415</pz34>
-      <center>-9991020,415</center>
-      <attr>0x10000001</attr>
-      <FontHeight>12</FontHeight>
-    </GD>
-    <GD>
-      <m_nType>1</m_nType>
-      <m_strName>XIVG2</m_strName>
-      <m_nCode>0x36</m_nCode>
-      <InterlockBus>0</InterlockBus>
-      <Module_Code>2C01</Module_Code>
-      <m_nZ>0</m_nZ>
-      <m_nSX>1</m_nSX>
-      <m_textRect>-9991004,-999464,-9991041,-999479</m_textRect>
-      <p1>-999960,480</p1>
-      <p2>-999960,490</p2>
-      <p3>-9991080,480</p3>
-      <p4>-9991080,490</p4>
-      <p12>-999960,485</p12>
-      <p34>-9991080,485</p34>
-      <pz12>-999990,485</pz12>
-      <pz34>-9991050,485</pz34>
-      <center>-9991020,485</center>
-      <attr>0x10000001</attr>
-      <FontHeight>12</FontHeight>
-    </GD>
-    <GD>
-      <m_nType>1</m_nType>
-      <m_strName>XIIIG2</m_strName>
-      <m_nCode>0x37</m_nCode>
-      <InterlockBus>0</InterlockBus>
-      <Module_Code>2C02</Module_Code>
-      <m_nZ>0</m_nZ>
-      <m_nSX>1</m_nSX>
-      <m_textRect>-9991004,-999534,-9991049,-999549</m_textRect>
-      <p1>-999960,550</p1>
-      <p2>-999960,560</p2>
-      <p3>-9991080,550</p3>
-      <p4>-9991080,560</p4>
-      <p12>-999960,555</p12>
-      <p34>-9991080,555</p34>
-      <pz12>-999990,555</pz12>
-      <pz34>-9991050,555</pz34>
-      <center>-9991020,555</center>
-      <attr>0x10000001</attr>
-      <FontHeight>12</FontHeight>
-    </GD>
-    <GD>
-      <m_nType>1</m_nType>
-      <m_strName>12G2</m_strName>
-      <m_nCode>0x38</m_nCode>
-      <InterlockBus>0</InterlockBus>
-      <Module_Code>2C03</Module_Code>
-      <m_nZ>0</m_nZ>
-      <m_nSX>1</m_nSX>
-      <m_textRect>-9991004,604,-9991034,619</m_textRect>
-      <p1>-999960,620</p1>
-      <p2>-999960,630</p2>
-      <p3>-9991080,620</p3>
-      <p4>-9991080,630</p4>
-      <p12>-999960,625</p12>
-      <p34>-9991080,625</p34>
-      <pz12>-999990,625</pz12>
-      <pz34>-9991050,625</pz34>
-      <center>-9991020,625</center>
-      <attr>0x10000001</attr>
-      <FontHeight>12</FontHeight>
-    </GD>
-    <GD>
-      <m_nType>1</m_nType>
-      <m_strName>11G2</m_strName>
-      <m_nCode>0x39</m_nCode>
-      <InterlockBus>0</InterlockBus>
-      <Module_Code>2C04</Module_Code>
-      <m_nZ>0</m_nZ>
-      <m_nSX>1</m_nSX>
-      <m_textRect>-9991004,-999674,-9991034,-999689</m_textRect>
-      <p1>-999960,690</p1>
-      <p2>-999960,700</p2>
-      <p3>-9991080,690</p3>
-      <p4>-9991080,700</p4>
-      <p12>-999960,695</p12>
-      <p34>-9991080,695</p34>
-      <pz12>-999990,695</pz12>
-      <pz34>-9991050,695</pz34>
-      <center>-9991020,695</center>
-      <attr>0x10000001</attr>
-      <FontHeight>12</FontHeight>
-    </GD>
-    <GD>
-      <m_nType>1</m_nType>
-      <m_strName>10G2</m_strName>
-      <m_nCode>0x3a</m_nCode>
-      <InterlockBus>0</InterlockBus>
-      <Module_Code>2D01</Module_Code>
-      <m_nZ>0</m_nZ>
-      <m_nSX>1</m_nSX>
-      <m_textRect>-9991004,-999744,-9991034,-999759</m_textRect>
-      <p1>-999960,760</p1>
-      <p2>-999960,770</p2>
-      <p3>-9991080,760</p3>
-      <p4>-9991080,770</p4>
-      <p12>-999960,765</p12>
-      <p34>-9991080,765</p34>
-      <pz12>-999990,765</pz12>
-      <pz34>-9991050,765</pz34>
-      <center>-9991020,765</center>
-      <attr>0x10000001</attr>
-      <FontHeight>12</FontHeight>
-    </GD>
-    <GD>
-      <m_nType>1</m_nType>
-      <m_strName>9G2</m_strName>
-      <m_nCode>0x3b</m_nCode>
-      <InterlockBus>0</InterlockBus>
-      <Module_Code>2D02</Module_Code>
-      <m_nZ>0</m_nZ>
-      <m_nSX>1</m_nSX>
-      <m_textRect>-9991009,-999814,-9991031,-999829</m_textRect>
-      <p1>-999960,830</p1>
-      <p2>-999960,840</p2>
-      <p3>-9991080,830</p3>
-      <p4>-9991080,840</p4>
-      <p12>-999960,835</p12>
-      <p34>-9991080,835</p34>
-      <pz12>-999990,835</pz12>
-      <pz34>-9991050,835</pz34>
-      <center>-9991020,835</center>
-      <attr>0x10000001</attr>
-      <FontHeight>12</FontHeight>
-    </GD>
-    <GD>
-      <m_nType>1</m_nType>
-      <m_strName>12G3</m_strName>
-      <m_nCode>0x3c</m_nCode>
-      <InterlockBus>0</InterlockBus>
-      <Module_Code>2E02</Module_Code>
-      <m_nZ>0</m_nZ>
-      <m_nSX>1</m_nSX>
-      <m_textRect>-9991114,604,-9991144,619</m_textRect>
-      <p1>-9991080,620</p1>
-      <p2>-9991080,630</p2>
-      <p3>-9991170,620</p3>
-      <p4>-9991170,630</p4>
-      <p12>-9991080,625</p12>
-      <p34>-9991170,625</p34>
-      <pz12>-9991110,625</pz12>
-      <pz34>-9991170,625</pz34>
-      <center>-9991125,625</center>
-      <attr>0x10000001</attr>
-      <FontHeight>12</FontHeight>
-    </GD>
-    <GD>
-      <m_nType>1</m_nType>
-      <m_strName>11G3</m_strName>
-      <m_nCode>0x3d</m_nCode>
-      <InterlockBus>0</InterlockBus>
-      <Module_Code>2E03</Module_Code>
-      <m_nZ>0</m_nZ>
-      <m_nSX>1</m_nSX>
-      <m_textRect>-9991114,674,-9991144,689</m_textRect>
-      <p1>-9991080,690</p1>
-      <p2>-9991080,700</p2>
-      <p3>-9991170,690</p3>
-      <p4>-9991170,700</p4>
-      <p12>-9991080,695</p12>
-      <p34>-9991170,695</p34>
-      <pz12>-9991110,695</pz12>
-      <pz34>-9991170,695</pz34>
-      <center>-9991125,695</center>
-      <attr>0x10000001</attr>
-      <FontHeight>12</FontHeight>
-    </GD>
-    <GD>
-      <m_nType>1</m_nType>
-      <m_strName>15G3</m_strName>
-      <m_nCode>0x3e</m_nCode>
-      <InterlockBus>0</InterlockBus>
-      <Module_Code>2D03</Module_Code>
-      <m_nZ>0</m_nZ>
-      <m_nSX>1</m_nSX>
-      <m_textRect>-9991124,394,-9991154,409</m_textRect>
-      <p1>-9991080,410</p1>
-      <p2>-9991080,420</p2>
-      <p3>-9991220,410</p3>
-      <p4>-9991220,420</p4>
-      <p12>-9991080,415</p12>
-      <p34>-9991220,415</p34>
-      <pz12>-9991110,415</pz12>
-      <pz34>-9991170,415</pz34>
-      <center>-9991150,415</center>
-      <attr>0x10000001</attr>
-      <FontHeight>12</FontHeight>
-    </GD>
-    <GD>
-      <m_nType>1</m_nType>
-      <m_strName>XIVG3</m_strName>
-      <m_nCode>0x3f</m_nCode>
-      <InterlockBus>0</InterlockBus>
-      <Module_Code>2D04</Module_Code>
-      <m_nZ>0</m_nZ>
-      <m_nSX>1</m_nSX>
-      <m_textRect>-9991124,464,-9991161,479</m_textRect>
-      <p1>-9991080,480</p1>
-      <p2>-9991080,490</p2>
-      <p3>-9991220,480</p3>
-      <p4>-9991220,490</p4>
-      <p12>-9991080,485</p12>
-      <p34>-9991220,485</p34>
-      <pz12>-9991110,485</pz12>
-      <pz34>-9991170,485</pz34>
-      <center>-9991150,485</center>
-      <attr>0x10000001</attr>
-      <FontHeight>12</FontHeight>
-    </GD>
-    <GD>
-      <m_nType>1</m_nType>
-      <m_strName>XIIIG3</m_strName>
-      <m_nCode>0x40</m_nCode>
-      <InterlockBus>0</InterlockBus>
-      <Module_Code>2E01</Module_Code>
-      <m_nZ>0</m_nZ>
-      <m_nSX>1</m_nSX>
-      <m_textRect>-9991124,534,-9991169,549</m_textRect>
-      <p1>-9991080,550</p1>
-      <p2>-9991080,560</p2>
-      <p3>-9991220,550</p3>
-      <p4>-9991220,560</p4>
-      <p12>-9991080,555</p12>
-      <p34>-9991220,555</p34>
-      <pz12>-9991110,555</pz12>
-      <pz34>-9991170,555</pz34>
-      <center>-9991150,555</center>
-      <attr>0x10000001</attr>
-      <FontHeight>12</FontHeight>
-    </GD>
-    <GD>
-      <m_nType>1</m_nType>
-      <m_strName>10G3</m_strName>
-      <m_nCode>0x41</m_nCode>
-      <InterlockBus>0</InterlockBus>
-      <Module_Code>2E04</Module_Code>
-      <m_nZ>0</m_nZ>
-      <m_nSX>1</m_nSX>
-      <m_textRect>-9991114,744,-9991144,759</m_textRect>
-      <p1>-9991080,760</p1>
-      <p2>-9991080,770</p2>
-      <p3>-9991175,760</p3>
-      <p4>-9991175,770</p4>
-      <p12>-9991080,765</p12>
-      <p34>-9991175,765</p34>
-      <pz12>-9991110,765</pz12>
-      <pz34>-9991170,765</pz34>
-      <center>-9991127,765</center>
-      <attr>0x10000001</attr>
-      <FontHeight>12</FontHeight>
-    </GD>
-    <GD>
-      <m_nType>1</m_nType>
-      <m_strName>9G3</m_strName>
-      <m_nCode>0x42</m_nCode>
-      <InterlockBus>0</InterlockBus>
-      <Module_Code>2F01</Module_Code>
-      <m_nZ>0</m_nZ>
-      <m_nSX>1</m_nSX>
-      <m_textRect>-9991119,814,-9991141,829</m_textRect>
-      <p1>-9991080,830</p1>
-      <p2>-9991080,840</p2>
-      <p3>-9991175,830</p3>
-      <p4>-9991175,840</p4>
-      <p12>-9991080,835</p12>
-      <p34>-9991175,835</p34>
-      <pz12>-9991110,835</pz12>
-      <pz34>-9991170,835</pz34>
-      <center>-9991127,835</center>
-      <attr>0x10000001</attr>
+      <center>1020,835</center>
+      <attr>0xd</attr>
       <FontHeight>12</FontHeight>
     </GD>
     <GD>
       <m_nType>1</m_nType>
       <m_strName>210WG</m_strName>
-      <m_nCode>0x43</m_nCode>
+      <m_nCode>0x35</m_nCode>
       <InterlockBus></InterlockBus>
       <Module_Code>2F04</Module_Code>
       <m_nZ>0</m_nZ>
@@ -2093,7 +1806,7 @@
     <GD>
       <m_nType>1</m_nType>
       <m_strName>212WG</m_strName>
-      <m_nCode>0x44</m_nCode>
+      <m_nCode>0x36</m_nCode>
       <InterlockBus>0</InterlockBus>
       <Module_Code>2F03</Module_Code>
       <m_nZ>0</m_nZ>
@@ -2114,7 +1827,7 @@
     <GD>
       <m_nType>1</m_nType>
       <m_strName>212WG1</m_strName>
-      <m_nCode>0x45</m_nCode>
+      <m_nCode>0x37</m_nCode>
       <InterlockBus>0</InterlockBus>
       <Module_Code>2F02</Module_Code>
       <m_nZ>0</m_nZ>
@@ -2135,7 +1848,7 @@
     <GD>
       <m_nType>1</m_nType>
       <m_strName>213WG</m_strName>
-      <m_nCode>0x46</m_nCode>
+      <m_nCode>0x38</m_nCode>
       <InterlockBus>0</InterlockBus>
       <Module_Code>1203</Module_Code>
       <m_nZ>0</m_nZ>
@@ -2156,7 +1869,7 @@
     <GD>
       <m_nType>1</m_nType>
       <m_strName>S1LQ</m_strName>
-      <m_nCode>0x47</m_nCode>
+      <m_nCode>0x39</m_nCode>
       <InterlockBus>1</InterlockBus>
       <Module_Code>0901</Module_Code>
       <m_nZ>0</m_nZ>
@@ -2177,7 +1890,7 @@
     <GD>
       <m_nType>1</m_nType>
       <m_strName>S2LQ</m_strName>
-      <m_nCode>0x48</m_nCode>
+      <m_nCode>0x3a</m_nCode>
       <InterlockBus>1</InterlockBus>
       <Module_Code>0902</Module_Code>
       <m_nZ>0</m_nZ>
@@ -2198,7 +1911,7 @@
     <GD>
       <m_nType>1</m_nType>
       <m_strName>S3LQ</m_strName>
-      <m_nCode>0x49</m_nCode>
+      <m_nCode>0x3b</m_nCode>
       <InterlockBus>1</InterlockBus>
       <Module_Code>0903</Module_Code>
       <m_nZ>0</m_nZ>
@@ -2219,7 +1932,7 @@
     <GD>
       <m_nType>1</m_nType>
       <m_strName>X3JG</m_strName>
-      <m_nCode>0x4a</m_nCode>
+      <m_nCode>0x3c</m_nCode>
       <InterlockBus>1</InterlockBus>
       <Module_Code>0904</Module_Code>
       <m_nZ>0</m_nZ>
@@ -2240,7 +1953,7 @@
     <GD>
       <m_nType>1</m_nType>
       <m_strName>X2JG</m_strName>
-      <m_nCode>0x4b</m_nCode>
+      <m_nCode>0x3d</m_nCode>
       <InterlockBus>1</InterlockBus>
       <Module_Code>0A01</Module_Code>
       <m_nZ>0</m_nZ>
@@ -2261,7 +1974,7 @@
     <GD>
       <m_nType>1</m_nType>
       <m_strName>X1JG</m_strName>
-      <m_nCode>0x4c</m_nCode>
+      <m_nCode>0x3e</m_nCode>
       <InterlockBus>1</InterlockBus>
       <Module_Code>0A02</Module_Code>
       <m_nZ>0</m_nZ>
@@ -2282,7 +1995,7 @@
     <GD>
       <m_nType>1</m_nType>
       <m_strName>S1JG</m_strName>
-      <m_nCode>0x4d</m_nCode>
+      <m_nCode>0x3f</m_nCode>
       <InterlockBus>1</InterlockBus>
       <Module_Code>0B01</Module_Code>
       <m_nZ>0</m_nZ>
@@ -2303,7 +2016,7 @@
     <GD>
       <m_nType>1</m_nType>
       <m_strName>S2JG</m_strName>
-      <m_nCode>0x4e</m_nCode>
+      <m_nCode>0x40</m_nCode>
       <InterlockBus>1</InterlockBus>
       <Module_Code>0A04</Module_Code>
       <m_nZ>0</m_nZ>
@@ -2324,7 +2037,7 @@
     <GD>
       <m_nType>1</m_nType>
       <m_strName>S3JG</m_strName>
-      <m_nCode>0x4f</m_nCode>
+      <m_nCode>0x41</m_nCode>
       <InterlockBus>1</InterlockBus>
       <Module_Code>0A03</Module_Code>
       <m_nZ>0</m_nZ>
@@ -2345,7 +2058,7 @@
     <GD>
       <m_nType>1</m_nType>
       <m_strName>X1LQ</m_strName>
-      <m_nCode>0x50</m_nCode>
+      <m_nCode>0x42</m_nCode>
       <InterlockBus>1</InterlockBus>
       <Module_Code>0B02</Module_Code>
       <m_nZ>0</m_nZ>
@@ -2366,7 +2079,7 @@
     <GD>
       <m_nType>1</m_nType>
       <m_strName>X2LQ</m_strName>
-      <m_nCode>0x51</m_nCode>
+      <m_nCode>0x43</m_nCode>
       <InterlockBus>1</InterlockBus>
       <Module_Code>0B03</Module_Code>
       <m_nZ>0</m_nZ>
@@ -2387,7 +2100,7 @@
     <GD>
       <m_nType>1</m_nType>
       <m_strName>X3LQ</m_strName>
-      <m_nCode>0x52</m_nCode>
+      <m_nCode>0x44</m_nCode>
       <InterlockBus>1</InterlockBus>
       <Module_Code>0B04</Module_Code>
       <m_nZ>0</m_nZ>
@@ -2407,7 +2120,7 @@
     </GD>
     <CX>
       <m_strName>CX1</m_strName>
-      <m_nCode>0x69</m_nCode>
+      <m_nCode>0x5b</m_nCode>
       <CXL_node>0</CXL_node>
       <CXR_node>1</CXR_node>
       <FHQD_node>32766</FHQD_node>
@@ -2422,7 +2135,7 @@
     </CX>
     <CX>
       <m_strName>CX2</m_strName>
-      <m_nCode>0x6a</m_nCode>
+      <m_nCode>0x5c</m_nCode>
       <CXL_node>2</CXL_node>
       <CXR_node>3</CXR_node>
       <FHQD_node>32766</FHQD_node>
@@ -2437,7 +2150,7 @@
     </CX>
     <CX>
       <m_strName>CX3</m_strName>
-      <m_nCode>0x6b</m_nCode>
+      <m_nCode>0x5d</m_nCode>
       <CXL_node>5</CXL_node>
       <CXR_node>4</CXR_node>
       <FHQD_node>32766</FHQD_node>
@@ -2452,7 +2165,7 @@
     </CX>
     <CX>
       <m_strName>CX4</m_strName>
-      <m_nCode>0x6c</m_nCode>
+      <m_nCode>0x5e</m_nCode>
       <CXL_node>7</CXL_node>
       <CXR_node>6</CXR_node>
       <FHQD_node>32766</FHQD_node>
@@ -2467,7 +2180,7 @@
     </CX>
     <CX>
       <m_strName>CX5</m_strName>
-      <m_nCode>0x6d</m_nCode>
+      <m_nCode>0x5f</m_nCode>
       <CXL_node>17</CXL_node>
       <CXR_node>18</CXR_node>
       <FHQD_node>32766</FHQD_node>
@@ -2482,7 +2195,7 @@
     </CX>
     <CX>
       <m_strName>CX6</m_strName>
-      <m_nCode>0x6e</m_nCode>
+      <m_nCode>0x60</m_nCode>
       <CXL_node>12</CXL_node>
       <CXR_node>92</CXR_node>
       <FHQD_node>32766</FHQD_node>
@@ -2497,7 +2210,7 @@
     </CX>
     <CX>
       <m_strName>CX7</m_strName>
-      <m_nCode>0x6f</m_nCode>
+      <m_nCode>0x61</m_nCode>
       <CXL_node>12</CXL_node>
       <CXR_node>18</CXR_node>
       <FHQD_node>32766</FHQD_node>
@@ -2512,7 +2225,7 @@
     </CX>
     <CX>
       <m_strName>CX8</m_strName>
-      <m_nCode>0x70</m_nCode>
+      <m_nCode>0x62</m_nCode>
       <CXL_node>13</CXL_node>
       <CXR_node>32</CXR_node>
       <FHQD_node>32766</FHQD_node>
@@ -2527,7 +2240,7 @@
     </CX>
     <CX>
       <m_strName>CX9</m_strName>
-      <m_nCode>0x71</m_nCode>
+      <m_nCode>0x63</m_nCode>
       <CXL_node>67</CXL_node>
       <CXR_node>22</CXR_node>
       <FHQD_node>32766</FHQD_node>
@@ -2542,7 +2255,7 @@
     </CX>
     <CX>
       <m_strName>CX10</m_strName>
-      <m_nCode>0x72</m_nCode>
+      <m_nCode>0x64</m_nCode>
       <CXL_node>98</CXL_node>
       <CXR_node>21</CXR_node>
       <FHQD_node>32766</FHQD_node>
@@ -2557,7 +2270,7 @@
     </CX>
     <CX>
       <m_strName>CX11</m_strName>
-      <m_nCode>0x73</m_nCode>
+      <m_nCode>0x65</m_nCode>
       <CXL_node>32766</CXL_node>
       <CXR_node>85</CXR_node>
       <FHQD_node>32766</FHQD_node>
@@ -2572,7 +2285,7 @@
     </CX>
     <CX>
       <m_strName>CX12</m_strName>
-      <m_nCode>0x74</m_nCode>
+      <m_nCode>0x66</m_nCode>
       <CXL_node>32766</CXL_node>
       <CXR_node>32766</CXR_node>
       <FHQD_node>32766</FHQD_node>
@@ -2588,7 +2301,7 @@
     <BuRect>
       <m_nType>81</m_nType>
       <m_strName>XGNTA</m_strName>
-      <m_nCode>0x75</m_nCode>
+      <m_nCode>0x67</m_nCode>
       <center>134,473</center>
       <m_textRect>132,450,169,465</m_textRect>
       <m_nTZB>0x0010</m_nTZB>
@@ -2598,7 +2311,7 @@
     <BuRect>
       <m_nType>81</m_nType>
       <m_strName>SGTA</m_strName>
-      <m_nCode>0x76</m_nCode>
+      <m_nCode>0x68</m_nCode>
       <center>1796,497</center>
       <m_textRect>1792,505,1822,520</m_textRect>
       <m_nTZB>0x0010</m_nTZB>
@@ -2607,9 +2320,9 @@
     </BuRect>
     <ZDBS>
       <RelayQD>32766</RelayQD>
-      <m_strName>ZDBS_XGN</m_strName>
+      <m_strName>XGN</m_strName>
       <m_nType>250</m_nType>
-      <m_nCode>0x77</m_nCode>
+      <m_nCode>0x69</m_nCode>
       <FontHeight>12</FontHeight>
       <m_textRect>-99956,-999452,-999116,-999467</m_textRect>
       <ZFZ1_rect>55,270,72,281</ZFZ1_rect>
@@ -2656,9 +2369,9 @@
     </ZDBS>
     <ZDBS>
       <RelayQD>32766</RelayQD>
-      <m_strName>ZDBS_XG</m_strName>
+      <m_strName>XG</m_strName>
       <m_nType>250</m_nType>
-      <m_nCode>0x78</m_nCode>
+      <m_nCode>0x6a</m_nCode>
       <FontHeight>12</FontHeight>
       <m_textRect>-99946,-999577,-99998,-999592</m_textRect>
       <ZFZ1_rect>55,745,72,756</ZFZ1_rect>
@@ -2711,9 +2424,9 @@
     </ZDBS>
     <ZDBS>
       <RelayQD>32766</RelayQD>
-      <m_strName>ZDBS_SG</m_strName>
+      <m_strName>SG</m_strName>
       <m_nType>250</m_nType>
-      <m_nCode>0x79</m_nCode>
+      <m_nCode>0x6b</m_nCode>
       <FontHeight>12</FontHeight>
       <m_textRect>-9991771,-999447,-9991823,-999462</m_textRect>
       <ZFZ1_rect>1825,265,1842,276</ZFZ1_rect>
@@ -2768,9 +2481,9 @@
     </ZDBS>
     <ZDBS>
       <RelayQD>32766</RelayQD>
-      <m_strName>ZDBS_SGN</m_strName>
+      <m_strName>SGN</m_strName>
       <m_nType>250</m_nType>
-      <m_nCode>0x7a</m_nCode>
+      <m_nCode>0x6c</m_nCode>
       <FontHeight>12</FontHeight>
       <m_textRect>-9991781,-999567,-9991841,-999582</m_textRect>
       <ZFZ1_rect>1840,755,1857,766</ZFZ1_rect>
@@ -2819,7 +2532,7 @@
     </ZDBS>
     <LS>
       <m_nType>300</m_nType>
-      <m_nCode>0x7b</m_nCode>
+      <m_nCode>0x6f</m_nCode>
       <FontHeight>14</FontHeight>
       <m_nModuleNum>1</m_nModuleNum>
       <InterlockBus>0</InterlockBus>
@@ -3119,7 +2832,7 @@
     <BuRect>
       <m_nType>381</m_nType>
       <m_strName>BA3</m_strName>
-      <m_nCode>0x7c</m_nCode>
+      <m_nCode>0x6d</m_nCode>
       <center>650,390</center>
       <p1>643,383</p1>
       <p2>657,397</p2>
@@ -3129,7 +2842,7 @@
     <BuRect>
       <m_nType>381</m_nType>
       <m_strName>BA1</m_strName>
-      <m_nCode>0x7d</m_nCode>
+      <m_nCode>0x6e</m_nCode>
       <center>635,655</center>
       <p1>628,648</p1>
       <p2>642,662</p2>
@@ -3227,62 +2940,6 @@
     <QD>
       <m_nChildNum>1</m_nChildNum>
       <m_nChild index="0">68</m_nChild>
-    </QD>
-    <QD>
-      <m_nChildNum>1</m_nChildNum>
-      <m_nChild index="0">69</m_nChild>
-    </QD>
-    <QD>
-      <m_nChildNum>1</m_nChildNum>
-      <m_nChild index="0">70</m_nChild>
-    </QD>
-    <QD>
-      <m_nChildNum>1</m_nChildNum>
-      <m_nChild index="0">71</m_nChild>
-    </QD>
-    <QD>
-      <m_nChildNum>1</m_nChildNum>
-      <m_nChild index="0">72</m_nChild>
-    </QD>
-    <QD>
-      <m_nChildNum>1</m_nChildNum>
-      <m_nChild index="0">73</m_nChild>
-    </QD>
-    <QD>
-      <m_nChildNum>1</m_nChildNum>
-      <m_nChild index="0">74</m_nChild>
-    </QD>
-    <QD>
-      <m_nChildNum>1</m_nChildNum>
-      <m_nChild index="0">75</m_nChild>
-    </QD>
-    <QD>
-      <m_nChildNum>1</m_nChildNum>
-      <m_nChild index="0">76</m_nChild>
-    </QD>
-    <QD>
-      <m_nChildNum>1</m_nChildNum>
-      <m_nChild index="0">77</m_nChild>
-    </QD>
-    <QD>
-      <m_nChildNum>1</m_nChildNum>
-      <m_nChild index="0">78</m_nChild>
-    </QD>
-    <QD>
-      <m_nChildNum>1</m_nChildNum>
-      <m_nChild index="0">79</m_nChild>
-    </QD>
-    <QD>
-      <m_nChildNum>1</m_nChildNum>
-      <m_nChild index="0">80</m_nChild>
-    </QD>
-    <QD>
-      <m_nChildNum>1</m_nChildNum>
-      <m_nChild index="0">81</m_nChild>
-    </QD>
-    <QD>
-      <m_nChildNum>1</m_nChildNum>
-      <m_nChild index="0">82</m_nChild>
     </QD>
     <QD>
       <m_nChildNum>1</m_nChildNum>

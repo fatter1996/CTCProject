@@ -38,7 +38,8 @@ namespace Station {
 
     public:     //外部初始化
         void InitDeviceEventFilter(QWidget* pWidget);
-        int ReadStationInfo(const QString& filePath); //解析"station.xml"
+        int ReadStationInfoByXml(const QString& filePath); //解析"station.xml"
+        int ReadStationInfoByTxt(const QString& filePath); //解析"station.txt"
         void InitStaDevice();   //站场设备初始化
         int ReadDeviceConfig(const QString& filePath); //解析"DeviceConfig.json"
         void SetVisible(VisibleDev devType, bool bVisible);

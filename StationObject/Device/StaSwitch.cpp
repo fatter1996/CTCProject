@@ -19,6 +19,7 @@ namespace Station {
             m_mapAttribute.insert("m_nCxjy", [&](const QString& strElement) { m_nCxjy = strElement.toUInt(); });
             m_mapAttribute.insert("m_nDSCode", [&](const QString& strElement) { m_nDSCode = strElement.toInt(); });
             m_mapAttribute.insert("QDMKInterlockBus", [&](const QString& strElement) { m_nQDMKInterlockBus = strElement.toInt(); });
+            m_mapAttribute.insert("m_nQDMKCode", [&](const QString& strElement) { m_nQDMKInterlockBus = strElement.toInt(nullptr, 16); });
             m_mapAttribute.insert("m_nJyj", [&](const QString& strElement) { m_nJyj = strElement.toInt(); });
             m_mapAttribute.insert("oneToMore", [&](const QString& strElement) { m_nOneToMore = strElement.toInt(); });
             m_mapAttribute.insert("p5", [&](const QString& strElement) { p5 = QStringToQPointF(strElement); });
@@ -28,10 +29,14 @@ namespace Station {
             m_mapAttribute.insert("pZ34", [&](const QString& strElement) { pz34 = QStringToQPointF(strElement); });
             m_mapAttribute.insert("pZ56", [&](const QString& strElement) { pz56 = QStringToQPointF(strElement); });
             m_mapAttribute.insert("m_MainDCQD", [&](const QString& strElement) { m_nMainDCQD = strElement.toInt(); });
+            m_mapAttribute.insert("m_bMainGD", [&](const QString& strElement) { m_nMainDCQD = strElement.toInt(); });
             m_mapAttribute.insert("isSafetySwitch", [&](const QString& strElement) { m_bSafetySwitch = strElement.toInt(); });
             m_mapAttribute.insert("m_nCQ", [&](const QString& strElement) { m_nQ = strElement.toInt(); });
+            m_mapAttribute.insert("m_nQ", [&](const QString& strElement) { m_nQ = strElement.toInt(); });
             m_mapAttribute.insert("m_nDW", [&](const QString& strElement) { m_nD = strElement.toInt(); });
+            m_mapAttribute.insert("m_nD", [&](const QString& strElement) { m_nD = strElement.toInt(); });
             m_mapAttribute.insert("m_nFW", [&](const QString& strElement) { m_nF = strElement.toInt(); });
+            m_mapAttribute.insert("m_nF", [&](const QString& strElement) { m_nF = strElement.toInt(); });
         }
 
         StaSwitch::~StaSwitch()

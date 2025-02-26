@@ -148,5 +148,75 @@ namespace Station {
         {
         
         }
+
+
+        StaMark::StaMark(QObject* pParent)
+            : DeviceBase(pParent)
+        {
+            m_mapAttribute.insert("m_Color", [&](const QString& strElement) { 
+                switch (strElement.toInt())
+                {
+                case 0:  m_cColor = Qt::white;  break;
+                case 1:  m_cColor = Qt::red;    break;
+                case 2:  m_cColor = Qt::yellow; break;
+                case 3:  m_cColor = Qt::green;  break;
+                default: m_cColor = Qt::white;  break;
+                }
+            });
+            m_mapAttribute.insert("m_Rect", [&](const QString& strElement) { m_rcMark = QStringToQRectF(strElement); });
+        }
+
+        StaMark::~StaMark()
+        {
+        
+        }
+
+        void StaMark::Draw(bool isMulti)
+        {
+            DrawMark();
+            return DeviceBase::Draw(isMulti);
+        }
+
+        void StaMark::DrawMark()
+        {
+            m_pPainter.setPen(QPen(m_cColor, 3));
+            if (m_nType == 601) {
+                QPointF points[4] = {
+                    Scale(m_rcMark.topLeft()),
+                    Scale(m_rcMark.bottomLeft()),
+                    Scale(m_rcMark.bottomRight()),
+                    Scale(m_rcMark.topRight())
+                };
+                m_pPainter.drawPolyline(points, 4);
+            }
+            else if (m_nType == 602) {
+                QPointF points[4] = {
+                        Scale(m_rcMark.bottomLeft()),
+                        Scale(m_rcMark.topLeft()),
+                        Scale(m_rcMark.topRight()),
+                        Scale(m_rcMark.bottomRight())
+                };
+                m_pPainter.drawPolyline(points, 4);
+            }
+            else if (m_nType == 611) {
+                m_pPainter.drawRect(Scale(m_rcMark));
+                m_pPainter.drawLine(QPointF(m_rcMark.left() + m_rcMark.width() * 0.15, m_rcMark.top() + m_rcMark.height() * 0.25),
+                    QPointF(m_rcMark.left() + m_rcMark.width() * 0.85, m_rcMark.top() + m_rcMark.height() * 0.25));
+                m_pPainter.drawLine(QPointF(m_rcMark.left() + m_rcMark.width() * 0.3, m_rcMark.top() + m_rcMark.height() * 0.5),
+                    QPointF(m_rcMark.left() + m_rcMark.width() * 0.7, m_rcMark.top() + m_rcMark.height() * 0.5));
+            }
+            else if (m_nType == 612) {
+                m_pPainter.drawRect(Scale(m_rcMark));
+                m_pPainter.drawLine(QPointF(m_rcMark.left() + m_rcMark.width() * 0.15, m_rcMark.top() + m_rcMark.height() * 0.75),
+                    QPointF(m_rcMark.left() + m_rcMark.width() * 0.85, m_rcMark.top() + m_rcMark.height() * 0.75));
+                m_pPainter.drawLine(QPointF(m_rcMark.left() + m_rcMark.width() * 0.3, m_rcMark.top() + m_rcMark.height() * 0.5),
+                    QPointF(m_rcMark.left() + m_rcMark.width() * 0.7, m_rcMark.top() + m_rcMark.height() * 0.5));
+            }
+        }
+        //Õ¾³¡·­×ª
+        void StaMark::setVollover(const QPointF& ptBase)
+        {
+        
+        }
     }
 }

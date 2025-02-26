@@ -20,6 +20,24 @@ namespace Station {
 
         }
 
+        void StaEndLine::InitDeviceAttribute()
+        {
+            if (p5.isNull()) {
+                if (m_nType == 41) {
+                    p5 = QPointF(p4.x() - 5, p4.y());
+                }
+                else if (m_nType == 42) {
+                    p5 = QPointF(p4.x() + 5, p4.y());
+                }
+            }
+            if (p6.isNull()) {
+                p6 = QPointF(p3.x(), p3.y() - 5);
+            }
+            if (p7.isNull()) {
+                p7 = QPointF(p3.x(), p3.y() + 5);
+            }
+        }
+
         void StaEndLine::Draw(bool isMulti)
         {
             if (MainStation()->IsVisible(VisibleDev::endMarker)) {

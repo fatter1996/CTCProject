@@ -21,19 +21,34 @@ namespace Station {
             m_mapAttribute.insert("p10", [&](const QString& strElement) { p10 = QStringToQPointF(strElement); });
             m_mapAttribute.insert("p13", [&](const QString& strElement) { p13 = QStringToQPointF(strElement); });
             m_mapAttribute.insert("p14", [&](const QString& strElement) { p14 = QStringToQPointF(strElement); });
-            m_mapAttribute.insert("m_nXHDType", [&](const QString& strElement) { m_nXHDType = strElement.toUInt(); });
-            m_mapAttribute.insert("radius", [&](const QString& strElement) { m_nRadius = strElement.toUInt(); });
+            m_mapAttribute.insert("m_nXHDType", [&](const QString& strElement) { 
+                m_nXHDType = strElement.toUInt(); 
+                m_strXHDType = strElement;
+            });
+            m_mapAttribute.insert("radius", [&](const QString& strElement) { m_nRadius = strElement.toInt(); });
             m_mapAttribute.insert("SignalType", [&](const QString& strElement) { m_nSignalType = strElement.toUInt(); });
             m_mapAttribute.insert("D_B_C_Signa", [&](const QString& strElement) { m_nD_B_C_Signal = strElement.toUInt(); });
             m_mapAttribute.insert("DC_LC_Signa", [&](const QString& strElement) { m_nDC_LC_Signal = strElement.toUInt(); });
             m_mapAttribute.insert("safeLamp", [&](const QString& strElement) { m_strSafeLamp = strElement; });
-            m_mapAttribute.insert("isHigh", [&](const QString& strElement) { m_bHigh = strElement.toInt(); });
+            m_mapAttribute.insert("isHigh", [&](const QString& strElement) { 
+                if (strElement == "TRUE") {
+                    m_bHigh = true;
+                }
+                else if (strElement == "FALSE") {
+                    m_bHigh = true;
+                }
+                else {
+                    m_bHigh = strElement.toInt();
+                }
+                
+            });
             m_mapAttribute.insert("IsHaveBSQ", [&](const QString& strElement) { m_bIsIsHaveBSQ = strElement.toInt(); });
             m_mapAttribute.insert("bsqNum", [&](const QString& strElement) { m_nBSQNum = strElement.toInt(); });
             m_mapAttribute.insert("bsqInterlockBus", [&](const QString& strElement) { m_nBSQInterlockBus = strElement.toInt(); });
             m_mapAttribute.insert("m_nBSQModuAddr", [&](const QString& strElement) { m_nBSQModuAddr = strElement.toInt(); });
             m_mapAttribute.insert("isMD", [&](const QString& strElement) { m_bMD = strElement.toInt(); });
             m_mapAttribute.insert("DC_LC_Signa", [&](const QString& strElement) { m_bSingleDeng = strElement.toInt(); });
+            m_mapAttribute.insert("isYDSD", [&](const QString& strElement) { m_bYDSD = strElement.toInt(); });
 
             InitSignalLightColor();
             
@@ -46,49 +61,58 @@ namespace Station {
 
         void StaSignal::InitDeviceAttribute()
         {
+            m_bRight = (m_nType == 31 || m_nType == 32);
+            if (m_nRadius == 0) {
+                m_nRadius = 7;
+            }
+            if (p12.isNull()) {
+                p12 = QPointF((m_bRight ? m_ptCenter.x() - 10 : m_ptCenter.x() + 10), m_ptCenter.y());
+            }
+            if (p7.isNull() || p8.isNull()) {
+                p7 = QPointF(m_bRight ? m_ptCenter.x() - m_nBtnRadius * 4 : m_ptCenter.x() + m_nBtnRadius * 2, m_ptCenter.y() - m_nBtnRadius);
+                p8 = QPointF(m_bRight ? m_ptCenter.x() - m_nBtnRadius * 2 : m_ptCenter.x() + m_nBtnRadius * 4, m_ptCenter.y() + m_nBtnRadius);
+            }
+            if (p9.isNull() || p10.isNull()) {
+                p9 = QPointF(m_bRight ? p7.x() - m_nBtnRadius * 2 - 4 : p8.x() + 4, p7.y());
+                p10 = QPointF(m_bRight ? p7.x() - 4 : p8.x() + m_nBtnRadius * 2 + 4, p8.y());
+            }
+            if (p13.isNull() || p14.isNull()) {
+                p13 = QPointF(m_bRight ? p9.x() - m_nBtnRadius * 2 - 4 : p10.x() + 4, p9.y());
+                p14 = QPointF(m_bRight ? p9.x() - 4 : p10.x() + m_nBtnRadius * 2 + 4, p10.y());
+            }
             //列车按钮
-            if (m_nAttr & (SIGNAL_LCZD | SIGNAL_LCSD)) {
+            if (m_nAttr & (SIGNAL_LCZD | SIGNAL_LCSD) || m_strXHDType == "JZ_XHJ" || m_strXHDType == "CZ_XHJ") {
                 m_rcTrainBtn = QRectF(p7, p8);
             }
             //调车按钮
-            if (m_nAttr & (SIGNAL_DCZD | SIGNAL_DCSD)) {
-                if (m_nAttr & (SIGNAL_LCZD | SIGNAL_LCSD)) {
+            if (m_nAttr & (SIGNAL_LCZD | SIGNAL_LCSD) || m_strXHDType == "CZ_XHJ") {
+                if (!(m_nAttr & SIGNAL_ISXXH || m_nSignalType)) {
                     m_rcShuntBtn = QRectF(p9, p10);
                 }
-                else {
-                    m_rcShuntBtn = QRectF(p7, p8);
-                }
             }
+            else if (((m_nAttr & (SIGNAL_DCZD | SIGNAL_DCSD)) && !(m_nAttr & SIGNAL_ISXXH || m_nSignalType)) || m_strXHDType == "DC_XHJ") {
+                m_rcShuntBtn = QRectF(p7, p8);
+            }
+
             //引导按钮,仅可作为始端
-            if ((m_nAttr & SIGNAL_LCSD) && (m_nAttr & SIGNAL_JCXH || m_nAttr & SIGNAL_FCXH || m_nAttr & SIGNAL_FCJLXH) && p13 != QPointF() && p14 != QPointF()) {
-                if ((m_nAttr & (SIGNAL_DCZD | SIGNAL_DCSD)) && (QRectF(p13, p14) == QRectF(p9, p10))) {
-                    m_rcGuideBtn = QRectF(
-                        QPointF((m_nAttr & SIGNAL_SYH) ? (p13.x() - 20) : (p13.x() + 20), p13.y()),
-                        QPointF((m_nAttr & SIGNAL_SYH) ? (p14.x() - 20) : (p14.x() + 20), p14.y()));
+            m_bYDSD |= ((m_nAttr & SIGNAL_LCSD) && (m_nAttr & SIGNAL_JCXH || m_nAttr & SIGNAL_FCXH || m_nAttr & SIGNAL_FCJLXH));
+            if (m_bYDSD) {
+                if (m_strXHDType == "JZ_XHJ") {
+                    m_rcGuideBtn = QRectF(p9, p10);
                 }
                 else {
                     m_rcGuideBtn = QRectF(p13, p14);
                 }
             }
 
-            int nDiameter = m_nRadius * 2;
             //第一灯位
-            if (p12.x() > p8.x()) {    //向右
-                m_rcLight1 = QRectF(p12.x() + m_nRadius, p12.y() - m_nRadius, Scale(nDiameter), Scale(nDiameter));
-            }
-            else {  //向左
-                m_rcLight1 = QRectF(p12.x() - 3 * m_nRadius, p12.y() - m_nRadius, Scale(nDiameter), Scale(nDiameter));
-            }
+            m_rcLight1 = QRectF((m_bRight ? (p12.x() + m_nRadius) : (p12.x() - 3 * m_nRadius)), p12.y() - m_nRadius, Scale(m_nRadius * 2), Scale(m_nRadius * 2));
             //第二灯位
-            if ((m_nAttr & (SIGNAL_LCZD | SIGNAL_LCSD)) && ((m_nAttr & (SIGNAL_LCZH | SIGNAL_AQH)) != SIGNAL_LCZH)) {
-                if (p12.x() > p8.x()) {    //向右
-                    m_rcLight2 = QRectF(p12.x() + 3 * m_nRadius, p12.y() - m_nRadius, Scale(nDiameter), Scale(nDiameter));
-                    m_rcLightTotal = QRectF(m_rcLight1.topLeft(), m_rcLight2.bottomRight());
-                }
-                else {  //向左
-                    m_rcLight2 = QRectF(p12.x() - 5 * m_nRadius, p12.y() - m_nRadius, Scale(nDiameter), Scale(nDiameter));
-                    m_rcLightTotal = QRectF(m_rcLight2.topLeft(), m_rcLight1.bottomRight());
-                }
+            m_rcLight2 = QRectF(m_bRight ? m_rcLight1.x() + 2 * m_nRadius : m_rcLight1.x() - 2 * m_nRadius, p12.y() - m_nRadius, Scale(m_nRadius * 2), Scale(m_nRadius * 2));
+            if (m_nType == 32 || m_nType == 34) {
+                m_rcLightTotal = QRectF(
+                    m_bRight ? m_rcLight1.topLeft() : m_rcLight2.bottomRight(), 
+                    m_bRight ? m_rcLight2.topLeft() : m_rcLight1.bottomRight());
             }
             else {
                 m_rcLightTotal = m_rcLight1;
@@ -119,34 +143,29 @@ namespace Station {
         void StaSignal::DrawSignalButton()
         {
             //列车按钮
-            if (m_nAttr & (SIGNAL_LCZD | SIGNAL_LCSD)) {   
+            if ((m_nAttr & (SIGNAL_LCZD | SIGNAL_LCSD)) || m_strXHDType == "JZ_XHJ" || m_strXHDType == "CZ_XHJ") {
                 DrawButton(m_pPainter, Scale(m_rcTrainBtn), COLOR_BTN_GREEN, m_nBtnState & BTNDOWN_TRAIN);
             }
             //调车按钮
-            if (m_nAttr & (SIGNAL_DCZD | SIGNAL_DCSD)) {
+            if (m_nAttr & (SIGNAL_DCZD | SIGNAL_DCSD) || m_strXHDType == "DC_XHJ" || m_strXHDType == "CZ_XHJ") {
                 DrawButton(m_pPainter, Scale(m_rcShuntBtn), COLOR_BTN_DEEPGRAY, m_nBtnState & BTNDOWN_SHUNT, 2);
             }
             //引导按钮,仅可作为始端
-            if (m_rcGuideBtn != QRectF()) {
+            if (m_bYDSD) {
                 DrawButton(m_pPainter, Scale(m_rcGuideBtn), COLOR_BTN_BLUE_YD, m_nBtnState & BTNDOWN_GUIDE);
             }
         }
 
         void StaSignal::DrawSignalLight()
         {
-            if (m_nAttr & SIGNAL_ISXXH) {  //虚信号机,不绘制灯位
+            if (m_nAttr & SIGNAL_ISXXH || m_nSignalType) {  //虚信号机,不绘制灯位
                 return;
             }
 
             m_pPainter.setPen(QPen(COLOR_TRACK_BLUE, 2));
             //绘制灯柱
             m_pPainter.drawLine(Scale(QPointF(p12.x(), p12.y() + m_nRadius)), Scale(QPointF(p12.x(), p12.y() - m_nRadius)));
-            if (p12.x() > p8.x()) {    //向右
-                m_pPainter.drawLine(Scale(QPointF(p12.x(), p12.y())), Scale(QPointF(p12.x() + m_nRadius, p12.y())));
-            }
-            else {
-                m_pPainter.drawLine(Scale(QPointF(p12.x(), p12.y())), Scale(QPointF(p12.x() - m_nRadius, p12.y())));
-            }
+            m_pPainter.drawLine(Scale(QPointF(p12.x(), p12.y())), Scale(QPointF(m_bRight ? (p12.x() + m_nRadius) : (p12.x() - m_nRadius), p12.y())));
 
             GetSignalLightColor();
             m_pPainter.setRenderHint(QPainter::Antialiasing, true);
@@ -154,7 +173,7 @@ namespace Station {
             m_pPainter.setBrush(m_cLightColor1);
             m_pPainter.drawEllipse(Scale(m_rcLight1));
             //第二灯位
-            if ((m_nAttr & (SIGNAL_LCZD | SIGNAL_LCSD)) && ((m_nAttr & (SIGNAL_LCZH | SIGNAL_AQH)) != SIGNAL_LCZH)) {  
+            if (m_nType == 32 || m_nType == 34) {
                 m_pPainter.setBrush(m_cLightColor2);
                 m_pPainter.drawEllipse(Scale(m_rcLight2));
             }
@@ -191,7 +210,7 @@ namespace Station {
 
         void StaSignal::DrawLightRange()
         {
-            if (m_nAttr & SIGNAL_ISXXH) {  //虚信号机,不绘制灯位
+            if (m_nAttr & SIGNAL_ISXXH || m_nSignalType) {  //虚信号机,不绘制灯位
                 return;
             }
 

@@ -128,25 +128,26 @@ namespace Station {
             }
             //信号机
             {
-                StaSignal* pSignal = nullptr;
-                int nFlagTemp = nFlag + m_mapDeviceVector[SIGNALLAMP].size(); //信号机按钮
-                int nFlagTemp2 = nFlagTemp + m_mapDeviceVector[SIGNALLAMP].size(); //信号表示器
-                bool bAddByte = false;
-                bool bAddByte2 = false;
                 for (DeviceBase* pDevice : m_mapDeviceVector[SIGNALLAMP]) {
-                    pSignal = dynamic_cast<StaSignal*>(pDevice);
-                    pSignal->setState(dataAyyay[nFlag++] & 0xff);
-                    pSignal = nullptr;
+                    dynamic_cast<StaSignal*>(pDevice)->setState(dataAyyay[nFlag++] & 0xff);
                 }
             }
             //半自动闭塞
             {
-                StaSemiAutoBlock* pSemiAutoBlock = nullptr;
                 for (DeviceBase* pDevice : m_mapDeviceVector[SEMIAUTOBLOCK]) {
-                    pSemiAutoBlock = dynamic_cast<StaSemiAutoBlock*>(pDevice);
-
-                    pSemiAutoBlock->setArrowState(dataAyyay[nFlag++] & 0xff);
-                    //pSemiAutoBlock->setState(dataAyyay[nFlag++] & 0xff);
+                    dynamic_cast<StaSemiAutoBlock*>(pDevice)->setArrowState(dataAyyay[nFlag++] & 0xff);
+                    //dynamic_cast<StaSemiAutoBlock*>(pDevice)->setState(dataAyyay[nFlag++] & 0xff);
+                }
+            }
+            //自动闭塞
+            {
+                StaAutoBlock* pAutoBlock = nullptr;
+                for (DeviceBase* pDevice : m_mapDeviceVector[AUTOBLOCK]) {
+                    pAutoBlock = dynamic_cast<StaAutoBlock*>(pDevice);
+                    pAutoBlock->setArrowState(dataAyyay[nFlag] & 0x0f);
+                    pAutoBlock->setState(dataAyyay[nFlag] & 0xf0);
+                    pAutoBlock->setLeaveTrackState(dataAyyay[nFlag + 1]);
+                    nFlag += 2;
                 }
             }
             //场联
@@ -177,17 +178,7 @@ namespace Station {
                     bAddByte = !bAddByte;
                 }
             }
-            //自动闭塞
-            {
-                StaAutoBlock* pAutoBlock = nullptr;
-                for (DeviceBase* pDevice : m_mapDeviceVector[AUTOBLOCK]) {
-                    pAutoBlock = dynamic_cast<StaAutoBlock*>(pDevice);
-                    pAutoBlock->setArrowState(dataAyyay[nFlag] & 0x0f);
-                    pAutoBlock->setState(dataAyyay[nFlag] & 0xf0);
-                    pAutoBlock->setLeaveTrackState(dataAyyay[nFlag + 1]);
-                    nFlag += 2;
-                }
-            }
+            
             return QByteArray();
         }
 

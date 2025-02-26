@@ -12,43 +12,6 @@ namespace Station {
         StaAutoBlock::StaAutoBlock(QObject* pParent) 
             : DeviceArrow(m_mapAttribute), StaDistant(pParent)
         {
-            m_pParent = pParent;
-            m_mapAttribute.insert("ZFZ1_rect", [&](const QString& strElement) {
-                m_rcZFZBtn = QStringToQRectF(strElement);
-                m_rcZFZBtn.setWidth(17);
-                m_rcZFZBtn.setHeight(17);
-            });
-
-            m_mapAttribute.insert("FFZ1_rect", [&](const QString& strElement) {
-                m_rcFCFZBtn = QStringToQRectF(strElement);
-                m_rcFCFZBtn.setWidth(17);
-                m_rcFCFZBtn.setHeight(17);
-            });
-
-            m_mapAttribute.insert("JFZ1_rect", [&](const QString& strElement) {
-                m_rcJCFZBtn = QStringToQRectF(strElement);
-                m_rcJCFZBtn.setWidth(17);
-                m_rcJCFZBtn.setHeight(17);
-            });
-
-            m_mapAttribute.insert("GF1_rect", [&](const QString& strElement) {
-                m_rcGFBtn = QStringToQRectF(strElement);
-                m_rcGFBtn.setWidth(17);
-                m_rcGFBtn.setHeight(17);
-            });
-
-            m_mapAttribute.insert("FZBSD_rect", [&](const QString& strElement) {
-                m_rcFZLight = QStringToQRectF(strElement);
-                m_rcFZLight.setWidth(13);
-                m_rcFZLight.setHeight(13);
-            });
-
-            m_mapAttribute.insert("ZFZ_Text", [&](const QString& strElement) { m_ptZFZText = QStringToQPointF(strElement); });
-            m_mapAttribute.insert("FFZ_Text", [&](const QString& strElement) { m_ptFCFZText = QStringToQPointF(strElement); });
-            m_mapAttribute.insert("JFZ_Text", [&](const QString& strElement) { m_ptJCFZText = QStringToQPointF(strElement); });
-            m_mapAttribute.insert("FZ_Text", [&](const QString& strElement) { m_ptFZText = QStringToQPointF(strElement); });
-            m_mapAttribute.insert("GF_Text", [&](const QString& strElement) { m_ptGFText = QStringToQPointF(strElement); });
-
             m_mapAttribute.insert("LampNum", [&](const QString& strElement) {
                 m_nLampNum = strElement.toUInt();
                 for (int i = 0; i < m_nLampNum; i++) {
@@ -80,68 +43,45 @@ namespace Station {
                 }
             });
 
-            m_mapAttribute.insert("ZFZ_JS", [&](const QString& strElement) { m_ptZFZ_JS = QStringToQPointF(strElement); });
-            m_mapAttribute.insert("FFZ_JS", [&](const QString& strElement) { m_ptJCFZ_JS = QStringToQPointF(strElement); });
-            m_mapAttribute.insert("JFZ_JS", [&](const QString& strElement) { m_ptFCFZ_JS = QStringToQPointF(strElement); });
-
-            m_mapAttribute.insert("m_direction", [&](const QString& strElement) { m_strDirection = strElement; });
-            m_mapAttribute.insert("m_routePoint", [&](const QString& strElement) { m_ptRouteWnd = QStringToQPointF(strElement); });
+            m_mapAttribute.insert("m_Direction", [&](const QString& strElement) { m_strDirection = strElement; });
+            m_mapAttribute.insert("m_RoutePoint", [&](const QString& strElement) { m_ptRouteWnd = QStringToQPointF(strElement); });
+            m_mapAttribute.insert("m_FrameRect", [&](const QString& strElement) { m_rcFrame = QStringToQRectF(strElement); });
             
-            m_mapAttribute.insert("Allow", [&](const QString& strElement) {
+            m_mapAttribute.insert("m_Button", [&](const QString& strElement) {
                 QJsonParseError error;
                 QJsonDocument josnDoc = QJsonDocument::fromJson(strElement.toUtf8(), &error);
                 if (josnDoc.isNull()) {
                     qDebug() << "无效的JSON格式:" << error.errorString();
                     return;
                 }
-                StaBlockLamp blockLamp;
-                blockLamp.m_strName = "允许发车"; 
-                blockLamp.m_rcName = QStringToQRectF(josnDoc.object().value("m_textRect").toString());
-                blockLamp.m_rcLamp = QStringToQRectF(josnDoc.object().value("m_lampRect").toString());
-                m_mapBlockLamp.insert("Allow", blockLamp);
+                if (josnDoc.isObject()) {
+                    for (const QString& key : josnDoc.object().keys()) {
+                        m_mapAttribute[key](QJsonDocument(josnDoc.object().value(key).toObject()).toJson());
+                    }
+                }
             });
+            m_mapAttribute.insert("ZFZ", [&](const QString& strElement) { AddBlockBtn("总辅助", strElement); });
+            m_mapAttribute.insert("JCFZ", [&](const QString& strElement) { AddBlockBtn("接车辅助", strElement); });
+            m_mapAttribute.insert("FCFZ", [&](const QString& strElement) { AddBlockBtn("发车辅助", strElement); });
+            m_mapAttribute.insert("YXGF", [&](const QString& strElement) { AddBlockBtn("允许改方", strElement); });
 
-            m_mapAttribute.insert("Assisted", [&](const QString& strElement) {
+            m_mapAttribute.insert("m_Lamp", [&](const QString& strElement) {
                 QJsonParseError error;
                 QJsonDocument josnDoc = QJsonDocument::fromJson(strElement.toUtf8(), &error);
                 if (josnDoc.isNull()) {
                     qDebug() << "无效的JSON格式:" << error.errorString();
                     return;
                 }
-                StaBlockLamp blockLamp;
-                blockLamp.m_strName = "辅助办理";
-                blockLamp.m_rcName = QStringToQRectF(josnDoc.object().value("m_textRect").toString());
-                blockLamp.m_rcLamp = QStringToQRectF(josnDoc.object().value("m_lampRect").toString());
-                m_mapBlockLamp.insert("Assisted", blockLamp);
-            });
-
-            m_mapAttribute.insert("Supervise", [&](const QString& strElement) {
-                QJsonParseError error;
-                QJsonDocument josnDoc = QJsonDocument::fromJson(strElement.toUtf8(), &error);
-                if (josnDoc.isNull()) {
-                    qDebug() << "无效的JSON格式:" << error.errorString();
-                    return;
+                if (josnDoc.isObject()) {
+                    for (const QString& key : josnDoc.object().keys()) {
+                        m_mapAttribute[key](QJsonDocument(josnDoc.object().value(key).toObject()).toJson());
+                    }
                 }
-                StaBlockLamp blockLamp;
-                blockLamp.m_strName = "监督区间";
-                blockLamp.m_rcName = QStringToQRectF(josnDoc.object().value("m_textRect").toString());
-                blockLamp.m_rcLamp = QStringToQRectF(josnDoc.object().value("m_lampRect").toString());
-                m_mapBlockLamp.insert("Supervise", blockLamp);
             });
-
-            m_mapAttribute.insert("Section", [&](const QString& strElement) {
-                QJsonParseError error;
-                QJsonDocument josnDoc = QJsonDocument::fromJson(strElement.toUtf8(), &error);
-                if (josnDoc.isNull()) {
-                    qDebug() << "无效的JSON格式:" << error.errorString();
-                    return;
-                }
-                StaBlockLamp blockLamp;
-                blockLamp.m_strName = "区间逻辑检查";
-                blockLamp.m_rcName = QStringToQRectF(josnDoc.object().value("m_textRect").toString());
-                blockLamp.m_rcLamp = QStringToQRectF(josnDoc.object().value("m_lampRect").toString());
-                m_mapBlockLamp.insert("Section", blockLamp);
-            });
+            m_mapAttribute.insert("Allow", [&](const QString& strElement) { AddBlockLamp("允许发车", strElement); });
+            m_mapAttribute.insert("Assisted", [&](const QString& strElement) { AddBlockLamp("辅助办理", strElement); });
+            m_mapAttribute.insert("Supervise", [&](const QString& strElement) { AddBlockLamp("监督区间", strElement); });
+            m_mapAttribute.insert("Section", [&](const QString& strElement) { AddBlockLamp("区间逻辑检查", strElement); });
         }
 
         StaAutoBlock::~StaAutoBlock()
@@ -164,28 +104,10 @@ namespace Station {
 
         void StaAutoBlock::InitDeviceAttribute()
         {
-            if (m_rcFZLight.x() < p11.x()) {
-                p11.setX(p11.x() + 48);
-                p12.setX(p12.x() + 48);
-                p13.setX(p13.x() + 48);
-                p14.setX(p14.x() + 48);
-                p15.setX(p15.x() + 48);
-                p16.setX(p16.x() + 48);
-                p17.setX(p17.x() + 48);
-            }
-            else if (m_rcFZLight.x() > p11.x()) {
-                p21.setX(p21.x() - 48);
-                p22.setX(p22.x() - 48);
-                p23.setX(p23.x() - 48);
-                p24.setX(p24.x() - 48);
-                p25.setX(p25.x() - 48);
-                p26.setX(p26.x() - 48);
-                p27.setX(p27.x() - 48);
-            }
             TrainFrame* pTrainFrame = nullptr;
             for (StaLeaveTrack& track : m_vecStaLeaveTrack) {
                 pTrainFrame = new TrainFrame();
-                int nWidth = track.m_rcTrack.width() > 80 ? 80 : track.m_rcTrack.width();
+                int nWidth = track.m_rcTrack.width() > 64 ? 64 : track.m_rcTrack.width();
                 pTrainFrame->m_rcFrame = QRect(track.m_rcTrack.center().x() - nWidth / 2,
                     track.m_rcTrack.center().y() - 15, nWidth, 30);
                 m_vecTrainFrame.append(pTrainFrame);
@@ -197,10 +119,11 @@ namespace Station {
             m_bShowName = MainStation()->IsVisible(VisibleDev::direction);
             DrawArrow(m_pPainter);
             if (m_bMainStation) {
-                DrawButton(m_pPainter, Scale(m_rcZFZBtn), m_nBtnState & 0x10 ? COLOR_BTN_RED : COLOR_BTN_DEEPGRAY, m_nBtnState & 0x01);
-                DrawButton(m_pPainter, Scale(m_rcJCFZBtn), m_nBtnState & 0x20 ? COLOR_BTN_RED : COLOR_BTN_DEEPGRAY, m_nBtnState & 0x02);
-                DrawButton(m_pPainter, Scale(m_rcFCFZBtn), m_nBtnState & 0x40 ? COLOR_BTN_RED : COLOR_BTN_DEEPGRAY, m_nBtnState & 0x04);
-                DrawButton(m_pPainter, Scale(m_rcGFBtn), m_nBtnState & 0x80 ? COLOR_BTN_RED : COLOR_BTN_DEEPGRAY, m_nBtnState & 0x08);
+                int nState = 0x01;
+                for (StaBlockBtn& btnBlock : m_vecBlockBtn) {
+                    DrawButton(m_pPainter, Scale(btnBlock.m_rcBtn), m_nBtnState & 0x10 ? COLOR_BTN_RED : COLOR_BTN_DEEPGRAY, m_nBtnState & nState);
+                    nState *= 2;
+                }
             }
             for (StaLeaveTrack& track : m_vecStaLeaveTrack) {
                 DrawLeaveTrack(track);
@@ -211,6 +134,11 @@ namespace Station {
             DrawTrain(m_pPainter);
             //车次预告窗
             DrawRoutePreviewWnd();
+            if (!m_rcFrame.isEmpty()) {
+                m_pPainter.setPen(QPen(COLOR_TRACK_WHITE, 1));
+                m_pPainter.setBrush(Qt::NoBrush);
+                m_pPainter.drawRect(m_rcFrame);
+            }
             
             return StaDistant::Draw(isMulti);
         }
@@ -246,9 +174,8 @@ namespace Station {
             m_pPainter.setPen(QPen(COLOR_LIGHT_WHITE, 2));
 
             m_pPainter.setRenderHint(QPainter::Antialiasing, true);
-            for (StaBlockLamp& lamp : m_mapBlockLamp) {
-                m_pPainter.drawText(Scale(lamp.m_rcName), m_strDirection + lamp.m_strName, QTextOption(Qt::AlignCenter));
-                //m_pPainter.drawRect(Scale(lamp.m_rcName));
+            for (StaBlockLamp& lamp : m_vecBlockLamp) {
+                m_pPainter.drawText(Scale(lamp.m_rcName), lamp.m_strName, QTextOption(Qt::AlignCenter));
                 m_pPainter.setBrush((lamp.m_nState & 0x10) ? COLOR_LIGHT_RED : COLOR_LIGHT_BLACK);
                 m_pPainter.drawEllipse(Scale(lamp.m_rcLamp));
             }
@@ -264,20 +191,12 @@ namespace Station {
             font.setFamily("微软雅黑");
             font.setPixelSize(Scale(m_nFontSize));//字号
             m_pPainter.setFont(font);//设置字体
-            m_pPainter.setPen(Qt::yellow);
-
-            QFontMetrics  fontMetrics(font);
-            //总辅助
-            m_pPainter.drawText(Scale(QRectF(m_ptZFZText, fontMetrics.size(Qt::TextSingleLine, "总辅助"))), "总辅助", QTextOption(Qt::AlignCenter));
-            //接车辅助
-            m_pPainter.drawText(Scale(QRectF(m_ptJCFZText, fontMetrics.size(Qt::TextSingleLine, "接车辅助"))), "接车辅助", QTextOption(Qt::AlignCenter));
-            //发车辅助
-            m_pPainter.drawText(Scale(QRectF(m_ptFCFZText, fontMetrics.size(Qt::TextSingleLine, "发车辅助"))), "发车辅助", QTextOption(Qt::AlignCenter));
-            if (m_ptGFText != QPointF()) {
-                //改方
-                m_pPainter.drawText(Scale(QRectF(m_ptGFText, fontMetrics.size(Qt::TextSingleLine, "允许改方"))), "允许改方", QTextOption(Qt::AlignCenter));
-            }
             
+            QFontMetrics  fontMetrics(font);
+            for (StaBlockBtn& btnBlock : m_vecBlockBtn) {
+                m_pPainter.setPen(btnBlock.m_cTextColor);
+                m_pPainter.drawText(Scale(btnBlock.m_rcName), btnBlock.m_strName, QTextOption(Qt::AlignCenter));
+            }
         }
 
         void StaAutoBlock::DrawRoutePreviewWnd()
@@ -290,8 +209,6 @@ namespace Station {
             rcTeainNum[1] = { m_ptRouteWnd.x(), m_ptRouteWnd.y() + 32, 120, 32 };
             rcTeainNum[2] = { m_ptRouteWnd.x(), m_ptRouteWnd.y() + 64, 120, 32 };
             
-            int m_nSignalCode = -1; //进/出站信号机编号
-            QString m_strSignal; //进/出站信号机
             QVector<StaTrainRoute*> vecTrainRoute;
             for (StaTrainRoute* pRoute : MainStation()->TrainRouteList()) {
                 if (pRoute->m_strSignal == m_strDirection) {
@@ -315,28 +232,24 @@ namespace Station {
 
         bool StaAutoBlock::Contains(const QPoint& ptPos)
         {
-            return Scale(m_rcZFZBtn).contains(ptPos) || Scale(m_rcJCFZBtn).contains(ptPos) || Scale(m_rcFCFZBtn).contains(ptPos)
-                || Scale(m_rcGFBtn).contains(ptPos);
+            bool bContains = false;
+            for (StaBlockBtn& btnBlock : m_vecBlockBtn) {
+                bContains |= Scale(btnBlock.m_rcBtn).contains(ptPos);
+            }
+            return bContains;
         }
 
         bool StaAutoBlock::IsMouseWheel(const QPoint& ptPos)
         {
             if (CTCWindows::BaseWnd::StaFunBtnToolBar::getCurrFunType() == CTCWindows::FunType::FunBtn) {
-                if (Scale(m_rcZFZBtn).contains(ptPos)) {
-                    m_nSelectBtnType = 0x01;
-                    return true;
-                }
-                else if (Scale(m_rcJCFZBtn).contains(ptPos)) {
-                    m_nSelectBtnType = 0x02;
-                    return true;
-                }
-                else if (Scale(m_rcFCFZBtn).contains(ptPos)) {
-                    m_nSelectBtnType = 0x04;
-                    return true;
-                }
-                else if (Scale(m_rcGFBtn).contains(ptPos)) {
-                    m_nSelectBtnType = 0x08;
-                    return true;
+                bool bContains = false;
+                int nState = 0x01;
+                for (StaBlockBtn& btnBlock : m_vecBlockBtn) {
+                    if (Scale(btnBlock.m_rcBtn).contains(ptPos)) {
+                        m_nSelectBtnType = nState;
+                        return true;
+                    }
+                    nState *= 2;
                 }
             }
             return false;
@@ -377,7 +290,7 @@ namespace Station {
                             MainStation()->AddSelectDevice(this);
                             MainStation()->SendPacketMsg(TARGET_INTERLOCK, 0x40, (track.m_nState & SECTION_STATE_BLOCK) ? 0x0b : 0x0a, 0x12);
                         }
-                        });
+                    });
 
                     QAction* pAction2 = new QAction("分路不良");
                     pMenu->addAction(pAction2);
@@ -475,6 +388,61 @@ namespace Station {
         void StaAutoBlock::ResetDevState()
         {
 
+        }
+
+        void StaAutoBlock::AddBlockBtn(QString strType, const QString& strElement)
+        {
+            QJsonParseError error;
+            QJsonDocument josnDoc = QJsonDocument::fromJson(strElement.toUtf8(), &error);
+            if (josnDoc.isNull()) {
+                qDebug() << "无效的JSON格式:" << error.errorString();
+                return;
+            }
+            QFont font;
+            font.setFamily("微软雅黑");
+            font.setPixelSize(Scale(m_nFontSize));//字号
+            QFontMetricsF  fontMetrics(font);
+            StaBlockBtn blockBtn;
+            blockBtn.m_strName = m_strDirection + strType;
+            blockBtn.m_rcName = QRectF(QStringToQPointF(josnDoc.object().value("pName").toString()), fontMetrics.size(Qt::TextSingleLine, blockBtn.m_strName));
+            blockBtn.m_rcBtn = QRectF(QStringToQPointF(josnDoc.object().value("m_ptBtn").toString()), QSizeF(15, 15));
+            blockBtn.m_ptCountdown = QStringToQPointF(josnDoc.object().value("m_ptCountdown").toString());
+            switch (josnDoc.object().value("m_textColor").toInt())
+            {
+            case 0:  blockBtn.m_cTextColor = Qt::white;  break;
+            case 1:  blockBtn.m_cTextColor = Qt::red;    break;
+            case 2:  blockBtn.m_cTextColor = Qt::yellow; break;
+            case 3:  blockBtn.m_cTextColor = Qt::green;  break;
+            default: blockBtn.m_cTextColor = Qt::white;  break;
+            }
+            m_vecBlockBtn.append(blockBtn);
+        }
+
+        void StaAutoBlock::AddBlockLamp(QString strType, const QString& strElement)
+        {
+            QJsonParseError error;
+            QJsonDocument josnDoc = QJsonDocument::fromJson(strElement.toUtf8(), &error);
+            if (josnDoc.isNull()) {
+                qDebug() << "无效的JSON格式:" << error.errorString();
+                return;
+            }
+            QFont font;
+            font.setFamily("微软雅黑");
+            font.setPixelSize(Scale(m_nFontSize));//字号
+            QFontMetricsF  fontMetrics(font);
+            StaBlockLamp blockLamp;
+            blockLamp.m_strName = m_strDirection + strType;
+            blockLamp.m_rcName = QRectF(QStringToQPointF(josnDoc.object().value("pName").toString()), fontMetrics.size(Qt::TextSingleLine, blockLamp.m_strName));
+            blockLamp.m_rcLamp = QRectF(QStringToQPointF(josnDoc.object().value("m_ptLamp").toString()), QSizeF(15, 15));
+            switch (josnDoc.object().value("m_textColor").toInt())
+            {
+            case 0:  blockLamp.m_cTextColor = Qt::white;  break;
+            case 1:  blockLamp.m_cTextColor = Qt::red;    break;
+            case 2:  blockLamp.m_cTextColor = Qt::yellow; break;
+            case 3:  blockLamp.m_cTextColor = Qt::green;  break;
+            default: blockLamp.m_cTextColor = Qt::white;  break;
+            }
+            m_vecBlockLamp.append(blockLamp);
         }
 
         void StaAutoBlock::setLeaveTrackState(int nState)

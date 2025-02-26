@@ -109,10 +109,20 @@ namespace CTCDoc{
 		Http::HttpClient::setServerAddress(QHostAddress(addressObj.value("HttpServerIp").toString()), addressObj.value("HttpServerPort").toInt());
 		
 		//解析站场设备
-		if (m_pMainStation->ReadStationInfo(rootObj.value("stationInfo").toString()) < 0) {
-			qDebug() << "无效的xml文件.";
-			return -1;
+		QString strFileName = rootObj.value("stationInfo").toString();
+		if (strFileName.right(3) == "xml") {
+			if (m_pMainStation->ReadStationInfoByXml(strFileName) < 0) {
+				qDebug() << "无效的xml文件.";
+				return -1;
+			}
 		}
+		else if (strFileName.right(3) == "txt") {
+			if (m_pMainStation->ReadStationInfoByTxt(strFileName) < 0) {
+				qDebug() << "无效的txt文件.";
+				return -1;
+			}
+		}
+		
 		if (m_pMainStation->ReadDeviceConfig(rootObj.value("deviceInfo").toString()) < 0) {
 			qDebug() << "无效的json文件.";
 			return -1;
@@ -124,12 +134,20 @@ namespace CTCDoc{
 			subObj = value.toObject();
 			StationObject* pStation = new StationObject;
 			//解析站场设备
-			if (pStation->ReadStationInfo(subObj.value("stationInfo").toString()) < 0) {
-				qDebug() << "无效的xml文件.";
-				continue;
+			strFileName = subObj.value("stationInfo").toString();
+			if (strFileName.right(3) == "xml") {
+				if (pStation->ReadStationInfoByXml(strFileName) < 0) {
+					qDebug() << "无效的xml文件.";
+					continue;
+				}
 			}
-			QString str = subObj.value("otherInfo").toString();
-			QString str2 = rootObj.value("multiStation").toString();
+			else if (strFileName.right(3) == "txt") {
+				if (pStation->ReadStationInfoByTxt(strFileName) < 0) {
+					qDebug() << "无效的txt文件.";
+					continue;
+				}
+			}
+
 			if (pStation->ReadDeviceConfig(subObj.value("deviceInfo").toString()) < 0) {
 				qDebug() << "无效的json文件.";
 				continue;

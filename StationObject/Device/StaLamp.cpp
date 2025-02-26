@@ -9,7 +9,9 @@ namespace Station {
         StaLamp::StaLamp(QObject* pParent)
             : DeviceBase(pParent)
         {
-            m_mapAttribute.insert("m_lampRect", [=](const QString& strElement) { m_rcLamp = QStringToQRectF(strElement); });
+            m_mapAttribute.insert("m_ptLamp", [=](const QString& strElement) { 
+                m_rcLamp = QRectF(QStringToQPointF(strElement), QSizeF(15, 15));
+            });
         }
 
         StaLamp::~StaLamp()

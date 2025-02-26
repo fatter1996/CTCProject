@@ -52,8 +52,10 @@ namespace CTCWindows {
         Track,            //股道
         Signal,           //信号灯
                           
-        Ascend = 0x21,    //上行咽喉
-        Descend,          //下行咽喉
+        Ascend = 0x21,    //上行总锁
+        Descend,          //下行总锁
+        UnAscend = 0x29,    //上行解锁
+        UnDescend,          //下行解锁
                           
         Blockage = 0x31,  //闭塞
         Restoration,      //复原

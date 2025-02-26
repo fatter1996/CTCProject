@@ -34,15 +34,12 @@ namespace Station {
             //状态重置
             void ResetDevState() override;
 
+            void AddBlockBtn(QString strType, const QString& strElement);
+
         private:
-            QPointF m_ptBSText;
-            QPointF m_ptFYText;
-            QPointF m_ptSGText;
-
-            QRectF m_rcBSBtn;
-            QRectF m_rcFYBtn;
-            QRectF m_rcSGBtn;
-
+            QVector<StaBlockBtn> m_vecBlockBtn;
+            QRectF m_rcFrame;
+            QString m_strDirection;
             uint m_nBlockType = 0;
             uint m_nSelectBtnType = 0x0;  //选中类型(0-未选中; 0x01-闭塞; 0x02-复原; 0x04-事故)
         };

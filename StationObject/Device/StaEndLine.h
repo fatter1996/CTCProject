@@ -3,7 +3,7 @@
 
 namespace Station {
     namespace Device {
-        //编发线
+        //尽头线
         class StaEndLine : public DeviceBase
         {
         public:
@@ -11,6 +11,7 @@ namespace Station {
             ~StaEndLine();
 
         private:
+            void InitDeviceAttribute() override;
             //站场绘制
             void Draw(bool isMulti = false) override;
 

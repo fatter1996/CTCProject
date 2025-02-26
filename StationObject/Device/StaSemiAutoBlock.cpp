@@ -1,5 +1,7 @@
 #include "StaSemiAutoBlock.h"
 #include "Global.h"
+#include <QJsonDocument>
+#include <QJsonObject>
 
 #pragma execution_character_set("utf-8")
 
@@ -9,29 +11,26 @@ namespace Station {
         StaSemiAutoBlock::StaSemiAutoBlock(QObject* pParent) 
             : DeviceArrow(m_mapAttribute), StaDistant(pParent)
         {
-            m_mapAttribute.insert("BS_Text", [&](const QString& strElement) { m_ptBSText = QStringToQPointF(strElement); });
-            m_mapAttribute.insert("FY_Text", [&](const QString& strElement) { m_ptFYText = QStringToQPointF(strElement); });
-            m_mapAttribute.insert("SG_Text", [&](const QString& strElement) { m_ptSGText = QStringToQPointF(strElement); });
-            
-            m_mapAttribute.insert("BS1_rect", [&](const QString& strElement) { 
-                m_rcBSBtn = QStringToQRectF(strElement); 
-                m_rcBSBtn.setWidth(17);
-                m_rcBSBtn.setHeight(17);
-            });
-
-            m_mapAttribute.insert("FY1_rect", [&](const QString& strElement) {
-                m_rcFYBtn = QStringToQRectF(strElement);
-                m_rcFYBtn.setWidth(17);
-                m_rcFYBtn.setHeight(17);
-            });
-
-            m_mapAttribute.insert("SG1_rect", [&](const QString& strElement) {
-                m_rcSGBtn = QStringToQRectF(strElement);
-                m_rcSGBtn.setWidth(17);
-                m_rcSGBtn.setHeight(17);
-            });
-
             m_mapAttribute.insert("BSType", [&](const QString& strElement) { m_nBlockType = strElement.toUInt(); });
+            m_mapAttribute.insert("m_Direction", [&](const QString& strElement) { m_strDirection = strElement; });
+            m_mapAttribute.insert("m_FrameRect", [&](const QString& strElement) { m_rcFrame = QStringToQRectF(strElement); });
+            m_mapAttribute.insert("m_Button", [&](const QString& strElement) {
+                QJsonParseError error;
+                QJsonDocument josnDoc = QJsonDocument::fromJson(strElement.toUtf8(), &error);
+                if (josnDoc.isNull()) {
+                    qDebug() << "无效的JSON格式:" << error.errorString();
+                    return;
+                }
+                if (josnDoc.isObject()) {
+                    for (const QString& key : josnDoc.object().keys()) {
+                        m_mapAttribute[key](QJsonDocument(josnDoc.object().value(key).toObject()).toJson());
+                    }
+                }
+            });
+            
+            m_mapAttribute.insert("BS", [&](const QString& strElement) { AddBlockBtn("闭塞", strElement); });
+            m_mapAttribute.insert("SG", [&](const QString& strElement) { AddBlockBtn("事故", strElement); });
+            m_mapAttribute.insert("FY", [&](const QString& strElement) { AddBlockBtn("复原", strElement); });
         }
 
         StaSemiAutoBlock::~StaSemiAutoBlock()
@@ -43,9 +42,16 @@ namespace Station {
         {
             DrawArrow(m_pPainter);
             if (m_bMainStation) {
-                DrawButton(m_pPainter, Scale(m_rcBSBtn), COLOR_BTN_DEEPGRAY, m_nBtnState & 0x01);
-                DrawButton(m_pPainter, Scale(m_rcFYBtn), COLOR_BTN_DEEPGRAY, m_nBtnState & 0x02);
-                DrawButton(m_pPainter, Scale(m_rcSGBtn), COLOR_BTN_DEEPGRAY, m_nBtnState & 0x04);
+                int nState = 0x01;
+                for (StaBlockBtn& btnBlock : m_vecBlockBtn) {
+                    DrawButton(m_pPainter, Scale(btnBlock.m_rcBtn), COLOR_BTN_DEEPGRAY, m_nBtnState & 0x01);
+                    nState *= 2;
+                }
+            }
+            if (!m_rcFrame.isEmpty()) {
+                m_pPainter.setPen(QPen(COLOR_TRACK_WHITE, 1));
+                m_pPainter.setBrush(Qt::NoBrush);
+                m_pPainter.drawRect(m_rcFrame);
             }
             return StaDistant::Draw(isMulti);
         }
@@ -63,38 +69,36 @@ namespace Station {
             QFont font;
             font.setFamily("微软雅黑");
             font.setPixelSize(Scale(m_nFontSize));//字号
-
             m_pPainter.setFont(font);//设置字体
-            m_pPainter.setPen(Qt::white);
 
             QFontMetrics  fontMetrics(font);
-            //闭塞
-            m_pPainter.drawText(Scale(QRectF(m_ptBSText, fontMetrics.size(Qt::TextSingleLine, "闭塞"))), "闭塞", QTextOption(Qt::AlignCenter));
-            //复原
-            m_pPainter.drawText(Scale(QRectF(m_ptFYText, fontMetrics.size(Qt::TextSingleLine, "复原"))), "复原", QTextOption(Qt::AlignCenter));
-            //事故
-            m_pPainter.drawText(Scale(QRectF(m_ptSGText, fontMetrics.size(Qt::TextSingleLine, "事故"))), "事故", QTextOption(Qt::AlignCenter));
+            int nState = 0x01;
+            for (StaBlockBtn& btnBlock : m_vecBlockBtn) {
+                m_pPainter.setPen(btnBlock.m_cTextColor);
+                m_pPainter.drawText(Scale(btnBlock.m_rcName), btnBlock.m_strName, QTextOption(Qt::AlignCenter));
+                nState *= 2;
+            }
         }
 
         bool StaSemiAutoBlock::Contains(const QPoint& ptPos)
         {
-            return Scale(m_rcBSBtn).contains(ptPos) || Scale(m_rcFYBtn).contains(ptPos) || Scale(m_rcSGBtn).contains(ptPos);
+            bool bContains = false;
+            for (StaBlockBtn& btnBlock : m_vecBlockBtn) {
+                bContains |= Scale(btnBlock.m_rcBtn).contains(ptPos);
+            }
+            return bContains;
         }
 
         bool StaSemiAutoBlock::IsMouseWheel(const QPoint& ptPos)
         {
             if (CTCWindows::BaseWnd::StaFunBtnToolBar::getCurrFunType() == CTCWindows::FunType::FunBtn) {
-                if (Scale(m_rcBSBtn).contains(ptPos)) {
-                    m_nSelectBtnType = 0x01;
-                    return true;
-                }
-                else if (Scale(m_rcFYBtn).contains(ptPos)) {
-                    m_nSelectBtnType = 0x02;
-                    return true;
-                }
-                else if (Scale(m_rcSGBtn).contains(ptPos)) {
-                    m_nSelectBtnType = 0x04;
-                    return true;
+                int nState = 0x01;
+                for (StaBlockBtn& btnBlock : m_vecBlockBtn) {
+                    if (Scale(btnBlock.m_rcBtn).contains(ptPos)) {
+                        m_nSelectBtnType = nState;
+                        return true;
+                    }
+                    nState *= 2;
                 }
             }
             return false;
@@ -160,6 +164,34 @@ namespace Station {
         void StaSemiAutoBlock::ResetDevState()
         {
 
+        }
+
+        void StaSemiAutoBlock::AddBlockBtn(QString strType, const QString& strElement)
+        {
+            QJsonParseError error;
+            QJsonDocument josnDoc = QJsonDocument::fromJson(strElement.toUtf8(), &error);
+            if (josnDoc.isNull()) {
+                qDebug() << "无效的JSON格式:" << error.errorString();
+                return;
+            }
+            QFont font;
+            font.setFamily("微软雅黑");
+            font.setPixelSize(Scale(m_nFontSize));//字号
+            QFontMetricsF  fontMetrics(font);
+            StaBlockBtn blockBtn;
+            blockBtn.m_strName = m_strDirection + strType;
+            blockBtn.m_rcName = QRectF(QStringToQPointF(josnDoc.object().value("pName").toString()), fontMetrics.size(Qt::TextSingleLine, blockBtn.m_strName));
+            blockBtn.m_rcBtn = QRectF(QStringToQPointF(josnDoc.object().value("m_ptBtn").toString()), QSizeF(15, 15));
+            blockBtn.m_ptCountdown = QStringToQPointF(josnDoc.object().value("m_ptCountdown").toString());
+            switch (josnDoc.object().value("m_textColor").toInt())
+            {
+            case 0:  blockBtn.m_cTextColor = Qt::white;  break;
+            case 1:  blockBtn.m_cTextColor = Qt::red;    break;
+            case 2:  blockBtn.m_cTextColor = Qt::yellow; break;
+            case 3:  blockBtn.m_cTextColor = Qt::green;  break;
+            default: blockBtn.m_cTextColor = Qt::white;  break;
+            }
+            m_vecBlockBtn.append(blockBtn);
         }
     }
 }

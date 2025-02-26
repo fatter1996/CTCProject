@@ -85,15 +85,18 @@ namespace Station {
         private:
             QPointF p12, p7, p8, p9, p10, p13, p14; //绘制坐标
             uint m_nXHDType = 0; //信号机类型
-            uint m_nRadius = 0; //信号机半径
+            QString m_strXHDType; //信号机类型
+            qreal m_nRadius = 0; //信号机半径
+            qreal m_nBtnRadius = 8; //按钮半径
             uint m_nSignalType = 0; //信号类型
-
+            bool m_bRight = false;
             uint m_nD_B_C_Signal = 0;
             uint m_nDC_LC_Signal = 0;
             QString m_strSafeLamp;
             bool m_bHigh = true;
             bool m_bSingleDeng = true;
             bool m_bMD = true;
+            bool m_bYDSD = false;
             QString m_strDirection;
 
             uint m_nSelectType = 0x0;  //选中类型(0-未选中; 0x01-选中信号机名称; 0x02-选中列车按钮; 0x04-选中调车按钮; 0x08-选中通过按钮; 0x1f-选中信号机灯位)

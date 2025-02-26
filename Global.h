@@ -9,6 +9,7 @@
 #define SWITCH			"DC"			//道岔
 #define DERAILER		"TGQ"			//脱轨器
 #define SIGNALLAMP		"XHD"			//信号机
+#define SIGNALLAMP2  	"XH"			//信号机
 #define TRACK			"GD"			//股道
 #define SEMIAUTOBLOCK	"BS"			//半自动闭塞
 #define LOCOMOTIVE		"Jwd"			//机务段
@@ -20,10 +21,12 @@
 #define BRAIDLINE		"BFX"			//编发线
 #define ENDLINE			"JTX"			//尽头线
 #define TEXT			"Text"			//文字
+#define TEXT2			"TX"			//文字
 #define PERMILLSIX		"PermillSix"	//千分之六标识
 #define SECTION			"QD"			//区段 
 #define LAMP			"Lamp"			//指示灯
 #define NEUTRAL			"Neutral"		//分相区
+#define MARK			"Mark"			//标志
 
 //区段状态
 #define SECTION_STATE_TAKEUP     0x01U	//占用

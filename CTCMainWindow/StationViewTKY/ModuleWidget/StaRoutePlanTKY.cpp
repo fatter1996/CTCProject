@@ -11,6 +11,7 @@ namespace CTCWindows {
 			ui.setupUi(this);
 			InitTrainRouteTable();
 			ui.widget->layout()->addWidget(m_pTrainRouteTable);
+			ui.label_2->setText(Station::MainStation()->getStationName());
 			connect(ui.refreshBtn, &QPushButton::clicked, [&]() {});
 		}
 

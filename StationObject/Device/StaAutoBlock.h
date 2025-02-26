@@ -20,14 +20,6 @@ namespace Station {
                 uint m_nState = 0;
             };
 
-            struct StaBlockLamp
-            {
-                QString m_strName;
-                QRectF m_rcName;
-                QRectF m_rcLamp;
-                uint m_nState = 0;
-            };
-
         private:
             void timerEvent(QTimerEvent* event) override;
             //初始化设备属性
@@ -65,23 +57,32 @@ namespace Station {
             //状态重置
             void ResetDevState() override;
 
+            void AddBlockBtn(QString strType, const QString& strElement);
+            void AddBlockLamp(QString strType, const QString& strElement);
+
         public:
             //设置接近/离去区段状态
             void setLeaveTrackState(int nState);
 
         private:
-            QRectF m_rcZFZBtn;
-            QRectF m_rcJCFZBtn;
-            QRectF m_rcFCFZBtn;
-            QRectF m_rcGFBtn;
-            QRectF m_rcFZLight;
+            //QRectF m_rcZFZBtn;
+            //QRectF m_rcJCFZBtn;
+            //QRectF m_rcFCFZBtn;
+            //QRectF m_rcGFBtn;
+            //QRectF m_rcFZLight;
+            //
+            //QPointF m_ptZFZText;
+            //QPointF m_ptJCFZText;
+            //QPointF m_ptFCFZText;
+            //QPointF m_ptFZText;
+            //QPointF m_ptGFText;
+            ////计时显示坐标
+            //QPointF m_ptZFZ_JS;
+            //QPointF m_ptJCFZ_JS;
+            //QPointF m_ptFCFZ_JS;
 
-            QPointF m_ptZFZText;
-            QPointF m_ptJCFZText;
-            QPointF m_ptFCFZText;
-            QPointF m_ptFZText;
-            QPointF m_ptGFText;
 
+            QRectF m_rcFrame;
             uint m_nLampNum = 0;
             bool m_bLeave = false;
             QPointF m_ptLampCenter;
@@ -89,14 +90,10 @@ namespace Station {
             QVector<StaLeaveTrack> m_vecStaLeaveTrack;
             QString m_strAutoBlockType;
 
-            //计时显示坐标
-            QPointF m_ptZFZ_JS;
-            QPointF m_ptJCFZ_JS;
-            QPointF m_ptFCFZ_JS;
-
             uint m_nSelectBtnType = 0x0;  //选中类型(0-未选中; 0x01-总辅助; 0x02-接车辅助; 0x04-发车辅助; 0x08-辅助改方)
             QString m_strDirection;
-            QMap<QString, StaBlockLamp> m_mapBlockLamp;
+            QVector<StaBlockBtn> m_vecBlockBtn;
+            QVector<StaBlockLamp> m_vecBlockLamp;
             QPointF m_ptRouteWnd;
 
             int m_nTimerIdJF = 0;

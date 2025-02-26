@@ -75,5 +75,26 @@ namespace Station {
             QVector<NeutralLine*> m_vecNeutralLine;
             QVector<NeutralText*> m_vecNeutralText;
         };
+
+
+        //标志
+        class StaMark : public DeviceBase {
+            Q_OBJECT
+        public:
+            explicit StaMark(QObject* pParent = nullptr);
+            ~StaMark();
+
+        private:
+            //站场绘制
+            void Draw(bool isMulti = false) override;
+            //绘制分相区
+            void DrawMark();
+            //站场翻转
+            void setVollover(const QPointF& ptBase) override;
+
+        private:
+            QColor m_cColor;
+            QRectF m_rcMark;
+        };
     }
 }

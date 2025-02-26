@@ -22,7 +22,8 @@ namespace Station {
         {
             m_rcRespondRect = QRectF(p1, p4);
             TrainFrame* pTrainFrame = new TrainFrame;
-            pTrainFrame->m_rcFrame = QRectF(m_ptCenter.x() - 36, m_ptCenter.y() - 16, 80, 30);
+            int nWidth = m_rcRespondRect.width() > 64 ? 64 : m_rcRespondRect.width();
+            pTrainFrame->m_rcFrame = QRectF(m_ptCenter.x() - nWidth / 2, m_ptCenter.y() - 16, nWidth, 32);
             m_vecTrainFrame.append(pTrainFrame);
         }
 
