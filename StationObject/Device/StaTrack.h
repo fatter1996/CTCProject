@@ -3,6 +3,29 @@
 
 namespace Station {
     namespace Device {
+        enum class LowFrequency : int {
+            L6 = 1,
+            L5,
+            L4,
+            L3,
+            L2,
+            L,
+            LU,
+            LU2,
+            U,
+            U2,
+            U2S,
+            UU,
+            UUS,
+            HU,
+            HB,
+            H,
+            O
+        };
+        enum class Direction : int {
+            Right,
+            Left
+        };
         //股道
         class StaTrack : public StaSection, public DeviceTrain
         {
@@ -39,11 +62,21 @@ namespace Station {
             void setVollover(const QPointF& ptBase) override;
             //状态重置
             void ResetDevState() override;
+            //区段低频显示
+            void DrawLowTriangulation();
+            //绘制正常显示
+            void DrawTriangulation(QColor pencolor,QColor Textcolor, Direction m_nDirection ,QString Text = "");
+
+            void DrawMinTriangulation(QColor Pencolor, Direction m_nDirection);
+
+            void DrawTriangulationLine();
 
         public:
             QString TrackType() { return m_strTrackType; }
 
         private:
+            static LowFrequency m_nLowFrequency;
+            static Direction m_nDirection;
             QString m_strTrackType; //股道类型
             bool m_bSpeedLimit = false;       //是否限速（临时限速）
             bool m_bShuntFault = false;        //是否分路不良

@@ -55,10 +55,10 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
-    <IncludePath>D:\MyWorkProject\CTCProject-master;D:\MyWorkProject\CTCProject-master\CTCMainWindow\BaseWndClass;D:\MyWorkProject\CTCProject-master\CTCMainWindow;$(IncludePath)</IncludePath>
+    <IncludePath>D:\CTC\CTCMainWindow\BaseWndClass;D:\CTC\CTCMainWindow;D:\CTC;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
-    <IncludePath>D:\MyWorkProject\CTCProject-master\CTCMainWindow\BaseWndClass;D:\MyWorkProject\CTCProject-master\CTCMainWindow;D:\MyWorkProject\CTCProject-master;$(IncludePath)</IncludePath>
+    <IncludePath>D:\CTC\CTCMainWindow;D:\CTC\CTCMainWindow\BaseWndClass;D:\CTC;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Link>
@@ -144,6 +144,7 @@
     <ClCompile Include="CultivateObject\Subject.cpp" />
     <ClCompile Include="Global.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="SealTechnique.cpp" />
     <ClCompile Include="SocketObject\HttpClient.cpp" />
     <ClCompile Include="SocketObject\servertcp.cpp" />
     <ClCompile Include="SocketObject\sockettcp.cpp" />
@@ -215,6 +216,7 @@
     <ClInclude Include="CultivateObject\Subject.h" />
     <ClInclude Include="Global.h" />
     <ClInclude Include="resource.h" />
+    <QtMoc Include="SealTechnique.h" />
     <ClInclude Include="SocketObject\HttpClient.h" />
     <ClInclude Include="StationObject\Device\StaAutoBlock.h" />
     <ClInclude Include="StationObject\Device\StaBraidLine.h" />
@@ -273,6 +275,7 @@
     <QtUic Include="CTCMainWindow\StationViewTKY\StationView\StationCtrlDispTKY.ui" />
     <QtUic Include="CTCMainWindow\StationViewTKY\StationView\StationLogDispTKY.ui" />
     <QtUic Include="CTCMainWindow\StationViewTKY\StationView\StationMultiDispTKY.ui" />
+    <QtUic Include="SealTechnique.ui" />
   </ItemGroup>
   <ItemGroup>
     <QtRcc Include="Resource.qrc" />

@@ -21,7 +21,7 @@ namespace Station {
         public:
             explicit DeviceScale();
             ~DeviceScale() {}
-
+           
         public:
             double Scale(double value, double nOffset = 0);
             QPointF Scale(const QPointF& pt, const bool bOutSide = false, const bool bTopLine = false);

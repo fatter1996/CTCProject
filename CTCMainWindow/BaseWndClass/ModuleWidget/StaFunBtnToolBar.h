@@ -104,6 +104,7 @@ namespace CTCWindows {
             QPushButton* m_pCommandClearBtn = nullptr;
             QPushButton* m_pCommandIssuedBtn = nullptr;
             QPushButton* m_pRouteBuildBtn = nullptr;
+            QPushButton* m_pAuxiliaryMenuBtn = nullptr;
 
         private:
             int m_nTimerID_500 = -1;

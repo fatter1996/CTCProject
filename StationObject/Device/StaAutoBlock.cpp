@@ -126,6 +126,7 @@ namespace Station {
                 }
             }
             for (StaLeaveTrack& track : m_vecStaLeaveTrack) {
+               
                 DrawLeaveTrack(track);
             }
             //绘制车次窗
@@ -175,6 +176,7 @@ namespace Station {
 
             m_pPainter.setRenderHint(QPainter::Antialiasing, true);
             for (StaBlockLamp& lamp : m_vecBlockLamp) {
+                qDebug() << "lamp" << lamp.m_strName;
                 m_pPainter.drawText(Scale(lamp.m_rcName), lamp.m_strName, QTextOption(Qt::AlignCenter));
                 m_pPainter.setBrush((lamp.m_nState & 0x10) ? COLOR_LIGHT_RED : COLOR_LIGHT_BLACK);
                 m_pPainter.drawEllipse(Scale(lamp.m_rcLamp));
@@ -211,6 +213,7 @@ namespace Station {
             
             QVector<StaTrainRoute*> vecTrainRoute;
             for (StaTrainRoute* pRoute : MainStation()->TrainRouteList()) {
+                
                 if (pRoute->m_strSignal == m_strDirection) {
                     vecTrainRoute.append(pRoute);
                 }
@@ -280,6 +283,7 @@ namespace Station {
                 }
             }
             for (StaLeaveTrack& track : m_vecStaLeaveTrack) {
+               
                 if (track.m_rcTrack.contains(ptPos)) {
                     QMenu* pMenu = new QMenu();
                     pMenu->setAttribute(Qt::WA_DeleteOnClose);

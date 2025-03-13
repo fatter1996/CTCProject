@@ -67,6 +67,7 @@ namespace CTCWindows {
 				pAuxiliary->close();
 			});
 			pAuxiliary->AddNewAuxiliaryBtn("破封统计", [=]() {
+				pAuxiliary->ShowSealTechnique();
 				pAuxiliary->close();
 			});
 			pAuxiliary->AddNewAuxiliaryBtn("接通光带", [=]() {
