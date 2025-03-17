@@ -1,7 +1,9 @@
 #include "AuxiliaryMenuWnd.h"
 
 #pragma execution_character_set("utf-8")
+
 namespace CTCWindows {
+	QStringList AuxiliaryMenuWnd::m_stringList;
 	AuxiliaryMenuWnd::AuxiliaryMenuWnd(QWidget* parent)
 		: QDialog(parent)
 	{
@@ -31,20 +33,23 @@ namespace CTCWindows {
 	}
 	void AuxiliaryMenuWnd::ShowSealTechnique()
 	{
-		SealTechnique* se = new SealTechnique;
-		se->SetMapSeal(StationSeal::ZRJ, 88);
-		se->SetStationSeal("³àË®");
+	
 		m_pSealTechnique = new SealTechnique;
-		m_pSealTechnique->SetMapSeal(StationSeal::GZ, 6);
-		m_pSealTechnique->SetMapSeal(StationSeal::SFZ, 6);
-		m_pSealTechnique->SetMapSeal(StationSeal::XZ, 6);
-		m_pSealTechnique->SetMapSeal(StationSeal::SF, 6);
-		m_pSealTechnique->SetMapSeal(StationSeal::XF, 6);
-		m_pSealTechnique->SetMapSeal(StationSeal::SFJ, 6);
-
-		m_pSealTechnique->SetStationSeal("±ê×¼Õ¾");
 		m_pSealTechnique->SetTable();
 		m_pSealTechnique->show();
 
+	}
+	void AuxiliaryMenuWnd::addString(QString LampStr)
+	{
+		for (QString str: m_stringList) {
+			if (str == LampStr) {
+				return;
+			}
+		}
+		m_stringList.append(LampStr);
+	}
+	QStringList  AuxiliaryMenuWnd::getStrList()
+	{
+		return m_stringList;
 	}
 }

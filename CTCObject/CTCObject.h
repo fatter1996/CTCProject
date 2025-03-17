@@ -3,7 +3,7 @@
 #include "SocketObject/socketudp.h"
 #include "SocketObject/sockettcp.h"
 #include "StationObject/StationObject.h"
-
+#include "SealTechnique.h"
 namespace CTCDoc {
     class CTCObject {
 

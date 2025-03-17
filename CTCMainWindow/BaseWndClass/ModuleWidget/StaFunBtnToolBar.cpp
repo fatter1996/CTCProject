@@ -2,7 +2,7 @@
 #include "Global.h"
 #include "CommonWidget/LeadSealDlg.h"
 #include "CommonWidget/ModeChangeWnd.h"
-
+#pragma execution_character_set("utf-8")
 namespace CTCWindows {
 	namespace BaseWnd {
 		FunType StaFunBtnToolBar::m_SelectFunType = FunType::RouteBuild;
@@ -11,6 +11,7 @@ namespace CTCWindows {
 		StaFunBtnToolBar::StaFunBtnToolBar(QWidget* parent)
 			: QWidget(parent)
 		{
+
 			m_nTimerID_500 = startTimer(500);
 		}
 
@@ -26,18 +27,83 @@ namespace CTCWindows {
 
 		void StaFunBtnToolBar::ButtonClicked(FunType eSelectType)
 		{
+			Station::MainStationObject* Station = Station::MainStation();
+			
+			QString stationName = Station->getStationName();
 			m_SelectFunType = eSelectType;
 			switch (m_SelectFunType)
 			{
-			case CTCWindows::FunType::GuideBtn:
-			case CTCWindows::FunType::GuideClock:
-			case CTCWindows::FunType::TotalRelieve:
-			case CTCWindows::FunType::RegionRelieve:
-			case CTCWindows::FunType::UnLighting:
-			case CTCWindows::FunType::RampUnlock:
-			case CTCWindows::FunType::PoorRoute: {
+			case CTCWindows::FunType::GuideBtn:			//引导按钮
 				if (!CTCWindows::LeadSealDlg::LeadSealPassword(CTCWindows::KeyInputType::LeadSeal)) {
 					onFunBtnStateReset();
+				}
+				else {
+					Station::MainStationObject* Station = Station::MainStation();
+					QString stationName = Station->getStationName();
+					SealTechnique::InsertSealRecord(stationName, "引导按钮");
+					
+				}
+				break;
+			case CTCWindows::FunType::GuideClock:		//引导总锁
+				if (!CTCWindows::LeadSealDlg::LeadSealPassword(CTCWindows::KeyInputType::LeadSeal)) {
+					onFunBtnStateReset();
+				}
+				else {
+					Station::MainStationObject* Station = Station::MainStation();
+					QString stationName = Station->getStationName();
+					SealTechnique::InsertSealRecord(stationName, "引导总锁");
+					
+				}
+				break;
+			case CTCWindows::FunType::TotalRelieve:	    //总人解
+				if (!CTCWindows::LeadSealDlg::LeadSealPassword(CTCWindows::KeyInputType::LeadSeal)) {
+					onFunBtnStateReset();
+				}
+				else {
+					Station::MainStationObject* Station = Station::MainStation();
+					QString stationName = Station->getStationName();
+					SealTechnique::InsertSealRecord(stationName, "总人解");
+				}
+				break;
+			case CTCWindows::FunType::RegionRelieve:	//区故解
+				if (!CTCWindows::LeadSealDlg::LeadSealPassword(CTCWindows::KeyInputType::LeadSeal)) {
+					onFunBtnStateReset();
+				}
+				else {
+					Station::MainStationObject* Station = Station::MainStation();
+					QString stationName = Station->getStationName();
+					SealTechnique::InsertSealRecord(stationName, "区故解");
+				}
+				break;
+			case CTCWindows::FunType::UnLighting:		//灭灯
+				if (!CTCWindows::LeadSealDlg::LeadSealPassword(CTCWindows::KeyInputType::LeadSeal)) {
+					onFunBtnStateReset();
+				}
+				else {
+					Station::MainStationObject* Station = Station::MainStation();
+					QString stationName = Station->getStationName();
+					SealTechnique::InsertSealRecord(stationName, "灭灯");
+				}
+				break;
+			case CTCWindows::FunType::RampUnlock:	    //坡道解锁
+				if (!CTCWindows::LeadSealDlg::LeadSealPassword(CTCWindows::KeyInputType::LeadSeal)) {
+					onFunBtnStateReset();
+				}
+				else {
+					Station::MainStationObject* Station = Station::MainStation();
+					QString stationName = Station->getStationName();
+					SealTechnique::InsertSealRecord(stationName, "坡道解锁");
+				}
+				break;
+			case CTCWindows::FunType::PoorRoute: {		//分路不良
+				if (!CTCWindows::LeadSealDlg::LeadSealPassword(CTCWindows::KeyInputType::LeadSeal)) {
+					onFunBtnStateReset();
+				}
+				else {
+					Station::MainStationObject* Station = Station::MainStation();
+					QString stationName = Station->getStationName();
+					SealTechnique::InsertSealRecord(stationName,"分路不良" );
+				
 				}
 			} break;
 			default:

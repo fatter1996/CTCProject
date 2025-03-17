@@ -5,7 +5,7 @@
 #include "Transmission/StaPacket.h"
 #include "../CultivateObject/Subject.h"
 #include "GlobalStruct.h"
-
+#include <QStringList>
 #define STAVIEW       1
 #define TRAINNUM      2
 
@@ -53,6 +53,7 @@ namespace Station {
     public:
         QVector<Device::DeviceBase*>& getDeviceVectorByType(QString strType) { return m_mapDeviceVector[strType]; }
         void setStationName(const QString& strName) { m_strStationName = strName; }
+        QString getStationName() { return m_strStationName; }
         Device::DeviceBase* getDeviceByCode(const uint& nCode);
         Device::DeviceBase* getDeviceByName(const QString& strName);
         Device::DeviceBase* getSwitchBySectionCode(int nCode);
@@ -62,7 +63,7 @@ namespace Station {
         QPoint getOffset() const { return m_ptOffset; }
         bool IsMainStation() const { return m_bMainStation; }
         QWidget* ShowWidget() const { return m_pShowWidget; }
-
+        QStringList ReadMapDevice();
     public:
         static void InitCreatDeviceMap();
 
@@ -154,7 +155,7 @@ namespace Station {
         void ClearNewStagePlan() { m_pNewStagePlan = nullptr; };
         StaDispatchOrder* NewDispatchOrder() { return m_pNewDispatchOrder; }
         void ClearNewDispatchOrder() { m_pNewDispatchOrder = nullptr; };
-
+        
         void setDiploid(DiploidOperate operate, int nType = STAVIEW); //站场大小缩放
         double getDiploid(DiploidRatio ratio) const { return m_mapDiploidRatio[ratio]; }
 

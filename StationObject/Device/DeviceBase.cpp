@@ -60,7 +60,9 @@ namespace Station {
             m_pParent = pParent;
             m_bMainStation = dynamic_cast<StationObject*>(m_pParent)->IsMainStation();
             m_mapAttribute.insert("m_nType", [&](const QString& strElement) { m_nType = strElement.toUInt(); });
+            
             m_mapAttribute.insert("m_strName", [&](const QString& strElement) { m_strName = strElement; });
+
             m_mapAttribute.insert("m_nCode", [&](const QString& strElement) { m_nCode = strElement.toInt(nullptr, 16); });
 
             m_mapAttribute.insert("m_textRect", [&](const QString& strElement) {

@@ -75,7 +75,7 @@ namespace Station {
             QFontMetrics  fontMetrics(font);
             int nState = 0x01;
             for (StaBlockBtn& btnBlock : m_vecBlockBtn) {
-                qDebug() << btnBlock.m_strName;
+
                 m_pPainter.setPen(btnBlock.m_cTextColor);
                 m_pPainter.drawText(Scale(btnBlock.m_rcName), btnBlock.m_strName, QTextOption(Qt::AlignCenter));
                 nState *= 2;

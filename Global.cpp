@@ -19,16 +19,18 @@ namespace CTCWindows {
 
 namespace Station {
     MainStationObject* m_pMainStationObject = nullptr;
-
+    
     void SetMainStation(MainStationObject* pStation)
     {
         m_pMainStationObject = pStation;
+       
     }
-
+  
     MainStationObject* MainStation()
     {
         return m_pMainStationObject;
     }
+
 }
 
 namespace Station {

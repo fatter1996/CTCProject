@@ -21,6 +21,7 @@ namespace CTCDoc{
 		m_pSocketUDP = new Socket::SocketUDP;
 
 		StationObject::InitCreatDeviceMap();
+		
 		m_pMainStation = new MainStationObject;
 		SetMainStation(m_pMainStation);
 		if (ConfigFileInit() < 0) {

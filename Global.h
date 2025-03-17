@@ -130,7 +130,9 @@ namespace CTCWindows {
 namespace Station {
 	void SetMainStation(MainStationObject* pStation);
 	MainStationObject* MainStation();
+	
 
+	
 	void InsterTrainType(int nType, int nIndex, QString strtype);
 }
 

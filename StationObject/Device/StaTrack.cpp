@@ -3,7 +3,10 @@
 #include <QMessageBox>
 #include "qmath.h"
 #include "CommonWidget/LeadSealDlg.h"
+
+
 #pragma execution_character_set("utf-8")
+
 Station::Device::LowFrequency Station::Device::StaTrack::m_nLowFrequency;
 Station::Device::Direction Station::Device::StaTrack::m_nDirection;
 namespace Station {
@@ -12,6 +15,7 @@ namespace Station {
         StaTrack::StaTrack(QObject* pParent)
             : StaSection(pParent)
         {
+            
             m_mapAttribute.insert("GD_Type", [&](const QString& strElement) { m_strTrackType = strElement; });
         }
 
@@ -49,25 +53,6 @@ namespace Station {
             if (m_strTrackType == "GD_QD" || m_strTrackType == "ZX_GD") {
 
             }
-            //绘制低频三角
-            //if (index < 3) {
-            //    m_nLowFrequency = LowFrequency::HU;
-            //}
-            //else
-            //{
-            //    m_nLowFrequency = LowFrequency::LU;
-            //}
-            //if (index < 3) {
-            //    m_nDirection = Direction::Left;
-            //}
-            //else
-            //{
-            //    m_nDirection = Direction::Right;
-            //    if (index > 5) {
-            //        index = 0;
-            //    }
-            //}
-            
             
             DrawLowTriangulation();
             //绘制车次
@@ -192,6 +177,10 @@ namespace Station {
 
         void StaTrack::ShowDeviceMenu(const QPoint& ptPos)
         {
+            Station::MainStationObject* Station = Station::MainStation();
+            QString stationName = Station->getStationName();
+          
+            
             if (m_vecTrainFrame[0]->m_rcFrame.contains(ptPos)) {   //车次号
                 ShowTrainMenu(QCursor::pos(), m_nCode);
             }
@@ -202,6 +191,7 @@ namespace Station {
                 pMenu->addAction(pAction1);
                 QObject::connect(pAction1, &QAction::triggered, [=]() {
                     if (QMessageBox::question(nullptr, MSGBOX_TITTLE, QString("下发\"封锁/解封[股道:%1]\"命令吗?").arg(m_strName), "确定", "取消") == 0) {
+                        
                         MainStation()->AddSelectDevice(this);
                         MainStation()->SendPacketMsg(TARGET_INTERLOCK, 0x40, (m_nState & SECTION_STATE_BLOCK) ? 0x0b : 0x0a, 0x12);
                     }
@@ -211,6 +201,7 @@ namespace Station {
                 QObject::connect(pAction2, &QAction::triggered, [=]() {
                     if (QMessageBox::question(nullptr, MSGBOX_TITTLE, QString("下发\"区故解[股道:%1]\"命令吗?").arg(m_strName), "确定", "取消") == 0) {
                         if (CTCWindows::LeadSealDlg::LeadSealPassword(CTCWindows::KeyInputType::LeadSeal)) {
+                            SealTechnique::InsertSealRecord(stationName, "区故解");
                             MainStation()->AddSelectDevice(this);
                             MainStation()->SendPacketMsg(TARGET_INTERLOCK, 0x40, 0x0d, 0x12);
                         }
@@ -222,6 +213,7 @@ namespace Station {
                 QObject::connect(pAction3, &QAction::triggered, [=]() {
                     if (QMessageBox::question(nullptr, MSGBOX_TITTLE, QString("下发\"分路不良[股道:%1]\"命令吗?").arg(m_strName), "确定", "取消") == 0) {
                         if (CTCWindows::LeadSealDlg::LeadSealPassword(CTCWindows::KeyInputType::LeadSeal)) {
+                            SealTechnique::InsertSealRecord(stationName, "分路不良");
                             MainStation()->AddSelectDevice(this);
                             MainStation()->SendPacketMsg(TARGET_INTERLOCK, 0x40, 0x11, 0x12);
                         }
@@ -387,7 +379,7 @@ namespace Station {
                 Scale(QPointF(p12.x() + (p34.x() - p12.x()) / 4, p12.y() - 12)),
                 QSizeF(Scale((p34.x() - p12.x()) / 3), Scale(p34.y() - p12.y() + 24))
             );
-            qreal offsetDistance;
+            qreal offsetDistance=0.0;
             QPointF trPoint1[3];
             if (m_nDirection == Direction::Right) {
                 offsetDistance = 5.0; // 边外偏移量
@@ -411,32 +403,39 @@ namespace Station {
             qreal lineLength = 5.0;     // 线条长度
             int linesPerEdge = 4;        // 每边线条数量
             qreal angles[] = { 30, 30 ,15, 15 }; // 每条线的角度（相对于法线方向）
-
+            QPointF p1;
+            QPointF p2;
+            QPointF edgeVector;
+            qreal t = 0;
+            QPointF basePoint;
+            QPointF startPoint;
+            qreal angle; 
+            QPointF endPoint;
             // 遍历三角形的每条边
             for (int edge = 0; edge < 3; ++edge) {
                 // 当前边的两个顶点
-                QPointF p1 = trPoint1[edge];
-                QPointF p2 = trPoint1[(edge + 1) % 3];
+                 p1 = trPoint1[edge];
+                 p2 = trPoint1[(edge + 1) % 3];
 
                 // 计算边的方向向量和法向量（指向外侧）
-                QPointF edgeVector = p2 - p1;
+                edgeVector = p2 - p1;
                 QPointF edgeDirection(edgeVector.x() / edgeVector.manhattanLength(),
                     edgeVector.y() / edgeVector.manhattanLength());
                 QPointF outerNormal(-edgeDirection.y(), edgeDirection.x()); // 法向量（外侧）
 
                 for (int line = 0; line < linesPerEdge; ++line) {
-                    qreal t = 0.2 + 0.2 * line;
-                    QPointF basePoint = p1 + t * edgeVector;
+                    t = 0.2 + 0.2 * line;
+                     basePoint = p1 + t * edgeVector;
 
-                    QPointF startPoint = basePoint + outerNormal * offsetDistance;
+                     startPoint = basePoint + outerNormal * offsetDistance;
 
-                    qreal angle = angles[line] * M_PI / 180; // 转为弧度
+                     angle = angles[line] * M_PI / 180; // 转为弧度
                     QPointF direction(
                         outerNormal.x() * qCos(angle) - outerNormal.y() * qSin(angle),
                         outerNormal.x() * qSin(angle) + outerNormal.y() * qCos(angle)
                     );
 
-                    QPointF endPoint = startPoint + direction * lineLength;
+                    endPoint = startPoint + direction * lineLength;
                     m_pPainter.drawLine(QLineF(startPoint, endPoint));
                 }
             }

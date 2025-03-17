@@ -4,14 +4,16 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include "CommonWidget/LeadSealDlg.h"
+#include <QMap>
 #pragma execution_character_set("utf-8")
-
+#include "./CTCMainWindow/CommonWidget/AuxiliaryMenuWnd.h"
 namespace Station {
     namespace Device {
 
         StaAutoBlock::StaAutoBlock(QObject* pParent) 
             : DeviceArrow(m_mapAttribute), StaDistant(pParent)
         {
+         
             m_mapAttribute.insert("LampNum", [&](const QString& strElement) {
                 m_nLampNum = strElement.toUInt();
                 for (int i = 0; i < m_nLampNum; i++) {
@@ -173,10 +175,10 @@ namespace Station {
             font.setPixelSize(Scale(m_nFontSize));//字号
             m_pPainter.setFont(font);//设置字体
             m_pPainter.setPen(QPen(COLOR_LIGHT_WHITE, 2));
-
+            CTCWindows::AuxiliaryMenuWnd* auxiliary = new CTCWindows::AuxiliaryMenuWnd;
             m_pPainter.setRenderHint(QPainter::Antialiasing, true);
-            for (StaBlockLamp& lamp : m_vecBlockLamp) {
-                qDebug() << "lamp" << lamp.m_strName;
+            for (StaBlockLamp& lamp : m_vecBlockLamp) { 
+                auxiliary->addString(lamp.m_strName);
                 m_pPainter.drawText(Scale(lamp.m_rcName), lamp.m_strName, QTextOption(Qt::AlignCenter));
                 m_pPainter.setBrush((lamp.m_nState & 0x10) ? COLOR_LIGHT_RED : COLOR_LIGHT_BLACK);
                 m_pPainter.drawEllipse(Scale(lamp.m_rcLamp));
@@ -266,9 +268,16 @@ namespace Station {
 
         void StaAutoBlock::InitClickEvent()
         {
+            
+            Station::MainStationObject* Station = Station::MainStation();
+
             m_mapClickEvent.insert(CTCWindows::FunType::FunBtn, [&]() {
                 if (CTCWindows::LeadSealDlg::LeadSealPassword(CTCWindows::KeyInputType::LeadSeal)) {
+
                     OnButtonClick(this);
+                    QString stationName = Station->getStationName();
+                    SealTechnique::InsertSealRecord(stationName, "功能按钮");
+
                 }
                 
             });
@@ -276,6 +285,8 @@ namespace Station {
 
         void StaAutoBlock::ShowDeviceMenu(const QPoint& ptPos)
         {
+
+     
             for (TrainFrame* pTrainFrame : m_vecTrainFrame) {
                 if (pTrainFrame->m_rcFrame.contains(ptPos)) {   //车次号
                     ShowTrainMenu(QCursor::pos(), m_nCode);
@@ -301,6 +312,12 @@ namespace Station {
                     QObject::connect(pAction2, &QAction::triggered, [=]() {
                         if (QMessageBox::question(nullptr, MSGBOX_TITTLE, QString("下发\"分路不良[区间轨道:%1]\"命令吗?").arg(track.m_strName), "确定", "取消") == 0) {
                             if (CTCWindows::LeadSealDlg::LeadSealPassword(CTCWindows::KeyInputType::LeadSeal)) {
+
+                                Station::MainStationObject* Station = Station::MainStation();
+
+                                QString stationName = Station->getStationName();
+                                SealTechnique::InsertSealRecord(stationName, "分路不良");
+
                                 MainStation()->AddSelectDevice(this);
                                 MainStation()->SendPacketMsg(TARGET_INTERLOCK, 0x40, 0x11, 0x12);
                             }
