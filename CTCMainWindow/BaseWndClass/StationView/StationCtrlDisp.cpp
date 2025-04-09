@@ -1,5 +1,6 @@
 #include "StationCtrlDisp.h"
 #include "Global.h"
+#include "CustomControl/TextSignLable.h"
 #include <QMouseEvent>
 #pragma execution_character_set("utf-8")
 #include "CommonWidget/LeadSealDlg.h"
@@ -25,24 +26,32 @@ namespace CTCWindows {
 				if (event->type() == QEvent::MouseButtonRelease) {
 					QMouseEvent* mouseEvent = dynamic_cast<QMouseEvent*>(event);
 					if (mouseEvent->button() == Qt::LeftButton) {   //鼠标左键点击事件
-						if (MainWindow()->getMouseState() == MouseState::Amplify) {
-							Station::MainStation()->setDiploid(Station::DiploidOperate::amplify, STAVIEW);
-							event->accept();
-							return true;
-						}
-						else if (MainWindow()->getMouseState() == MouseState::Reduce) {
-							Station::MainStation()->setDiploid(Station::DiploidOperate::reduce, STAVIEW);
-							event->accept();
-							return true;
-						}
+						onLeftbuttonRelease();
+						event->accept();
+						return true;
 					}
 					if (mouseEvent->button() == Qt::RightButton) {   //鼠标右键点击事件
-						if (MainWindow()->getMouseState() == MouseState::Amplify ||
-							MainWindow()->getMouseState() == MouseState::Reduce) {
-							MainWindow()->setMouseState(MouseState::Default);
-						}
-						QMenu* pMenu = new QMenu();
-						pMenu->setAttribute(Qt::WA_DeleteOnClose);
+						onRightbuttonRelease();
+					}
+				}
+
+				if (event->type() == QEvent::MouseMove) {
+					if (MainWindow()->getMouseState() == MouseState::Amplify) {
+						setCursor(QCursor(QPixmap(":/CTCProject/icon/mouseEnlarge.png")));
+					}
+					else if (MainWindow()->getMouseState() == MouseState::Reduce) {
+						setCursor(QCursor(QPixmap(":/CTCProject/icon/mouseNarrow.png")));
+					}
+					else if (MainWindow()->getMouseState() == MouseState::AddTrain) {
+						setCursor(QCursor(QPixmap(":/CTCProject/icon/trainHand.png")));
+					}
+					else {
+						unsetCursor();
+					}
+				}
+			}
+			return QWidget::eventFilter(obj, event);
+		}
 
 						if (Station::MainStation()->getSelectDevice().size()) {
 							QAction* pAction1 = new QAction("命令下达");
@@ -202,30 +211,39 @@ namespace CTCWindows {
 					}
 				}
 
-				if (event->type() == QEvent::MouseMove) {
-					if (MainWindow()->getMouseState() == MouseState::Amplify) {
-						setCursor(QCursor(QPixmap(":/CTCProject/icon/mouseEnlarge.png")));
-					}
-					else if (MainWindow()->getMouseState() == MouseState::Reduce) {
-						setCursor(QCursor(QPixmap(":/CTCProject/icon/mouseNarrow.png")));
-					}
-					else if (MainWindow()->getMouseState() == MouseState::AddTrain) {
-						setCursor(QCursor(QPixmap(":/CTCProject/icon/trainHand.png")));
-					}
-					else {
-						unsetCursor();
-					}
-				}
+		void StationCtrlDisp::onLeftbuttonRelease()
+		{
+			if (MainWindow()->getMouseState() == MouseState::Amplify) {
+				Station::MainStation()->setDiploid(Station::DiploidOperate::amplify, STAVIEW);
 			}
-			return QWidget::eventFilter(obj, event);
+			else if (MainWindow()->getMouseState() == MouseState::Reduce) {
+				Station::MainStation()->setDiploid(Station::DiploidOperate::reduce, STAVIEW);
+			}
 		}
 
-		void StationCtrlDisp::timerEvent(QTimerEvent* event)
+		void StationCtrlDisp::onRightbuttonRelease()
 		{
-			if (event->timerId() == m_nTimerId_500) {
-				StaPaintView()->update();
+			if (MainWindow()->getMouseState() == MouseState::Amplify ||
+				MainWindow()->getMouseState() == MouseState::Reduce) {
+				MainWindow()->setMouseState(MouseState::Default);
 			}
-			return QWidget::timerEvent(event);
+			QMenu* pMenu = new QMenu();
+			pMenu->setAttribute(Qt::WA_DeleteOnClose);
+			QPoint ptMouse = QCursor::pos();
+			if (Station::MainStation()->getSelectDevice().size()) {
+				QAction* pAction1 = new QAction("命令下达");
+				pMenu->addAction(pAction1);
+				connect(pAction1, &QAction::triggered, Station::MainStation(), &Station::MainStationObject::onOrderIssued);
+				QAction* pAction2 = new QAction("命令清除");
+				pMenu->addAction(pAction2);
+				connect(pAction2, &QAction::triggered, []() {
+					Station::MainStation()->onOrderClear(true);
+				});
+			}
+			else {
+				ShowRightMouseMenu(pMenu, ptMouse);
+			}
+			pMenu->exec(ptMouse);
 		}
 	}
 }

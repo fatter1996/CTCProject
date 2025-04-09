@@ -39,7 +39,7 @@ namespace CTCWindows {
 			m_pAuxiliaryMenuBtn = ui.FunBtn20_AuxiliaryMenu;
 			QObject::connect(m_pButtonGroup, qOverload<QAbstractButton*>(&QButtonGroup::buttonClicked), this, &StaFunBtnToolBar::onButtonClicked);
 			//ÃüÁîÇå³ı
-			QObject::connect(m_pCommandClearBtn, &QPushButton::clicked, [&]() { emit OrderClear(1); });
+			QObject::connect(m_pCommandClearBtn, &QPushButton::clicked, [&]() { emit OrderClear(true); });
 			//ÃüÁîÏÂ´ï
 			QObject::connect(m_pCommandIssuedBtn, &QPushButton::clicked, [&]() { emit OrderIssued(); });
 			

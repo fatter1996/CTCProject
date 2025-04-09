@@ -11,6 +11,7 @@ namespace Station {
             ~StaSwitch();
 
         private:
+            void InitAttributeMap() override;
             //初始化设备属性
             void InitDeviceAttribute() override;
             //站场绘制

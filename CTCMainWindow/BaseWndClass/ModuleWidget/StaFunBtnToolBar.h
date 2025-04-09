@@ -96,7 +96,7 @@ namespace CTCWindows {
 
         signals:
             void countdownStarts();
-            void OrderClear(int);
+            void OrderClear(bool);
             void OrderIssued();
             void GiveTheOrder();
         protected:

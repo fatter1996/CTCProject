@@ -105,9 +105,7 @@ namespace CTCWindows {
             addDockWidget(Qt::BottomDockWidgetArea, m_pPlanDock);
             
         }
-        if (!m_bShowToolbarBtn) {
-            m_pStationViewToolBar->hide();
-        }
+    }
 
         if (!m_bShowToolbarLabel) {
             m_pStateToolBar->hide();

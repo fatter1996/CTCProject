@@ -81,6 +81,7 @@ namespace CTCWindows {
 		void MenuStateSync(int type, int nType = 0);
 		//获取实际大小
 		void setFixedSize(const QSize& size);
+		void SetShowToolbar(bool bShowBtn, bool bShowLabel);
 
 	private:
 		virtual BaseWnd::StationCtrlDisp* CreateStationCtrlDisp() = 0;
@@ -137,10 +138,7 @@ namespace CTCWindows {
 		bool IsMultiStaView() const { return m_eViewFlag == ViewFlag::MultiStaView; }
 		void setMouseState(MouseState state) { m_eMouseState = state; }
 		MouseState getMouseState() const { return m_eMouseState; }
-		void SetShowToolbar(bool bShowBtn, bool bShowLabel) {
-			m_bShowToolbarBtn = bShowBtn;
-			m_bShowToolbarLabel = bShowLabel;
-		}
+		bool IsShowToolbar() const { return !m_pStationViewToolBar->isHidden(); }
 
 	protected:
 		int TimerId = 0;
@@ -166,7 +164,5 @@ namespace CTCWindows {
 		MouseState m_eMouseState = MouseState::Default;
 		MenuSyncAction m_stuMenuSyncAction;
 		QAction* m_pRoutePlanAction = nullptr;
-		bool m_bShowToolbarBtn = true;
-		bool m_bShowToolbarLabel = true;
 	};
 }

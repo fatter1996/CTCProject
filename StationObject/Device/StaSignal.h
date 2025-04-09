@@ -7,7 +7,6 @@
 
 namespace Station {
     namespace Device {
-
         enum class SignalState : int {
             DS,      	//断丝
             B,          //白灯
@@ -35,6 +34,7 @@ namespace Station {
             ~StaSignal();
 
         private:
+            void InitAttributeMap() override;
             //初始化设备属性
             void InitDeviceAttribute() override;
             //站场绘制
@@ -70,7 +70,7 @@ namespace Station {
             //设置按钮属性
             void SetBtnState() override;
             //命令清除
-            void OrderClear(int nType = 0) override;
+            void OrderClear(bool bClearTwinkle = false) override;
             //站场翻转
             void setVollover(const QPointF& ptBase) override;
             //状态重置

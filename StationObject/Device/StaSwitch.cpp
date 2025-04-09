@@ -15,34 +15,44 @@ namespace Station {
         StaSwitch::StaSwitch(QObject* pParent)
             : StaSection(pParent)
         {
-           
-            m_mapAttribute.insert("m_nQDCode", [&](const QString& strElement) { m_nQDCode = strElement.toUInt(nullptr, 16); });
-            m_mapAttribute.insert("m_nCxjy", [&](const QString& strElement) { m_nCxjy = strElement.toUInt(); });
-            m_mapAttribute.insert("m_nDSCode", [&](const QString& strElement) { m_nDSCode = strElement.toInt(); });
-            m_mapAttribute.insert("QDMKInterlockBus", [&](const QString& strElement) { m_nQDMKInterlockBus = strElement.toInt(); });
-            m_mapAttribute.insert("m_nQDMKCode", [&](const QString& strElement) { m_nQDMKInterlockBus = strElement.toInt(nullptr, 16); });
-            m_mapAttribute.insert("m_nJyj", [&](const QString& strElement) { m_nJyj = strElement.toInt(); });
-            m_mapAttribute.insert("oneToMore", [&](const QString& strElement) { m_nOneToMore = strElement.toInt(); });
-            m_mapAttribute.insert("p5", [&](const QString& strElement) { p5 = QStringToQPointF(strElement); });
-            m_mapAttribute.insert("p6", [&](const QString& strElement) { p6 = QStringToQPointF(strElement); });
-            m_mapAttribute.insert("p56", [&](const QString& strElement) { p56 = QStringToQPointF(strElement); });
-            m_mapAttribute.insert("pZ12", [&](const QString& strElement) { pz12 = QStringToQPointF(strElement); });
-            m_mapAttribute.insert("pZ34", [&](const QString& strElement) { pz34 = QStringToQPointF(strElement); });
-            m_mapAttribute.insert("pZ56", [&](const QString& strElement) { pz56 = QStringToQPointF(strElement); });
-            m_mapAttribute.insert("m_MainDCQD", [&](const QString& strElement) { m_nMainDCQD = strElement.toInt(); });
-            m_mapAttribute.insert("m_bMainGD", [&](const QString& strElement) { m_nMainDCQD = strElement.toInt(); });
-            m_mapAttribute.insert("isSafetySwitch", [&](const QString& strElement) { m_bSafetySwitch = strElement.toInt(); });
-            m_mapAttribute.insert("m_nCQ", [&](const QString& strElement) { m_nQ = strElement.toInt(); });
-            m_mapAttribute.insert("m_nQ", [&](const QString& strElement) { m_nQ = strElement.toInt(); });
-            m_mapAttribute.insert("m_nDW", [&](const QString& strElement) { m_nD = strElement.toInt(); });
-            m_mapAttribute.insert("m_nD", [&](const QString& strElement) { m_nD = strElement.toInt(); });
-            m_mapAttribute.insert("m_nFW", [&](const QString& strElement) { m_nF = strElement.toInt(); });
-            m_mapAttribute.insert("m_nF", [&](const QString& strElement) { m_nF = strElement.toInt(); });
+            
         }
 
         StaSwitch::~StaSwitch()
         {
             
+        }
+
+        void StaSwitch::InitAttributeMap()
+        {
+            if (m_mapAttribute.contains(m_strType)) {
+                return;
+            }
+            AttrMap mapAttrFun;
+            m_mapAttribute.insert(m_strType, mapAttrFun);
+            m_mapAttribute[m_strType].insert("m_nQDCode", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaSwitch*>(pDevice)->m_nQDCode = strElement.toUInt(nullptr, 16); });
+            m_mapAttribute[m_strType].insert("m_nCxjy", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaSwitch*>(pDevice)->m_nCxjy = strElement.toUInt(); });
+            m_mapAttribute[m_strType].insert("m_nDSCode", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaSwitch*>(pDevice)->m_nDSCode = strElement.toInt(); });
+            m_mapAttribute[m_strType].insert("QDMKInterlockBus", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaSwitch*>(pDevice)->m_nQDMKInterlockBus = strElement.toInt(); });
+            m_mapAttribute[m_strType].insert("m_nQDMKCode", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaSwitch*>(pDevice)->m_nQDMKInterlockBus = strElement.toInt(nullptr, 16); });
+            m_mapAttribute[m_strType].insert("m_nJyj", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaSwitch*>(pDevice)->m_nJyj = strElement.toInt(); });
+            m_mapAttribute[m_strType].insert("oneToMore", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaSwitch*>(pDevice)->m_nOneToMore = strElement.toInt(); });
+            m_mapAttribute[m_strType].insert("p5", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaSwitch*>(pDevice)->p5 = QStringToQPointF(strElement); });
+            m_mapAttribute[m_strType].insert("p6", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaSwitch*>(pDevice)->p6 = QStringToQPointF(strElement); });
+            m_mapAttribute[m_strType].insert("p56", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaSwitch*>(pDevice)->p56 = QStringToQPointF(strElement); });
+            m_mapAttribute[m_strType].insert("pZ12", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaSwitch*>(pDevice)->pz12 = QStringToQPointF(strElement); });
+            m_mapAttribute[m_strType].insert("pZ34", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaSwitch*>(pDevice)->pz34 = QStringToQPointF(strElement); });
+            m_mapAttribute[m_strType].insert("pZ56", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaSwitch*>(pDevice)->pz56 = QStringToQPointF(strElement); });
+            m_mapAttribute[m_strType].insert("m_MainDCQD", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaSwitch*>(pDevice)->m_nMainDCQD = strElement.toInt(); });
+            m_mapAttribute[m_strType].insert("m_bMainGD", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaSwitch*>(pDevice)->m_nMainDCQD = strElement.toInt(); });
+            m_mapAttribute[m_strType].insert("isSafetySwitch", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaSwitch*>(pDevice)->m_bSafetySwitch = strElement.toInt(); });
+            m_mapAttribute[m_strType].insert("m_nCQ", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaSwitch*>(pDevice)->m_nQ = strElement.toInt(); });
+            m_mapAttribute[m_strType].insert("m_nQ", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaSwitch*>(pDevice)->m_nQ = strElement.toInt(); });
+            m_mapAttribute[m_strType].insert("m_nDW", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaSwitch*>(pDevice)->m_nD = strElement.toInt(); });
+            m_mapAttribute[m_strType].insert("m_nD", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaSwitch*>(pDevice)->m_nD = strElement.toInt(); });
+            m_mapAttribute[m_strType].insert("m_nFW", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaSwitch*>(pDevice)->m_nF = strElement.toInt(); });
+            m_mapAttribute[m_strType].insert("m_nF", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaSwitch*>(pDevice)->m_nF = strElement.toInt(); });
+            return StaSection::InitAttributeMap();
         }
 
         void StaSwitch::InitDeviceAttribute()
@@ -299,9 +309,9 @@ namespace Station {
                 case static_cast<int>(CTCWindows::FunType::SingleUnlock):       //单解
                 case static_cast<int>(CTCWindows::FunType::Blockade):           //封锁
                 case static_cast<int>(CTCWindows::FunType::UnBlockade): {       //解封
-                    m_mapClickEvent.insert(static_cast<CTCWindows::FunType>(i), [&]() {
+                    m_mapClickEvent[m_strType].insert(static_cast<CTCWindows::FunType>(i), [](DeviceBase* pDevice) {
                         CTCWindows::BaseWnd::StaFunBtnToolBar::setOperObjType(CTCWindows::OperObjType::Switch);
-                        MainStation()->AddSelectDevice(this);
+                        MainStation()->AddSelectDevice(pDevice);
                     });
                 break;
                 }

@@ -10,17 +10,28 @@ namespace Station {
         StaSwitchSection::StaSwitchSection(QObject* pParent)
             : DeviceBase(pParent)
         {
-            m_mapAttribute.insert("m_nChildNum", [&](const QString& strElement) { m_nChildNum = strElement.toUInt(); });
-            m_mapAttribute.insert("m_nChild", [&](const QString& strElement) {
-                if (nIndex < m_nChildNum) {
-                    m_vecSectionsCode.append(strElement.toUInt());
-                }
-            });
+            
         }
 
         StaSwitchSection::~StaSwitchSection()
         {
 
+        }
+
+        void StaSwitchSection::InitAttributeMap()
+        {
+            if (m_mapAttribute.contains(m_strType)) {
+                return;
+            }
+            AttrMap mapAttrFun;
+            m_mapAttribute.insert(m_strType, mapAttrFun);
+            m_mapAttribute[m_strType].insert("m_nChildNum", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaSwitchSection*>(pDevice)->m_nChildNum = strElement.toUInt(); });
+            m_mapAttribute[m_strType].insert("m_nChild", [](DeviceBase* pDevice, const QString& strElement) {
+                if (dynamic_cast<StaSwitchSection*>(pDevice)->nIndex < dynamic_cast<StaSwitchSection*>(pDevice)->m_nChildNum) {
+                    dynamic_cast<StaSwitchSection*>(pDevice)->m_vecSectionsCode.append(strElement.toUInt());
+                }
+            });
+            return DeviceBase::InitAttributeMap();
         }
 
         void StaSwitchSection::setVollover(const QPointF& ptBase)
@@ -33,13 +44,24 @@ namespace Station {
         StaPermillSix::StaPermillSix(QObject* pParent)
             : DeviceBase(pParent)
         {
-            m_mapAttribute.insert("p1", [&](const QString& strElement) { p1 = QStringToQPointF(strElement); });
-            m_mapAttribute.insert("p2", [&](const QString& strElement) { p2 = QStringToQPointF(strElement); });
+            
         }
 
         StaPermillSix::~StaPermillSix()
         {
         
+        }
+
+        void StaPermillSix::InitAttributeMap()
+        {
+            if (m_mapAttribute.contains(m_strType)) {
+                return;
+            }
+            AttrMap mapAttrFun;
+            m_mapAttribute.insert(m_strType, mapAttrFun);
+            m_mapAttribute[m_strType].insert("p1", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaPermillSix*>(pDevice)->p1 = QStringToQPointF(strElement); });
+            m_mapAttribute[m_strType].insert("p2", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaPermillSix*>(pDevice)->p2 = QStringToQPointF(strElement); });
+            return DeviceBase::InitAttributeMap();
         }
 
         void StaPermillSix::Draw(bool isMulti)
@@ -67,14 +89,29 @@ namespace Station {
         StaNeutral::StaNeutral(QObject* pParent)
             : DeviceBase(pParent)
         {
-            m_mapAttribute.insert("Line", [&](const QString& strElement) {  
+            
+        }
+
+        StaNeutral::~StaNeutral()
+        {
+
+        }
+
+        void StaNeutral::InitAttributeMap()
+        {
+            if (m_mapAttribute.contains(m_strType)) {
+                return;
+            }
+            AttrMap mapAttrFun;
+            m_mapAttribute.insert(m_strType, mapAttrFun);
+            m_mapAttribute[m_strType].insert("Line", [](DeviceBase* pDevice, const QString& strElement) {
                 QJsonParseError error;
                 QJsonDocument josnDoc = QJsonDocument::fromJson(strElement.toUtf8(), &error);
                 if (josnDoc.isNull()) {
                     qDebug() << "无效的JSON格式:" << error.errorString();
                     return;
                 }
-                
+
                 if (josnDoc.isArray()) {
                     NeutralLine* pLine = nullptr;
                     for (const QJsonValue& value : josnDoc.array()) {
@@ -82,13 +119,13 @@ namespace Station {
                             pLine = new NeutralLine;
                             pLine->ptStart = QStringToQPointF(value.toObject().value("m_startPos").toString());
                             pLine->ptEnd = QStringToQPointF(value.toObject().value("m_endPos").toString());
-                            m_vecNeutralLine.append(pLine);
+                            dynamic_cast<StaNeutral*>(pDevice)->m_vecNeutralLine.append(pLine);
                         }
                     }
                 }
             });
 
-            m_mapAttribute.insert("Text", [&](const QString& strElement) {
+            m_mapAttribute[m_strType].insert("Text", [](DeviceBase* pDevice, const QString& strElement) {
                 QJsonParseError error;
                 QJsonDocument josnDoc = QJsonDocument::fromJson(strElement.toUtf8(), &error);
                 if (josnDoc.isNull()) {
@@ -111,16 +148,12 @@ namespace Station {
                             case 3:  pText->cTextColor = Qt::green;  break;
                             default: pText->cTextColor = Qt::white;  break;
                             }
-                            m_vecNeutralText.append(pText);
+                            dynamic_cast<StaNeutral*>(pDevice)->m_vecNeutralText.append(pText);
                         }
                     }
                 }
             });
-        }
-
-        StaNeutral::~StaNeutral()
-        {
-
+            return DeviceBase::InitAttributeMap();
         }
 
         void StaNeutral::Draw(bool isMulti)
@@ -153,22 +186,33 @@ namespace Station {
         StaMark::StaMark(QObject* pParent)
             : DeviceBase(pParent)
         {
-            m_mapAttribute.insert("m_Color", [&](const QString& strElement) { 
-                switch (strElement.toInt())
-                {
-                case 0:  m_cColor = Qt::white;  break;
-                case 1:  m_cColor = Qt::red;    break;
-                case 2:  m_cColor = Qt::yellow; break;
-                case 3:  m_cColor = Qt::green;  break;
-                default: m_cColor = Qt::white;  break;
-                }
-            });
-            m_mapAttribute.insert("m_Rect", [&](const QString& strElement) { m_rcMark = QStringToQRectF(strElement); });
+            
         }
 
         StaMark::~StaMark()
         {
         
+        }
+
+        void StaMark::InitAttributeMap()
+        {
+            if (m_mapAttribute.contains(m_strType)) {
+                return;
+            }
+            AttrMap mapAttrFun;
+            m_mapAttribute.insert(m_strType, mapAttrFun);
+            m_mapAttribute[m_strType].insert("m_Color", [](DeviceBase* pDevice, const QString& strElement) {
+                switch (strElement.toInt())
+                {
+                case 0:  dynamic_cast<StaMark*>(pDevice)->m_cColor = Qt::white;  break;
+                case 1:  dynamic_cast<StaMark*>(pDevice)->m_cColor = Qt::red;    break;
+                case 2:  dynamic_cast<StaMark*>(pDevice)->m_cColor = Qt::yellow; break;
+                case 3:  dynamic_cast<StaMark*>(pDevice)->m_cColor = Qt::green;  break;
+                default: dynamic_cast<StaMark*>(pDevice)->m_cColor = Qt::white;  break;
+                }
+            });
+            m_mapAttribute[m_strType].insert("m_Rect", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaMark*>(pDevice)->m_rcMark = QStringToQRectF(strElement); });
+            return DeviceBase::InitAttributeMap();
         }
 
         void StaMark::Draw(bool isMulti)

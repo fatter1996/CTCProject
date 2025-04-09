@@ -6,18 +6,29 @@ namespace Station {
         StaEndLine::StaEndLine(QObject* pParent)
             : DeviceBase(pParent)
         {
-            m_mapAttribute.insert("p1", [&](const QString& strElement) { p1 = QStringToQPointF(strElement); });
-            m_mapAttribute.insert("p2", [&](const QString& strElement) { p2 = QStringToQPointF(strElement); });
-            m_mapAttribute.insert("p3", [&](const QString& strElement) { p3 = QStringToQPointF(strElement); });
-            m_mapAttribute.insert("p4", [&](const QString& strElement) { p4 = QStringToQPointF(strElement); });
-            m_mapAttribute.insert("p5", [&](const QString& strElement) { p5 = QStringToQPointF(strElement); });
-            m_mapAttribute.insert("p6", [&](const QString& strElement) { p6 = QStringToQPointF(strElement); });
-            m_mapAttribute.insert("p7", [&](const QString& strElement) { p7 = QStringToQPointF(strElement); });
+            
         }
 
         StaEndLine::~StaEndLine()
         {
 
+        }
+
+        void StaEndLine::InitAttributeMap()
+        {
+            if (m_mapAttribute.contains(m_strType)) {
+                return;
+            }
+            AttrMap mapAttrFun;
+            m_mapAttribute.insert(m_strType, mapAttrFun);
+            m_mapAttribute[m_strType].insert("p1", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaEndLine*>(pDevice)->p1 = QStringToQPointF(strElement); });
+            m_mapAttribute[m_strType].insert("p2", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaEndLine*>(pDevice)->p2 = QStringToQPointF(strElement); });
+            m_mapAttribute[m_strType].insert("p3", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaEndLine*>(pDevice)->p3 = QStringToQPointF(strElement); });
+            m_mapAttribute[m_strType].insert("p4", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaEndLine*>(pDevice)->p4 = QStringToQPointF(strElement); });
+            m_mapAttribute[m_strType].insert("p5", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaEndLine*>(pDevice)->p5 = QStringToQPointF(strElement); });
+            m_mapAttribute[m_strType].insert("p6", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaEndLine*>(pDevice)->p6 = QStringToQPointF(strElement); });
+            m_mapAttribute[m_strType].insert("p7", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaEndLine*>(pDevice)->p7 = QStringToQPointF(strElement); });
+            return DeviceBase::InitAttributeMap();
         }
 
         void StaEndLine::InitDeviceAttribute()

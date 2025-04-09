@@ -7,12 +7,23 @@ namespace Station {
         StaText::StaText(QObject* pParent)
             : DeviceBase(pParent)
         {
-            m_mapAttribute.insert("isTitle", [&](const QString& strElement) { m_bIsTitle = strElement.toUInt(); });
+           
         }
 
         StaText::~StaText()
         {
 
+        }
+
+        void StaText::InitAttributeMap()
+        {
+            if (m_mapAttribute.contains(m_strType)) {
+                return;
+            }
+            AttrMap mapAttrFun;
+            m_mapAttribute.insert(m_strType, mapAttrFun);
+            m_mapAttribute[m_strType].insert("isTitle", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaText*>(pDevice)->m_bIsTitle = strElement.toUInt(); });
+            return DeviceBase::InitAttributeMap();
         }
 
         void StaText::Draw(bool isMulti)

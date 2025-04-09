@@ -172,6 +172,7 @@
     <ClCompile Include="StationObject\Device\StaSignal.cpp" />
     <ClCompile Include="StationObject\Device\StaSwitch.cpp" />
     <ClCompile Include="StationObject\Device\StaText.cpp" />
+    <ClCompile Include="StationObject\Device\StaTextSign.cpp" />
     <ClCompile Include="StationObject\Device\StaTrack.cpp" />
     <ClCompile Include="StationObject\StationObject.cpp" />
     <ClCompile Include="StationObject\Transmission\StaPacket.cpp" />
@@ -247,6 +248,7 @@
     <ClInclude Include="StationObject\Device\StaSignal.h" />
     <ClInclude Include="StationObject\Device\StaSwitch.h" />
     <ClInclude Include="StationObject\Device\StaText.h" />
+    <ClInclude Include="StationObject\Device\StaTextSign.h" />
     <ClInclude Include="StationObject\Device\StaTrack.h" />
     <ClInclude Include="StationObject\GlobalStruct.h" />
     <QtMoc Include="StationObject\StationObject.h" />

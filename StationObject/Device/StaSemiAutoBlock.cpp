@@ -9,13 +9,27 @@ namespace Station {
     namespace Device {
 
         StaSemiAutoBlock::StaSemiAutoBlock(QObject* pParent) 
-            : DeviceArrow(m_mapAttribute), StaDistant(pParent)
+            : StaDistant(pParent)
         {
-            m_mapAttribute.insert("BSType", [&](const QString& strElement) { m_nBlockType = strElement.toUInt(); });
-            m_mapAttribute.insert("m_Direction", [&](const QString& strElement) { m_strDirection = strElement; });
-            m_mapAttribute.insert("m_FrameRect", [&](const QString& strElement) { m_rcFrame = QStringToQRectF(strElement); });
-            m_mapAttribute.insert("m_RoutePoint", [&](const QString& strElement) { m_ptRouteWnd = QStringToQPointF(strElement); });
-            m_mapAttribute.insert("m_Button", [&](const QString& strElement) {
+            
+        }
+
+        StaSemiAutoBlock::~StaSemiAutoBlock()
+        {
+
+        }
+
+        void StaSemiAutoBlock::InitAttributeMap()
+        {
+            if (m_mapAttribute.contains(m_strType)) {
+                return;
+            }
+            AttrMap mapAttrFun;
+            m_mapAttribute.insert(m_strType, mapAttrFun);
+            m_mapAttribute[m_strType].insert("BSType", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaSemiAutoBlock*>(pDevice)->m_nBlockType = strElement.toUInt(); });
+            m_mapAttribute[m_strType].insert("m_Direction", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaSemiAutoBlock*>(pDevice)->m_strDirection = strElement; });
+            m_mapAttribute[m_strType].insert("m_FrameRect", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaSemiAutoBlock*>(pDevice)->m_rcFrame = QStringToQRectF(strElement); });
+            m_mapAttribute[m_strType].insert("m_Button", [](DeviceBase* pDevice, const QString& strElement) {
                 QJsonParseError error;
                 QJsonDocument josnDoc = QJsonDocument::fromJson(strElement.toUtf8(), &error);
                 if (josnDoc.isNull()) {
@@ -24,19 +38,16 @@ namespace Station {
                 }
                 if (josnDoc.isObject()) {
                     for (const QString& key : josnDoc.object().keys()) {
-                        m_mapAttribute[key](QJsonDocument(josnDoc.object().value(key).toObject()).toJson());
+                        m_mapAttribute[pDevice->getStrType()][key](pDevice, QJsonDocument(josnDoc.object().value(key).toObject()).toJson());
                     }
                 }
             });
-            
-            m_mapAttribute.insert("BS", [&](const QString& strElement) { AddBlockBtn("±ÕÈû", strElement); });
-            m_mapAttribute.insert("SG", [&](const QString& strElement) { AddBlockBtn("ÊÂ¹Ê", strElement); });
-            m_mapAttribute.insert("FY", [&](const QString& strElement) { AddBlockBtn("¸´Ô­", strElement); });
-        }
 
-        StaSemiAutoBlock::~StaSemiAutoBlock()
-        {
-
+            m_mapAttribute[m_strType].insert("BS", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaSemiAutoBlock*>(pDevice)->AddBlockBtn("±ÕÈû", strElement); });
+            m_mapAttribute[m_strType].insert("SG", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaSemiAutoBlock*>(pDevice)->AddBlockBtn("ÊÂ¹Ê", strElement); });
+            m_mapAttribute[m_strType].insert("FY", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaSemiAutoBlock*>(pDevice)->AddBlockBtn("¸´Ô­", strElement); });
+            InitArrowAttributeMap(m_strType, m_mapAttribute);
+            return StaDistant::InitAttributeMap();
         }
         void StaSemiAutoBlock::DrawRoutePreviewWnd()
         {
@@ -165,8 +176,8 @@ namespace Station {
 
         void StaSemiAutoBlock::InitClickEvent()
         {
-            m_mapClickEvent.insert(CTCWindows::FunType::FunBtn, [&]() {
-                OnButtonClick(this);
+            m_mapClickEvent[m_strType].insert(CTCWindows::FunType::FunBtn, [](DeviceBase* pDevice) {
+                dynamic_cast<StaSemiAutoBlock*>(pDevice)->OnButtonClick();
             });
         }
 
@@ -210,7 +221,7 @@ namespace Station {
             }
         }
 
-        void StaSemiAutoBlock::OrderClear(int nType)
+        void StaSemiAutoBlock::OrderClear(bool bClearTwinkle)
         {
             BtnStateReset();
         }

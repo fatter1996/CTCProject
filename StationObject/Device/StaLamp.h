@@ -2,8 +2,8 @@
 #include "DeviceBase.h"
 
 namespace Station {
-    namespace Device { //独立按钮
-        //独立按钮
+    namespace Device { //独立灯光
+        //独立灯光
         class StaLamp : public DeviceBase
         {
         public:
@@ -11,6 +11,7 @@ namespace Station {
             ~StaLamp();
 
         private:
+            void InitAttributeMap() override;
             void InitDeviceAttribute() override;
             //站场绘制
             void Draw(bool isMulti = false) override;

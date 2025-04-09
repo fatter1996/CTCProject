@@ -27,6 +27,7 @@
 #define LAMP			"Lamp"			//指示灯
 #define NEUTRAL			"Neutral"		//分相区
 #define MARK			"Mark"			//标志
+#define TEXTSIGN		"TextSign"		//文字标注
 
 //区段状态
 #define SECTION_STATE_TAKEUP     0x01U	//占用

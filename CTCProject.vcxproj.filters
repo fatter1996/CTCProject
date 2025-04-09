@@ -295,7 +295,10 @@
     </ClInclude>
     <ClInclude Include="Config.h" />
     <ClInclude Include="resource.h" />
-    <ClInclude Include="Global.h" />
+     <ClInclude Include="Global.h" />
+    <ClInclude Include="StationObject\Device\StaTextSign.h">
+      <Filter>StationObject\Device</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="CTCObject">
@@ -532,6 +535,9 @@
       <Filter>CTCMainWindow\CommonWidget</Filter>
     </QtMoc>
     <QtMoc Include="CTCMainWindow\CustomControl\CarLocationEdit.h">
+      <Filter>CTCMainWindow\CustomControl</Filter>
+    </QtMoc>
+      <QtMoc Include="CTCMainWindow\CustomControl\TextSignLable.h">
       <Filter>CTCMainWindow\CustomControl</Filter>
     </QtMoc>
   </ItemGroup>

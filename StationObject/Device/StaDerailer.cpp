@@ -7,17 +7,27 @@ namespace Station {
         StaDerailer::StaDerailer(QObject* pParent)
             : DeviceBase(pParent)
         {
-            m_mapAttribute.insert("m_RelayDCnode", [&](const QString& strElement) { m_nRelayDCnode = strElement.toInt(nullptr, 16); });
-            m_mapAttribute.insert("ISDD", [&](const QString& strElement) { m_bISDD = strElement.toInt(); });
-            m_mapAttribute.insert("p1", [&](const QString& strElement) { p1 = QStringToQPointF(strElement); });
-            m_mapAttribute.insert("p2", [&](const QString& strElement) { p2 = QStringToQPointF(strElement); });
-            m_mapAttribute.insert("p3", [&](const QString& strElement) { p3 = QStringToQPointF(strElement); });
-            m_mapAttribute.insert("IsDCorTGQ", [&](const QString& strElement) { m_bIsDCorTGQ = strElement.toUInt(); });
+            
         }
 
         StaDerailer::~StaDerailer()
         {
 
+        }
+
+        void StaDerailer::InitAttributeMap()
+        {
+            if (m_mapAttribute.contains(m_strType)) {
+                return;
+            }
+            AttrMap mapAttrFun;
+            m_mapAttribute[m_strType].insert("m_RelayDCnode", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaDerailer*>(pDevice)->m_nRelayDCnode = strElement.toInt(nullptr, 16); });
+            m_mapAttribute[m_strType].insert("ISDD", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaDerailer*>(pDevice)->m_bISDD = strElement.toInt(); });
+            m_mapAttribute[m_strType].insert("p1", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaDerailer*>(pDevice)->p1 = QStringToQPointF(strElement); });
+            m_mapAttribute[m_strType].insert("p2", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaDerailer*>(pDevice)->p2 = QStringToQPointF(strElement); });
+            m_mapAttribute[m_strType].insert("p3", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaDerailer*>(pDevice)->p3 = QStringToQPointF(strElement); });
+            m_mapAttribute[m_strType].insert("IsDCorTGQ", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaDerailer*>(pDevice)->m_bIsDCorTGQ = strElement.toUInt(); });
+            return DeviceBase::InitAttributeMap();
         }
 
         void StaDerailer::Draw(bool isMulti)
