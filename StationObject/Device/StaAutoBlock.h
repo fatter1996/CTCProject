@@ -1,6 +1,6 @@
 #pragma once
 #include "DeviceBase.h"
-
+#include "SealTechnique.h"
 namespace Station {
     namespace Device {
         //自动闭塞
@@ -90,7 +90,7 @@ namespace Station {
             QPointF m_ptInterUsed;
             QVector<StaLeaveTrack> m_vecStaLeaveTrack;
             QString m_strAutoBlockType;
-
+            SealTechnique* m_pSealTechnique = nullptr;
             uint m_nSelectBtnType = 0x0;  //选中类型(0-未选中; 0x01-总辅助; 0x02-接车辅助; 0x04-发车辅助; 0x08-辅助改方)
             QString m_strDirection;
             QVector<StaBlockBtn> m_vecBlockBtn;

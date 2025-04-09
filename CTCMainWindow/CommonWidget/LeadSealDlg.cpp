@@ -66,6 +66,7 @@ namespace CTCWindows {
 
 			connect(ui.confirmBtn, &QPushButton::clicked, [&]() {
 				m_bResult = (m_pCurrLineEdit->text() == PASSWORD);
+				//qDebug() << m_bResult;
 				this->close();
 			});
 		}

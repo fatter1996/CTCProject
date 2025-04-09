@@ -1,5 +1,6 @@
 #include "StaFunBtnToolBarTKY.h"
 #include "CommonWidget/LeadSealDlg.h"
+#pragma execution_character_set("utf-8")
 
 namespace CTCWindows {
 	namespace CARS {
@@ -33,13 +34,14 @@ namespace CTCWindows {
 			m_pRouteBuildBtn = ui.FunBtn1_RouteBuild;
 			m_pCommandClearBtn = ui.FunBtn21_CommandClear;
 			m_pCommandIssuedBtn = ui.FunBtn22_CommandIssued;
-
+			m_pAuxiliaryMenuBtn = ui.FunBtn20_AuxiliaryMenu;
 			QObject::connect(m_pButtonGroup, qOverload<QAbstractButton*>(&QButtonGroup::buttonClicked), this, &StaFunBtnToolBar::onButtonClicked);
 			//命令清除
 			QObject::connect(m_pCommandClearBtn, &QPushButton::clicked, [&]() { emit OrderClear(true); });
 			//命令下达
 			QObject::connect(m_pCommandIssuedBtn, &QPushButton::clicked, [&]() { emit OrderIssued(); });
-
+			
+			QObject::connect(m_pAuxiliaryMenuBtn, &QPushButton::clicked, this,&StaFunBtnToolBar::onAuxiliaryMenuBtnClicked);
 			onFunBtnStateReset();
 		}
 
@@ -60,6 +62,8 @@ namespace CTCWindows {
 				pAuxiliary->close();
 			});
 			pAuxiliary->AddNewAuxiliaryBtn("破封统计", [=]() {
+
+				pAuxiliary->ShowSealTechnique();
 				pAuxiliary->close();
 			});
 			pAuxiliary->AddNewAuxiliaryBtn("接通光带", [=]() {

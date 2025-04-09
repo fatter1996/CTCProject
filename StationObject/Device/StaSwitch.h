@@ -75,8 +75,8 @@ namespace Station {
             int m_nQ = -1;
             int m_nD = -1;
             int m_nF = -1;
-
-            uint m_nSwitchState = 0;  //道岔状态(1-定位,2-反位,0-失表示,3-岔前)
+            SealTechnique* m_pSealTechnique = nullptr;
+            uint m_nSwitchState = 0;  //道岔状态(1-定位,2-反位,0,3-岔前)
             uint m_nShuntFault = 0;  //分路不良(1-定位,2-反位,4-岔前)(可组合)
             bool m_bShuntFaultIdle = false;  //分路不良空闲
             uint m_nSpeedLimit = 0;  //是否限速（临时限速）(1-定位,2-反位,4-岔前)(可组合)

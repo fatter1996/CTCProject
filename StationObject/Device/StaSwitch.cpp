@@ -320,6 +320,9 @@ namespace Station {
 
         void StaSwitch::ShowDeviceMenu(const QPoint& ptPos)
         {
+            Station::MainStationObject* Station = Station::MainStation();
+
+            QString stationName = Station->getStationName();
             QMenu* pMenu = new QMenu();
             pMenu->setAttribute(Qt::WA_DeleteOnClose);
             QAction* pAction1 = new QAction("定操");
@@ -375,6 +378,8 @@ namespace Station {
             QObject::connect(pAction6, &QAction::triggered, [=]() {
                 if (QMessageBox::question(nullptr, MSGBOX_TITTLE, QString("下发\"区故解[道岔:%1]\"命令吗?").arg(m_strName), "确定", "取消") == 0) {
                     if (CTCWindows::LeadSealDlg::LeadSealPassword(CTCWindows::KeyInputType::LeadSeal)) {
+                        SealTechnique::InsertSealRecord(stationName, "区故解");
+                    
                         MainStation()->AddSelectDevice(this);
                         MainStation()->SendPacketMsg(TARGET_INTERLOCK, 0x40, 0x0d, 0x11);
                     }
@@ -387,17 +392,27 @@ namespace Station {
             QObject::connect(pAction7, &QAction::triggered, [=]() {
                 if (QMessageBox::question(nullptr, MSGBOX_TITTLE, QString("下发\"岔前 分路不良[道岔:%1]\"命令吗?").arg(m_strName), "确定", "取消") == 0) {
                     if (CTCWindows::LeadSealDlg::LeadSealPassword(CTCWindows::KeyInputType::LeadSeal)) {
+                        Station::MainStationObject* Station = Station::MainStation();
+
+                        QString stationName = Station->getStationName();
+                        SealTechnique::InsertSealRecord(stationName, "分路不良");
+                        
                         MainStation()->AddSelectDevice(this);
                         MainStation()->SendPacketMsg(TARGET_INTERLOCK, 0x40, 0x11, 0x23);
                     }
                 }
             });
+
             QAction* pAction8 = new QAction("定位 分路不良");
             pAction8->setEnabled(m_nSwitchState & SWITCH_STATE_LOCK);
             pMenu->addAction(pAction8);
             QObject::connect(pAction8, &QAction::triggered, [=]() {
                 if (QMessageBox::question(nullptr, MSGBOX_TITTLE, QString("下发\"定位 分路不良[道岔:%1]\"命令吗?").arg(m_strName), "确定", "取消") == 0) {
                     if (CTCWindows::LeadSealDlg::LeadSealPassword(CTCWindows::KeyInputType::LeadSeal)) {
+                        SealTechnique::InsertSealRecord(stationName, "分路不良");
+                        Station::MainStationObject* Station = Station::MainStation();
+                       
+
                         MainStation()->AddSelectDevice(this);
                         MainStation()->SendPacketMsg(TARGET_INTERLOCK, 0x40, 0x11, 0x24);
                     }
@@ -409,6 +424,9 @@ namespace Station {
             QObject::connect(pAction9, &QAction::triggered, [=]() {
                 if (QMessageBox::question(nullptr, MSGBOX_TITTLE, QString("下发\"反位 分路不良[道岔:%1]\"命令吗?").arg(m_strName), "确定", "取消") == 0) {
                     if (CTCWindows::LeadSealDlg::LeadSealPassword(CTCWindows::KeyInputType::LeadSeal)) {
+                        SealTechnique::InsertSealRecord(stationName, "分路不良");
+
+        
                         MainStation()->AddSelectDevice(this);
                         MainStation()->SendPacketMsg(TARGET_INTERLOCK, 0x40, 0x11, 0x25);
                     }
