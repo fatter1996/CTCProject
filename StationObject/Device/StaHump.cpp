@@ -8,34 +8,45 @@ namespace Station {
         StaHump::StaHump(QObject* pParent)
             : StaDistant(pParent)
         {
-            m_mapAttribute.insert("p1", [&](const QString& strElement) { p1 = QStringToQPointF(strElement); });
-            m_mapAttribute.insert("p2", [&](const QString& strElement) { p2 = QStringToQPointF(strElement); });
-            m_mapAttribute.insert("p3", [&](const QString& strElement) { p3 = QStringToQPointF(strElement); });
-            m_mapAttribute.insert("p4", [&](const QString& strElement) { p4 = QStringToQPointF(strElement); });
-            m_mapAttribute.insert("p5", [&](const QString& strElement) { p5 = QStringToQPointF(strElement); });
-            m_mapAttribute.insert("p6", [&](const QString& strElement) { p6 = QStringToQPointF(strElement); });
-            m_mapAttribute.insert("p7", [&](const QString& strElement) { p7 = QStringToQPointF(strElement); });
-            m_mapAttribute.insert("p8", [&](const QString& strElement) { p8 = QStringToQPointF(strElement); });
-            m_mapAttribute.insert("p9", [&](const QString& strElement) { p9 = QStringToQPointF(strElement); });
-            m_mapAttribute.insert("Pqd", [&](const QString& strElement) { m_ptCutOff = QStringToQPointF(strElement); });
-            m_mapAttribute.insert("Pyxts", [&](const QString& strElement) { m_ptAllow = QStringToQPointF(strElement); });
-            m_mapAttribute.insert("Pdczc", [&](const QString& strElement) { m_ptTakeLook = QStringToQPointF(strElement); });
-
-            m_mapAttribute.insert("anRect1", [&](const QString& strElement) {
-                m_rcButton = QStringToQRectF(strElement);
-                m_rcButton.setWidth(17);
-                m_rcButton.setHeight(17);
-            });
-
-            m_mapAttribute.insert("yxtsRect", [&](const QString& strElement) { m_rcAllow = QStringToQRectF(strElement); });
-            m_mapAttribute.insert("dczcRect", [&](const QString& strElement) { m_rcTakeLook = QStringToQRectF(strElement); });
-            m_mapAttribute.insert("qdRect", [&](const QString& strElement) { m_rcCutOff = QStringToQRectF(strElement); });
-            m_mapAttribute.insert("xhRect", [&](const QString& strElement) { m_rcSignal = QStringToQRectF(strElement); });
+            
         }
 
         StaHump::~StaHump()
         {
 
+        }
+
+        void StaHump::InitAttributeMap()
+        {
+            if (m_mapAttribute.contains(m_strType)) {
+                return;
+            }
+            AttrMap mapAttrFun;
+            m_mapAttribute.insert(m_strType, mapAttrFun);
+            m_mapAttribute[m_strType].insert("p1", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaHump*>(pDevice)->p1 = QStringToQPointF(strElement); });
+            m_mapAttribute[m_strType].insert("p2", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaHump*>(pDevice)->p2 = QStringToQPointF(strElement); });
+            m_mapAttribute[m_strType].insert("p3", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaHump*>(pDevice)->p3 = QStringToQPointF(strElement); });
+            m_mapAttribute[m_strType].insert("p4", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaHump*>(pDevice)->p4 = QStringToQPointF(strElement); });
+            m_mapAttribute[m_strType].insert("p5", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaHump*>(pDevice)->p5 = QStringToQPointF(strElement); });
+            m_mapAttribute[m_strType].insert("p6", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaHump*>(pDevice)->p6 = QStringToQPointF(strElement); });
+            m_mapAttribute[m_strType].insert("p7", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaHump*>(pDevice)->p7 = QStringToQPointF(strElement); });
+            m_mapAttribute[m_strType].insert("p8", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaHump*>(pDevice)->p8 = QStringToQPointF(strElement); });
+            m_mapAttribute[m_strType].insert("p9", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaHump*>(pDevice)->p9 = QStringToQPointF(strElement); });
+            m_mapAttribute[m_strType].insert("Pqd", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaHump*>(pDevice)->m_ptCutOff = QStringToQPointF(strElement); });
+            m_mapAttribute[m_strType].insert("Pyxts", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaHump*>(pDevice)->m_ptAllow = QStringToQPointF(strElement); });
+            m_mapAttribute[m_strType].insert("Pdczc", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaHump*>(pDevice)->m_ptTakeLook = QStringToQPointF(strElement); });
+
+            m_mapAttribute[m_strType].insert("anRect1", [](DeviceBase* pDevice, const QString& strElement) {
+                dynamic_cast<StaHump*>(pDevice)->m_rcButton = QStringToQRectF(strElement);
+                dynamic_cast<StaHump*>(pDevice)->m_rcButton.setWidth(17);
+                dynamic_cast<StaHump*>(pDevice)->m_rcButton.setHeight(17);
+            });
+
+            m_mapAttribute[m_strType].insert("yxtsRect", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaHump*>(pDevice)->m_rcAllow = QStringToQRectF(strElement); });
+            m_mapAttribute[m_strType].insert("dczcRect", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaHump*>(pDevice)->m_rcTakeLook = QStringToQRectF(strElement); });
+            m_mapAttribute[m_strType].insert("qdRect", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaHump*>(pDevice)->m_rcCutOff = QStringToQRectF(strElement); });
+            m_mapAttribute[m_strType].insert("xhRect", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaHump*>(pDevice)->m_rcSignal = QStringToQRectF(strElement); });
+            return StaDistant::InitAttributeMap();
         }
 
         void StaHump::Draw(bool isMulti)
@@ -111,8 +122,8 @@ namespace Station {
 
         void StaHump::InitClickEvent()
         {
-            m_mapClickEvent.insert(CTCWindows::FunType::FunBtn, [&]() {
-                OnButtonClick(this);
+            m_mapClickEvent[m_strType].insert(CTCWindows::FunType::FunBtn, [](DeviceBase* pDevice) {
+                dynamic_cast<StaHump*>(pDevice)->OnButtonClick();
             });
         }
 

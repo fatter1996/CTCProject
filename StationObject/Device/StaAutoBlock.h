@@ -3,7 +3,7 @@
 
 namespace Station {
     namespace Device {
-        //半自动闭塞
+        //自动闭塞
         class StaAutoBlock : public StaDistant, public DeviceArrow, public DeviceBtn, public DeviceTrain
         {
         public:
@@ -22,6 +22,7 @@ namespace Station {
 
         private:
             void timerEvent(QTimerEvent* event) override;
+            void InitAttributeMap() override;
             //初始化设备属性
             void InitDeviceAttribute();
             //站场绘制
@@ -51,7 +52,7 @@ namespace Station {
             //获取箭头颜色
             void getArrowColor() override;
             //命令清除
-            void OrderClear(int nType = 0) override;
+            void OrderClear(bool bClearTwinkle = false) override;
             //站场翻转
             void setVollover(const QPointF& ptBase) override;
             //状态重置

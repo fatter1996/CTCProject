@@ -11,6 +11,7 @@ namespace Station {
             ~StaSemiAutoBlock();
 
         private:
+            void InitAttributeMap() override;
             //站场绘制
             void Draw(bool isMulti = false) override;
             //绘制信号灯
@@ -28,7 +29,7 @@ namespace Station {
             //获取箭头颜色
             void getArrowColor() override;
             //命令清除
-            void OrderClear(int nType = 0) override;
+            void OrderClear(bool bClearTwinkle = false) override;
             //站场翻转
             void setVollover(const QPointF& ptBase) override;
             //状态重置

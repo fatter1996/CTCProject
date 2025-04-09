@@ -1,92 +1,105 @@
-﻿#include "StaAutoBlock.h"
-#include "Global.h"
+﻿
 #include <QMessageBox>
 #include <QJsonDocument>
 #include <QJsonObject>
 #include "CommonWidget/LeadSealDlg.h"
+#include "StaAutoBlock.h"
+#include "Global.h"
 #pragma execution_character_set("utf-8")
 
 namespace Station {
     namespace Device {
 
         StaAutoBlock::StaAutoBlock(QObject* pParent) 
-            : DeviceArrow(m_mapAttribute), StaDistant(pParent)
+            : StaDistant(pParent)
         {
-            m_mapAttribute.insert("LampNum", [&](const QString& strElement) {
-                m_nLampNum = strElement.toUInt();
-                for (int i = 0; i < m_nLampNum; i++) {
-                    m_vecStaLeaveTrack.append(StaLeaveTrack());
-                    m_vecStaLeaveTrack[i].m_nIndex = i;
-                }
-            });
-
-            m_mapAttribute.insert("isLeave", [&](const QString& strElement) { m_bLeave = strElement.toUInt(); });
-            m_mapAttribute.insert("LampCenter0", [&](const QString& strElement) { m_ptLampCenter = QStringToQPointF(strElement); });
-            m_mapAttribute.insert("InterUsed", [&](const QString& strElement) { m_ptInterUsed = QStringToQPointF(strElement); });
-            m_mapAttribute.insert("ZDBS_Type", [&](const QString& strElement) { m_strAutoBlockType = strElement; });
             
-            m_mapAttribute.insert("trackName", [&](const QString& strElement) {
-                if (m_vecStaLeaveTrack.size() > nIndex) {
-                    m_vecStaLeaveTrack[nIndex].m_strName = strElement;
-                }
-            });
-
-            m_mapAttribute.insert("trackNamePoint", [&](const QString& strElement) {
-                if (m_vecStaLeaveTrack.size() > nIndex) {
-                    m_vecStaLeaveTrack[nIndex].m_ptName = QStringToQPointF(strElement);
-                }
-            });
-
-            m_mapAttribute.insert("CommLeaveTrack", [&](const QString& strElement) {
-                if (m_vecStaLeaveTrack.size() > nIndex) {
-                    m_vecStaLeaveTrack[nIndex].m_rcTrack = QStringToQRectF(strElement);
-                }
-            });
-
-            m_mapAttribute.insert("m_Direction", [&](const QString& strElement) { m_strDirection = strElement; });
-            m_mapAttribute.insert("m_RoutePoint", [&](const QString& strElement) { m_ptRouteWnd = QStringToQPointF(strElement); });
-            m_mapAttribute.insert("m_FrameRect", [&](const QString& strElement) { m_rcFrame = QStringToQRectF(strElement); });
-            
-            m_mapAttribute.insert("m_Button", [&](const QString& strElement) {
-                QJsonParseError error;
-                QJsonDocument josnDoc = QJsonDocument::fromJson(strElement.toUtf8(), &error);
-                if (josnDoc.isNull()) {
-                    qDebug() << "无效的JSON格式:" << error.errorString();
-                    return;
-                }
-                if (josnDoc.isObject()) {
-                    for (const QString& key : josnDoc.object().keys()) {
-                        m_mapAttribute[key](QJsonDocument(josnDoc.object().value(key).toObject()).toJson());
-                    }
-                }
-            });
-            m_mapAttribute.insert("ZFZ", [&](const QString& strElement) { AddBlockBtn("总辅助", strElement); });
-            m_mapAttribute.insert("JCFZ", [&](const QString& strElement) { AddBlockBtn("接车辅助", strElement); });
-            m_mapAttribute.insert("FCFZ", [&](const QString& strElement) { AddBlockBtn("发车辅助", strElement); });
-            m_mapAttribute.insert("YXGF", [&](const QString& strElement) { AddBlockBtn("允许改方", strElement); });
-
-            m_mapAttribute.insert("m_Lamp", [&](const QString& strElement) {
-                QJsonParseError error;
-                QJsonDocument josnDoc = QJsonDocument::fromJson(strElement.toUtf8(), &error);
-                if (josnDoc.isNull()) {
-                    qDebug() << "无效的JSON格式:" << error.errorString();
-                    return;
-                }
-                if (josnDoc.isObject()) {
-                    for (const QString& key : josnDoc.object().keys()) {
-                        m_mapAttribute[key](QJsonDocument(josnDoc.object().value(key).toObject()).toJson());
-                    }
-                }
-            });
-            m_mapAttribute.insert("Allow", [&](const QString& strElement) { AddBlockLamp("允许发车", strElement); });
-            m_mapAttribute.insert("Assisted", [&](const QString& strElement) { AddBlockLamp("辅助办理", strElement); });
-            m_mapAttribute.insert("Supervise", [&](const QString& strElement) { AddBlockLamp("监督区间", strElement); });
-            m_mapAttribute.insert("Section", [&](const QString& strElement) { AddBlockLamp("区间逻辑检查", strElement); });
         }
 
         StaAutoBlock::~StaAutoBlock()
         {
 
+        }
+
+        void StaAutoBlock::InitAttributeMap()
+        {
+            if (m_mapAttribute.contains(m_strType)) {
+                return;
+            }
+            AttrMap mapAttrFun;
+            m_mapAttribute.insert(m_strType, mapAttrFun);
+            m_mapAttribute[m_strType].insert("LampNum", [](DeviceBase* pDevice, const QString& strElement) {
+                dynamic_cast<StaAutoBlock*>(pDevice)->m_nLampNum = strElement.toUInt();
+                for (int i = 0; i < dynamic_cast<StaAutoBlock*>(pDevice)->m_nLampNum; i++) {
+                    dynamic_cast<StaAutoBlock*>(pDevice)->m_vecStaLeaveTrack.append(StaLeaveTrack());
+                    dynamic_cast<StaAutoBlock*>(pDevice)->m_vecStaLeaveTrack[i].m_nIndex = i;
+                }
+            });
+
+            m_mapAttribute[m_strType].insert("isLeave", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaAutoBlock*>(pDevice)->m_bLeave = strElement.toUInt(); });
+            m_mapAttribute[m_strType].insert("LampCenter0", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaAutoBlock*>(pDevice)->m_ptLampCenter = QStringToQPointF(strElement); });
+            m_mapAttribute[m_strType].insert("InterUsed", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaAutoBlock*>(pDevice)->m_ptInterUsed = QStringToQPointF(strElement); });
+            m_mapAttribute[m_strType].insert("ZDBS_Type", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaAutoBlock*>(pDevice)->m_strAutoBlockType = strElement; });
+
+            m_mapAttribute[m_strType].insert("trackName", [](DeviceBase* pDevice, const QString& strElement) {
+                if (dynamic_cast<StaAutoBlock*>(pDevice)->m_vecStaLeaveTrack.size() > dynamic_cast<StaAutoBlock*>(pDevice)->nIndex) {
+                    dynamic_cast<StaAutoBlock*>(pDevice)->m_vecStaLeaveTrack[dynamic_cast<StaAutoBlock*>(pDevice)->nIndex].m_strName = strElement;
+                }
+            });
+
+            m_mapAttribute[m_strType].insert("trackNamePoint", [](DeviceBase* pDevice, const QString& strElement) {
+                if (dynamic_cast<StaAutoBlock*>(pDevice)->m_vecStaLeaveTrack.size() > dynamic_cast<StaAutoBlock*>(pDevice)->nIndex) {
+                    dynamic_cast<StaAutoBlock*>(pDevice)->m_vecStaLeaveTrack[dynamic_cast<StaAutoBlock*>(pDevice)->nIndex].m_ptName = QStringToQPointF(strElement);
+                }
+            });
+
+            m_mapAttribute[m_strType].insert("CommLeaveTrack", [](DeviceBase* pDevice, const QString& strElement) {
+                if (dynamic_cast<StaAutoBlock*>(pDevice)->m_vecStaLeaveTrack.size() > dynamic_cast<StaAutoBlock*>(pDevice)->nIndex) {
+                    dynamic_cast<StaAutoBlock*>(pDevice)->m_vecStaLeaveTrack[dynamic_cast<StaAutoBlock*>(pDevice)->nIndex].m_rcTrack = QStringToQRectF(strElement);
+                }
+            });
+
+            m_mapAttribute[m_strType].insert("m_Direction", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaAutoBlock*>(pDevice)->m_strDirection = strElement; });
+            m_mapAttribute[m_strType].insert("m_RoutePoint", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaAutoBlock*>(pDevice)->m_ptRouteWnd = QStringToQPointF(strElement); });
+            m_mapAttribute[m_strType].insert("m_FrameRect", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaAutoBlock*>(pDevice)->m_rcFrame = QStringToQRectF(strElement); });
+
+            m_mapAttribute[m_strType].insert("m_Button", [](DeviceBase* pDevice, const QString& strElement) {
+                QJsonParseError error;
+                QJsonDocument josnDoc = QJsonDocument::fromJson(strElement.toUtf8(), &error);
+                if (josnDoc.isNull()) {
+                    qDebug() << "无效的JSON格式:" << error.errorString();
+                    return;
+                }
+                if (josnDoc.isObject()) {
+                    for (const QString& key : josnDoc.object().keys()) {
+                        m_mapAttribute[pDevice->getStrType()][key](pDevice, QJsonDocument(josnDoc.object().value(key).toObject()).toJson());
+                    }
+                }
+                });
+            m_mapAttribute[m_strType].insert("ZFZ", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaAutoBlock*>(pDevice)->AddBlockBtn("总辅助", strElement); });
+            m_mapAttribute[m_strType].insert("JCFZ", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaAutoBlock*>(pDevice)->AddBlockBtn("接车辅助", strElement); });
+            m_mapAttribute[m_strType].insert("FCFZ", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaAutoBlock*>(pDevice)->AddBlockBtn("发车辅助", strElement); });
+            m_mapAttribute[m_strType].insert("YXGF", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaAutoBlock*>(pDevice)->AddBlockBtn("允许改方", strElement); });
+
+            m_mapAttribute[m_strType].insert("m_Lamp", [](DeviceBase* pDevice, const QString& strElement) {
+                QJsonParseError error;
+                QJsonDocument josnDoc = QJsonDocument::fromJson(strElement.toUtf8(), &error);
+                if (josnDoc.isNull()) {
+                    qDebug() << "无效的JSON格式:" << error.errorString();
+                    return;
+                }
+                if (josnDoc.isObject()) {
+                    for (const QString& key : josnDoc.object().keys()) {
+                        m_mapAttribute[pDevice->getStrType()][key](pDevice, QJsonDocument(josnDoc.object().value(key).toObject()).toJson());
+                    }
+                }
+                });
+            m_mapAttribute[m_strType].insert("Allow", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaAutoBlock*>(pDevice)->AddBlockLamp("允许发车", strElement); });
+            m_mapAttribute[m_strType].insert("Assisted", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaAutoBlock*>(pDevice)->AddBlockLamp("辅助办理", strElement); });
+            m_mapAttribute[m_strType].insert("Supervise", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaAutoBlock*>(pDevice)->AddBlockLamp("监督区间", strElement); });
+            m_mapAttribute[m_strType].insert("Section", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaAutoBlock*>(pDevice)->AddBlockLamp("区间逻辑检查", strElement); });
+            InitArrowAttributeMap(m_strType, m_mapAttribute);
+            return StaDistant::InitAttributeMap();
         }
 
         void StaAutoBlock::timerEvent(QTimerEvent* event)
@@ -263,11 +276,10 @@ namespace Station {
 
         void StaAutoBlock::InitClickEvent()
         {
-            m_mapClickEvent.insert(CTCWindows::FunType::FunBtn, [&]() {
+            m_mapClickEvent[m_strType].insert(CTCWindows::FunType::FunBtn, [](DeviceBase* pDevice) {
                 if (CTCWindows::LeadSealDlg::LeadSealPassword(CTCWindows::KeyInputType::LeadSeal)) {
-                    OnButtonClick(this);
+                    dynamic_cast<StaAutoBlock*>(pDevice)->OnButtonClick();
                 }
-                
             });
         }
 
@@ -370,9 +382,9 @@ namespace Station {
             }
         }
 
-        void StaAutoBlock::OrderClear(int nType)
+        void StaAutoBlock::OrderClear(bool bClearTwinkle)
         {
-            if (nType == 1) {
+            if (bClearTwinkle) {
                 m_nBtnState ^= m_nSelectBtnType << 4;
                 killTimer(m_nTimerIdJF);
                 killTimer(m_nTimerIdFF);

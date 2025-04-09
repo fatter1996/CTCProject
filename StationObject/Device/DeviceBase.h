@@ -6,31 +6,43 @@
 #include <QXmlStreamReader>
 #include <QRectF>
 #include <QMap>
+#include <QMap>
+#include "StationObject/GlobalStruct.h"
 #include "BaseWndClass/ModuleWidget/StaFunBtnToolBar.h"
-#include "../GlobalStruct.h"
 
 #define TRACK_WIDTH     4    //股道宽度
 #define COLOR_BTN_BLUE		 QColor("#0000EE")
 #define COLOR_BTN_WHITE      QColor("#FAFAFA")
 
 
+
 namespace Station {
     namespace Device {
+
+        class DeviceBase;
+        typedef QMap<QString, std::function<void(DeviceBase* pDevice, const QString& strElement)>> AttrMap;
+        typedef QMap<CTCWindows::FunType, std::function<void(DeviceBase* pDevice)>> ClickEventMap;
+
         class DeviceScale {
 
         public:
             explicit DeviceScale();
             ~DeviceScale() {}
 
-        public:
+        public: //工具函数
             double Scale(double value, double nOffset = 0);
             QPointF Scale(const QPointF& pt, const bool bOutSide = false, const bool bTopLine = false);
             QRectF Scale(const QRectF& rect);
+            static QRectF QStringToQRectF(const QString& strRect);
+            static QPointF QStringToQPointF(const QString& strPoint);
+            static QRectF OutSideRect(const QRectF& rect, int rx, int ry);
 
         protected:
             bool m_bMainStation = false;
             QObject* m_pParent = nullptr;
+                 
         };
+
 
         class DeviceBase : public QObject, virtual public DeviceScale {
             Q_OBJECT
@@ -42,11 +54,14 @@ namespace Station {
             virtual bool eventFilter(QObject* obj, QEvent* event) override;
 
         public:
+            virtual void InitAttributeMap() = 0;
             //初始化设备信息
             void InitDeviceInfoFromXml(QXmlStreamReader* pDeviceInfoReader, const QString& strDeviceType);
             void InitDeviceInfoFromTxt(QStringList& strInfoList, const QString& strDeviceType);
             void InitDeviceInfoFromJson(const QJsonObject& object);
+
         private:
+            
             //读取设备属性
             void ReadDeviceAttributeFromXml(QXmlStreamReader* m_pDeviceInfoReader);
             void ReadDeviceAttributeFromJson(const QJsonObject& lampObject, const QString& strKey);
@@ -59,9 +74,10 @@ namespace Station {
 
         public:
             //命令清除
-            virtual void OrderClear(int nType = 0) {}
+            virtual void OrderClear(bool bClearTwinkle = false) {}
 
         protected:
+            
             //初始化设备属性
             virtual void InitDeviceAttribute() {}
             //站场绘制
@@ -107,20 +123,14 @@ namespace Station {
             static bool getElapsed() { return m_bElapsed; }
             static void setElapsed() { m_bElapsed = !m_bElapsed; }
 
-        public: //工具函数
-            static QRectF QStringToQRectF(const QString& strRect);
-            static QPointF QStringToQPointF(const QString& strPoint);
-
-            QRectF OutSideRect(const QRectF& rect, int rx, int ry);
+        
 
         protected:
             uint nIndex = 0;
-            QMap<CTCWindows::FunType, std::function<void()>> m_mapClickEvent;
-            QMap<QString, std::function<void(const QString& strElement)>> m_mapAttribute;
             //设备信息
             uint m_nType = 0;         //设备类型
-            QString m_strName = "1";
-            QString m_strType = "2";        //设备名称
+            QString m_strType;
+            QString m_strName;
             int m_nCode = -1;    //设备编号
             QPointF m_ptCenter;        //设备中心点
             bool m_bUpDown = false;       //上下行咽喉 true:S false:X
@@ -149,6 +159,8 @@ namespace Station {
             int m_nTipsType = 0;    
             
         protected:
+            static QMap<QString, ClickEventMap> m_mapClickEvent;
+            static QMap<QString, AttrMap> m_mapAttribute;
             static QPainter m_pPainter;    //绘制器
             static bool m_bElapsed;     //闪烁控制
             static int m_nWheelDevCode;
@@ -162,6 +174,7 @@ namespace Station {
             ~StaSection();
 
         protected:
+            virtual void InitAttributeMap() override;
             //站场绘制
             virtual void Draw(bool isMulti = false) override;
             //绘制外边缘
@@ -194,7 +207,7 @@ namespace Station {
             void DrawButton(QPainter& pPainter, const QRectF rcButton, const QColor& cBtnColor, bool bBtnDown, int nType = 1, 
                 const QColor cBtnDownColor = COLOR_BTN_BLUE, const QColor cBtnElapsedColor = COLOR_BTN_WHITE);
             //按钮点击事件
-            void OnButtonClick(DeviceBase* pDevice);
+            void OnButtonClick();
             virtual void SetBtnState() = 0;
             //按钮状态重置
             void BtnStateReset();
@@ -211,10 +224,11 @@ namespace Station {
         class DeviceArrow : virtual public DeviceScale {
 
         public:
-            DeviceArrow(QMap<QString, std::function<void(const QString& strElement)>>& mapAttribute);
+            DeviceArrow();
             ~DeviceArrow();
 
         protected:
+            void InitArrowAttributeMap(QString strType, QMap<QString, AttrMap>& mapAttribute);
             //绘制箭头
             void DrawArrow(QPainter& pPainter);
 
@@ -262,6 +276,7 @@ namespace Station {
             ~StaDistant();
 
         protected:
+            virtual void InitAttributeMap() override;
             //站场绘制
             virtual void Draw(bool isMulti = false) override;
             //绘制信号灯
@@ -280,6 +295,7 @@ namespace Station {
             uint m_nOutStart = 0;
             uint m_nOutStart2 = 0;
         };
+
 
         class DeviceTrain : virtual public DeviceScale {
 
@@ -316,6 +332,5 @@ namespace Station {
             bool m_bTrainLeave = false;
             static int m_nInTrainFrame;
         };
-
     }
 }

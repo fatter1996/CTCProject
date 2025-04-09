@@ -3,12 +3,12 @@
 
 namespace Station {
     namespace Device {
-        //ÎÄ×Ö
-        class StaText : public DeviceBase
+        //ÍÑ¹ìÆ÷
+        class StaTextSign : public DeviceBase
         {
         public:
-            explicit StaText(QObject* pParent = nullptr);
-            ~StaText();
+            explicit StaTextSign(QObject* pParent = nullptr);
+            ~StaTextSign();
 
         public:
             void InitAttributeMap() override;

@@ -9,69 +9,87 @@ namespace Station {
         StaScattered::StaScattered(QObject* pParent)
             : StaDistant(pParent)
         {
-            m_mapAttribute.insert("mRsbjRect", [&](const QString& strElement) { 
-                m_rcFuseAlarmText = QStringToQRectF(strElement);
-                m_rcFuseAlarmLamp = getLampRectByTextRect(m_rcFuseAlarmText);
-            });
-
-            m_mapAttribute.insert("mZFdyRect", [&](const QString& strElement) {
-                m_rcMainAuxPowerText = QStringToQRectF(strElement);
-                m_rcMainAuxPowerLamp = getLampRectByTextRect(m_rcMainAuxPowerText);
-            });
-
-            m_mapAttribute.insert("mGdtdRect", [&](const QString& strElement) {
-                if (nIndex == 0) {
-                    m_rcTrackOutageSText = QStringToQRectF(strElement);
-                    m_rcTrackOutageSLamp = getLampRectByTextRect(m_rcTrackOutageSText);
-                }
-                else if (nIndex == 1) {
-                    m_rcTrackOutageXText = QStringToQRectF(strElement);
-                    m_rcTrackOutageXLamp = getLampRectByTextRect(m_rcTrackOutageXText);
-                }
-            });
-
-            m_mapAttribute.insert("mYdzsbRect", [&](const QString& strElement) {
-                if (nIndex == 0) {
-                    m_rcTotalLockSText = QStringToQRectF(strElement);
-                    m_rcTotalLockSLamp = getLampRectByTextRect(m_rcTotalLockSText);
-                }
-                else if (nIndex == 1) {
-                    m_rcTotalLockXText = QStringToQRectF(strElement);
-                    m_rcTotalLockXLamp = getLampRectByTextRect(m_rcTotalLockXText);
-                }
-            });
-
-            m_mapAttribute.insert("mDsdsRect", [&](const QString& strElement) {
-                if (nIndex == 0) {
-                    m_rcFilamentBreakSText = QStringToQRectF(strElement);
-                    m_rcFilamentBreakSLamp = getLampRectByTextRect(m_rcFilamentBreakSText);
-                }
-                else if (nIndex == 1) {
-                    m_rcFilamentBreakXText = QStringToQRectF(strElement);
-                    m_rcFilamentBreakXLamp = getLampRectByTextRect(m_rcFilamentBreakXText);
-                }
-            });
             
-            m_mapAttribute.insert("mJcbjRect", [&](const QString& strElement) {
-                m_rcCrowdAlarmText = QStringToQRectF(strElement);
-                m_rcCrowdAlarmLamp = getLampRectByTextRect(m_rcCrowdAlarmText);
-            });
-            
-            m_mapAttribute.insert("mDmhbjRect", [&](const QString& strElement) {
-                m_rcCodeAlarmText = QStringToQRectF(strElement);
-                m_rcCodeAlarmLamp = getLampRectByTextRect(m_rcCodeAlarmText);
-            });
-
-            m_mapAttribute.insert("SGDTDJ", [&](const QString& strElement) { m_strSGDTDJ = strElement; });
-            m_mapAttribute.insert("SGDTDJ_bus", [&](const QString& strElement) {m_nSGDTDJ = strElement.toInt(); });
-            m_mapAttribute.insert("XGDTDJ", [&](const QString& strElement) { m_strXGDTDJ = strElement; });
-            m_mapAttribute.insert("XGDTDJ_bus", [&](const QString& strElement) { m_nXGDTDJ = strElement.toInt(); });
-            m_mapAttribute.insert("trackType", [&](const QString& strElement) { m_strTrackType = strElement; });
         }
 
         StaScattered::~StaScattered()
         {
 
+        }
+
+        void StaScattered::InitAttributeMap()
+        {
+            if (m_mapAttribute.contains(m_strType)) {
+                return;
+            }
+            AttrMap mapAttrFun;
+            m_mapAttribute.insert(m_strType, mapAttrFun);
+            m_mapAttribute[m_strType].insert("mRsbjRect", [](DeviceBase* pDevice, const QString& strElement) {
+                StaScattered* pStaScattered = dynamic_cast<StaScattered*>(pDevice);
+                pStaScattered->m_rcFuseAlarmText = QStringToQRectF(strElement);
+                pStaScattered->m_rcFuseAlarmLamp = pStaScattered->getLampRectByTextRect(pStaScattered->m_rcFuseAlarmText);
+            });
+
+            m_mapAttribute[m_strType].insert("mZFdyRect", [](DeviceBase* pDevice, const QString& strElement) {
+                StaScattered* pStaScattered = dynamic_cast<StaScattered*>(pDevice);
+                pStaScattered->m_rcMainAuxPowerText = QStringToQRectF(strElement);
+                pStaScattered->m_rcMainAuxPowerLamp = pStaScattered->getLampRectByTextRect(pStaScattered->m_rcMainAuxPowerText);
+            });
+
+            m_mapAttribute[m_strType].insert("mGdtdRect", [](DeviceBase* pDevice, const QString& strElement) {
+                StaScattered* pStaScattered = dynamic_cast<StaScattered*>(pDevice);
+                if (pStaScattered->nIndex == 0) {
+                    pStaScattered->m_rcTrackOutageSText = QStringToQRectF(strElement);
+                    pStaScattered->m_rcTrackOutageSLamp = pStaScattered->getLampRectByTextRect(pStaScattered->m_rcTrackOutageSText);
+                }
+                else if (pStaScattered->nIndex == 1) {
+                    pStaScattered->m_rcTrackOutageXText = QStringToQRectF(strElement);
+                    pStaScattered->m_rcTrackOutageXLamp = pStaScattered->getLampRectByTextRect(pStaScattered->m_rcTrackOutageXText);
+                }
+            });
+
+            m_mapAttribute[m_strType].insert("mYdzsbRect", [](DeviceBase* pDevice, const QString& strElement) {
+                StaScattered* pStaScattered = dynamic_cast<StaScattered*>(pDevice);
+                if (pStaScattered->nIndex == 0) {
+                    pStaScattered->m_rcTotalLockSText = QStringToQRectF(strElement);
+                    pStaScattered->m_rcTotalLockSLamp = pStaScattered->getLampRectByTextRect(pStaScattered->m_rcTotalLockSText);
+                }
+                else if (pStaScattered->nIndex == 1) {
+                    pStaScattered->m_rcTotalLockXText = QStringToQRectF(strElement);
+                    pStaScattered->m_rcTotalLockXLamp = pStaScattered->getLampRectByTextRect(pStaScattered->m_rcTotalLockXText);
+                }
+            });
+
+            m_mapAttribute[m_strType].insert("mDsdsRect", [](DeviceBase* pDevice, const QString& strElement) {
+                StaScattered* pStaScattered = dynamic_cast<StaScattered*>(pDevice);
+                if (pStaScattered->nIndex == 0) {
+                    pStaScattered->m_rcFilamentBreakSText = QStringToQRectF(strElement);
+                    pStaScattered->m_rcFilamentBreakSLamp = pStaScattered->getLampRectByTextRect(pStaScattered->m_rcFilamentBreakSText);
+                }
+                else if (pStaScattered->nIndex == 1) {
+                    pStaScattered->m_rcFilamentBreakXText = QStringToQRectF(strElement);
+                    pStaScattered->m_rcFilamentBreakXLamp = pStaScattered->getLampRectByTextRect(pStaScattered->m_rcFilamentBreakXText);
+                }
+            });
+
+            m_mapAttribute[m_strType].insert("mJcbjRect", [](DeviceBase* pDevice, const QString& strElement) {
+                StaScattered* pStaScattered = dynamic_cast<StaScattered*>(pDevice);
+                pStaScattered->m_rcCrowdAlarmText = QStringToQRectF(strElement);
+                pStaScattered->m_rcCrowdAlarmLamp = pStaScattered->getLampRectByTextRect(pStaScattered->m_rcCrowdAlarmText);
+            });
+
+            m_mapAttribute[m_strType].insert("mDmhbjRect", [](DeviceBase* pDevice, const QString& strElement) {
+                StaScattered* pStaScattered = dynamic_cast<StaScattered*>(pDevice);
+                pStaScattered->m_rcCodeAlarmText = QStringToQRectF(strElement);
+                pStaScattered->m_rcCodeAlarmLamp = pStaScattered->getLampRectByTextRect(pStaScattered->m_rcCodeAlarmText);
+            });
+
+            m_mapAttribute[m_strType].insert("SGDTDJ", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaScattered*>(pDevice)->m_strSGDTDJ = strElement; });
+            m_mapAttribute[m_strType].insert("SGDTDJ_bus", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaScattered*>(pDevice)->m_nSGDTDJ = strElement.toInt(); });
+            m_mapAttribute[m_strType].insert("XGDTDJ", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaScattered*>(pDevice)->m_strXGDTDJ = strElement; });
+            m_mapAttribute[m_strType].insert("XGDTDJ_bus", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaScattered*>(pDevice)->m_nXGDTDJ = strElement.toInt(); });
+            m_mapAttribute[m_strType].insert("trackType", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaScattered*>(pDevice)->m_strTrackType = strElement; });
+            return StaDistant::InitAttributeMap();
         }
 
         void StaScattered::DrawLight()

@@ -11,6 +11,7 @@ namespace Station {
             ~StaHump();
 
         private:
+            void InitAttributeMap() override;
             //’æ≥°ªÊ÷∆
             void Draw(bool isMulti = false) override;
             //ªÊ÷∆Õ’∑Â

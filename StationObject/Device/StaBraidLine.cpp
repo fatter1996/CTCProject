@@ -8,13 +8,24 @@ namespace Station {
         StaBraidLine::StaBraidLine(QObject* pParent)
             : StaDistant(pParent)
         {
-            m_mapAttribute.insert("TYFCBSD_rect", [&](const QString& strElement) { m_rcAllowLamp = QStringToQRectF(strElement); });
-            m_mapAttribute.insert("TYFCText_rect", [&](const QString& strElement) { m_rcAllowText = QStringToQRectF(strElement); });
+            
         }
 
         StaBraidLine::~StaBraidLine()
         {
 
+        }
+
+        void StaBraidLine::InitAttributeMap()
+        {
+            if (m_mapAttribute.contains(m_strType)) {
+                return;
+            }
+            AttrMap mapAttrFun;
+            m_mapAttribute.insert(m_strType, mapAttrFun);
+            m_mapAttribute[m_strType].insert("TYFCBSD_rect", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaBraidLine*>(pDevice)->m_rcAllowLamp = QStringToQRectF(strElement); });
+            m_mapAttribute[m_strType].insert("TYFCText_rect", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaBraidLine*>(pDevice)->m_rcAllowText = QStringToQRectF(strElement); });
+            return StaDistant::InitAttributeMap();
         }
 
         void StaBraidLine::Draw(bool isMulti)

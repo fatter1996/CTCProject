@@ -15,3 +15,4 @@
 #include "StaEndLine.h"
 #include "StaLamp.h"
 #include "StaOthers.h"
+#include "StaTextSign.h"

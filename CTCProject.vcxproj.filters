@@ -201,6 +201,12 @@
     <ClCompile Include="CTCMainWindow\StationViewTH\StationView\StationMultiDispTH.cpp">
       <Filter>CTCMainWindow\StationViewTH\StationView</Filter>
     </ClCompile>
+    <ClCompile Include="CTCMainWindow\CustomControl\TextSignLable.cpp">
+      <Filter>CTCMainWindow\CustomControl</Filter>
+    </ClCompile>
+    <ClCompile Include="StationObject\Device\StaTextSign.cpp">
+      <Filter>StationObject\Device</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Global.h" />
@@ -272,6 +278,9 @@
     </ClInclude>
     <ClInclude Include="Config.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="StationObject\Device\StaTextSign.h">
+      <Filter>StationObject\Device</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="CTCObject">
@@ -485,6 +494,9 @@
     </QtMoc>
     <QtMoc Include="CTCMainWindow\StationViewTH\StationView\StationMultiDispTH.h">
       <Filter>CTCMainWindow\StationViewTH\StationView</Filter>
+    </QtMoc>
+    <QtMoc Include="CTCMainWindow\CustomControl\TextSignLable.h">
+      <Filter>CTCMainWindow\CustomControl</Filter>
     </QtMoc>
   </ItemGroup>
   <ItemGroup>

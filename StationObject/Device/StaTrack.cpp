@@ -10,12 +10,23 @@ namespace Station {
         StaTrack::StaTrack(QObject* pParent)
             : StaSection(pParent)
         {
-            m_mapAttribute.insert("GD_Type", [&](const QString& strElement) { m_strTrackType = strElement; });
+            
         }
 
         StaTrack::~StaTrack()
         {
 
+        }
+
+        void StaTrack::InitAttributeMap()
+        {
+            if (m_mapAttribute.contains(m_strType)) {
+                return;
+            }
+            AttrMap mapAttrFun;
+            m_mapAttribute.insert(m_strType, mapAttrFun);
+            m_mapAttribute[m_strType].insert("GD_Type", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaTrack*>(pDevice)->m_strTrackType = strElement; });
+            return StaSection::InitAttributeMap();
         }
 
         void StaTrack::InitDeviceAttribute()
@@ -157,9 +168,9 @@ namespace Station {
                 case static_cast<int>(CTCWindows::FunType::RampUnlock):         //坡道解锁
                 case static_cast<int>(CTCWindows::FunType::PoorRoute):          //分路不良
                 case static_cast<int>(CTCWindows::FunType::IdleConfirm): {      //确认空闲
-                    m_mapClickEvent.insert(static_cast<CTCWindows::FunType>(i), [&]() {
+                    m_mapClickEvent[m_strType].insert(static_cast<CTCWindows::FunType>(i), [](DeviceBase* pDevice) {
                         CTCWindows::BaseWnd::StaFunBtnToolBar::setOperObjType(CTCWindows::OperObjType::Track);
-                        MainStation()->AddSelectDevice(this);
+                        MainStation()->AddSelectDevice(pDevice);
                     });
                     break;
                 }

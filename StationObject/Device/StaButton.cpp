@@ -8,15 +8,26 @@ namespace Station {
         StaButton::StaButton(QObject* pParent)
             : DeviceBase(pParent)
         {
-            m_mapAttribute.insert("p1", [=](const QString& strElement) {p1 = QStringToQPointF(strElement); });
-            m_mapAttribute.insert("p2", [=](const QString& strElement) {p2 = QStringToQPointF(strElement); });
-            m_mapAttribute.insert("m_nTZB", [=](const QString& strElement) {m_nTZB = strElement.toUInt(nullptr, 16); });
-            m_mapAttribute.insert("ButLong", [=](const QString& strElement) {m_nButLong = strElement.toUInt(); });
+
         }
 
         StaButton::~StaButton()
         {
 
+        }
+
+        void StaButton::InitAttributeMap()
+        {
+            if (m_mapAttribute.contains(m_strType)) {
+                return;
+            }
+            AttrMap mapAttrFun;
+            m_mapAttribute.insert(m_strType, mapAttrFun);
+            m_mapAttribute[m_strType].insert("p1", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaButton*>(pDevice)->p1 = QStringToQPointF(strElement); });
+            m_mapAttribute[m_strType].insert("p2", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaButton*>(pDevice)->p2 = QStringToQPointF(strElement); });
+            m_mapAttribute[m_strType].insert("m_nTZB", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaButton*>(pDevice)->m_nTZB = strElement.toUInt(nullptr, 16); });
+            m_mapAttribute[m_strType].insert("ButLong", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaButton*>(pDevice)->m_nButLong = strElement.toUInt(); });
+            return DeviceBase::InitAttributeMap();
         }
 
         void StaButton::InitDeviceAttribute()
@@ -84,11 +95,11 @@ namespace Station {
 
         void StaButton::InitClickEvent()
         {
-            m_mapClickEvent.insert(CTCWindows::FunType::RouteBuild, [&]() {
-                OnButtonClick(this);
+            m_mapClickEvent[m_strType].insert(CTCWindows::FunType::RouteBuild, [](DeviceBase* pDevice) {
+                dynamic_cast<StaButton*>(pDevice)->OnButtonClick();
             });
-            m_mapClickEvent.insert(CTCWindows::FunType::FunBtn, [&]() {
-                OnButtonClick(this);
+            m_mapClickEvent[m_strType].insert(CTCWindows::FunType::FunBtn, [](DeviceBase* pDevice) {
+                dynamic_cast<StaButton*>(pDevice)->OnButtonClick();
             });
         }
 
@@ -125,9 +136,9 @@ namespace Station {
             }
         }
 
-        void StaButton::OrderClear(int nType)
+        void StaButton::OrderClear(bool bClearTwinkle)
         {
-            if (nType == 1) {
+            if (bClearTwinkle) {
                 m_nBtnState ^= 0x10;
             }
             BtnStateReset();

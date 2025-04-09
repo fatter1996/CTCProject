@@ -44,6 +44,8 @@ namespace Station {
         int ReadDeviceConfig(const QString& filePath); //解析"DeviceConfig.json"
         void SetVisible(VisibleDev devType, bool bVisible);
         bool IsVisible(VisibleDev devType);
+        void AddNewTextSign(const QString& strText, const QPoint& ptPos, const QColor& colFont = Qt::black, const QColor& colBackground = Qt::white, int nSize = 10);
+        void ClearAllTextSign();
 
     private:    //内部初始化
         void ReadDeviceInfoHead(); //解析"station.xml" HEAD
@@ -83,7 +85,7 @@ namespace Station {
     private:
         static QXmlStreamReader* m_pDeviceInfoReader;  //XML解析器
         static QMap<QString, std::function<Device::DeviceBase* (StationObject*)>> m_mapCreatDeviceVector;
-        static int m_nTimerId_500;
+        //static int m_nTimerId_500;
     };
 
     
@@ -133,7 +135,7 @@ namespace Station {
         void CompareResult(const QByteArray& dataAyyay);
 
         void StationReset();
-        void ClearDevice(int nType = 0);
+        void ClearDevice(bool bClearTwinkle = false);
 
     public:
         QVector<Device::DeviceBase*>& getSelectDevice() { return m_vecSelectDevice; }
@@ -174,7 +176,7 @@ namespace Station {
     public slots:
         void onReciveData(const QByteArray& dataAyyay);
         void onOrderIssued();
-        void onOrderClear(int nType = 0);
+        void onOrderClear(bool bClearTwinkle = false);
         void onUserLogin(QString strUserName, QString strPassword);
 
     signals:

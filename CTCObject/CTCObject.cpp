@@ -59,8 +59,8 @@ namespace CTCDoc{
 		if (m_pCTCMainWindow) {
 			//初始化主界面
 			CTCWindows::SetMainWindow(m_pCTCMainWindow);
-			m_pCTCMainWindow->SetShowToolbar(m_bShowToolbarBtn, m_bShowToolbarLabel);
 			m_pCTCMainWindow->InitStattionView();
+			m_pCTCMainWindow->SetShowToolbar(m_bShowToolbarBtn, m_bShowToolbarLabel);
 			m_pCTCMainWindow->setFixedSize(m_pMainStation->getStaFixedSize());
 			m_pMainStation->InitDeviceEventFilter(m_pCTCMainWindow->StaPaintView());
 			StaOperationConnect();
@@ -227,7 +227,6 @@ namespace CTCDoc{
 	{
 		UserLoginDlg dlgUserLogin;
 		QObject::connect(&dlgUserLogin, &UserLoginDlg::UserLogin, m_pMainStation, &MainStationObject::onUserLogin);
-		
 		return dlgUserLogin.exec() == QDialog::Accepted;
 	}
 }

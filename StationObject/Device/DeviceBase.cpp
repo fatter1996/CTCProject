@@ -13,6 +13,8 @@
 
 namespace Station {
     namespace Device {
+        QMap<QString, ClickEventMap> DeviceBase::m_mapClickEvent;
+        QMap<QString, AttrMap> DeviceBase::m_mapAttribute;
         QPainter DeviceBase::m_pPainter;
         bool DeviceBase::m_bElapsed = false;
         int DeviceBase::m_nWheelDevCode = -1;
@@ -55,50 +57,95 @@ namespace Station {
                 Scale(rect.width()), Scale(rect.height()));
         }
 
+        QRectF DeviceScale::QStringToQRectF(const QString& strRect)
+        {
+            if (strRect.isEmpty()) {
+                return QRectF();
+            }
+
+            QStringList strlist;
+            QString strRectT = strRect;
+            strRectT.replace(" ", "");
+            if (strRectT.startsWith("R(") && strRectT.endsWith(")")) {
+                strlist = strRectT.mid(2, strRectT.length() - 3).split(",");
+            }
+            else {
+                strlist = strRectT.split(",");
+            }
+
+            if (strlist.size() == 4) {
+                return QRectF(QPointF(strlist[0].toInt(), strlist[1].toInt()), QPointF(strlist[2].toInt(), strlist[3].toInt()));
+            }
+            else {
+                return QRectF();
+            }
+        }
+
+        QPointF DeviceScale::QStringToQPointF(const QString& strPoint)
+        {
+            if (strPoint.isEmpty()) {
+                return QPointF();
+            }
+            QStringList strlist;
+            QString strPointT = strPoint;
+            strPointT.replace(" ", "");
+            if (strPointT.startsWith("P(") && strPointT.endsWith(")")) {
+                strlist = strPointT.mid(2, strPointT.length() - 3).split(",");
+            }
+            else {
+                strlist = strPointT.split(",");
+            }
+
+            return QPointF(strlist[0].toInt(), strlist[1].toInt());
+        }
+
+        QRectF DeviceScale::OutSideRect(const QRectF& rect, int rx, int ry)
+        {
+            return QRectF(rect.x() - rx, rect.y() - ry, rect.width() + (2 * (qreal)rx), rect.height() + (2 * (qreal)ry));
+        }
+
         DeviceBase::DeviceBase(QObject* pParent)
         {
             m_pParent = pParent;
             m_bMainStation = dynamic_cast<StationObject*>(m_pParent)->IsMainStation();
-            m_mapAttribute.insert("m_nType", [&](const QString& strElement) { m_nType = strElement.toUInt(); });
-            m_mapAttribute.insert("m_strName", [&](const QString& strElement) { m_strName = strElement; });
-            m_mapAttribute.insert("m_nCode", [&](const QString& strElement) { m_nCode = strElement.toInt(nullptr, 16); });
-
-            m_mapAttribute.insert("m_textRect", [&](const QString& strElement) {
-                m_rcTextRect = QStringToQRectF(strElement);
-                QFont font;
-                font.setFamily("微软雅黑");
-                font.setPixelSize(Scale(m_nFontSize));//字号
-                QFontMetrics  fontMetrics(font);
-                m_ptName = m_rcTextRect.topLeft();
-                m_rcTextRect = QRectF(m_rcTextRect.topLeft(), fontMetrics.size(Qt::TextSingleLine, m_strName));
-                if (m_strName == "6‰") {
-                    QSize size = fontMetrics.size(Qt::TextSingleLine, m_strName);
-                }
-            });
-            m_mapAttribute.insert("pName", [&](const QString& strElement) {
-                m_ptName = QStringToQPointF(strElement);
-                QFont font;
-                font.setFamily("微软雅黑");
-                font.setPixelSize(Scale(m_nFontSize));//字号
-                QFontMetrics  fontMetrics(font);
-                m_rcTextRect = QRectF(m_ptName, fontMetrics.size(Qt::TextSingleLine, m_strName));
-                if (m_strName == "6‰") {
-                    QSize size = fontMetrics.size(Qt::TextSingleLine, m_strName);
-                }
-            });
-
-            m_mapAttribute.insert("m_nSX", [&](const QString& strElement) { m_bUpDown = strElement.toUInt(); });
-            m_mapAttribute.insert("FontHeight", [&](const QString& strElement) { m_nFontSize = strElement.toUInt(); });
-            m_mapAttribute.insert("m_nSize", [&](const QString& strElement) { m_nFontSize = strElement.toUInt(); });
-            m_mapAttribute.insert("center", [&](const QString& strElement) { m_ptCenter = QStringToQPointF(strElement); });
-            m_mapAttribute.insert("InterlockBus", [&](const QString& strElement) { m_nInterlockBus = strElement.toInt(); });
-            m_mapAttribute.insert("attr", [&](const QString& strElement) { m_nAttr = strElement.toULong(nullptr, 16); });
-            m_mapAttribute.insert("Module_Code", [&](const QString& strElement) { m_nModuleCode = strElement.toULong(nullptr, 16); });
         }
 
         DeviceBase::~DeviceBase()
         {
-            
+
+        }
+
+        void DeviceBase::InitAttributeMap()
+        {
+            m_mapAttribute[m_strType].insert("m_nType", [](DeviceBase* pDevice, const QString& strElement) { pDevice->m_nType = strElement.toUInt(); });
+            m_mapAttribute[m_strType].insert("m_strName", [](DeviceBase* pDevice, const QString& strElement) { pDevice->m_strName = strElement; });
+            m_mapAttribute[m_strType].insert("m_nCode", [](DeviceBase* pDevice, const QString& strElement) { pDevice->m_nCode = strElement.toInt(nullptr, 16); });
+
+            m_mapAttribute[m_strType].insert("m_textRect", [](DeviceBase* pDevice, const QString& strElement) {
+                pDevice->m_rcTextRect = QStringToQRectF(strElement);
+                QFont font;
+                font.setFamily("微软雅黑");
+                font.setPixelSize(pDevice->Scale(pDevice->m_nFontSize));//字号
+                QFontMetrics  fontMetrics(font);
+                pDevice->m_ptName = pDevice->m_rcTextRect.topLeft();
+                pDevice->m_rcTextRect = QRectF(pDevice->m_rcTextRect.topLeft(), fontMetrics.size(Qt::TextSingleLine, pDevice->m_strName));
+            });
+            m_mapAttribute[m_strType].insert("pName", [](DeviceBase* pDevice, const QString& strElement) {
+                pDevice->m_ptName = QStringToQPointF(strElement);
+                QFont font;
+                font.setFamily("微软雅黑");
+                font.setPixelSize(pDevice->Scale(pDevice->m_nFontSize));//字号
+                QFontMetrics  fontMetrics(font);
+                pDevice->m_rcTextRect = QRectF(pDevice->m_ptName, fontMetrics.size(Qt::TextSingleLine, pDevice->m_strName));
+            });
+
+            m_mapAttribute[m_strType].insert("m_nSX", [](DeviceBase* pDevice, const QString& strElement) { pDevice->m_bUpDown = strElement.toUInt(); });
+            m_mapAttribute[m_strType].insert("FontHeight", [](DeviceBase* pDevice, const QString& strElement) { pDevice->m_nFontSize = strElement.toUInt(); });
+            m_mapAttribute[m_strType].insert("m_nSize", [](DeviceBase* pDevice, const QString& strElement) { pDevice->m_nFontSize = strElement.toUInt(); });
+            m_mapAttribute[m_strType].insert("center", [](DeviceBase* pDevice, const QString& strElement) { pDevice->m_ptCenter = QStringToQPointF(strElement); });
+            m_mapAttribute[m_strType].insert("InterlockBus", [](DeviceBase* pDevice, const QString& strElement) { pDevice->m_nInterlockBus = strElement.toInt(); });
+            m_mapAttribute[m_strType].insert("attr", [](DeviceBase* pDevice, const QString& strElement) { pDevice->m_nAttr = strElement.toULong(nullptr, 16); });
+            m_mapAttribute[m_strType].insert("Module_Code", [](DeviceBase* pDevice, const QString& strElement) { pDevice->m_nModuleCode = strElement.toULong(nullptr, 16); });
         }
 
         bool DeviceBase::eventFilter(QObject* obj, QEvent* event)
@@ -182,30 +229,30 @@ namespace Station {
         void DeviceBase::ReadDeviceAttributeFromXml(QXmlStreamReader* m_pDeviceInfoReader)
         {
             QString strKey = m_pDeviceInfoReader->name().toString();
-            if (m_mapAttribute.contains(strKey)) {
+            if (m_mapAttribute[m_strType].contains(strKey)) {
                 if (m_pDeviceInfoReader->attributes().hasAttribute("index")) {
                     nIndex = m_pDeviceInfoReader->attributes().value("index").toInt();
                 }
-                m_mapAttribute[strKey](m_pDeviceInfoReader->readElementText());
+                m_mapAttribute[m_strType][strKey](this, m_pDeviceInfoReader->readElementText());
             }
         }
 
         void DeviceBase::ReadDeviceAttributeFromJson(const QJsonObject& lampObject, const QString& strKey)
         {
-            if (m_mapAttribute.contains(strKey)) {
+            if (m_mapAttribute[m_strType].contains(strKey)) {
                 if (lampObject.value(strKey).isObject()) {
                     QJsonDocument jsonDoc(lampObject.value(strKey).toObject());
-                    m_mapAttribute[strKey](jsonDoc.toJson());
+                    m_mapAttribute[m_strType][strKey](this, jsonDoc.toJson());
                 }
                 else if (lampObject.value(strKey).isArray()) {
                     QJsonDocument jsonDoc(lampObject.value(strKey).toArray());
-                    m_mapAttribute[strKey](jsonDoc.toJson());
+                    m_mapAttribute[m_strType][strKey](this, jsonDoc.toJson());
                 }
                 else if (lampObject.value(strKey).isString()) {
-                    m_mapAttribute[strKey](lampObject.value(strKey).toString());
+                    m_mapAttribute[m_strType][strKey](this, lampObject.value(strKey).toString());
                 }
                 else {
-                    m_mapAttribute[strKey](QString::number(lampObject.value(strKey).toInt()));
+                    m_mapAttribute[m_strType][strKey](this, QString::number(lampObject.value(strKey).toInt()));
                 }
             }
         }
@@ -217,8 +264,8 @@ namespace Station {
                 nIndex = strKey.mid(strKey.indexOf("["), strKey.indexOf("]") - strKey.indexOf("[") - 1).toInt();
                 strKeyTemp = strKey.left(strKey.indexOf("["));
             }
-            if (m_mapAttribute.contains(strKeyTemp)) {
-                m_mapAttribute[strKeyTemp](strValue);
+            if (m_mapAttribute[m_strType].contains(strKeyTemp)) {
+                m_mapAttribute[m_strType][strKeyTemp](this, strValue);
             }
         }
 
@@ -303,77 +350,34 @@ namespace Station {
 
         void DeviceBase::onDeviceClick()
         {
-            if (m_mapClickEvent.contains(CTCWindows::BaseWnd::StaFunBtnToolBar::getCurrFunType())) {
-                m_mapClickEvent[CTCWindows::BaseWnd::StaFunBtnToolBar::getCurrFunType()]();
+            if (m_mapClickEvent[m_strType].contains(CTCWindows::BaseWnd::StaFunBtnToolBar::getCurrFunType())) {
+                m_mapClickEvent[m_strType][CTCWindows::BaseWnd::StaFunBtnToolBar::getCurrFunType()](this);
             }
         }
-
-        QRectF DeviceBase::QStringToQRectF(const QString& strRect)
-        {
-            if (strRect.isEmpty()) {
-                return QRectF();
-            }
-
-            QStringList strlist;
-            QString strRectT = strRect;
-            strRectT.replace(" ", "");
-            if (strRectT.startsWith("R(") && strRectT.endsWith(")")) {
-                strlist = strRectT.mid(2, strRectT.length() - 3).split(",");
-            }
-            else {
-                strlist = strRectT.split(",");
-            }
-
-            if (strlist.size() == 4) {
-                return QRectF(QPointF(strlist[0].toInt(), strlist[1].toInt()), QPointF(strlist[2].toInt(), strlist[3].toInt()));
-            }
-            else {
-                return QRectF();
-            }
-        }
-        
-        QPointF DeviceBase::QStringToQPointF(const QString& strPoint)
-        {
-            if (strPoint.isEmpty()) {
-                return QPointF();
-            }
-            QStringList strlist;
-            QString strPointT = strPoint;
-            strPointT.replace(" ", "");
-            if (strPointT.startsWith("P(") && strPointT.endsWith(")")) {
-                strlist = strPointT.mid(2, strPointT.length() - 3).split(",");
-            }
-            else {
-                strlist = strPointT.split(",");
-            }
-            
-            return QPointF(strlist[0].toInt(), strlist[1].toInt());
-        }
-
-        QRectF DeviceBase::OutSideRect(const QRectF& rect, int rx, int ry)
-        {
-            return QRectF(rect.x() - rx, rect.y() - ry, rect.width() + (2 * (qreal)rx), rect.height() + (2 * (qreal)ry));
-        }
-        
-
 
         StaSection::StaSection(QObject* pParent)
             : DeviceBase(pParent)
         {
-            m_mapAttribute.insert("m_nZ", [&](const QString& strElement) { m_nZ = strElement.toUInt(); });
-            m_mapAttribute.insert("p1", [&](const QString& strElement) { p1 = QStringToQPointF(strElement); });
-            m_mapAttribute.insert("p2", [&](const QString& strElement) { p2 = QStringToQPointF(strElement); });
-            m_mapAttribute.insert("p3", [&](const QString& strElement) { p3 = QStringToQPointF(strElement); });
-            m_mapAttribute.insert("p4", [&](const QString& strElement) { p4 = QStringToQPointF(strElement); });
-            m_mapAttribute.insert("p12", [&](const QString& strElement) { p12 = QStringToQPointF(strElement); });
-            m_mapAttribute.insert("p34", [&](const QString& strElement) { p34 = QStringToQPointF(strElement); });
-            m_mapAttribute.insert("pz12", [&](const QString& strElement) { pz12 = QStringToQPointF(strElement); });
-            m_mapAttribute.insert("pz34", [&](const QString& strElement) { pz34 = QStringToQPointF(strElement); });
+            
         }
 
         StaSection::~StaSection()
         {
 
+        }
+
+        void StaSection::InitAttributeMap()
+        {
+            m_mapAttribute[m_strType].insert("m_nZ", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaSection*>(pDevice)->m_nZ = strElement.toUInt(); });
+            m_mapAttribute[m_strType].insert("p1", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaSection*>(pDevice)->p1 = QStringToQPointF(strElement); });
+            m_mapAttribute[m_strType].insert("p2", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaSection*>(pDevice)->p2 = QStringToQPointF(strElement); });
+            m_mapAttribute[m_strType].insert("p3", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaSection*>(pDevice)->p3 = QStringToQPointF(strElement); });
+            m_mapAttribute[m_strType].insert("p4", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaSection*>(pDevice)->p4 = QStringToQPointF(strElement); });
+            m_mapAttribute[m_strType].insert("p12", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaSection*>(pDevice)->p12 = QStringToQPointF(strElement); });
+            m_mapAttribute[m_strType].insert("p34", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaSection*>(pDevice)->p34 = QStringToQPointF(strElement); });
+            m_mapAttribute[m_strType].insert("pz12", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaSection*>(pDevice)->pz12 = QStringToQPointF(strElement); });
+            m_mapAttribute[m_strType].insert("pz34", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaSection*>(pDevice)->pz34 = QStringToQPointF(strElement); });
+            return DeviceBase::InitAttributeMap();
         }
 
         void StaSection::Draw(bool isMulti)
@@ -505,14 +509,14 @@ namespace Station {
             pPainter.setRenderHint(QPainter::Antialiasing, false);
         }
 
-        void DeviceBtn::OnButtonClick(DeviceBase* pDevice)
+        void DeviceBtn::OnButtonClick()
         {
             if ((m_nBtnState & 0x0F)) {
                 return;
             }
             SetBtnState();
             if (m_nBtnState) {
-                MainStation()->AddSelectDevice(pDevice);
+                MainStation()->AddSelectDevice(dynamic_cast<DeviceBase*>(this));
             }
         }
 
@@ -523,47 +527,53 @@ namespace Station {
         }
 
 
-        DeviceArrow::DeviceArrow(QMap<QString, std::function<void(const QString& strElement)>>& mapAttribute)
+        DeviceArrow::DeviceArrow()
         {
-            mapAttribute.insert("p11", [&](const QString& strElement) { p11 = DeviceBase::QStringToQPointF(strElement); });
-            mapAttribute.insert("p12", [&](const QString& strElement) { p12 = DeviceBase::QStringToQPointF(strElement); });
-            mapAttribute.insert("p13", [&](const QString& strElement) { p13 = DeviceBase::QStringToQPointF(strElement); });
-            mapAttribute.insert("p14", [&](const QString& strElement) { p14 = DeviceBase::QStringToQPointF(strElement); });
-            mapAttribute.insert("p15", [&](const QString& strElement) { p15 = DeviceBase::QStringToQPointF(strElement); });
-            mapAttribute.insert("p16", [&](const QString& strElement) { p16 = DeviceBase::QStringToQPointF(strElement); });
-            mapAttribute.insert("p17", [&](const QString& strElement) { p17 = DeviceBase::QStringToQPointF(strElement); });
             
-            mapAttribute.insert("p21", [&](const QString& strElement) { p21 = DeviceBase::QStringToQPointF(strElement); });
-            mapAttribute.insert("p22", [&](const QString& strElement) { p22 = DeviceBase::QStringToQPointF(strElement); });
-            mapAttribute.insert("p23", [&](const QString& strElement) { p23 = DeviceBase::QStringToQPointF(strElement); });
-            mapAttribute.insert("p24", [&](const QString& strElement) { p24 = DeviceBase::QStringToQPointF(strElement); });
-            mapAttribute.insert("p25", [&](const QString& strElement) { p25 = DeviceBase::QStringToQPointF(strElement); });
-            mapAttribute.insert("p26", [&](const QString& strElement) { p26 = DeviceBase::QStringToQPointF(strElement); });
-            mapAttribute.insert("p27", [&](const QString& strElement) { p27 = DeviceBase::QStringToQPointF(strElement); });
-
-            mapAttribute.insert("m_ArrowPoint", [&](const QString& strElement) {
-                ptArrow = DeviceBase::QStringToQPointF(strElement);
-                p11 = QPointF(ptArrow.x() - 10, ptArrow.y());
-                p12 = QPointF(p11.x() - 8, p11.y() - 8);
-                p13 = QPointF(p12.x(), p12.y() + 4);
-                p14 = QPointF(p13.x() - 16, p13.y());
-                p15 = QPointF(p14.x(), p14.y() + 8);
-                p16 = QPointF(p15.x() + 16, p15.y());
-                p17 = QPointF(p16.x(), p16.y() + 4);
-
-                p21 = QPointF(ptArrow.x() + 10, ptArrow.y());
-                p22 = QPointF(p21.x() + 8, p21.y() - 8);
-                p23 = QPointF(p22.x(), p22.y() + 4);
-                p24 = QPointF(p23.x() + 16, p23.y());
-                p25 = QPointF(p24.x(), p24.y() + 8);
-                p26 = QPointF(p25.x() - 16, p25.y());
-                p27 = QPointF(p26.x(), p26.y() + 4);
-            });
         }
 
         DeviceArrow::~DeviceArrow()
         {
         
+        }
+
+        void DeviceArrow::InitArrowAttributeMap(QString strType, QMap<QString, AttrMap>& mapAttribute)
+        {
+            mapAttribute[strType].insert("p11", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<DeviceArrow*>(pDevice)->p11 = DeviceBase::QStringToQPointF(strElement); });
+            mapAttribute[strType].insert("p12", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<DeviceArrow*>(pDevice)->p12 = DeviceBase::QStringToQPointF(strElement); });
+            mapAttribute[strType].insert("p13", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<DeviceArrow*>(pDevice)->p13 = DeviceBase::QStringToQPointF(strElement); });
+            mapAttribute[strType].insert("p14", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<DeviceArrow*>(pDevice)->p14 = DeviceBase::QStringToQPointF(strElement); });
+            mapAttribute[strType].insert("p15", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<DeviceArrow*>(pDevice)->p15 = DeviceBase::QStringToQPointF(strElement); });
+            mapAttribute[strType].insert("p16", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<DeviceArrow*>(pDevice)->p16 = DeviceBase::QStringToQPointF(strElement); });
+            mapAttribute[strType].insert("p17", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<DeviceArrow*>(pDevice)->p17 = DeviceBase::QStringToQPointF(strElement); });
+
+            mapAttribute[strType].insert("p21", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<DeviceArrow*>(pDevice)->p21 = DeviceBase::QStringToQPointF(strElement); });
+            mapAttribute[strType].insert("p22", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<DeviceArrow*>(pDevice)->p22 = DeviceBase::QStringToQPointF(strElement); });
+            mapAttribute[strType].insert("p23", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<DeviceArrow*>(pDevice)->p23 = DeviceBase::QStringToQPointF(strElement); });
+            mapAttribute[strType].insert("p24", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<DeviceArrow*>(pDevice)->p24 = DeviceBase::QStringToQPointF(strElement); });
+            mapAttribute[strType].insert("p25", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<DeviceArrow*>(pDevice)->p25 = DeviceBase::QStringToQPointF(strElement); });
+            mapAttribute[strType].insert("p26", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<DeviceArrow*>(pDevice)->p26 = DeviceBase::QStringToQPointF(strElement); });
+            mapAttribute[strType].insert("p27", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<DeviceArrow*>(pDevice)->p27 = DeviceBase::QStringToQPointF(strElement); });
+
+            mapAttribute[strType].insert("m_ArrowPoint", [](DeviceBase* pDevice, const QString& strElement) {
+                DeviceArrow* pArrow = dynamic_cast<DeviceArrow*>(pDevice);
+                pArrow->ptArrow = DeviceBase::QStringToQPointF(strElement);
+                pArrow->p11 = QPointF(pArrow->ptArrow.x() - 10, pArrow->ptArrow.y());
+                pArrow->p12 = QPointF(pArrow->p11.x() - 8, pArrow->p11.y() - 8);
+                pArrow->p13 = QPointF(pArrow->p12.x(), pArrow->p12.y() + 4);
+                pArrow->p14 = QPointF(pArrow->p13.x() - 16, pArrow->p13.y());
+                pArrow->p15 = QPointF(pArrow->p14.x(), pArrow->p14.y() + 8);
+                pArrow->p16 = QPointF(pArrow->p15.x() + 16, pArrow->p15.y());
+                pArrow->p17 = QPointF(pArrow->p16.x(), pArrow->p16.y() + 4);
+
+                pArrow->p21 = QPointF(pArrow->ptArrow.x() + 10, pArrow->ptArrow.y());
+                pArrow->p22 = QPointF(pArrow->p21.x() + 8, pArrow->p21.y() - 8);
+                pArrow->p23 = QPointF(pArrow->p22.x(), pArrow->p22.y() + 4);
+                pArrow->p24 = QPointF(pArrow->p23.x() + 16, pArrow->p23.y());
+                pArrow->p25 = QPointF(pArrow->p24.x(), pArrow->p24.y() + 8);
+                pArrow->p26 = QPointF(pArrow->p25.x() - 16, pArrow->p25.y());
+                pArrow->p27 = QPointF(pArrow->p26.x(), pArrow->p26.y() + 4);
+            });
         }
 
         void DeviceArrow::DrawArrow(QPainter& pPainter)
@@ -585,20 +595,27 @@ namespace Station {
         StaDistant::StaDistant(QObject* pParent)
             : DeviceBase(pParent)
         {
-            m_mapAttribute.insert("RelayQD", [&](const QString& strElement) { m_strRelayQD = strElement; });
-            m_mapAttribute.insert("CJ_qModule", [&](const QString& strElement) { m_strCJ_qModule = strElement; });
-            m_mapAttribute.insert("CJ_hModule", [&](const QString& strElement) { m_strCJ_hModule = strElement; });
-            m_mapAttribute.insert("CJ_qModule2", [&](const QString& strElement) { m_strCJ_qModule2 = strElement; });
-            m_mapAttribute.insert("CJ_hModule2", [&](const QString& strElement) { m_strCJ_hModule2 = strElement; });
-            m_mapAttribute.insert("inStart", [&](const QString& strElement) { m_nInStart = strElement.toUInt(); });
-            m_mapAttribute.insert("inStart2", [&](const QString& strElement) { m_nInStart2 = strElement.toUInt(); });
-            m_mapAttribute.insert("outStart", [&](const QString& strElement) { m_nOutStart = strElement.toUInt(); });
-            m_mapAttribute.insert("outStart2", [&](const QString& strElement) { m_nOutStart2 = strElement.toUInt(); });
+            
         }
 
         StaDistant::~StaDistant()
         {
         
+        }
+
+        void StaDistant::InitAttributeMap()
+        {
+            AttrMap mapAttrFun;
+            m_mapAttribute[m_strType].insert("RelayQD", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaDistant*>(pDevice)->m_strRelayQD = strElement; });
+            m_mapAttribute[m_strType].insert("CJ_qModule", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaDistant*>(pDevice)->m_strCJ_qModule = strElement; });
+            m_mapAttribute[m_strType].insert("CJ_hModule", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaDistant*>(pDevice)->m_strCJ_hModule = strElement; });
+            m_mapAttribute[m_strType].insert("CJ_qModule2", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaDistant*>(pDevice)->m_strCJ_qModule2 = strElement; });
+            m_mapAttribute[m_strType].insert("CJ_hModule2", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaDistant*>(pDevice)->m_strCJ_hModule2 = strElement; });
+            m_mapAttribute[m_strType].insert("inStart", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaDistant*>(pDevice)->m_nInStart = strElement.toUInt(); });
+            m_mapAttribute[m_strType].insert("inStart2", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaDistant*>(pDevice)->m_nInStart2 = strElement.toUInt(); });
+            m_mapAttribute[m_strType].insert("outStart", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaDistant*>(pDevice)->m_nOutStart = strElement.toUInt(); });
+            m_mapAttribute[m_strType].insert("outStart2", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaDistant*>(pDevice)->m_nOutStart2 = strElement.toUInt(); });
+            return DeviceBase::InitAttributeMap();
         }
 
         //站场绘制

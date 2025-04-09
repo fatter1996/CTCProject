@@ -16,8 +16,8 @@
     },
     "stationInfo": "Station.txt",
     "deviceInfo": "DeviceConfig.json",
-    "isShowToolBarBtn": 0,
-    "isShowToolBarLabel": 0,
+    "isShowToolBarBtn": 1,
+    "isShowToolBarLabel": 1,
     "multiStation": [
         {
             "stationInfo": "Station.txt",

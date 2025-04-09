@@ -11,6 +11,7 @@ namespace Station {
             ~StaScattered();
 
         private:
+            void InitAttributeMap() override;
             //绘制信号灯
             void DrawLight() override;
             //绘制文字

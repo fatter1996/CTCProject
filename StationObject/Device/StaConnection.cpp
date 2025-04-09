@@ -6,29 +6,41 @@
 namespace Station {
     namespace Device {
         StaConnection::StaConnection(QObject* pParent) 
-            : DeviceArrow(m_mapAttribute), StaDistant(pParent)
+            : StaDistant(pParent)
         {
-            m_mapAttribute.insert("flag", [&](const QString& strElement) { m_nFlag = strElement.toInt(); });
-            m_mapAttribute.insert("Pxh", [&](const QString& strElement) { m_ptSignal = QStringToQPointF(strElement); });
-            m_mapAttribute.insert("Pjj", [&](const QString& strElement) { m_ptNear = QStringToQPointF(strElement); });
-            m_mapAttribute.insert("Pzc", [&](const QString& strElement) { m_ptTakeLook = QStringToQPointF(strElement); });
-            m_mapAttribute.insert("Pyx", [&](const QString& strElement) { m_ptAllow = QStringToQPointF(strElement); });
-            m_mapAttribute.insert("Pbc", [&](const QString& strElement) { m_ptFileld = QStringToQPointF(strElement); });
-            m_mapAttribute.insert("Plc", [&](const QString& strElement) { m_ptAdjFileld = QStringToQPointF(strElement); });
-            m_mapAttribute.insert("JJbsdRect", [&](const QString& strElement) { m_rcNearLight = QStringToQRectF(strElement); });
-            m_mapAttribute.insert("BCbsdRect", [&](const QString& strElement) { m_rcFileldLight = QStringToQRectF(strElement); });
-            m_mapAttribute.insert("LCbsdRect", [&](const QString& strElement) { m_rcAdjFileldLight = QStringToQRectF(strElement); });
-            m_mapAttribute.insert("YXANRect1", [&](const QString& strElement) { 
-                m_rcAllowBtn = QStringToQRectF(strElement);
-                m_rcAllowBtn.setWidth(17);
-                m_rcAllowBtn.setHeight(17);
-            });
-            m_mapAttribute.insert("CL_Type", [&](const QString& strElement) { m_strCLType = strElement; });
+            
         }
 
         StaConnection::~StaConnection()
         {
 
+        }
+
+        void StaConnection::InitAttributeMap()
+        {
+            if (m_mapAttribute.contains(m_strType)) {
+                return;
+            }
+            AttrMap mapAttrFun;
+            m_mapAttribute.insert(m_strType, mapAttrFun);
+            m_mapAttribute[m_strType].insert("flag", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaConnection*>(pDevice)->m_nFlag = strElement.toInt(); });
+            m_mapAttribute[m_strType].insert("Pxh", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaConnection*>(pDevice)->m_ptSignal = QStringToQPointF(strElement); });
+            m_mapAttribute[m_strType].insert("Pjj", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaConnection*>(pDevice)->m_ptNear = QStringToQPointF(strElement); });
+            m_mapAttribute[m_strType].insert("Pzc", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaConnection*>(pDevice)->m_ptTakeLook = QStringToQPointF(strElement); });
+            m_mapAttribute[m_strType].insert("Pyx", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaConnection*>(pDevice)->m_ptAllow = QStringToQPointF(strElement); });
+            m_mapAttribute[m_strType].insert("Pbc", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaConnection*>(pDevice)->m_ptFileld = QStringToQPointF(strElement); });
+            m_mapAttribute[m_strType].insert("Plc", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaConnection*>(pDevice)->m_ptAdjFileld = QStringToQPointF(strElement); });
+            m_mapAttribute[m_strType].insert("JJbsdRect", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaConnection*>(pDevice)->m_rcNearLight = QStringToQRectF(strElement); });
+            m_mapAttribute[m_strType].insert("BCbsdRect", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaConnection*>(pDevice)->m_rcFileldLight = QStringToQRectF(strElement); });
+            m_mapAttribute[m_strType].insert("LCbsdRect", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaConnection*>(pDevice)->m_rcAdjFileldLight = QStringToQRectF(strElement); });
+            m_mapAttribute[m_strType].insert("YXANRect1", [](DeviceBase* pDevice, const QString& strElement) {
+                dynamic_cast<StaConnection*>(pDevice)->m_rcAllowBtn = QStringToQRectF(strElement);
+                dynamic_cast<StaConnection*>(pDevice)->m_rcAllowBtn.setWidth(17);
+                dynamic_cast<StaConnection*>(pDevice)->m_rcAllowBtn.setHeight(17);
+            });
+            m_mapAttribute[m_strType].insert("CL_Type", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaConnection*>(pDevice)->m_strCLType = strElement; });
+            InitArrowAttributeMap(m_strType, m_mapAttribute);
+            return StaDistant::InitAttributeMap();
         }
 
         void StaConnection::Draw(bool isMulti)
@@ -143,8 +155,8 @@ namespace Station {
 
         void StaConnection::InitClickEvent()
         {
-            m_mapClickEvent.insert(CTCWindows::FunType::FunBtn, [&]() {
-                OnButtonClick(this);
+            m_mapClickEvent[m_strType].insert(CTCWindows::FunType::FunBtn, [](DeviceBase* pDevice) {
+                dynamic_cast<StaConnection*>(pDevice)->OnButtonClick();
             });
         }
 

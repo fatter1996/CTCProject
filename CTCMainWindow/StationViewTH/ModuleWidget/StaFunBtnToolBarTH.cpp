@@ -18,7 +18,7 @@ namespace CTCWindows {
 			m_pCommandClearBtn = ui.FunBtn5_CommandClear;
 
 			//ÃüÁîÇå³ý
-			QObject::connect(m_pCommandClearBtn, &QPushButton::clicked, [&]() { emit OrderClear(1); });
+			QObject::connect(m_pCommandClearBtn, &QPushButton::clicked, [&]() { emit OrderClear(true); });
 		}
 
 		StaFunBtnToolBarTH::~StaFunBtnToolBarTH()

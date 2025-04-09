@@ -11,6 +11,7 @@ namespace Station {
             ~StaConnection();
 
         private:
+            void InitAttributeMap() override;
             //站场绘制
             void Draw(bool isMulti = false) override;
             //绘制信号灯

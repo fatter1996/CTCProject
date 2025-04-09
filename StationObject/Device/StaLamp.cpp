@@ -9,14 +9,25 @@ namespace Station {
         StaLamp::StaLamp(QObject* pParent)
             : DeviceBase(pParent)
         {
-            m_mapAttribute.insert("m_ptLamp", [=](const QString& strElement) { 
-                m_rcLamp = QRectF(QStringToQPointF(strElement), QSizeF(15, 15));
-            });
+            
         }
 
         StaLamp::~StaLamp()
         {
 
+        }
+
+        void StaLamp::InitAttributeMap()
+        {
+            if (m_mapAttribute.contains(m_strType)) {
+                return;
+            }
+            AttrMap mapAttrFun;
+            m_mapAttribute.insert(m_strType, mapAttrFun);
+            m_mapAttribute[m_strType].insert("m_ptLamp", [](DeviceBase* pDevice, const QString& strElement) {
+                dynamic_cast<StaLamp*>(pDevice)->m_rcLamp = QRectF(QStringToQPointF(strElement), QSizeF(15, 15));
+            });
+            return DeviceBase::InitAttributeMap();
         }
 
         void StaLamp::InitDeviceAttribute()

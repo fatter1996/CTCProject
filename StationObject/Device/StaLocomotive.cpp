@@ -7,12 +7,23 @@ namespace Station {
         StaLocomotive::StaLocomotive(QObject* pParent)
             : StaDistant(pParent)
         {
-            m_mapAttribute.insert("bsdRect", [&](const QString& strElement) { m_rcLight = QStringToQRectF(strElement); });
+            
         }
 
         StaLocomotive::~StaLocomotive()
         {
 
+        }
+
+        void StaLocomotive::InitAttributeMap()
+        {
+            if (m_mapAttribute.contains(m_strType)) {
+                return;
+            }
+            AttrMap mapAttrFun;
+            m_mapAttribute.insert(m_strType, mapAttrFun);
+            m_mapAttribute[m_strType].insert("bsdRect", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaLocomotive*>(pDevice)->m_rcLight = QStringToQRectF(strElement); });
+            return DeviceBase::InitAttributeMap();
         }
 
         void StaLocomotive::Draw(bool isMulti)

@@ -11,6 +11,7 @@ namespace Station {
             ~StaEndLine();
 
         private:
+            void InitAttributeMap() override;
             void InitDeviceAttribute() override;
             //’æ≥°ªÊ÷∆
             void Draw(bool isMulti = false) override;

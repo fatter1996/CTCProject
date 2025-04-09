@@ -14,49 +14,58 @@ namespace Station {
         StaSignal::StaSignal(QObject* pParent)
             : DeviceBase(pParent)
         {
-            m_mapAttribute.insert("p12", [&](const QString& strElement) { p12 = QStringToQPointF(strElement); });
-            m_mapAttribute.insert("p7", [&](const QString& strElement) { p7 = QStringToQPointF(strElement); });
-            m_mapAttribute.insert("p8", [&](const QString& strElement) { p8 = QStringToQPointF(strElement); });
-            m_mapAttribute.insert("p9", [&](const QString& strElement) { p9 = QStringToQPointF(strElement); });
-            m_mapAttribute.insert("p10", [&](const QString& strElement) { p10 = QStringToQPointF(strElement); });
-            m_mapAttribute.insert("p13", [&](const QString& strElement) { p13 = QStringToQPointF(strElement); });
-            m_mapAttribute.insert("p14", [&](const QString& strElement) { p14 = QStringToQPointF(strElement); });
-            m_mapAttribute.insert("m_nXHDType", [&](const QString& strElement) { 
-                m_nXHDType = strElement.toUInt(); 
-                m_strXHDType = strElement;
-            });
-            m_mapAttribute.insert("radius", [&](const QString& strElement) { m_nRadius = strElement.toInt(); });
-            m_mapAttribute.insert("SignalType", [&](const QString& strElement) { m_nSignalType = strElement.toUInt(); });
-            m_mapAttribute.insert("D_B_C_Signa", [&](const QString& strElement) { m_nD_B_C_Signal = strElement.toUInt(); });
-            m_mapAttribute.insert("DC_LC_Signa", [&](const QString& strElement) { m_nDC_LC_Signal = strElement.toUInt(); });
-            m_mapAttribute.insert("safeLamp", [&](const QString& strElement) { m_strSafeLamp = strElement; });
-            m_mapAttribute.insert("isHigh", [&](const QString& strElement) { 
-                if (strElement == "TRUE") {
-                    m_bHigh = true;
-                }
-                else if (strElement == "FALSE") {
-                    m_bHigh = true;
-                }
-                else {
-                    m_bHigh = strElement.toInt();
-                }
-                
-            });
-            m_mapAttribute.insert("IsHaveBSQ", [&](const QString& strElement) { m_bIsIsHaveBSQ = strElement.toInt(); });
-            m_mapAttribute.insert("bsqNum", [&](const QString& strElement) { m_nBSQNum = strElement.toInt(); });
-            m_mapAttribute.insert("bsqInterlockBus", [&](const QString& strElement) { m_nBSQInterlockBus = strElement.toInt(); });
-            m_mapAttribute.insert("m_nBSQModuAddr", [&](const QString& strElement) { m_nBSQModuAddr = strElement.toInt(); });
-            m_mapAttribute.insert("isMD", [&](const QString& strElement) { m_bMD = strElement.toInt(); });
-            m_mapAttribute.insert("DC_LC_Signa", [&](const QString& strElement) { m_bSingleDeng = strElement.toInt(); });
-            m_mapAttribute.insert("isYDSD", [&](const QString& strElement) { m_bYDSD = strElement.toInt(); });
-
             InitSignalLightColor();
-            
         }
 
         StaSignal::~StaSignal()
         {
 
+        }
+
+        void StaSignal::InitAttributeMap()
+        {
+            if (m_mapAttribute.contains(m_strType)) {
+                return;
+            }
+            AttrMap mapAttrFun;
+            m_mapAttribute.insert(m_strType, mapAttrFun);
+            m_mapAttribute[m_strType].insert("p12", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaSignal*>(pDevice)->p12 = QStringToQPointF(strElement); });
+            m_mapAttribute[m_strType].insert("p7", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaSignal*>(pDevice)->p7 = QStringToQPointF(strElement); });
+            m_mapAttribute[m_strType].insert("p8", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaSignal*>(pDevice)->p8 = QStringToQPointF(strElement); });
+            m_mapAttribute[m_strType].insert("p9", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaSignal*>(pDevice)->p9 = QStringToQPointF(strElement); });
+            m_mapAttribute[m_strType].insert("p10", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaSignal*>(pDevice)->p10 = QStringToQPointF(strElement); });
+            m_mapAttribute[m_strType].insert("p13", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaSignal*>(pDevice)->p13 = QStringToQPointF(strElement); });
+            m_mapAttribute[m_strType].insert("p14", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaSignal*>(pDevice)->p14 = QStringToQPointF(strElement); });
+            m_mapAttribute[m_strType].insert("m_nXHDType", [](DeviceBase* pDevice, const QString& strElement) {
+                dynamic_cast<StaSignal*>(pDevice)->m_nXHDType = strElement.toUInt();
+                dynamic_cast<StaSignal*>(pDevice)->m_strXHDType = strElement;
+            });
+            m_mapAttribute[m_strType].insert("radius", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaSignal*>(pDevice)->m_nRadius = strElement.toInt(); });
+            m_mapAttribute[m_strType].insert("SignalType", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaSignal*>(pDevice)->m_nSignalType = strElement.toUInt(); });
+            m_mapAttribute[m_strType].insert("D_B_C_Signa", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaSignal*>(pDevice)->m_nD_B_C_Signal = strElement.toUInt(); });
+            m_mapAttribute[m_strType].insert("DC_LC_Signa", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaSignal*>(pDevice)->m_nDC_LC_Signal = strElement.toUInt(); });
+            m_mapAttribute[m_strType].insert("safeLamp", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaSignal*>(pDevice)->m_strSafeLamp = strElement; });
+            m_mapAttribute[m_strType].insert("isHigh", [](DeviceBase* pDevice, const QString& strElement) {
+                if (strElement == "TRUE") {
+                    dynamic_cast<StaSignal*>(pDevice)->m_bHigh = true;
+                }
+                else if (strElement == "FALSE") {
+                    dynamic_cast<StaSignal*>(pDevice)->m_bHigh = true;
+                }
+                else {
+                    dynamic_cast<StaSignal*>(pDevice)->m_bHigh = strElement.toInt();
+                }
+
+            });
+            m_mapAttribute[m_strType].insert("IsHaveBSQ", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaSignal*>(pDevice)->m_bIsIsHaveBSQ = strElement.toInt(); });
+            m_mapAttribute[m_strType].insert("bsqNum", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaSignal*>(pDevice)->m_nBSQNum = strElement.toInt(); });
+            m_mapAttribute[m_strType].insert("bsqInterlockBus", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaSignal*>(pDevice)->m_nBSQInterlockBus = strElement.toInt(); });
+            m_mapAttribute[m_strType].insert("m_nBSQModuAddr", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaSignal*>(pDevice)->m_nBSQModuAddr = strElement.toInt(); });
+            m_mapAttribute[m_strType].insert("isMD", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaSignal*>(pDevice)->m_bMD = strElement.toInt(); });
+            m_mapAttribute[m_strType].insert("DC_LC_Signa", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaSignal*>(pDevice)->m_bSingleDeng = strElement.toInt(); });
+            m_mapAttribute[m_strType].insert("isYDSD", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaSignal*>(pDevice)->m_bYDSD = strElement.toInt(); });
+
+            return DeviceBase::InitAttributeMap();
         }
 
         void StaSignal::InitDeviceAttribute()
@@ -110,9 +119,7 @@ namespace Station {
             //第二灯位
             m_rcLight2 = QRectF(m_bRight ? m_rcLight1.x() + 2 * m_nRadius : m_rcLight1.x() - 2 * m_nRadius, p12.y() - m_nRadius, Scale(m_nRadius * 2), Scale(m_nRadius * 2));
             if (m_nType == 32 || m_nType == 34) {
-                m_rcLightTotal = QRectF(
-                    m_bRight ? m_rcLight1.topLeft() : m_rcLight2.bottomRight(), 
-                    m_bRight ? m_rcLight2.topLeft() : m_rcLight1.bottomRight());
+                m_rcLightTotal = QRectF(m_bRight ? m_rcLight1.topLeft() : m_rcLight2.bottomRight(), QSizeF(4 * m_nRadius, 2 * m_nRadius));
             }
             else {
                 m_rcLightTotal = m_rcLight1;
@@ -219,7 +226,8 @@ namespace Station {
             //第一灯位
             m_pPainter.drawRect(Scale(m_rcLight1));
             //第二灯位
-            if ((m_nAttr & (SIGNAL_LCZD | SIGNAL_LCSD)) && ((m_nAttr & (SIGNAL_LCZH | SIGNAL_AQH)) != SIGNAL_LCZH)) {
+            /*(m_nAttr & (SIGNAL_LCZD | SIGNAL_LCSD)) && ((m_nAttr & (SIGNAL_LCZH | SIGNAL_AQH)) != SIGNAL_LCZH)*/
+            if (m_nType == 32 || m_nType == 34) {
                 m_pPainter.drawRect(Scale(m_rcLight2));
             }
         }
@@ -397,16 +405,16 @@ namespace Station {
                 {
                 case static_cast<int>(CTCWindows::FunType::RouteBuild):         //进路建立
                 case static_cast<int>(CTCWindows::FunType::GuideBtn): {         //引导按钮
-                    m_mapClickEvent.insert(static_cast<CTCWindows::FunType>(i), [&]() {
-                        OnButtonClick(this);
+                    m_mapClickEvent[m_strType].insert(static_cast<CTCWindows::FunType>(i), [](DeviceBase* pDevice) {
+                        dynamic_cast<StaSignal*>(pDevice)->OnButtonClick();
                     });
                     break;
                 }   
                 case static_cast<int>(CTCWindows::FunType::SignalReopen): {     //信号重开
-                    m_mapClickEvent.insert(static_cast<CTCWindows::FunType>(i), [&]() {
-                        if (m_nSelectType == 0x01 || m_nSelectType == 0x1f) { //点击信号机名称或信号机灯位
+                    m_mapClickEvent[m_strType].insert(static_cast<CTCWindows::FunType>(i), [](DeviceBase* pDevice) {
+                        if (dynamic_cast<StaSignal*>(pDevice)->m_nSelectType == 0x01 || dynamic_cast<StaSignal*>(pDevice)->m_nSelectType == 0x1f) { //点击信号机名称或信号机灯位
                             CTCWindows::BaseWnd::StaFunBtnToolBar::setOperObjType(CTCWindows::OperObjType::Signal);
-                            MainStation()->AddSelectDevice(this);
+                            MainStation()->AddSelectDevice(pDevice);
                         }
                     });
                     break;
@@ -415,32 +423,33 @@ namespace Station {
                 case static_cast<int>(CTCWindows::FunType::TotalRelieve):       //总人解
                 case static_cast<int>(CTCWindows::FunType::Blockade):           //封锁
                 case static_cast<int>(CTCWindows::FunType::UnBlockade): {       //解封
-                    m_mapClickEvent.insert(static_cast<CTCWindows::FunType>(i), [&]() {
-                        if (m_nSelectType == 0x02 && (m_nFirstBtnType == 0 || m_nFirstBtnType == 1)) { //点击列车按钮
+                    m_mapClickEvent[m_strType].insert(static_cast<CTCWindows::FunType>(i), [](DeviceBase* pDevice) {
+                        StaSignal* pSignal = dynamic_cast<StaSignal*>(pDevice);
+                        if (pSignal->m_nSelectType == 0x02 && (m_nFirstBtnType == 0 || pSignal->m_nFirstBtnType == 1)) { //点击列车按钮
                             CTCWindows::BaseWnd::StaFunBtnToolBar::setOperObjType(CTCWindows::OperObjType::Train);
                             if (m_nFirstBtnType == 0) {
                                 m_nFirstBtnType = 1;
                             }
                         }
-                        else if (m_nSelectType == 0x04 && (m_nFirstBtnType == 0 || m_nFirstBtnType == 2)) { //点击调车按钮
+                        else if (pSignal->m_nSelectType == 0x04 && (m_nFirstBtnType == 0 || m_nFirstBtnType == 2)) { //点击调车按钮
                             CTCWindows::BaseWnd::StaFunBtnToolBar::setOperObjType(CTCWindows::OperObjType::Shunt);
                             if (m_nFirstBtnType == 0) {
                                 m_nFirstBtnType = 2;
                             }
                         }
-                        else if (m_nSelectType == 0x1f) { //点击信号灯
+                        else if (pSignal->m_nSelectType == 0x1f) { //点击信号灯
                             CTCWindows::BaseWnd::StaFunBtnToolBar::setOperObjType(CTCWindows::OperObjType::Signal);
                         }
-                        MainStation()->AddSelectDevice(this);
+                        MainStation()->AddSelectDevice(pSignal);
                     });
                     break;
                 }
                 case static_cast<int>(CTCWindows::FunType::Lighting):           //点灯
                 case static_cast<int>(CTCWindows::FunType::UnLighting): {       //灭灯
-                    m_mapClickEvent.insert(static_cast<CTCWindows::FunType>(i), [&]() {
-                        if (m_nSelectType == 0x1f) { //点击信号机灯位
+                    m_mapClickEvent[m_strType].insert(static_cast<CTCWindows::FunType>(i), [](DeviceBase* pDevice) {
+                        if (dynamic_cast<StaSignal*>(pDevice)->m_nSelectType == 0x1f) { //点击信号机灯位
                             CTCWindows::BaseWnd::StaFunBtnToolBar::setOperObjType(CTCWindows::OperObjType::Signal);
-                            MainStation()->AddSelectDevice(this);
+                            MainStation()->AddSelectDevice(pDevice);
                         }
                     });
                     break;
@@ -611,7 +620,7 @@ namespace Station {
             }
         }
 
-        void StaSignal::OrderClear(int nType)
+        void StaSignal::OrderClear(bool bClearTwinkle)
         {
             BtnStateReset();
         }

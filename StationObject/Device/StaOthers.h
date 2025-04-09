@@ -11,6 +11,7 @@ namespace Station {
             ~StaSwitchSection();
 
         private:
+            void InitAttributeMap() override;
             //站场翻转
             void setVollover(const QPointF& ptBase) override;
 
@@ -30,6 +31,7 @@ namespace Station {
             ~StaPermillSix();
 
         private:
+            void InitAttributeMap() override;
             //站场绘制
             void Draw(bool isMulti = false) override;
             //绘制千分之六标识
@@ -64,6 +66,7 @@ namespace Station {
             };
 
         private:
+            void InitAttributeMap() override;
             //站场绘制
             void Draw(bool isMulti = false) override;
             //绘制分相区
@@ -85,6 +88,7 @@ namespace Station {
             ~StaMark();
 
         private:
+            void InitAttributeMap() override;
             //站场绘制
             void Draw(bool isMulti = false) override;
             //绘制分相区
