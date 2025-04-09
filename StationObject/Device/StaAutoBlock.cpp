@@ -3,10 +3,11 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include "CommonWidget/LeadSealDlg.h"
+#include "CommonWidget/AuxiliaryMenuWnd.h"
 #include "StaAutoBlock.h"
 #include "Global.h"
 #pragma execution_character_set("utf-8")
-#include "./CTCMainWindow/CommonWidget/AuxiliaryMenuWnd.h"
+
 namespace Station {
     namespace Device {
 
@@ -282,7 +283,7 @@ namespace Station {
             m_mapClickEvent[m_strType].insert(CTCWindows::FunType::FunBtn, [](DeviceBase* pDevice) {
                 if (CTCWindows::LeadSealDlg::LeadSealPassword(CTCWindows::KeyInputType::LeadSeal)) {
                     dynamic_cast<StaAutoBlock*>(pDevice)->OnButtonClick();
-                    QString stationName = Station->getStationName();
+                    QString stationName = MainStation()->getStationName();
                     SealTechnique::InsertSealRecord(stationName, "功能按钮");
 
                 }
