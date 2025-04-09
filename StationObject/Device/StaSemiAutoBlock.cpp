@@ -14,6 +14,7 @@ namespace Station {
             m_mapAttribute.insert("BSType", [&](const QString& strElement) { m_nBlockType = strElement.toUInt(); });
             m_mapAttribute.insert("m_Direction", [&](const QString& strElement) { m_strDirection = strElement; });
             m_mapAttribute.insert("m_FrameRect", [&](const QString& strElement) { m_rcFrame = QStringToQRectF(strElement); });
+            m_mapAttribute.insert("m_RoutePoint", [&](const QString& strElement) { m_ptRouteWnd = QStringToQPointF(strElement); });
             m_mapAttribute.insert("m_Button", [&](const QString& strElement) {
                 QJsonParseError error;
                 QJsonDocument josnDoc = QJsonDocument::fromJson(strElement.toUtf8(), &error);
@@ -37,10 +38,66 @@ namespace Station {
         {
 
         }
+        void StaSemiAutoBlock::DrawRoutePreviewWnd()
+        {
+            QFont font = m_pPainter.font();
+            font.setPointSizeF(14);
+            QPen pen;
+            pen.setColor(Qt::white);
+            pen.setStyle(Qt::SolidLine);
+            m_pPainter.setPen(pen);
+            m_pPainter.setFont(font);
+            QRectF rcTeainNum[3];
+            rcTeainNum[0] = { m_ptRouteWnd.x(), m_ptRouteWnd.y(), 120, 32 };
+            rcTeainNum[1] = { m_ptRouteWnd.x(), m_ptRouteWnd.y() + 32, 120, 32 };
+            rcTeainNum[2] = { m_ptRouteWnd.x(), m_ptRouteWnd.y() + 64, 120, 32 };
+
+            QVector<StaTrainRoute*> vecTrainRoute;
+            for (StaTrainRoute* pRoute : MainStation()->TrainRouteList()) {
+
+                if (pRoute->m_strSignal == m_strDirection) {
+                    vecTrainRoute.append(pRoute);
+                }
+            }
+            int nIndex = 0;
+            StaTrain* pTrain = nullptr;
+     
+            while (nIndex < 3) {
+                m_pPainter.setBrush(Qt::NoBrush);
+                m_pPainter.drawRect(Scale(rcTeainNum[nIndex]));
+                if (nIndex < vecTrainRoute.size()) {
+                    pTrain = MainStation()->getStaTrainById(vecTrainRoute[nIndex]->m_nTrainId);
+                    StaTrainRoute* pRoute = vecTrainRoute[nIndex];
+                    if (!pRoute->m_bAutoTouch) {//人工触发-false
+                        m_pPainter.setPen(QPen(COLOR_LIGHT_RED, 1));
+                    }
+                    else if (pRoute->m_bAutoTouch) {//自动触发-true
+                        m_pPainter.setPen(QPen(COLOR_BTN_YELLOW, 1));
+                    }
+
+                    if (pRoute->m_nRouteState == 2) {//触发成功
+                        m_pPainter.setPen(QPen(COLOR_BTN_GREEN_TG, 1));
+                    }
+
+                    if (pRoute->m_bArrivaRoute)//接发类型 (接车-true 发车-false 通过)
+                    {
+                        m_pPainter.drawText(Scale(rcTeainNum[nIndex]), pTrain->m_strTrainNum + "  J" + pRoute->m_strTrack, QTextOption(Qt::AlignCenter));
+                    }
+                    else if (!pRoute->m_bArrivaRoute) {
+                        m_pPainter.drawText(Scale(rcTeainNum[nIndex]), pTrain->m_strTrainNum + "  F" + pRoute->m_strTrack, QTextOption(Qt::AlignCenter));
+                    }
+                    else {
+                        m_pPainter.drawText(Scale(rcTeainNum[nIndex]), pTrain->m_strTrainNum + "  T" + pRoute->m_strTrack, QTextOption(Qt::AlignCenter));
+                    }
+                }
+                nIndex++;
+            }
+        }
 
         void StaSemiAutoBlock::Draw(bool isMulti)
         {
             DrawArrow(m_pPainter);
+            DrawRoutePreviewWnd();
             if (m_bMainStation) {
                 int nState = 0x01;
                 for (StaBlockBtn& btnBlock : m_vecBlockBtn) {

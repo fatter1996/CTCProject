@@ -10,7 +10,7 @@
 
 namespace Station {
     namespace Device {
-
+        int Station::Device::StaSignal::m_nBState = 0;
         StaSignal::StaSignal(QObject* pParent)
             : DeviceBase(pParent)
         {
@@ -465,7 +465,7 @@ namespace Station {
                 });
                 pMenu->addSeparator();
             }
-            if (m_nAttr & (SIGNAL_LCZD | SIGNAL_LCSD)) {    //列车
+            if (m_nAttr & (SIGNAL_LCZD | SIGNAL_LCSD) || m_strXHDType == "JZ_XHJ" || m_strXHDType == "CZ_XHJ") {    //列车
                 QAction* pAction1 = new QAction("列车 进路办理");
                 pAction1->setEnabled(static_cast<SignalState>(m_nState & 0x0f) == SignalState::U);
                 pMenu->addAction(pAction1);
@@ -511,7 +511,7 @@ namespace Station {
                     }
                 });
             }
-            if (m_nAttr & (SIGNAL_DCZD | SIGNAL_DCSD)) {    //调车
+            if (m_nAttr & (SIGNAL_DCZD | SIGNAL_DCSD) || m_strXHDType == "DC_XHJ" || m_strXHDType == "CZ_XHJ") {    //调车
                 pMenu->addSeparator();
                 QAction* pAction1 = new QAction("调车 进路办理");
                 pAction1->setEnabled(static_cast<SignalState>(m_nState & 0x0f) == SignalState::B);
@@ -609,6 +609,7 @@ namespace Station {
                     m_nFirstBtnType = 4;
                 }
             }
+            m_nBState = m_nBtnState;
         }
 
         void StaSignal::OrderClear(int nType)

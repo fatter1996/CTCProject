@@ -11,6 +11,10 @@
 #define PLAN_TYPE_THROUGH	0x04
 
 namespace Station {
+	enum class LimitsOfAuthority : int {
+		admin,		//管理
+		employee    //成员
+	};
 	enum class VisibleDev : int {
 		button,					//按钮
 		trainButton,			//列车按钮

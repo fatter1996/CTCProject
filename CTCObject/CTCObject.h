@@ -28,7 +28,7 @@ namespace CTCDoc {
         Socket::SocketTCP* m_pSocketTCP = nullptr;
         //站间透明
         QVector<Station::StationObject*> m_vecMultiStation;
-
+        
         bool m_bShowToolbarBtn = true;
         bool m_bShowToolbarLabel = true;
     };

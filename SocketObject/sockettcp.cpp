@@ -78,6 +78,7 @@ namespace Socket {
         if (m_nTimer == event->timerId()) {
             m_pTcpSocket->connectToHost(m_hServerIp, m_nServerPort);
         }
+        return QObject::timerEvent(event);
     }
 
     void SocketTCP::setLocalAddress(const QHostAddress& hAddress, const quint16& nPort)

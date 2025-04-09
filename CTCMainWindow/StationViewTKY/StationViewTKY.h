@@ -2,6 +2,9 @@
 
 #include "BaseWndClass/CTCMainWindow.h"
 #include "ui_StationViewTKY.h"
+#include "ModuleWidget/StaAlarmWindowTKY.h"
+#include "CTCMainWindow/CustomControl/LntervallogicCheck.h"
+#include "CTCMainWindow/CommonWidget/VehicleManage.h"
 
 namespace CTCWindows {
 	namespace CARS {
@@ -27,7 +30,7 @@ namespace CTCWindows {
 			BaseWnd::StaDispatchOrder* CreateStaDispatchOrder() override;
 			//创建显示设置界面
 			BaseWnd::StaVisibleSet* CreateStaVisibleSet() override;
-
+			bool eventFilter(QObject* obj, QEvent* event);
 			//初始化主菜单
 			void InitStationViewMenuBar() override;
 			//初始化工具栏-主工具栏
@@ -38,13 +41,20 @@ namespace CTCWindows {
 			void InitSignForToolBar() override;
 			//初始化工具栏-状态工具栏
 			void InitStateToolBar() override;
+			// 初始化工具栏-底部行车日志工具栏
+			void InitbottomTrafficLogToolBar() override;
 			//初始化界面布局
 			QLayout* WidgetLayout() override { return ui.centralWidget->layout(); }
+			//void onButtonToggled(bool checked);
 
 		signals:
 			void clickFunbutton(FunType eSelectType);
+			void countdownStarts();
 
 		private:
+			VehicleManage* m_pVehicleManage = nullptr;
+			StaAlarmWindowTKY*  m_pStaAlarm = nullptr;
+			LntervallogicCheck* m_pLntervallogic = nullptr;
 			Ui::StationViewTKY ui;
 		};
 	}

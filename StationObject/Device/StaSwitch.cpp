@@ -69,6 +69,7 @@ namespace Station {
         {
             m_bShowName = MainStation()->IsVisible(VisibleDev::switchName);
             //绘制股道
+            //qDebug() << "222222222222222222" << getName() << getSwitchState() << getState();
             DrawTrack(QPen(getTrackColor(), Scale(TRACK_WIDTH), Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin), m_nSwitchState | SWITCH_DRAW_CQ);
             DrawTrack(QPen(COLOR_TRACK_BLUE, Scale(TRACK_WIDTH), Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin), 0x07 ^ (m_nSwitchState | SWITCH_DRAW_CQ));
             //绘制岔心
@@ -452,10 +453,10 @@ namespace Station {
         {
             QColor cTrackColor = Qt::black;
 
-            if (m_nSwitchState & SWITCH_DRAW_DW) {
+            if (m_nSwitchState & SWITCH_DRAW_DW && !(m_nSwitchState & SWITCH_DRAW_FW)) {
                 cTrackColor = COLOR_TRACK_GREEN;
             }
-            else if (m_nSwitchState & SWITCH_DRAW_FW) {
+            else if (m_nSwitchState & SWITCH_DRAW_FW && !(m_nSwitchState & SWITCH_DRAW_DW)) {
                 cTrackColor = COLOR_TRACK_YELLOW;
             }
             else {
@@ -463,7 +464,12 @@ namespace Station {
             }
 
             if (m_nState & SECTION_STATE_TAKEUP) {
-                cTrackColor = COLOR_TRACK_RED;
+                if (m_nSwitchState == 0 || m_nSwitchState == 3) {
+                    cTrackColor = m_bElapsed ? COLOR_TRACK_RED : cTrackColor;
+                }
+                else {
+                    cTrackColor = COLOR_TRACK_RED;
+                }
             }
 
             if (m_nState & SECTION_STATE_PRELOCK) {

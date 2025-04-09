@@ -4,9 +4,11 @@
 #include "BaseWndClass/ModuleWidget/StaDispatchOrder.h"
 #include "StationObject/GlobalStruct.h"
 #include "ui_StaDispatchOrderTKY.h"
+#include <StationObject/GlobalStruct.h>
 
 namespace CTCWindows {
 	namespace CARS {
+
 		class StaDispatchOrderTKY : public BaseWnd::StaDispatchOrder
 		{
 			Q_OBJECT
@@ -15,6 +17,7 @@ namespace CTCWindows {
 			~StaDispatchOrderTKY();
 
 		public:
+			void ViewPermission(Station::LimitsOfAuthority operate) override;
 			void DispatchOrderListUpData() override;
 			void CurDispatchOrderUpData() override;
 			void TrainDispatchOrderListUpData() override;

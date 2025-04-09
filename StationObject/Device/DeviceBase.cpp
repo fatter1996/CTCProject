@@ -9,6 +9,7 @@
 #include <QJsonDocument>
 #include <QMessageBox>
 #include "CommonWidget/LeadSealDlg.h"
+#include <StationViewTKY/StationView/StationCtrlDispTKY.h>
 #pragma execution_character_set("utf-8")
 
 namespace Station {
@@ -109,7 +110,7 @@ namespace Station {
                 m_pPainter.begin((QWidget*)obj);
                 Draw();
                 m_pPainter.end();
-            }
+            }   
             if (m_bMainStation) {
                 if (event->type() == QEvent::MouseMove) {
                     QMouseEvent* mouseEvent = dynamic_cast<QMouseEvent*>(event);

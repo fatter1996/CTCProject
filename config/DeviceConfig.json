@@ -88,95 +88,218 @@
         }
     ],
     "#AutoBlock": "自动闭塞",
-    "AutoBlock": [
-        {
-            "#m_strName": "设备名称",
-            "#m_textRect": "设备名称坐标",
-            "#m_nType": "设备类型,固定250",
-            "#m_nCode": "编号,不能与其他设备Code重复",
-            "m_nSX": "上下行, 1-上行,0-下行",
-            "#m_Direction": "方向,如X,S,SN等(关联信号机名称)",
-            "#m_ArrowPoint": "箭头坐标",
-            "#m_RoutePoint": "进路窗左上角坐标",
-            "#m_FrameRect": "外框范围",
-            "#m_Button": {
-                "##ZFZ": "总辅助",
-                "#ZFZ": {
-                    "pName": "文字坐标",
-                    "m_ptBtn": "按钮坐标",
-                    "m_ptCountdown": "倒计时显示坐标",
-                    "m_textColor": "字体颜色,(0-白,1-红,2-黄,3-绿)"
-                },
-                "##JCFZ": "接车辅助,内容同上",
-                "##FCFZ": "发车辅助,内容同上",
-                "##YXGF": "允许改方,内容同上"
-
-            },
-            "#m_Lamp": {
-                "##Allow": "允许发车",
-                "#Allow": {
-                    "pName": "文字坐标",
-                    "m_ptLamp": "灯光坐标",
-                    "m_textColor": "字体颜色,(0-白,1-红,2-黄,3-绿)"
-                },
-                "##Assisted": "辅助办理,内容同上",
-                "##Supervise": "监督区间,内容同上",
-                "##Section": "区间逻辑检查,内容同上"
-            }
+  "AutoBlock": [
+    {
+      "#m_strName": "设备名称",
+      "#m_textRect": "设备名称坐标",
+      "#m_nType": "设备类型,固定250",
+      "#m_nCode": "编号,不能与其他设备Code重复",
+      "m_nSX": "上下行, 1-上行,0-下行",
+      "#m_Direction": "方向,如X,S,SN等(关联信号机名称)",
+      "#m_ArrowPoint": "箭头坐标",
+      "#m_RoutePoint": "进路窗左上角坐标",
+      "#m_FrameRect": "外框范围",
+      "#m_Button": {
+        "##ZFZ": "总辅助",
+        "#ZFZ": {
+          "pName": "文字坐标",
+          "m_ptBtn": "按钮坐标",
+          "m_ptCountdown": "倒计时显示坐标",
+          "m_textColor": "字体颜色,(0-白,1-红,2-黄,3-绿)"
         },
-        {
-            "m_strName": "S",
-            "m_textRect": "200,100",
-            "m_nType": 250,
-            "m_nCode": "0x7a",
-            "m_nSX": 1,
-            "m_Direction": "S",
-            "m_ArrowPoint": "260,100",
-            "m_RoutePoint": "400,200",
-            "m_FrameRect": "180,100,260,180",
-            "m_textColor": 2,
-            "m_Button": {
-                "ZFZ": {
-                    "pName": "200,140",
-                    "m_ptBtn": "200,160",
-                    "m_textColor": 2
-                },
-                "JCFZ": {
-                    "pName": "260,140",
-                    "m_ptBtn": "260,160",
-                    "m_textColor": 2
-                },
-                "FCFZ": {
-                    "pName": "320,140",
-                    "m_ptBtn": "320,160",
-                    "m_textColor": 2
-                },
-                "YXGF": {
-                    "pName": "360,140",
-                    "m_ptBtn": "360,160",
-                    "m_textColor": 2
-                }
-            },
-            "m_Lamp": {
-                "Allow": {
-                    "pName": "200,200",
-                    "m_ptLamp": "200,220"
-                },
-                "Assisted": {
-                    "pName": "240,200",
-                    "m_ptLamp": "240,220"
-                },
-                "Supervise": {
-                    "pName": "280,200",
-                    "m_ptLamp": "280,220"
-                },
-                "Section": {
-                    "pName": "320,200",
-                    "m_ptLamp": "320,220"
-                }
-            }
+        "##JCFZ": "接车辅助,内容同上",
+        "##FCFZ": "发车辅助,内容同上",
+        "##YXGF": "允许改方,内容同上"
+
+      },
+      "#m_Lamp": {
+        "##Allow": "允许发车",
+        "#Allow": {
+          "pName": "文字坐标",
+          "m_ptLamp": "灯光坐标",
+          "m_textColor": "字体颜色,(0-白,1-红,2-黄,3-绿)"
+        },
+        "##Assisted": "辅助办理,内容同上",
+        "##Supervise": "监督区间,内容同上",
+        "##Section": "区间逻辑检查,内容同上"
+      }
+    },
+    {
+      "m_strName": "S",
+      "m_textRect": "130,130,410,300",
+      "m_nType": 250,
+      "m_nCode": "0x79",
+      "m_nSX": 1,
+      "isLeave": 0,
+      "m_Direction": "S",
+      "m_ArrowPoint": "365,140",
+      "m_FrameRect": "120,120,410,270",
+      "m_RoutePoint": "415,120,450,270",
+      "m_textColor": 2,
+      "m_Button": {
+        "ZFZ": {
+          "pName": "148,220",
+          "m_ptBtn": "160,200",
+          "pTime": "165,180"
+        },
+        "JCFZ": {
+          "pName": "207,220",
+          "m_ptBtn": "225,200",
+          "pTime": "230,180"
+        },
+        "FCFZ": {
+          "pName": "275,220",
+          "m_ptBtn": "295,200",
+          "pTime": "295,180"
+        },
+        "YXGF": {
+          "pName": "335,220",
+          "m_ptBtn": "355,200"
         }
-    ],
+
+      },
+      "m_Lamp": {
+        "Supervise": {
+          "pName": "155,175",
+          "m_ptLamp": "185,155"
+        },
+        "Assisted": {
+          "pName": "230,175",
+          "m_ptLamp": "255,155"
+        },
+        "Allow": {
+          "pName": "300,175",
+          "m_ptLamp": "325,155"
+        }
+      }
+    },
+    {
+      "m_strName": "SF",
+      "m_textRect": "130,510,70,750",
+      "m_nType": 250,
+      "m_nCode": "0x7a",
+      "m_nSX": 1,
+      "isLeave": 1,
+      "m_Direction": "SF",
+      "m_ArrowPoint": "365,520",
+      "m_RoutePoint": "415,500,440,650",
+      "m_FrameRect": "120,500,410,650",
+      "m_Button": {
+        "ZFZ": {
+          "pName": "140,610",
+          "m_ptBtn": "160,590",
+          "pTime": "165,580"
+        },
+        "JCFZ": {
+          "pName": "215,610",
+          "m_ptBtn": "235,590",
+          "pTime": "195,580"
+        },
+        "FCFZ": {
+          "pName": "285,610",
+          "m_ptBtn": "305,590",
+          "pTime": "245,580"
+        }
+      },
+      "m_Lamp": {
+        "Supervise": {
+          "pName": "160,565",
+          "m_ptLamp": "190,545"
+        },
+        "Assisted": {
+          "pName": "260,565",
+          "m_ptLamp": "295,545"
+        }
+      }
+    },
+    {
+      "m_strName": "X",
+      "m_textRect": "1500,510,1520,750",
+      "m_nType": 250,
+      "m_nCode": "0x7b",
+      "m_nSX": 0,
+      "isLeave": 0,
+      "m_Direction": "X",
+      "m_ArrowPoint": "1735,520",
+      "m_RoutePoint": "1360,500,1475,650",
+      "m_FrameRect": "1485,500,1780,650",
+      "m_Button": {
+        "ZFZ": {
+          "pName": "1515,610",
+          "m_ptBtn": "1530,590",
+          "pTime": "1660,750"
+        },
+        "FCFZ": {
+          "pName": "1570,610",
+          "m_ptBtn": "1590,590",
+          "pTime": "1725,750"
+        },
+        "JCFZ": {
+          "pName": "1640,610",
+          "m_ptBtn": "1660,590",
+          "pTime": "1790,750"
+        },
+        "YXGF": {
+          "pName": "1710,610",
+          "m_ptBtn": "1730,590"
+        }
+      },
+      "m_Lamp": {
+        "Supervise": {
+          "pName": "1525,565",
+          "m_ptLamp": "1545,545"
+        },
+        "Assisted": {
+          "pName": "1605,565",
+          "m_ptLamp": "1635,545"
+        },
+        "Allow": {
+          "pName": "1695,565",
+          "m_ptLamp": "1715,545"
+        }
+      }
+    },
+    {
+      "m_strName": "XF",
+      "m_textRect": "1500,130,1520,300",
+      "m_nType": 250,
+      "m_nCode": "0x7c",
+      "m_nSX": 0,
+      "isLeave": 1,
+      "m_Direction": "X",
+      "m_ArrowPoint": "1735,140",
+      "m_RoutePoint": "1360,120,1475,270",
+      "m_FrameRect": "1485,120,1780,270",
+      "m_Button": {
+        "ZFZ": {
+          "pName": "1500,220",
+          "m_ptBtn": "1510,200",
+          "pTime": "1640,680"
+        },
+        "FCFZ": {
+          "pName": "1600,220",
+          "m_ptBtn": "1620,200",
+          "pTime": "1705,680"
+        },
+        "JCFZ": {
+          "pName": "1700,220",
+          "m_ptBtn": "1720,200",
+          "pTime": "1770,680"
+        }
+      },
+      "m_Lamp": {
+        "Supervise": {
+          "pName": "1540,175",
+          "m_ptLamp": "1560,155"
+        },
+        "Assisted": {
+          "pName": "1640,175",
+          "m_ptLamp": "1560,155"
+        }
+      }
+    }
+
+  ],
     "#SemiAutoBlock": "半自动闭塞",
     "SemiAutoBlock": [
         {
@@ -200,32 +323,60 @@
 
             }
         },
-        {
-            "m_nCode": "0x73",
-            "m_nSX": 1,
-            "m_Direction": "SJ",
-            "m_ArrowPoint": "800,100",
-            "m_FrameRect": "780,80,960,160",
-            "m_textColor": 2,
-            "m_Button": {
-                "BS": {
-                    "pName": "800,120",
-                    "m_ptBtn": "800,140"
-                },
-                "SG": {
-                    "pName": "850,120",
-                    "m_ptBtn": "850,140",
-                    "m_textColor": 2
-                },
-                "FY": {
-                    "pName": "900,120",
-                    "m_ptBtn": "900,140"
-                }
-            },
-            "m_Lamp": {
+      {
+        "m_nCode": "0x73",
+        "m_nSX": 1,
+        "m_Direction": "SJ",
+        "m_ArrowPoint": "215,50",
+        "m_RoutePoint": "305,15,330,100",
+        "m_FrameRect": "120,15,300,100",
+        "m_textColor": 2,
+        "m_Button": {
+          "BS": {
+            "pName": "140,55",
+            "m_ptBtn": "145,80"
+          },
+          "SG": {
+            "pName": "200,55",
+            "m_ptBtn": "205,80",
+            "m_textColor": 2
+          },
+          "FY": {
+            "pName": "260,55",
+            "m_ptBtn": "265,80"
+          }
+        },
+        "m_Lamp": {
 
-            }
         }
+      },
+      {
+        "m_nCode": "0x74",
+        "m_nSX": 1,
+        "m_Direction": "XJ",
+        "m_ArrowPoint": "1680,50",
+        "m_RoutePoint": "1475,15,1485,100",
+        "m_FrameRect": "1600,15,1780,100",
+        "m_textColor": 2,
+        "m_Button": {
+          "BS": {
+            "pName": "1610,55",
+            "m_ptBtn": "1615,80"
+          },
+          "SG": {
+            "pName": "1670,55",
+            "m_ptBtn": "1675,80",
+            "m_textColor": 2
+          },
+          "FY": {
+            "pName": "1730,55",
+            "m_ptBtn": "1735,80"
+          }
+        },
+        "m_Lamp": {
+
+        }
+      }
     ],
     "#BuRect": "引导总锁等功能按钮,内容与xml中的按钮基本相同",
     "BuRect": [
@@ -248,33 +399,33 @@
             "m_nType": 540,
             "m_nCode": "0x7c",
             "m_strName": "X引导总锁",
-            "center": "1020,900",
-            "p1": "1015,880",
-            "p2": "1030,895",
+            "center": "1020,660",
+            "p1": "1015,640",
+            "p2": "1030,655",
             "m_nSX": 0,
-            "pName": "990,900,1050,920",
+            "pName": "990,660,1050,680",
             "FontHeight": 14
         },
         {
             "m_nType": 540,
             "m_nCode": " 0x7d",
             "m_strName": "S引导总锁",
-            "center": "1120,900",
-            "p1": "1115,880",
-            "p2": "1130,895",
+            "center": "1120,660",
+            "p1": "1115,640",
+            "p2": "1130,655",
             "m_nSX": 1,
-            "pName": "1090,900,1150,920",
+            "pName": "1090,660,1150,680",
             "FontHeight": 14
         },
         {
             "m_nType": 541,
             "m_nCode": "0x7e",
             "m_strName": "故障通知",
-            "center": "920,900",
-            "p1": "915,880",
-            "p2": "930,895",
+            "center": "920,660",
+            "p1": "915,640",
+            "p2": "930,655",
             "m_nSX": 0,
-            "pName": "890,900,950,920",
+            "pName": "890,660,950,680",
             "FontHeight": 14
         }
     ],
@@ -285,103 +436,8 @@
             "#m_strName": "名称",
             "#pName": "文字范围",
             "#m_lampRect": "灯范围"
-        },
-        {
-            "m_nType": 510,
-            "m_strName": "XGN限速",
-            "pName": "200, 360, 280, 390",
-            "m_lampRect": "232, 340, 248, 356"
-        },
-        {
-            "m_nType": 510,
-            "m_strName": "XG限速",
-            "pName": "190,650, 270, 680",
-            "m_lampRect": "222, 630,238, 646"
-        },
-        {
-            "m_nType": 510,
-            "m_strName": "SG限速",
-            "pName": "1730, 390, 1810, 420",
-            "m_lampRect": "1762, 370, 1778, 386"
-        },
-        {
-            "m_nType": 510,
-            "m_strName": "SGN限速",
-            "pName": "1730, 650, 1810, 680",
-            "m_lampRect": "1762, 630, 1778, 646"
-        },
-        {
-            "m_nType": 510,
-            "m_strName": "15G停稳",
-            "pName": "770,300,810,320",
-            "m_lampRect": "782,282,798,298"
-        },
-        {
-            "m_nType": 510,
-            "m_strName": "XIVG停稳",
-            "pName": "830,300,870,320",
-            "m_lampRect": "842,282,858,298"
-        },
-        {
-            "m_nType": 510,
-            "m_strName": "VIIIG停稳",
-            "pName": "890,300,930,320",
-            "m_lampRect": "902,282,918,298"
-        },
-        {
-            "m_nType": 510,
-            "m_strName": "12G停稳",
-            "pName": "950,300,990,320",
-            "m_lampRect": "962,282,978,298"
-        },
-        {
-            "m_nType": 510,
-            "m_strName": "11G停稳",
-            "pName": "1010,300,1050,320",
-            "m_lampRect": "1022,282,1038,298"
-        },
-        {
-            "m_nType": 510,
-            "m_strName": "10G停稳",
-            "pName": "1070,300,1110,320",
-            "m_lampRect": "1082,282,1098,298"
-        },
-        {
-            "m_nType": 510,
-            "m_strName": "9G停稳",
-            "pName": "1130,300,1170,320",
-            "m_lampRect": "1142,282,1158,298"
-        },
-        {
-            "m_nType": 510,
-            "m_strName": "205/207#安全线道岔不在定位",
-            "pName": "350, 360, 430, 390",
-            "m_lampRect": "382, 340, 398, 356"
-        },
-        {
-            "m_nType": 510,
-            "m_strName": "上行侧线限速6",
-            "pName": "550, 360, 630, 390",
-            "m_lampRect": "582, 340, 598, 356"
-        },
-        {
-            "m_nType": 510,
-            "m_strName": "下行侧线限速5",
-            "pName": "1400,650, 1600, 680",
-            "m_lampRect": "1482, 630, 1498, 646"
-        },
-        {
-            "m_nType": 510,
-            "m_strName": "X轨道停电",
-            "pName": "1200,850, 1400, 880",
-            "m_lampRect": "1282, 830, 1298, 846"
-        },
-        {
-            "m_nType": 510,
-            "m_strName": "S轨道停电",
-            "pName": "1300,850, 1500, 880",
-            "m_lampRect": "1382, 830, 1398, 846"
         }
+        
     ],
     "#PermillSix": "千分之六",
     "PermillSix": [
@@ -394,10 +450,10 @@
         },
         {
             "m_strName": "6‰",
-            "pName": "1055,765",
-            "p1": "1040,780",
-            "center": "1090,780",
-            "p2": "1120,810"
+            "pName": "50,240",
+            "p1": "30,230",
+            "center": "80,230",
+            "p2": "100,250"
         }
     ],
     "#Neutral": "分相区",
@@ -416,48 +472,6 @@
                     "m_strContent": "文字内容",
                     "pName": "文字范围",
                     "m_textColor": "字体颜色,(0-白,1-红,2-黄,3-绿)"
-                }
-            ]
-        },
-        {
-            "Line": [
-                {
-                    "m_startPos": "10,420",
-                    "m_endPos": "110,420"
-                },
-                {
-                    "m_startPos": "60,420",
-                    "m_endPos": "60,480"
-                }
-            ],
-            "Text": [
-                {
-                    "m_strContent": "K4+515",
-                    "pName": "960,140,1020,160"
-                },
-                {
-                    "m_strContent": "K3+202",
-                    "pName": "120,430,280,450"
-                },
-                {
-                    "m_strContent": "K3+202",
-                    "pName": "120,580,280,600"
-                },
-                {
-                    "m_strContent": "K5+689",
-                    "pName": "1620,430,1780,450"
-                },
-                {
-                    "m_strContent": "K5+691",
-                    "pName": "1620,610,1780,630"
-                },
-                {
-                    "m_strContent": "K0+609-K1+610",
-                    "pName": "-10,400,140,420"
-                },
-                {
-                    "m_strContent": "分相区",
-                    "pName": "-10,380,140,410"
                 }
             ]
         }

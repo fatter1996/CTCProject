@@ -440,5 +440,9 @@ namespace Station {
                 }
             }
         }
+        void StaTrack::SetTrack()
+        {
+            m_nPowerCut = true;
+        }
     }
 }

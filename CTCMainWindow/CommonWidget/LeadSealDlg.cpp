@@ -6,7 +6,7 @@
 #include <QPainterPath>
 #include <QMouseEvent>
 #include <QGridLayout>
-#include <QCheckBox>
+
 #include "Global.h"
 #pragma execution_character_set("utf-8")
 
@@ -70,11 +70,53 @@ namespace CTCWindows {
 				this->close();
 			});
 		}
+		else if (type == KeyInputType::InputTrain) {
+			ui.tiplabel->setText("请输入车次号");
+			QLabel* pTxetLabel = new QLabel(this);
+			pTxetLabel->setFixedHeight(24);
+			pTxetLabel->setText("请输入车次号");
+			ui.contentWidget->layout()->addWidget(pTxetLabel);
+			QLineEdit* pEdit = new QLineEdit(this);
+			pEdit->setFixedHeight(24);
+			m_pCurrLineEdit = pEdit;
+			ui.contentWidget->layout()->addWidget(pEdit);
+
+			connect(ui.confirmBtn, &QPushButton::clicked, [&]() {
+				qDebug() << m_pCurrLineEdit->text();
+				this->close();
+				});
+		}
+		else if (type == KeyInputType::InputShuntingTime) {
+			ui.tiplabel->setText("调车作业钩时分");
+			QBoxLayout* pLayout = qobject_cast<QBoxLayout*>(ui.contentWidget->layout());
+			QLabel* pTxetLabel = new QLabel(this);
+			pTxetLabel->setFixedHeight(24);
+			pTxetLabel->setText("调车作业预计时长:");
+			QLineEdit* pEdit = new QLineEdit(this);
+			pEdit->setFixedHeight(24);
+			m_pCurrLineEdit = pEdit;
+			QHBoxLayout* LabelEditLayout = new QHBoxLayout();
+			LabelEditLayout->addWidget(pTxetLabel);
+			LabelEditLayout->addWidget(pEdit);
+			pLayout->addLayout(LabelEditLayout);
+		    pCheck = new QCheckBox(this);
+			pCheck->setText("强制执行");
+			pLayout->addWidget(pCheck, 0, Qt::AlignCenter);
+
+			connect(ui.confirmBtn, &QPushButton::clicked, [&]() {
+				if (pCheck->isChecked()) {
+					qDebug() << "强制执行";
+				}
+				qDebug() << m_pCurrLineEdit->text()+"分钟";
+				this->close();
+				});
+		}
 		else {
 			Station::StaTrain* pTrain = static_cast<Station::StaTrain*>(pAttrObject);
 			if (!pTrain) {
 				return;
 			}
+	
 			if (type == KeyInputType::AddTrain) {
 				ui.tiplabel->setText("添加车次");
 				InitAddTrain(pAttrObject);

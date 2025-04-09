@@ -16,6 +16,7 @@ namespace CTCWindows {
 			~StaDispatchOrderKSK();
 
 		public:
+			void ViewPermission(Station::LimitsOfAuthority operate) {}
 			void DispatchOrderListUpData() {}
 			void CurDispatchOrderUpData() {}
 			void TrainDispatchOrderListUpData() {}

@@ -30,7 +30,7 @@ namespace Socket {
 
     void SocketUDP::onRecvData()
     {
-        QByteArray recvDataArray;
+        QByteArray   recvDataArray;
         QHostAddress clientAddress;
         quint16 nPort = 0;
 

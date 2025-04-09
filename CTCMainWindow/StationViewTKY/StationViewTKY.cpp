@@ -17,14 +17,12 @@ namespace CTCWindows {
 			: CTCMainWindow(parent)
 		{
 			ui.setupUi(this);
-
 		}
 
 		StationViewTKY::~StationViewTKY()
 		{
 
 		}
-
 		StationViewTKY* StationViewTKY::CreatStationView(QWidget* parent)
 		{
 			return new StationViewTKY(parent);
@@ -82,16 +80,37 @@ namespace CTCWindows {
 					pPointReport->exec();
 				});
 
-				connect(pMenuBarInfo2->addNewAction("现存车管理", 1, 1), &QAction::triggered, [&]() {});
+				connect(pMenuBarInfo2->addNewAction("现存车管理", 1, 1), &QAction::triggered, [&]() {
+					if (m_pVehicleManage == nullptr) {
+						m_pVehicleManage = new VehicleManage;
+					}
+					m_pVehicleManage->show();
+					});
 				connect(pMenuBarInfo2->addNewAction("确报查询", 1, 2), &QAction::triggered, [&]() {});
-				connect(pMenuBarInfo2->addNewAction("列控区间占用逻辑检查", 1, 3), &QAction::triggered, [&]() {});
+				connect(pMenuBarInfo2->addNewAction("列控区间占用逻辑检查", 1, 3), &QAction::triggered, [&]() {
+					if (m_pLntervallogic == nullptr) {
+						m_pLntervallogic = new LntervallogicCheck;
+					}
+					m_pLntervallogic->show();
+
+					});
 			}
 
 			MenuBarInfo* pMenuBarInfo3 = new MenuBarInfo;
 			m_vecMenuBarInfo.append(pMenuBarInfo3);
 			pMenuBarInfo3->m_pMenu = m_pMenuBar->addMenu("调度命令(D)"); {
-				connect(pMenuBarInfo3->addNewAction("调度命令管理", 1, 0), &QAction::triggered, [&]() {});
-				connect(pMenuBarInfo3->addNewAction("调度命令查询", 1, 1), &QAction::triggered, [&]() {});
+				connect(pMenuBarInfo3->addNewAction("调度命令管理", 1, 0), &QAction::triggered, [&]() {
+					BaseWnd::StaDispatchOrder* pDispatchOrderWnd = CreateStaDispatchOrder();
+					pDispatchOrderWnd->setAttribute(Qt::WA_DeleteOnClose);
+					pDispatchOrderWnd->ViewPermission(Station::LimitsOfAuthority::admin);
+					pDispatchOrderWnd->exec();
+					});
+				connect(pMenuBarInfo3->addNewAction("调度命令查询", 1, 1), &QAction::triggered, [&]() {
+					BaseWnd::StaDispatchOrder* pDispatchOrderWnd = CreateStaDispatchOrder();
+					pDispatchOrderWnd->setAttribute(Qt::WA_DeleteOnClose);
+					pDispatchOrderWnd->ViewPermission(Station::LimitsOfAuthority::employee);
+					pDispatchOrderWnd->exec();
+					});
 				connect(pMenuBarInfo3->addNewAction("行车凭证管理", 1, 2), &QAction::triggered, [&]() {});
 				connect(pMenuBarInfo3->addNewAction("行车凭证查询", 1, 3), &QAction::triggered, [&]() {});
 			}
@@ -184,6 +203,7 @@ namespace CTCWindows {
 						m_pStationCtrl->StaFunBtnBar()->ButtonClicked(FunType::Lighting);
 					});
 					connect(pMenuInfo->addNewSubAction("灭灯", 2, 3), &QAction::triggered, [&]() {
+						
 						m_pStationCtrl->StaFunBtnBar()->ButtonClicked(FunType::UnLighting);
 					});
 				}
@@ -257,7 +277,134 @@ namespace CTCWindows {
 					m_pStationCtrl->StaFunBtnBar()->ButtonClicked(FunType::CommandClear);
 				});
 			}
+			MenuBarInfo* pMenuBarInfo6 = new MenuBarInfo;
+			m_vecMenuBarInfo.append(pMenuBarInfo6);
+			pMenuBarInfo6->m_pMenu = m_pMenuBar->addMenu("查询(S)"); {
+				connect(pMenuBarInfo6->addNewAction("告警信息", 1, 0) , &QAction::triggered, [&]() {
+					
+					m_pStaAlarm = new StaAlarmWindowTKY;
+					m_pStaAlarm->show();
+
+					});
+				connect(pMenuBarInfo6->addNewAction("历史告警信息", 1, 1) , & QAction::triggered, [&]() {
+					
+					});
+				pMenuBarInfo6->m_pMenu->addSeparator();
+				connect(pMenuBarInfo6->addNewAction("查询行车日志", 1, 2), &QAction::triggered, [&]() {
+					});
+				connect(pMenuBarInfo6->addNewAction("查询车次", 1, 3), &QAction::triggered, [&]() {
+					});
+				pMenuBarInfo6->m_pMenu->addSeparator();
+				connect(pMenuBarInfo6->addNewAction("调车作业单查询", 1, 4), &QAction::triggered, [&]() {
+					});
+				connect(pMenuBarInfo6->addNewAction("运行图查询", 1,5), &QAction::triggered, [&]() {
+					});
+				pMenuBarInfo6->m_pMenu->addSeparator();
+				connect(pMenuBarInfo6->addNewAction("铅封计数查询", 1, 6), &QAction::triggered, [&]() {
+
+
+					});
+			}
+			MenuBarInfo* pMenuBarInfo7 = new MenuBarInfo;
+			m_vecMenuBarInfo.append(pMenuBarInfo7);
+			pMenuBarInfo7->m_pMenu = m_pMenuBar->addMenu("打印(P)"); {
+				connect(pMenuBarInfo7->addNewAction("打印行车日志", 1, 0), &QAction::triggered, [&]() {
+					});
+				pMenuBarInfo7->m_pMenu->addSeparator();
+				connect(pMenuBarInfo7->addNewAction("打印阶段计划", 1, 1), &QAction::triggered, [&]() {
+					});
+				connect(pMenuBarInfo7->addNewAction("打印上行计划", 1, 2), &QAction::triggered, [&]() {
+					});
+				connect(pMenuBarInfo7->addNewAction("打印下行计划", 1, 3), &QAction::triggered, [&]() {
+					});
+				pMenuBarInfo7->m_pMenu->addSeparator();
+				connect(pMenuBarInfo7->addNewAction("清空打印任务", 1, 4), &QAction::triggered, [&]() {
+					});
+				connect(pMenuBarInfo7->addNewAction("打印计划设置", 1, 5), &QAction::triggered, [&]() {
+					});
+
+			}
+			MenuBarInfo* pMenuBarInfo8 = new MenuBarInfo;
+			m_vecMenuBarInfo.append(pMenuBarInfo8);
+			pMenuBarInfo8->m_pMenu = m_pMenuBar->addMenu("选项(W)"); {
+				connect(pMenuBarInfo8->addNewAction("显示报点表格", 1, 0), &QAction::triggered, [&]() {
+					});
 			
+				connect(pMenuBarInfo8->addNewAction("显示站场显示", 1, 1), &QAction::triggered, [&]() {
+					});
+				pMenuBarInfo8->m_pMenu->addSeparator();
+				connect(pMenuBarInfo8->addNewAction("自动报点", 1, 2), &QAction::triggered, [&]() {
+					});
+				connect(pMenuBarInfo8->addNewAction("车次号自识别", 1, 3), &QAction::triggered, [&]() {
+					});
+				pMenuBarInfo8->m_pMenu->addSeparator();
+				
+				pMenuBarInfo8->addNewAction("无线车次上表", 1, 4); {
+					MenuInfo* pMenuInfo = pMenuBarInfo8->m_vecSubMenuInfo[4];
+					connect(pMenuInfo->addNewSubAction("机车类型", 2, 0), &QAction::triggered, [&]() {
+						});
+					connect(pMenuInfo->addNewSubAction("机车号", 2, 1), &QAction::triggered, [&]() {
+						});
+					connect(pMenuInfo->addNewSubAction("车长姓名", 2, 2), &QAction::triggered, [&]() {
+						});
+					connect(pMenuInfo->addNewSubAction("司机代号", 2, 3), &QAction::triggered, [&]() {
+						});
+					connect(pMenuInfo->addNewSubAction("总重", 2, 4), &QAction::triggered, [&]() {
+						});
+					connect(pMenuInfo->addNewSubAction("换长", 2, 5), &QAction::triggered, [&]() {
+						});
+					connect(pMenuInfo->addNewSubAction("辆数", 2, 6), &QAction::triggered, [&]() {
+						});
+				}
+				pMenuBarInfo8->m_pMenu->addSeparator();
+				connect(pMenuBarInfo8->addNewAction("股道不一致报警", 1, 5), &QAction::triggered, [&]() {
+					});
+				pMenuBarInfo8->m_pMenu->addSeparator();
+				connect(pMenuBarInfo8->addNewAction("行车日志", 1, 6), &QAction::triggered, [&]() {
+					CTCMainWindow::TurnToTrafficLogDisp();
+					});
+				connect(pMenuBarInfo8->addNewAction("列车/甩挂编组", 1, 7), &QAction::triggered, [&]() {
+					});
+				connect(pMenuBarInfo8->addNewAction("电话记录", 1, 8), &QAction::triggered, [&]() {
+					});
+				connect(pMenuBarInfo8->addNewAction("邻站站名", 1, 9), &QAction::triggered, [&]() {
+					});
+				connect(pMenuBarInfo8->addNewAction("图定时间", 1, 10), &QAction::triggered, [&]() {
+					});
+				connect(pMenuBarInfo8->addNewAction("邻站发车", 1, 11), &QAction::triggered, [&]() {
+					});
+
+			}
+			MenuBarInfo* pMenuBarInfo9 = new MenuBarInfo;
+			m_vecMenuBarInfo.append(pMenuBarInfo9);
+			pMenuBarInfo9->m_pMenu = m_pMenuBar->addMenu("系统维护(W)"); {
+				connect(pMenuBarInfo9->addNewAction("本机倒为备机", 1, 0), &QAction::triggered, [&]() {
+					});
+				pMenuBarInfo9->m_pMenu->addSeparator();
+				connect(pMenuBarInfo9->addNewAction("测试无线设备", 1, 1), &QAction::triggered, [&]() {
+					});
+				connect(pMenuBarInfo9->addNewAction("声音测试", 1, 2), &QAction::triggered, [&]() {
+					});
+				connect(pMenuBarInfo9->addNewAction("校 时", 1, 3), &QAction::triggered, [&]() {
+					});
+				pMenuBarInfo9->m_pMenu->addSeparator();
+				connect(pMenuBarInfo9->addNewAction("下载工作日志", 1, 4), &QAction::triggered, [&]() {
+					});
+				connect(pMenuBarInfo9->addNewAction("更新配置文件", 1, 5), &QAction::triggered, [&]() {
+					});
+				pMenuBarInfo9->m_pMenu->addSeparator();
+				connect(pMenuBarInfo9->addNewAction("登销记模板维护", 1, 6), &QAction::triggered, [&]() {
+					});
+				pMenuBarInfo9->m_pMenu->addSeparator();
+				connect(pMenuBarInfo9->addNewAction("辅助模拟标注", 1, 7), &QAction::triggered, [&]() {
+					});
+			}
+			MenuBarInfo* pMenuBarInfo10 = new MenuBarInfo;
+			m_vecMenuBarInfo.append(pMenuBarInfo10);
+			pMenuBarInfo10->m_pMenu = m_pMenuBar->addMenu("帮助(H)"); {
+
+			}
+
 			this->setMenuBar(m_pMenuBar);
 		}
 
@@ -265,6 +412,7 @@ namespace CTCWindows {
 		{
 			qDebug() << "InitStationViewToolBarTKY";
 			m_pStationViewToolBar = new QToolBar(this);
+			
 			connect(AddToolBarBtn(":/CTCProject/icon/TKY/log.png", "行车日志", STAVIEW_TOOL), &QPushButton::clicked, this, &CTCMainWindow::TurnToTrafficLogDisp);
 			connect(AddToolBarBtn(":/CTCProject/icon/TKY/staTable.png", "进路序列窗口", STAVIEW_TOOL), &QPushButton::clicked, this, &CTCMainWindow::ShowStaRoutePlanWnd);
 			connect(AddToolBarBtn(":/CTCProject/icon/TKY/set.png", "显示设置", STAVIEW_TOOL), &QPushButton::clicked, this, &CTCMainWindow::ShowVisibleSetWnd);
@@ -317,6 +465,8 @@ namespace CTCWindows {
 			pLabel->setFrameShadow(QFrame::Sunken);
 			pLabel->setFixedSize(160, 28);
 			m_pSignForToolBar->addWidget(pLabel);
+			m_pStationViewToolBar->installEventFilter(this);
+			m_pSignForToolBar->installEventFilter(this);
 			//addToolBar(m_pSignForToolBar);
 			insertToolBar(m_pStationViewToolBar, m_pSignForToolBar);
 		}
@@ -361,8 +511,77 @@ namespace CTCWindows {
 			pOperaTypeLabel->setFixedSize(180, 28);
 			pOperaTypeLabel->setStyleSheet("QLabel{ color: green; }");
 			m_pStateToolBar->addWidget(pOperaTypeLabel);
-
+			m_pStateToolBar->installEventFilter(this);
 			addToolBar(m_pStateToolBar);
+		}
+		bool StationViewTKY::eventFilter(QObject* obj, QEvent* event) {
+			if (obj == m_pBottomStationViewToolBar && event->type() == QEvent::ContextMenu) {
+				return true; // 直接拦截右键事件
+			}
+			if (obj == m_pStateToolBar && event->type() == QEvent::ContextMenu) {
+				return true; // 直接拦截右键事件
+			}
+			if (obj == m_pStationViewToolBar && event->type() == QEvent::ContextMenu) {
+				return true; // 直接拦截右键事件
+			}
+			if (obj == m_pSignForToolBar && event->type() == QEvent::ContextMenu) {
+				return true; // 直接拦截右键事件
+			}
+			return QObject::eventFilter(obj, event);
+		}
+		void StationViewTKY::InitbottomTrafficLogToolBar()
+		{
+			m_pBottomStationViewToolBar = new QToolBar(this);
+			m_pBottomStationViewToolBar->installEventFilter(this);
+			QPushButton* pDispatBtn = new QPushButton("行车日志");
+			pDispatBtn->setCheckable(true);
+			pDispatBtn->setFixedSize(64, 20);
+			pDispatBtn->setStyleSheet("QPushButton {background-color: rgb(250, 250, 250);}");
+			m_pBottomStationViewToolBar->addWidget(pDispatBtn);
+			connect(pDispatBtn, &QPushButton::clicked, this, &CTCMainWindow::TurnToTrafficLogDisp);
+			connect(pDispatBtn, &QPushButton::toggled, this, &CTCMainWindow::onButtonToggled);
+			addToolBar(m_pBottomStationViewToolBar);
+
+			QPushButton* pTrainformaBtn = new QPushButton("列车编组");
+			pTrainformaBtn->setCheckable(true);
+			pTrainformaBtn->setFixedSize(64, 20);
+			pTrainformaBtn->setStyleSheet("QPushButton {background-color: rgb(250, 250, 250);}");
+			m_pBottomStationViewToolBar->addWidget(pTrainformaBtn);
+			connect(pTrainformaBtn, &QPushButton::clicked, this, [&] {});
+			addToolBar(m_pBottomStationViewToolBar);
+
+			QPushButton* pTelephonerecordBtn = new QPushButton("电话记录");
+			pTelephonerecordBtn->setCheckable(true);
+			pTelephonerecordBtn->setFixedSize(64, 20);
+			pTelephonerecordBtn->setStyleSheet("QPushButton {background-color: rgb(250, 250, 250);}");
+			m_pBottomStationViewToolBar->addWidget(pTelephonerecordBtn);
+			connect(pTelephonerecordBtn, &QPushButton::clicked, this, [&] {});
+			addToolBar(m_pBottomStationViewToolBar);
+
+			QPushButton* pAdjacentStationBtn = new QPushButton("邻站站名");
+			pAdjacentStationBtn->setCheckable(true);
+			pAdjacentStationBtn->setFixedSize(64, 20);
+			pAdjacentStationBtn->setStyleSheet("QPushButton {background-color: rgb(250, 250, 250);}");
+			m_pBottomStationViewToolBar->addWidget(pAdjacentStationBtn);
+			connect(pAdjacentStationBtn, &QPushButton::clicked, this, [&] {});
+			addToolBar(m_pBottomStationViewToolBar);
+
+			QPushButton* pMapTimeBtn = new QPushButton("图定时间");
+			pMapTimeBtn->setCheckable(true);
+			pMapTimeBtn->setFixedSize(64, 20);
+			pMapTimeBtn->setStyleSheet("QPushButton {background-color: rgb(250, 250, 250);}");
+			m_pBottomStationViewToolBar->addWidget(pMapTimeBtn);
+			connect(pMapTimeBtn, &QPushButton::clicked, this, [&] {});
+			addToolBar(m_pBottomStationViewToolBar);
+
+			QPushButton* pAdjacentStationDepartureBtn = new QPushButton("邻站发车");
+			pAdjacentStationDepartureBtn->setCheckable(true);
+			pAdjacentStationDepartureBtn->setFixedSize(64, 20);
+			pAdjacentStationDepartureBtn->setStyleSheet("QPushButton {background-color: rgb(250, 250, 250);}");
+			m_pBottomStationViewToolBar->addWidget(pAdjacentStationDepartureBtn);
+			connect(pAdjacentStationDepartureBtn, &QPushButton::clicked, this, [&] {});
+			addToolBar(m_pBottomStationViewToolBar);
+
 		}
 	}
 }

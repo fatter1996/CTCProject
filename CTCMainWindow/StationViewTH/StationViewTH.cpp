@@ -28,6 +28,11 @@ namespace CTCWindows {
 			return new StationViewTH(parent);
 		}
 
+		void StationViewTH::InitbottomTrafficLogToolBar()
+		{
+		}
+
+
 		BaseWnd::StationCtrlDisp* StationViewTH::CreateStationCtrlDisp()
 		{
 			return new StationCtrlDispTH(this);
@@ -255,5 +260,6 @@ namespace CTCWindows {
 
 			addToolBar(m_pStateToolBar);
 		}
+
 	}
 }

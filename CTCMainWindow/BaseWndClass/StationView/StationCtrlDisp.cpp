@@ -2,12 +2,14 @@
 #include "Global.h"
 #include <QMouseEvent>
 #pragma execution_character_set("utf-8")
+#include "CommonWidget/LeadSealDlg.h"
 
 namespace CTCWindows {
 	namespace BaseWnd {
 		StationCtrlDisp::StationCtrlDisp(QWidget* parent)
 		{
 			m_nTimerId_500 = startTimer(500);
+			startTimer(500);
 			installEventFilter(this);
 			setMouseTracking(true);
 		}
@@ -45,7 +47,33 @@ namespace CTCWindows {
 						if (Station::MainStation()->getSelectDevice().size()) {
 							QAction* pAction1 = new QAction("ÃüÁîÏÂ´ï");
 							pMenu->addAction(pAction1);
-							connect(pAction1, &QAction::triggered, Station::MainStation(), &Station::MainStationObject::onOrderIssued);
+							
+							connect(pAction1, &QAction::triggered, Station::MainStation(), []() {
+								Station::Device::StaSignal* pSignal = nullptr;
+								if (CTCWindows::BaseWnd::StaFunBtnToolBar::getCurrFunType() == CTCWindows::FunType::RouteBuild) {
+									Station::Device::DeviceBase* pdevic = Station::MainStation()->getSelectDevice().at(0);
+									if (pdevic->getStrType() == "XHD") {
+										pSignal = dynamic_cast<Station::Device::StaSignal*>(pdevic);
+										if (pSignal->GetBtnState() == 0x01) {
+											LeadSealDlg* pLeadSeal = new LeadSealDlg;
+											pLeadSeal->setAttribute(Qt::WA_TranslucentBackground);
+											pLeadSeal->setWindowFlags(Qt::FramelessWindowHint);
+											//pLeadSeal->Init(CTCWindows::KeyInputType::InputTrain, nullptr);
+											pLeadSeal->Init(CTCWindows::KeyInputType::InputTrain, nullptr);
+											pLeadSeal->exec();
+										}
+										else if (pSignal->GetBtnState() == 0x02) {
+											LeadSealDlg* pLeadSeal = new LeadSealDlg;
+											pLeadSeal->setAttribute(Qt::WA_TranslucentBackground);
+											pLeadSeal->setWindowFlags(Qt::FramelessWindowHint);
+											pLeadSeal->Init(CTCWindows::KeyInputType::InputShuntingTime, nullptr);
+											pLeadSeal->exec();
+										}
+									}
+
+									&Station::MainStationObject::onOrderIssued;
+								}
+								});
 							QAction* pAction2 = new QAction("ÃüÁîÇå³ý");
 							pMenu->addAction(pAction2);
 							connect(pAction2, &QAction::triggered, []() {

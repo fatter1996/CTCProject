@@ -70,10 +70,10 @@ namespace Station {
             void DrawMinTriangulation(QColor Pencolor, Direction m_nDirection);
 
             void DrawTriangulationLine();
-
+            
         public:
             QString TrackType() { return m_strTrackType; }
-
+            void SetTrack();
         private:
             static LowFrequency m_nLowFrequency;
             static Direction m_nDirection;
