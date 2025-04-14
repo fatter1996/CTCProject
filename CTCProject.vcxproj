@@ -124,6 +124,7 @@
     <ClCompile Include="CTCMainWindow\CustomControl\RichTableView.cpp" />
     <ClCompile Include="CTCMainWindow\CustomControl\StationZoningSelection.cpp" />
     <ClCompile Include="CTCMainWindow\CustomControl\TableView.cpp" />
+    <ClCompile Include="CTCMainWindow\CustomControl\TextSignLable.cpp" />
     <ClCompile Include="CTCMainWindow\StationViewKSK\ModuleWidget\StaAlarmWindowKSK.cpp" />
     <ClCompile Include="CTCMainWindow\StationViewKSK\ModuleWidget\StaDispatchOrderKSK.cpp" />
     <ClCompile Include="CTCMainWindow\StationViewKSK\ModuleWidget\StaFunBtnToolBarKSK.cpp" />
@@ -138,6 +139,7 @@
     <ClCompile Include="CTCMainWindow\StationViewTH\StationViewTH.cpp" />
     <ClCompile Include="CTCMainWindow\StationViewTH\StationView\StationCtrlDispTH.cpp" />
     <ClCompile Include="CTCMainWindow\StationViewTH\StationView\StationMultiDispTH.cpp" />
+    <ClCompile Include="CTCMainWindow\StationViewTKY\ModuleWidget\EditingInterfaceTKY.cpp" />
     <ClCompile Include="CTCMainWindow\StationViewTKY\ModuleWidget\StaAlarmWindowTKY.cpp" />
     <ClCompile Include="CTCMainWindow\StationViewTKY\ModuleWidget\StaDispatchOrderTKY.cpp" />
     <ClCompile Include="CTCMainWindow\StationViewTKY\ModuleWidget\StaFunBtnToolBarTKY.cpp" />
@@ -227,6 +229,8 @@
     <QtMoc Include="CTCMainWindow\StationViewKSK\ModuleWidget\StaAlarmWindowKSK.h" />
     <QtMoc Include="CTCMainWindow\CommonWidget\VehicleManage.h" />
     <QtMoc Include="CTCMainWindow\CustomControl\CarLocationEdit.h" />
+    <QtMoc Include="CTCMainWindow\CustomControl\TextSignLable.h" />
+    <QtMoc Include="CTCMainWindow\StationViewTKY\ModuleWidget\EditingInterfaceTKY.h" />
     <ClInclude Include="CTCObject\CTCObject.h" />
     <ClInclude Include="CultivateObject\Subject.h" />
     <ClInclude Include="Global.h" />
@@ -288,6 +292,7 @@
     <QtUic Include="CTCMainWindow\StationViewTH\StationViewTH.ui" />
     <QtUic Include="CTCMainWindow\StationViewTH\StationView\StationCtrlDispTH.ui" />
     <QtUic Include="CTCMainWindow\StationViewTH\StationView\StationMultiDispTH.ui" />
+    <QtUic Include="CTCMainWindow\StationViewTKY\ModuleWidget\EditingInterfaceTKY.ui" />
     <QtUic Include="CTCMainWindow\StationViewTKY\ModuleWidget\StaAlarmWindowTKY.ui" />
     <QtUic Include="CTCMainWindow\StationViewTKY\ModuleWidget\StaDispatchOrderTKY.ui" />
     <QtUic Include="CTCMainWindow\StationViewTKY\ModuleWidget\StaFunBtnToolBarTKY.ui" />

@@ -6,19 +6,23 @@ namespace Station {
         //文字标注
         class StaTextSign : public DeviceBase
         {
+    
         public:
             explicit StaTextSign(QObject* pParent = nullptr);
             ~StaTextSign();
 
         public:
             void InitAttributeMap() override;
+            void ShowDeviceMenu(const QPoint& ptPos) override;
+            bool Contains(const QPoint& ptPos) override;
+            bool IsMouseWheel(const QPoint& ptPos) override;
             //站场绘制
             void Draw(bool isMulti = false) override;
             void InitTextSign(const QString& strText, const QPoint& ptPos, const QColor& colFont = Qt::black, const QColor& colBackground = Qt::white, int nSize = 10);
-        
         private:
             void DrawTextSign();
-        
+        signals:
+            void EditingInterface();
         private:
             bool m_bIsShow = true;
             QString m_strText;

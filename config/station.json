@@ -1,6 +1,6 @@
 ﻿{
   "staName": "标准站",
-  "stationType": 2,
+  "stationType": 1,
   "stationID": 100,
   "comAddress": {
     "#localAddress": "本地通信地址",

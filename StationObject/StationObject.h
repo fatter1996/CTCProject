@@ -46,7 +46,10 @@ namespace Station {
         bool IsVisible(VisibleDev devType);
         void AddNewTextSign(const QString& strText, const QPoint& ptPos, const QColor& colFont = Qt::black, const QColor& colBackground = Qt::white, int nSize = 10);
         void ClearAllTextSign();
-
+    signals:
+        void TextSignEdit(QString text,Station::Device::StaTextSign* pTextSign);
+        void DeleteTextSign(Station::Device::StaTextSign* pTextSign);
+      
     private:    //内部初始化
         void ReadDeviceInfoHead(); //解析"station.xml" HEAD
         void ReadDeviceInfo();  //解析"station.xml" DEVICE
@@ -95,7 +98,7 @@ namespace Station {
         static int UpState;
         static QXmlStreamReader* m_pDeviceInfoReader;  //XML解析器
         static QMap<QString, std::function<Device::DeviceBase* (StationObject*)>> m_mapCreatDeviceVector;
-        static int m_nTimerId_500;
+        int m_nTimerId_500;
         static int UpStateTimer;
     };
 
@@ -189,14 +192,15 @@ namespace Station {
         void onOrderIssued();
         void onOrderClear(bool bClearTwinkle = false);
         void onUserLogin(QString strUserName, QString strPassword);
+ 
 
+     
     signals:
         void FunBtnStateReset();
         void SendDataToUDP(const QByteArray&);
         void SendDataToTCP(const QByteArray&);
         void TrainRouteUpData();
         void TrafficLogTableUpData();
-
     private:
         //数据传输
         Transmission::StaProtocol* m_pProtocol = nullptr;

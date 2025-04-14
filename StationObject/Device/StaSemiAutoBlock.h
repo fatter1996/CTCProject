@@ -39,9 +39,9 @@ namespace Station {
 
             void DrawRoutePreviewWnd();
         private:
-            QPointF m_ptRouteWnd;
             QVector<StaBlockBtn> m_vecBlockBtn;
             QRectF m_rcFrame;
+            QRectF m_ptRouteWnd;
             QString m_strDirection;
             uint m_nBlockType = 0;
             uint m_nSelectBtnType = 0x0;  //选中类型(0-未选中; 0x01-闭塞; 0x02-复原; 0x04-事故)

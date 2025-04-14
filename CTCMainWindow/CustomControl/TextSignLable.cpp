@@ -1,7 +1,8 @@
 #include "TextSignLable.h"
 #include <QBoxLayout>
 #include <QEvent>
-
+#include <QMenu>
+#include <QMouseEvent>
 namespace CTCWindows {
 	namespace  Control {
 		TextSignLable::TextSignLable(QWidget* parent)
@@ -34,6 +35,7 @@ namespace CTCWindows {
 				this->layout()->addWidget(m_pLineEdit);
 				this->setFixedSize(160, 32);
 			}
+			m_pLineEdit->installEventFilter(this);
 		}
 
 		TextSignLable* TextSignLable::CreateTextSignLable(QWidget* parent, int nType)
@@ -42,6 +44,8 @@ namespace CTCWindows {
 			pTextSignLable->InitLable(nType);
 			pTextSignLable->show();
 			return pTextSignLable;
+
 		}
+
 	}
 }

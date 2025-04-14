@@ -28,6 +28,7 @@ namespace Station {
             m_mapAttribute.insert(m_strType, mapAttrFun);
             m_mapAttribute[m_strType].insert("BSType", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaSemiAutoBlock*>(pDevice)->m_nBlockType = strElement.toUInt(); });
             m_mapAttribute[m_strType].insert("m_Direction", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaSemiAutoBlock*>(pDevice)->m_strDirection = strElement; });
+            m_mapAttribute[m_strType].insert("m_RoutePoint", [&](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaSemiAutoBlock*>(pDevice)->m_ptRouteWnd = QStringToQRectF(strElement); });
             m_mapAttribute[m_strType].insert("m_FrameRect", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaSemiAutoBlock*>(pDevice)->m_rcFrame = QStringToQRectF(strElement); });
             m_mapAttribute[m_strType].insert("m_Button", [](DeviceBase* pDevice, const QString& strElement) {
                 QJsonParseError error;
