@@ -55,7 +55,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
-    <IncludePath>D:\CTC\CTCMainWindow\BaseWndClass;D:\CTC\CTCMainWindow;D:\CTC;$(IncludePath)</IncludePath>
+    <IncludePath>D:\CTC\CTCMainWindow\BaseWndClass;D:\CTC\CTCMainWindow;D:\CTC;D:\MyWorkProject\CTCProject-master\CTCMainWindow\BaseWndClass;D:\MyWorkProject\CTCProject-master\CTCMainWindow;D:\MyWorkProject\CTCProject-master;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
     <IncludePath>D:\CTC\CTCMainWindow;D:\CTC\CTCMainWindow\BaseWndClass;D:\CTC;$(IncludePath)</IncludePath>
@@ -101,6 +101,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="CTCMainWindow\BaseWndClass\CTCMainWindow.cpp" />
+    <ClCompile Include="CTCMainWindow\BaseWndClass\ModuleWidget\StaAlarmWindow.cpp" />
     <ClCompile Include="CTCMainWindow\BaseWndClass\ModuleWidget\StaDispatchOrder.cpp" />
     <ClCompile Include="CTCMainWindow\BaseWndClass\ModuleWidget\StaFunBtnToolBar.cpp" />
     <ClCompile Include="CTCMainWindow\BaseWndClass\ModuleWidget\StaRoutePlan.cpp" />
@@ -117,9 +118,13 @@
     <ClCompile Include="CTCMainWindow\CommonWidget\StagePlanSign.cpp" />
     <ClCompile Include="CTCMainWindow\CommonWidget\TrafficMsgLog.cpp" />
     <ClCompile Include="CTCMainWindow\CommonWidget\UserLoginDlg.cpp" />
+    <ClCompile Include="CTCMainWindow\CommonWidget\VehicleManage.cpp" />
+    <ClCompile Include="CTCMainWindow\CustomControl\CarLocationEdit.cpp" />
+    <ClCompile Include="CTCMainWindow\CustomControl\LntervallogicCheck.cpp" />
     <ClCompile Include="CTCMainWindow\CustomControl\RichTableView.cpp" />
+    <ClCompile Include="CTCMainWindow\CustomControl\StationZoningSelection.cpp" />
     <ClCompile Include="CTCMainWindow\CustomControl\TableView.cpp" />
-    <ClCompile Include="CTCMainWindow\CustomControl\TextSignLable.cpp" />
+    <ClCompile Include="CTCMainWindow\StationViewKSK\ModuleWidget\StaAlarmWindowKSK.cpp" />
     <ClCompile Include="CTCMainWindow\StationViewKSK\ModuleWidget\StaDispatchOrderKSK.cpp" />
     <ClCompile Include="CTCMainWindow\StationViewKSK\ModuleWidget\StaFunBtnToolBarKSK.cpp" />
     <ClCompile Include="CTCMainWindow\StationViewKSK\ModuleWidget\StaRoutePlanKSK.cpp" />
@@ -133,6 +138,7 @@
     <ClCompile Include="CTCMainWindow\StationViewTH\StationViewTH.cpp" />
     <ClCompile Include="CTCMainWindow\StationViewTH\StationView\StationCtrlDispTH.cpp" />
     <ClCompile Include="CTCMainWindow\StationViewTH\StationView\StationMultiDispTH.cpp" />
+    <ClCompile Include="CTCMainWindow\StationViewTKY\ModuleWidget\StaAlarmWindowTKY.cpp" />
     <ClCompile Include="CTCMainWindow\StationViewTKY\ModuleWidget\StaDispatchOrderTKY.cpp" />
     <ClCompile Include="CTCMainWindow\StationViewTKY\ModuleWidget\StaFunBtnToolBarTKY.cpp" />
     <ClCompile Include="CTCMainWindow\StationViewTKY\ModuleWidget\StaRoutePlanTKY.cpp" />
@@ -190,7 +196,6 @@
     <QtMoc Include="CTCMainWindow\BaseWndClass\ModuleWidget\StaFunBtnToolBar.h" />
     <QtMoc Include="CTCMainWindow\BaseWndClass\StationView\StationMultiDisp.h" />
     <QtMoc Include="CTCMainWindow\BaseWndClass\StationView\StationLogDisp.h" />
-    <QtMoc Include="CTCMainWindow\BaseWndClass\StationView\StationCtrlDisp.h" />
     <QtMoc Include="CTCMainWindow\BaseWndClass\ModuleWidget\StaVisibleSet.h" />
     <QtMoc Include="CTCMainWindow\BaseWndClass\ModuleWidget\StaRoutePlan.h" />
     <QtMoc Include="CTCMainWindow\BaseWndClass\ModuleWidget\StaDispatchOrder.h" />
@@ -214,7 +219,14 @@
     <QtMoc Include="CTCMainWindow\StationViewTH\ModuleWidget\StaRoutePlanTH.h" />
     <QtMoc Include="CTCMainWindow\StationViewTH\StationView\StationCtrlDispTH.h" />
     <QtMoc Include="CTCMainWindow\StationViewTH\StationView\StationMultiDispTH.h" />
-    <QtMoc Include="CTCMainWindow\CustomControl\TextSignLable.h" />
+    <QtMoc Include="CTCMainWindow\BaseWndClass\StationView\StationCtrlDisp.h" />
+    <QtMoc Include="CTCMainWindow\CustomControl\LntervallogicCheck.h" />
+    <QtMoc Include="CTCMainWindow\CustomControl\StationZoningSelection.h" />
+    <QtMoc Include="CTCMainWindow\BaseWndClass\ModuleWidget\StaAlarmWindow.h" />
+    <QtMoc Include="CTCMainWindow\StationViewTKY\ModuleWidget\StaAlarmWindowTKY.h" />
+    <QtMoc Include="CTCMainWindow\StationViewKSK\ModuleWidget\StaAlarmWindowKSK.h" />
+    <QtMoc Include="CTCMainWindow\CommonWidget\VehicleManage.h" />
+    <QtMoc Include="CTCMainWindow\CustomControl\CarLocationEdit.h" />
     <ClInclude Include="CTCObject\CTCObject.h" />
     <ClInclude Include="CultivateObject\Subject.h" />
     <ClInclude Include="Global.h" />
@@ -258,6 +270,11 @@
     <QtUic Include="CTCMainWindow\CommonWidget\StagePlanSign.ui" />
     <QtUic Include="CTCMainWindow\CommonWidget\TrafficMsgLog.ui" />
     <QtUic Include="CTCMainWindow\CommonWidget\UserLoginDlg.ui" />
+    <QtUic Include="CTCMainWindow\CommonWidget\VehicleManage.ui" />
+    <QtUic Include="CTCMainWindow\CustomControl\CarLocationEdit.ui" />
+    <QtUic Include="CTCMainWindow\CustomControl\LntervallogicCheck.ui" />
+    <QtUic Include="CTCMainWindow\CustomControl\StationZoningSelection.ui" />
+    <QtUic Include="CTCMainWindow\StationViewKSK\ModuleWidget\StaAlarmWindowKSK.ui" />
     <QtUic Include="CTCMainWindow\StationViewKSK\ModuleWidget\StaDispatchOrderKSK.ui" />
     <QtUic Include="CTCMainWindow\StationViewKSK\ModuleWidget\StaFunBtnToolBarKSK.ui" />
     <QtUic Include="CTCMainWindow\StationViewKSK\ModuleWidget\StaRoutePlanKSK.ui" />
@@ -271,6 +288,7 @@
     <QtUic Include="CTCMainWindow\StationViewTH\StationViewTH.ui" />
     <QtUic Include="CTCMainWindow\StationViewTH\StationView\StationCtrlDispTH.ui" />
     <QtUic Include="CTCMainWindow\StationViewTH\StationView\StationMultiDispTH.ui" />
+    <QtUic Include="CTCMainWindow\StationViewTKY\ModuleWidget\StaAlarmWindowTKY.ui" />
     <QtUic Include="CTCMainWindow\StationViewTKY\ModuleWidget\StaDispatchOrderTKY.ui" />
     <QtUic Include="CTCMainWindow\StationViewTKY\ModuleWidget\StaFunBtnToolBarTKY.ui" />
     <QtUic Include="CTCMainWindow\StationViewTKY\ModuleWidget\StaRoutePlanTKY.ui" />

@@ -96,8 +96,6 @@ namespace Http {
 
 	bool  HttpClient::AddStaStagePlan(Station::StaStagePlan* pStagePlan, QByteArray& btResult)
 	{
-		QString m_strArrivaTrainNum; //到达车次号
-		QString m_strDepartTrainNum; //出发车次号
 		QString strContent = QString("stationId=%1&planNum=%2&planType=%3"
 			"&arriveTrainNum=%4&arriveTrackCode=%5&entrySignalCode=%6&arriveTime=%7"
 			"&departTrainNum=%8&departTrackCode=%9&exitSignalCode=%10&departTime=%11")

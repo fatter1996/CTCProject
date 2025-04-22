@@ -15,6 +15,8 @@ namespace CTCWindows {
 		public:
 			//创建卡斯柯CTC
 			static StationViewTH* CreatStationView(QWidget* parent = nullptr);
+			// 初始化工具栏-底部行车日志工具栏
+			void InitbottomTrafficLogToolBar() override;
 
 			//创建单站界面
 			BaseWnd::StationCtrlDisp* CreateStationCtrlDisp() override;
@@ -39,7 +41,6 @@ namespace CTCWindows {
 			void InitSignForToolBar() override;
 			//初始化工具栏-状态工具栏
 			void InitStateToolBar() override;
-
 			QLayout* WidgetLayout() override { return ui.centralWidget->layout(); }
 
 		private:

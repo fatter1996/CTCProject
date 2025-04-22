@@ -12,11 +12,11 @@ SealTechnique::SealTechnique(QWidget *parent)
 	: QWidget(parent)
 {
 	ui.setupUi(this);
-
+	InsertSealRecord(Station::MainStation()->getStationName(), "");
 	ui.tableWidget->setColumnWidth(1, 100);
 	ui.tableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 	ui.tableWidget->horizontalHeader()->setSectionResizeMode(1, QHeaderView::Fixed);
-
+	
 
 }
 
@@ -27,12 +27,16 @@ void SealTechnique::SetTable()
 {
 
 	QStringList stationNames = m_mStationSeal.keys();
-
 	stationNames = m_mStationSeal.keys();
+	if (m_mStationSeal.size() == 0) {
+		stationNames.join( Station::MainStation()->getStationName());
+	}
+
 	QStringListModel* model = new QStringListModel(this);
 	model->setStringList(stationNames);
 	ui.listView->setModel(model);
-
+	QMap<QString, int> value = m_mStationSeal.value(0);
+	SetTableWidget(value, Station::MainStation()->ReadMapDevice());
 	ui.listView->setEditTriggers(QAbstractItemView::NoEditTriggers);
 	QObject::connect(ui.listView, &QListView::pressed, [=](QModelIndex pos) {
 		QStringList predefinedTexts;

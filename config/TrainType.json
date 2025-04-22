@@ -1,6 +1,6 @@
 {
     "trainNumType": {
-        "passengetrain": [
+        "passengeTrain": [
             "管内临时旅客列车",
             "跨局临时旅游列车",
             "因故折返旅客列车",
@@ -31,7 +31,7 @@
             "管内城际动车组",
             "管内特快旅客列车"
         ],
-        "freightrain": [
+        "freightTrain": [
 			"电力技术直达列车",
 			"电力直通货物列车",
 			"电力区段货物列车",

@@ -41,7 +41,7 @@ namespace CTCWindows {
 					Station::MainStationObject* Station = Station::MainStation();
 					QString stationName = Station->getStationName();
 					SealTechnique::InsertSealRecord(stationName, "引导按钮");
-					
+					emit countdownStarts();
 				}
 				break;
 			case CTCWindows::FunType::GuideClock:		//引导总锁
@@ -52,7 +52,7 @@ namespace CTCWindows {
 					Station::MainStationObject* Station = Station::MainStation();
 					QString stationName = Station->getStationName();
 					SealTechnique::InsertSealRecord(stationName, "引导总锁");
-					
+					emit countdownStarts();
 				}
 				break;
 			case CTCWindows::FunType::TotalRelieve:	    //总人解
@@ -63,16 +63,19 @@ namespace CTCWindows {
 					Station::MainStationObject* Station = Station::MainStation();
 					QString stationName = Station->getStationName();
 					SealTechnique::InsertSealRecord(stationName, "总人解");
+					emit countdownStarts();
 				}
 				break;
 			case CTCWindows::FunType::RegionRelieve:	//区故解
 				if (!CTCWindows::LeadSealDlg::LeadSealPassword(CTCWindows::KeyInputType::LeadSeal)) {
 					onFunBtnStateReset();
+					
 				}
 				else {
 					Station::MainStationObject* Station = Station::MainStation();
 					QString stationName = Station->getStationName();
 					SealTechnique::InsertSealRecord(stationName, "区故解");
+					emit countdownStarts();
 				}
 				break;
 			case CTCWindows::FunType::UnLighting:		//灭灯
@@ -83,6 +86,7 @@ namespace CTCWindows {
 					Station::MainStationObject* Station = Station::MainStation();
 					QString stationName = Station->getStationName();
 					SealTechnique::InsertSealRecord(stationName, "灭灯");
+					emit countdownStarts();
 				}
 				break;
 			case CTCWindows::FunType::RampUnlock:	    //坡道解锁
@@ -93,6 +97,7 @@ namespace CTCWindows {
 					Station::MainStationObject* Station = Station::MainStation();
 					QString stationName = Station->getStationName();
 					SealTechnique::InsertSealRecord(stationName, "坡道解锁");
+					emit countdownStarts();
 				}
 				break;
 			case CTCWindows::FunType::PoorRoute: {		//分路不良
@@ -103,12 +108,19 @@ namespace CTCWindows {
 					Station::MainStationObject* Station = Station::MainStation();
 					QString stationName = Station->getStationName();
 					SealTechnique::InsertSealRecord(stationName,"分路不良" );
-				
+					emit countdownStarts();
 				}
 			} break;
-			default:
-				break;
+			case CTCWindows::FunType::CommandClear: 
+			case CTCWindows::FunType::AuxiliaryMenu: 
+			case CTCWindows::FunType::StateChange:
+			case CTCWindows::FunType::MethodConvert: 
+			case CTCWindows::FunType::CommandIssued:break;
+			default:	
+				emit countdownStarts();
+				break;																								  
 			}
+
 			Station::MainStation()->ClearDevice();
 		}
 
@@ -122,6 +134,7 @@ namespace CTCWindows {
 					m_pCommandIssuedBtn->setEnabled(Station::MainStation()->IsAllowStaOperation());
 				}
 			}
+			return QWidget::timerEvent(event);
 		}
 
 		void StaFunBtnToolBar::onAuxiliaryMenuBtnClicked()
@@ -146,7 +159,6 @@ namespace CTCWindows {
 			if (!m_pButtonGroup) {
 				return;
 			}
-
 			for (QAbstractButton* pButton : m_pButtonGroup->buttons()) {
 				pButton->setEnabled(Station::MainStation()->IsAllowStaOperation());
 			}

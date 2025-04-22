@@ -94,6 +94,19 @@ namespace CTCWindows {
 
 		}
 
+		void StaDispatchOrderTKY::ViewPermission(Station::LimitsOfAuthority operate)
+		{
+			if (operate == Station::LimitsOfAuthority::admin) {
+				ui.widget_2->hide();
+				ui.widget_3->hide();
+			}
+			else if (operate == Station::LimitsOfAuthority::employee) {
+				ui.trainWidget->hide();
+				ui.forwardCheckBox->hide();
+			}
+
+		}
+
 		void StaDispatchOrderTKY::DispatchOrderListUpData()
 		{
 			ui.receiveTree->clear();

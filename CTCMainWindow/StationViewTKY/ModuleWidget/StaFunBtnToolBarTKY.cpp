@@ -1,7 +1,9 @@
 #include "StaFunBtnToolBarTKY.h"
 #include "CommonWidget/LeadSealDlg.h"
 #pragma execution_character_set("utf-8")
-
+#include "./StationObject/Device/DeviceBase.h"
+#include "./StationObject/StationObject.h"
+#include "./Global.h"
 namespace CTCWindows {
 	namespace CARS {
 		StaFunBtnToolBarTKY::StaFunBtnToolBarTKY(QWidget* parent)
@@ -53,6 +55,13 @@ namespace CTCWindows {
 		void StaFunBtnToolBarTKY::InitAuxiliaryMenu(AuxiliaryMenuWnd* pAuxiliary)
 		{
 			pAuxiliary->AddNewAuxiliaryBtn("股道无电", [=]() {
+				Station::Device::StaTrack* pStaDevice = nullptr;
+				QVector<Station::Device::DeviceBase*> vect = Station::MainStation()->getDeviceVectorByType(TRACK);
+				for (int i = 0; i < vect.size(); i++) {
+					pStaDevice = dynamic_cast<Station::Device::StaTrack*>(vect.at(i));
+					pStaDevice->SetTrack();
+				}
+
 				pAuxiliary->close();
 			});
 			pAuxiliary->AddNewAuxiliaryBtn("接触网定位无电", [=]() {

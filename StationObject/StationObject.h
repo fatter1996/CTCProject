@@ -53,7 +53,13 @@ namespace Station {
         void InitDeviceMap();
         
     public:
-        QVector<Device::DeviceBase*>& getDeviceVectorByType(QString strType) { return m_mapDeviceVector[strType]; }
+        QVector<Device::DeviceBase*>& getDeviceVectorByType(QString strType) { return m_mapDeviceVector[strType];
+        
+        }
+        static QMap<QString, std::function<Device::DeviceBase* (StationObject*)>> getmapDeviceVector() {
+            return m_mapCreatDeviceVector; 
+        }
+
         void setStationName(const QString& strName) { m_strStationName = strName; }
         QString getStationName() { return m_strStationName; }
         Device::DeviceBase* getDeviceByCode(const uint& nCode);
@@ -61,6 +67,7 @@ namespace Station {
         Device::DeviceBase* getSwitchBySectionCode(int nCode);
         QSize getStaFixedSize(); //获取站场实际大小
         uint getStationId() const { return m_nStationId; }
+        void setStationId(uint nStationID)  { m_nStationId = nStationID; }
         QString getStationName() const { return m_strStationName; }
         QPoint getOffset() const { return m_ptOffset; }
         bool IsMainStation() const { return m_bMainStation; }
@@ -84,9 +91,12 @@ namespace Station {
         QWidget* m_pShowWidget = nullptr;
 
     private:
+
+        static int UpState;
         static QXmlStreamReader* m_pDeviceInfoReader;  //XML解析器
         static QMap<QString, std::function<Device::DeviceBase* (StationObject*)>> m_mapCreatDeviceVector;
-        //static int m_nTimerId_500;
+        static int m_nTimerId_500;
+        static int UpStateTimer;
     };
 
     
@@ -191,7 +201,7 @@ namespace Station {
         //数据传输
         Transmission::StaProtocol* m_pProtocol = nullptr;
         Transmission::StaPacket* m_pStaPacket = nullptr;
-
+       
     private:
         StaLimits m_StaLimits;
         QVector<Device::DeviceBase*> m_vecSelectDevice;
@@ -211,6 +221,7 @@ namespace Station {
         QMap<Order, std::function<StaOrder*()>> m_mapCreatStationOrder;
         QMap<Order, std::function<void(void*, const QJsonObject&)>> m_mapStationOrder;
         QMap<DiploidRatio, double> m_mapDiploidRatio;
+
 
         StaStagePlan* m_pNewStagePlan = nullptr;
         StaDispatchOrder* m_pNewDispatchOrder = nullptr;

@@ -87,6 +87,7 @@ namespace Station {
 
         QByteArray StaProtocol::UnpackStaViewState(const QByteArray& dataAyyay)
         {
+        
             int nFlag = 11;
             //道岔
             {
@@ -102,7 +103,7 @@ namespace Station {
             {  
                 bool bAddByte = false;
                 StaSwitchSection* pSection = nullptr;
-                for (DeviceBase* pDevice : m_mapDeviceVector[SECTION]) {
+                 for (DeviceBase* pDevice : m_mapDeviceVector[SECTION]) {
                     pSection = dynamic_cast<StaSwitchSection*>(pDevice);
 
                     DeviceBase* pSubDevice = nullptr;
@@ -113,14 +114,19 @@ namespace Station {
                     }
 
                     if (!bAddByte) {
-                        pSubDevice->setState(dataAyyay[nFlag] & 0x0f);
+                        if (pSubDevice->getStrType() != "DC") {
+                            pSubDevice->setState(dataAyyay[nFlag] & 0x0f);
+                        }
 
                         if (pSection == m_mapDeviceVector[SECTION].at(m_mapDeviceVector[SECTION].size() - 1)) {
                             nFlag++;
                         }
                     }
                     else {
-                        pSubDevice->setState((dataAyyay[nFlag] >> 4) & 0x0f);
+                        if (pSubDevice->getStrType() != "DC") {
+                            pSubDevice->setState((dataAyyay[nFlag] >> 4) & 0x0f);
+                        }
+                        
                         nFlag++;
                     }
                     bAddByte = !bAddByte;

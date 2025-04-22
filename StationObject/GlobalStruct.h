@@ -11,6 +11,10 @@
 #define PLAN_TYPE_THROUGH	0x04
 
 namespace Station {
+	enum class LimitsOfAuthority : int {
+		admin,		//管理
+		employee    //成员
+	};
 	enum class VisibleDev : int {
 		button,					//按钮
 		trainButton,			//列车按钮
@@ -123,6 +127,10 @@ namespace Station {
 		QString m_strPlanNum; //计划编号
 
 		int m_nPlanType = 0; //计划类型 (接发-0x01, 始发-0x02, 终到-0x03, 通过-0x04)
+
+		bool m_bElectric = true; //电力
+		int m_nOverLimitLevel = 0; //超限等级
+		bool m_bFreightTrain = false; //列货类型(列车-false, 货车-true)
 
 		QString m_strArrivalTrainNum; //到达车次号
 		int m_nArrivalTrackCode = -1; //到达股道编号

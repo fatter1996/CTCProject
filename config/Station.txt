@@ -19,6 +19,8 @@
 #define XX_OUT_NUM 0
 #define FRAMELENGTH 500
 #define STATELENGTH 500
+#define STATIONID 100
+
 ##DC
 gddc.m_nType=22;
 gddc.m_strName="24";
@@ -1930,20 +1932,20 @@ gd.pz34=P(190,320);
 gd.center=P(175,320);
 ADD_29;
 ##BS
-bs.m_strName="SJ";
+bs.m_strName="SJ方向";
 bs.m_nCode=0x73;
 bs.RelayQD="IVBG";
 bs.Module_Code=0x;
-bs.m_textRect=R(170,210,190,230);
+bs.m_textRect=R(195,18,225,40);
 bs.m_nSX=0;
 bs.isXN=0;
 ADD_0;
 ##BS
-bs.m_strName="XJ";
+bs.m_strName="XJ方向";
 bs.m_nCode=0x74;
 bs.RelayQD="IVAG";
 bs.Module_Code=0x;
-bs.m_textRect=R(1710,180,1730,200);
+bs.m_textRect=R(1660,18,1680,200);
 bs.m_nSX=1;
 bs.isXN=0;
 ADD_1;
@@ -1952,8 +1954,8 @@ BuRect.m_nType=81;
 BuRect.m_strName="STA";
 BuRect.m_nCode=0x75;
 BuRect.m_nCode=0x75;
-BuRect.p1=P(160,360);
-BuRect.m_textRect=R(162,357,176,361);
+BuRect.p1=P(160,363);
+BuRect.m_textRect=R(150,345,164,350);
 BuRect.m_nTZB=0x0010;
 ADD_0;
 ##BuRect
@@ -1961,8 +1963,8 @@ BuRect.m_nType=81;
 BuRect.m_strName="XTA";
 BuRect.m_nCode=0x76;
 BuRect.m_nCode=0x76;
-BuRect.p1=P(1720,450);
-BuRect.m_textRect=R(1695,475,1728,466);
+BuRect.p1=P(1705,442);
+BuRect.m_textRect=R(1700,460,1728,466);
 BuRect.m_nTZB=0x0010;
 ADD_1;
 ##BuRect
@@ -1970,8 +1972,8 @@ BuRect.m_nType=81;
 BuRect.m_strName="SJTA";
 BuRect.m_nCode=0x77;
 BuRect.m_nCode=0x77;
-BuRect.p1=P(190,310);
-BuRect.m_textRect=R(160,295,198,296);
+BuRect.p1=P(160,302);
+BuRect.m_textRect=R(150,280,198,296);
 BuRect.m_nTZB=0x0010;
 ADD_2;
 ##BuRect
@@ -1979,8 +1981,8 @@ BuRect.m_nType=81;
 BuRect.m_strName="XJTA";
 BuRect.m_nCode=0x78;
 BuRect.m_nCode=0x78;
-BuRect.p1=P(1730,300);
-BuRect.m_textRect=R(1740,295,1738,286);
+BuRect.p1=P(1755,302);
+BuRect.m_textRect=R(1750,280,1738,286);
 BuRect.m_nTZB=0x0010;
 ADD_3;
 ##LS
@@ -2015,7 +2017,7 @@ ADD_5;
 txt.m_strName="安全线";
 txt.m_DCname="";
 txt.m_nSize=12;
-txt.m_textRect=R(1490,250,1532,265);
+txt.m_textRect=R(1440,270,1482,300);
 ADD_33;
 ##TX
 txt.m_strName="丁站方面";

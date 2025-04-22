@@ -87,7 +87,7 @@ namespace CTCWindows {
             static FunType getCurrFunType() { return m_SelectFunType; }
             static void setOperObjType(OperObjType eType) { m_nOperObjType = eType; }
             static OperObjType getOperObjType() { return m_nOperObjType; }
-
+        
         public slots:
             void onButtonClicked(QAbstractButton* pButton);
             void onAuxiliaryMenuBtnClicked();
@@ -95,9 +95,10 @@ namespace CTCWindows {
             void onFunBtnStateReset();
 
         signals:
+            void countdownStarts();
             void OrderClear(bool);
             void OrderIssued();
-
+            void GiveTheOrder();
         protected:
             QMap<QAbstractButton*, FunType> m_mapFunBtnType;
             QButtonGroup* m_pButtonGroup = nullptr;

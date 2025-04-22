@@ -1,9 +1,10 @@
 #pragma once
 #include <QDialog>
-#include "StationObject/GlobalStruct.h" 
+#include <StationObject/GlobalStruct.h>
 
 namespace CTCWindows {
 	namespace BaseWnd {
+
 		class StaDispatchOrder : public QDialog
 		{
 			Q_OBJECT
@@ -12,6 +13,7 @@ namespace CTCWindows {
 			~StaDispatchOrder();
 		
 		public:
+			virtual void ViewPermission(Station::LimitsOfAuthority operate) = 0;
 			virtual void DispatchOrderListUpData() = 0;
 			virtual void CurDispatchOrderUpData() = 0;
 			virtual void TrainDispatchOrderListUpData() = 0;

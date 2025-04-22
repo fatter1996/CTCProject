@@ -1,0 +1,175 @@
+{
+    "AutoBlock": [
+      {
+        "m_strName": "S",
+        "m_textRect": "30,620,70,630",
+        "m_nType": 250,
+        "m_nCode": "0x79",
+        "m_nSX": 1,
+        "isLeave": 0,
+        "m_Direction": "S",
+        "m_ArrowPoint": "230,640",
+        "m_FrameRect": "25,615,280,725",
+        "m_textColor": 2,
+        "m_Button": {
+          "ZFZ": {
+            "pName": "38,700",
+            "m_ptBtn": "50,680",
+            "pTime": "70,680"
+          },
+          "JCFZ": {
+            "pName": "97,700",
+            "m_ptBtn": "115,680",
+            "pTime": "135,680"
+          },
+          "FCFZ": {
+            "pName": "162,700",
+            "m_ptBtn": "180,680",
+            "pTime": "200,680"
+          },
+          "YXGF": {
+            "pName": "225,700",
+            "m_ptBtn": "245,680"
+          }
+
+        },
+        "m_Lamp": {
+          "Supervise": {
+            "pName": "42,655",
+            "m_ptLamp": "50,635"
+          },
+          "Assisted": {
+            "pName": "90,655",
+            "m_ptLamp": "100,635"
+          },
+          "Allow": {
+            "pName": "130,655",
+            "m_ptLamp": "150,635"
+          }
+        }
+      },
+        {
+            "m_strName": "SF",
+            "m_textRect": "30,740,70,750",
+            "m_nType": 250,
+            "m_nCode": "0x7a",
+            "m_nSX": 1,
+            "isLeave": 1,
+            "m_Direction": "SF",
+            "m_ArrowPoint": "180,760",
+            "m_FrameRect": "25,735,230,845",
+            "m_Button": {
+                "ZFZ": {
+                    "pName": "38,820",
+                    "m_ptBtn": "50,800",
+                    "pTime": "70,800"
+                },
+                "JCFZ": {
+                    "pName": "97,820",
+                    "m_ptBtn": "115,800",
+                    "pTime": "135,800"
+                },
+                "FCFZ": {
+                    "pName": "162,820",
+                    "m_ptBtn": "180,800",
+                    "pTime": "200,800"
+                }
+            },
+            "m_Lamp": {
+                "Supervise": {
+                    "pName": "45,775",
+                    "m_ptLamp": "50,755"
+                },
+                "Assisted": {
+                    "pName": "93,775",
+                    "m_ptLamp": "100,755"
+                }
+            }
+        },
+        {
+            "m_strName": "X",
+            "m_textRect": "1650,740,1690,750",
+            "m_nType": 250,
+            "m_nCode": "0x7b",
+            "m_nSX": 0,
+            "isLeave": 0,
+            "m_Direction": "X",
+            "m_ArrowPoint": "1695,760",
+            "m_FrameRect": "1645,735,1900,845",
+            "m_Button": {
+                "ZFZ": {
+                    "pName": "1855,820",
+                    "m_ptBtn": "1865,800",
+                    "pTime": "1690,750"
+                },
+                "FCFZ": {
+                    "pName": "1717,820",
+                    "m_ptBtn": "1735,800",
+                    "pTime": "1755,750"
+                },
+                "JCFZ": {
+                    "pName": "1783,820",
+                    "m_ptBtn": "1800,800",
+                    "pTime": "1820,750"
+                },
+                "YXGF": {
+                    "pName": "1655,820",
+                    "m_ptBtn": "1670,800"
+                }
+            },
+            "m_Lamp": {
+                "Supervise": {
+                    "pName": "1850,775",
+                    "m_ptLamp": "1855,755"
+                },
+                "Assisted": {
+                    "pName": "1800,775",
+                    "m_ptLamp": "1805,755"
+                },
+                "Allow": {
+                    "pName": "1738,775",
+                    "m_ptLamp": "1755,755"
+                }
+            }
+        },
+        {
+            "m_strName": "XF",
+            "m_textRect": "1700,620,1740,630",
+            "m_nType": 250,
+            "m_nCode": "0x7c",
+            "m_nSX": 0,
+            "isLeave": 1,
+            "m_Direction": "X",
+            "m_ArrowPoint": "1745,640",
+            "m_FrameRect": "1695,615,1900,725",
+            "m_Button": {
+                "ZFZ": {
+                    "pName": "1855,700",
+                    "m_ptBtn": "1865,680",
+                    "pTime": "1690,680"
+                },
+                "FCFZ": {
+                    "pName": "1717,700",
+                    "m_ptBtn": "1735,680",
+                    "pTime": "1755,680"
+                },
+                "JCFZ": {
+                    "pName": "1783,700",
+                    "m_ptBtn": "1800,680",
+                    "pTime": "1820,680"
+                }
+            },
+            "m_Lamp": {
+                "Supervise": {
+                    "pName": "1850,655",
+                    "m_ptLamp": "1855,635"
+                },
+                "Assisted": {
+                    "pName": "1800,655",
+                    "m_ptLamp": "1805,635"
+                }
+            }
+        }
+    ]
+
+}

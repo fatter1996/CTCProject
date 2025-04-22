@@ -65,8 +65,8 @@ namespace CTCDoc{
 			m_pCTCMainWindow->setFixedSize(m_pMainStation->getStaFixedSize());
 			m_pMainStation->InitDeviceEventFilter(m_pCTCMainWindow->StaPaintView());
 			StaOperationConnect();
-			//查询车站命令信息
-			//m_pMainStation->SelectStationOrder();
+			//车站命令信息
+			m_pMainStation->SelectStationOrder();
 			m_pCTCMainWindow->MultiDisp()->InitMultiStation(m_vecMultiStation);
 			QtConcurrent::run(m_pMainStation, &MainStationObject::SelectStationOrder);
 			m_pMainStation->OnLine();
@@ -97,6 +97,7 @@ namespace CTCDoc{
 		QJsonObject rootObj = josnDoc.object();
 		//站名
 		m_pMainStation->setStationName(rootObj.value("staName").toString());
+		m_pMainStation->setStationId(rootObj.value("stationID").toInt());
 		//站场界面类型
 		m_nStationViewType = rootObj.value("stationType").toInt();
 		m_bShowToolbarBtn = rootObj.value("isShowToolBarBtn").toInt();
@@ -182,12 +183,12 @@ namespace CTCDoc{
 		QJsonObject rootObj = josnDoc.object();
 		QJsonObject trainNumTypeObj = rootObj.value("trainNumType").toObject();
 
-		QJsonArray passengeTrainArray = trainNumTypeObj.value("passengetrain").toArray();
+		QJsonArray passengeTrainArray = trainNumTypeObj.value("passengeTrain").toArray();
 		for (int i = 0; i < passengeTrainArray.size(); i++) {
 			InsterTrainType(PASSENGE_TYPE, i, passengeTrainArray.at(i).toString());
 		}
 
-		QJsonArray freighTrainArray = trainNumTypeObj.value("freightrain").toArray();
+		QJsonArray freighTrainArray = trainNumTypeObj.value("freightTrain").toArray();
 		for (int i = 0; i < freighTrainArray.size(); i++) {
 			InsterTrainType(FREIGH_TYPE, i, freighTrainArray.at(i).toString());
 		}
