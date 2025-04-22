@@ -2,7 +2,6 @@
 #include <QWidget>
 #include <QLabel>
 #include <QLineEdit>
-
 namespace CTCWindows {
 	namespace  Control {
 		class TextSignLable : public QWidget
@@ -17,7 +16,6 @@ namespace CTCWindows {
 
 		public:
 			static TextSignLable* CreateTextSignLable(QWidget* parent, int nType = 0);
-
 		signals:
 			void addTextSignLable(const QString&);
 

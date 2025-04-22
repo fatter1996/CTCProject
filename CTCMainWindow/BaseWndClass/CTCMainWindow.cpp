@@ -5,7 +5,9 @@
 #include <QToolBar>
 #include <QMessageBox>
 #include <QDebug>
+#include <QLabel>
 #include "Global.h"
+#include "CTCObject/CTCObject.h"
 #pragma execution_character_set("utf-8")
 
 namespace CTCWindows {
@@ -44,9 +46,9 @@ namespace CTCWindows {
         //初始化工具栏-签收工具栏
         InitStateToolBar();
         InitbottomTrafficLogToolBar();
-        InitStatusBar(); 
+        InitStatusBar();
         //初始化界面布局
-        
+
         InitViewLayout();
     }
 
@@ -96,23 +98,37 @@ namespace CTCWindows {
                         m_pRoutePlanAction->setChecked(false);
                     }
                     m_vecMenuBarInfo[1]->getSubActionByIndex(2, 0, 3)->m_pAction->setChecked(false);
-                });
+                    });
             }
             m_pPlanDock->setWidget(m_pRoutePlanWnd);
             m_pPlanDock->setFloating(false);
             m_pPlanDock->setFeatures(QDockWidget::DockWidgetClosable | QDockWidget::DockWidgetVerticalTitleBar);
             m_pPlanDock->setAllowedAreas(Qt::BottomDockWidgetArea);
             addDockWidget(Qt::BottomDockWidgetArea, m_pPlanDock);
-            
+
+        }
+
+
+        if (!m_bShowToolbarBtn) {
+            m_pStationViewToolBar->hide();
+        }
+      
+        if (!m_bShowToolbarLabel) {
+            m_pStateToolBar->hide();
+        }
+        if (m_pBottomStationViewToolBar) {
+            addToolBar(Qt::BottomToolBarArea, m_pBottomStationViewToolBar);
+            //addToolBar(m_pBottomStationViewToolBar);
+        }
+        if (m_pStatusBar) {
+            setStatusBar(m_pStatusBar);
         }
     }
-
     void CTCMainWindow::SetShowToolbar(bool bShowBtn, bool bShowLabel)
     {
         m_pStationViewToolBar->setHidden(!bShowBtn);
         m_pStateToolBar->setHidden(!bShowLabel);
     }
-
     void CTCMainWindow::MenuStateSync(int type, int nType)
     {
         if (type == 1) {    //缩放
@@ -166,18 +182,18 @@ namespace CTCWindows {
         QSpacerItem* spacer = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
         QHBoxLayout* Labellayout = new QHBoxLayout(LabelWidget);
         Labellayout->setMargin(0);
-        
+
         Labellayout->addWidget(Label1);
         Labellayout->addWidget(Label2);
         Labellayout->addItem(spacer);
         TimeLabel->setStyleSheet(" border: 0.5px solid #ccc;");
         permanentLabel3->setStyleSheet(" border: 0.5px solid #ccc;");
-        StatusLayout->addWidget(permanentLabel,1);
-        StatusLayout->addWidget(TimeLabel,1);
-        StatusLayout->addWidget(permanentLabel3,8);
-        StatusLayout->addWidget(LabelWidget,0);
+        StatusLayout->addWidget(permanentLabel, 1);
+        StatusLayout->addWidget(TimeLabel, 1);
+        StatusLayout->addWidget(permanentLabel3, 8);
+        StatusLayout->addWidget(LabelWidget, 0);
 
-        m_pStatusBar->addWidget(m_pStatusBarWidget,1);
+        m_pStatusBar->addWidget(m_pStatusBarWidget, 1);
 
     }
     QString CTCMainWindow::getWeekday(const QDateTime& dateTime) {
@@ -280,7 +296,7 @@ namespace CTCWindows {
             m_pCurShowView = m_pStationLog;
             m_pCurShowView->show();
         }
-         
+
         if (m_pCurToolBar != m_pTrafficLogToolBar) {
             m_pCurToolBar->hide();
             m_pCurToolBar = m_pTrafficLogToolBar;
@@ -367,7 +383,7 @@ namespace CTCWindows {
         if (strIconFile2 != "") {
             strStyleSheet.append(QString(
                 "QPushButton:disabled {"
-                    "background-image:url(%1);"
+                "background-image:url(%1);"
                 "}").arg(strIconFile2));
         }
 
@@ -409,7 +425,7 @@ namespace CTCWindows {
         m_pAction->setText(text);
         m_pAction->setEnabled(Enabled);
         m_pAction->setCheckable(isCheckable);
-        
+
         if (isCheckable) {
             m_pAction->setChecked(isChecked);
         }
@@ -435,7 +451,7 @@ namespace CTCWindows {
         if (isCheckable) {
             info->m_pAction->setChecked(isChecked);
         }
-        
+
         m_vecSubMenuInfo.append(info);
         menu->addAction(info->m_pAction);
         return info->m_pAction;
@@ -519,7 +535,7 @@ namespace CTCWindows {
             }
         }
         else if (nType == TRAINNUM) {
-            
+
         }
     }
 }

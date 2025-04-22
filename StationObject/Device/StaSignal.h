@@ -76,6 +76,7 @@ namespace Station {
             //状态重置
             void ResetDevState() override;
 
+          
         public:
             int GetBtnState() { return m_nBtnState; }
             void setRelatedBtn(const DeviceBase* pDevice) { m_pRelatedBtn = const_cast<DeviceBase*>(pDevice); }

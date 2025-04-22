@@ -5,7 +5,7 @@
 #include "ModuleWidget/StaAlarmWindowTKY.h"
 #include "CTCMainWindow/CustomControl/LntervallogicCheck.h"
 #include "CTCMainWindow/CommonWidget/VehicleManage.h"
-
+#include "ModuleWidget/EditingInterfaceTKY.h"
 namespace CTCWindows {
 	namespace CARS {
 		class StationViewTKY : public CTCMainWindow
@@ -52,6 +52,7 @@ namespace CTCWindows {
 			void countdownStarts();
 
 		private:
+			EditingInterfaceTKY* m_pEditInterFace = nullptr;
 			VehicleManage* m_pVehicleManage = nullptr;
 			StaAlarmWindowTKY*  m_pStaAlarm = nullptr;
 			LntervallogicCheck* m_pLntervallogic = nullptr;

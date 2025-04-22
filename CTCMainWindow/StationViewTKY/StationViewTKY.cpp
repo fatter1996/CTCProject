@@ -17,6 +17,12 @@ namespace CTCWindows {
 			: CTCMainWindow(parent)
 		{
 			ui.setupUi(this);
+			connect(Station::MainStation(), &StationObject::TextSignEdit,
+				this, [=](QString Text, Station::Device::StaTextSign* pTextSign) {
+					m_pEditInterFace = new EditingInterfaceTKY();
+					m_pEditInterFace->setLinEditText(Text, pTextSign);
+					m_pEditInterFace->show();
+				});
 		}
 
 		StationViewTKY::~StationViewTKY()
@@ -529,7 +535,6 @@ namespace CTCWindows {
 			}
 			return QObject::eventFilter(obj, event);
 		}
-		
 		void StationViewTKY::InitbottomTrafficLogToolBar()
 		{
 			m_pBottomStationViewToolBar = new QToolBar(this);

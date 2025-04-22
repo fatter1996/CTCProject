@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>EditingInterfaceTKYClass</class>
+ <widget class="QMainWindow" name="EditingInterfaceTKYClass">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>263</width>
+    <height>121</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>文字标注</string>
+  </property>
+  <widget class="QWidget" name="centralWidget">
+   <property name="minimumSize">
+    <size>
+     <width>263</width>
+     <height>121</height>
+    </size>
+   </property>
+   <property name="maximumSize">
+    <size>
+     <width>263</width>
+     <height>121</height>
+    </size>
+   </property>
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout_5">
+      <item>
+       <widget class="QLabel" name="label">
+        <property name="text">
+         <string>内容</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLineEdit" name="lineEdit"/>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout_4">
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout_2">
+        <item>
+         <widget class="QLabel" name="label_2">
+          <property name="text">
+           <string>字体颜色</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QComboBox" name="comboBox">
+          <item>
+           <property name="text">
+            <string>黑色</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>白色</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>红色</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>黄色</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>蓝色</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>绿色</string>
+           </property>
+          </item>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout">
+        <item>
+         <widget class="QLabel" name="label_3">
+          <property name="text">
+           <string>背景颜色</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <widget class="QComboBox" name="comboBox_2">
+        <item>
+         <property name="text">
+          <string>白色</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>黄色</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>蓝色</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>绿色</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>红色</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>黑色</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout_3">
+      <item>
+       <widget class="QPushButton" name="pushButton">
+        <property name="maximumSize">
+         <size>
+          <width>70</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>确定</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="pushButton_2">
+        <property name="maximumSize">
+         <size>
+          <width>70</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>取消</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+   </layout>
+  </widget>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <resources/>
+ <connections/>
+</ui>

@@ -33,6 +33,7 @@ namespace CTCWindows {
 		AddTrain
 	};
 
+
 	struct MenuInfo {
 		int m_nLevel = 0;
 		int m_nIndex = 0;
@@ -107,7 +108,8 @@ namespace CTCWindows {
 	private:
 		//初始化界面布局
 		void InitViewLayout();
-
+	signals:
+		void ModifyContent(QString Content, int TextColor, int BackColor, Station::Device::StaTextSign* pTextSign);
 	public slots:
 		void onButtonToggled(bool checked);
 		void InitStatusBar();
@@ -164,5 +166,8 @@ namespace CTCWindows {
 		MouseState m_eMouseState = MouseState::Default;
 		MenuSyncAction m_stuMenuSyncAction;
 		QAction* m_pRoutePlanAction = nullptr;
+
+		bool m_bShowToolbarBtn = true;
+		bool m_bShowToolbarLabel = true;
 	};
 }

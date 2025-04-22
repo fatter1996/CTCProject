@@ -51,5 +51,6 @@
         <file>icon/TKY/textEnlarge.png</file>
         <file>icon/TKY/textNarrow.png</file>
         <file>icon/TKY/textRevert.png</file>
+        <file>icon/inbox.png</file>
     </qresource>
 </RCC>

@@ -320,6 +320,15 @@ namespace Station {
         pDispatch->m_nStateDisOrder = subObj.value("stateDisOrder").toInt();
     }
 
+    QMap<QString, QString> StaDispatchOrder::GetOrder(int m_nOrderId, int m_nOrderType, int m_nSendState)
+    {
+        QMap<QString, QString> m_mapOredr;
+        m_mapOredr.insert("ÃüÁîID",QString("%1").arg(m_nOrderId));
+        m_mapOredr.insert("ÃüÁîÀàĞÍ", QString("%1").arg(m_nOrderType));
+        m_mapOredr.insert("·¢ËÍ×´Ì¬", QString("%1").arg(m_nSendState));
+        return QMap<QString, QString>();
+    }
+
     StaDispatchOrder* StaTrainDispatch::getParentOrder()
     {
         for (StaDispatchOrder* pOrder : MainStation()->DispatchOrderList()) {
