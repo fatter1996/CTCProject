@@ -33,11 +33,13 @@ namespace CTCWindows {
 				pOrder->m_nOrderId = m_pCurDispatch->m_nOrderId;	//关联调度命令ID
 				pOrder->m_tRecv = QDateTime::currentDateTime();//机车接收时间
 				GetTrainInfo(pOrder);
-				QByteArray btResult;
-				int nTrainId = 1;
+				QByteArray btResult = "-1";
+				int nTrainId = 0;
 				while (btResult != "") {
-					if (Http::HttpClient::SelectStaTrain(nTrainId, btResult)) {
-						nTrainId++;
+					if (Http::HttpClient::SelectStaTrain(++nTrainId, btResult)) {
+						if (nTrainId > 256) {
+							nTrainId = 0;
+						}
 					}
 				}
 				pOrder->m_nTrainId = nTrainId;

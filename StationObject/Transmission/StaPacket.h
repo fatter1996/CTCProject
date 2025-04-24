@@ -19,7 +19,7 @@ namespace Station {
             QByteArray PackCultivate();
             QByteArray PackSubject();
             QByteArray PackSubject(int nType, QByteArray btToInterLock);
-            QByteArray PackTrain(int nTrainId, int nType, QByteArray btTrainNum);
+            QByteArray PackTrain(int nTrainId, int nType);
             QByteArray PackTrainRoute(int nRouteId, int nType);
             QByteArray PackLimits(int nType, int nValue);
 

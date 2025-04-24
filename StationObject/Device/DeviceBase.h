@@ -127,8 +127,6 @@ namespace Station {
             static bool getElapsed() { return m_bElapsed; }
             static void setElapsed() { m_bElapsed = !m_bElapsed; }
 
-        
-
         protected:
             uint nIndex = 0;
             //设备信息

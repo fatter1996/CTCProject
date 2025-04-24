@@ -6,14 +6,29 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>600</width>
-    <height>400</height>
+    <width>293</width>
+    <height>446</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>铅封按钮计数统计</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
+   <property name="spacing">
+    <number>8</number>
+   </property>
+   <property name="leftMargin">
+    <number>8</number>
+   </property>
+   <property name="topMargin">
+    <number>8</number>
+   </property>
+   <property name="rightMargin">
+    <number>8</number>
+   </property>
+   <property name="bottomMargin">
+    <number>8</number>
+   </property>
    <item>
     <widget class="QWidget" name="widget" native="true">
      <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="1,3">
@@ -75,7 +90,7 @@
           <number>0</number>
          </property>
          <item>
-          <widget class="QTableWidget" name="tableWidget">
+          <widget class="CTCWindows::Control::TableView" name="tableWidget">
            <property name="columnCount">
             <number>2</number>
            </property>
@@ -112,6 +127,21 @@
       </size>
      </property>
      <layout class="QHBoxLayout" name="horizontalLayout">
+      <property name="spacing">
+       <number>8</number>
+      </property>
+      <property name="leftMargin">
+       <number>8</number>
+      </property>
+      <property name="topMargin">
+       <number>8</number>
+      </property>
+      <property name="rightMargin">
+       <number>8</number>
+      </property>
+      <property name="bottomMargin">
+       <number>8</number>
+      </property>
       <item>
        <widget class="QPushButton" name="pushButton">
         <property name="minimumSize">
@@ -156,6 +186,13 @@
   </layout>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>CTCWindows::Control::TableView</class>
+   <extends>QTableWidget</extends>
+   <header location="global">CustomControl/TableView.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

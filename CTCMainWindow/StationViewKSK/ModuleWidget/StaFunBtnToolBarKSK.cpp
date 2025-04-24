@@ -37,12 +37,11 @@ namespace CTCWindows {
 			m_pRouteBuildBtn = ui.FunBtn1_RouteBuild;
 			m_pCommandClearBtn = ui.FunBtn18_CommandClear;
 			m_pCommandIssuedBtn = ui.FunBtn19_CommandIssued;
+			m_pAuxiliaryMenuBtn = ui.FunBtn17_AuxiliaryMenu;
 
 			QObject::connect(m_pButtonGroup, qOverload<QAbstractButton*>(&QButtonGroup::buttonClicked), this, &StaFunBtnToolBar::onButtonClicked);
-			
-			QObject::connect(ui.FunBtn17_AuxiliaryMenu, &QPushButton::clicked, this, &StaFunBtnToolBar::onAuxiliaryMenuBtnClicked);
+			QObject::connect(m_pAuxiliaryMenuBtn, &QPushButton::clicked, this, &StaFunBtnToolBar::onAuxiliaryMenuBtnClicked);
 			QObject::connect(ui.FunBtn21_MethodConvert, &QPushButton::clicked, this, &StaFunBtnToolBar::onMethodConvertBtnClicked);
-			
 			//ÃüÁîÇå³ý
 			QObject::connect(m_pCommandClearBtn, &QPushButton::clicked, [&]() { emit OrderClear(true); });
 			//ÃüÁîÏÂ´ï

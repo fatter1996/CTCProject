@@ -124,11 +124,13 @@ namespace CTCWindows {
             setStatusBar(m_pStatusBar);
         }
     }
+
     void CTCMainWindow::SetShowToolbar(bool bShowBtn, bool bShowLabel)
     {
         m_pStationViewToolBar->setHidden(!bShowBtn);
         m_pStateToolBar->setHidden(!bShowLabel);
     }
+
     void CTCMainWindow::MenuStateSync(int type, int nType)
     {
         if (type == 1) {    //缩放
@@ -149,6 +151,7 @@ namespace CTCWindows {
         tempSize.setHeight(size.height() < 926 ? 926 : size.height());
         StaPaintView()->setFixedSize(tempSize);
     }
+
     void CTCMainWindow::timerEvent(QTimerEvent* event)
     {
         if (TimerId == event->timerId()) {
@@ -156,6 +159,7 @@ namespace CTCWindows {
         }
         return QMainWindow::timerEvent(event);
     }
+
     void CTCMainWindow::InitStatusBar()
     {
         TimerId = startTimer(1000);

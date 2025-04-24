@@ -58,7 +58,7 @@
     <IncludePath>D:\CTC\CTCMainWindow\BaseWndClass;D:\CTC\CTCMainWindow;D:\CTC;D:\MyWorkProject\CTCProject-master\CTCMainWindow\BaseWndClass;D:\MyWorkProject\CTCProject-master\CTCMainWindow;D:\MyWorkProject\CTCProject-master;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
-    <IncludePath>D:\CTC\CTCMainWindow;D:\CTC\CTCMainWindow\BaseWndClass;D:\CTC;$(IncludePath)</IncludePath>
+    <IncludePath>D:\MyWorkProject\CTCProject-master;D:\MyWorkProject\CTCProject-master\CTCMainWindow\BaseWndClass;D:\MyWorkProject\CTCProject-master\CTCMainWindow;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Link>
@@ -115,6 +115,7 @@
     <ClCompile Include="CTCMainWindow\CommonWidget\ModeChangeRow.cpp" />
     <ClCompile Include="CTCMainWindow\CommonWidget\ModeChangeWnd.cpp" />
     <ClCompile Include="CTCMainWindow\CommonWidget\PointReport.cpp" />
+    <ClCompile Include="CTCMainWindow\CommonWidget\SealTechnique.cpp" />
     <ClCompile Include="CTCMainWindow\CommonWidget\StagePlanSign.cpp" />
     <ClCompile Include="CTCMainWindow\CommonWidget\TrafficMsgLog.cpp" />
     <ClCompile Include="CTCMainWindow\CommonWidget\UserLoginDlg.cpp" />
@@ -153,7 +154,6 @@
     <ClCompile Include="CultivateObject\Subject.cpp" />
     <ClCompile Include="Global.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="SealTechnique.cpp" />
     <ClCompile Include="SocketObject\HttpClient.cpp" />
     <ClCompile Include="SocketObject\servertcp.cpp" />
     <ClCompile Include="SocketObject\sockettcp.cpp" />
@@ -231,11 +231,11 @@
     <QtMoc Include="CTCMainWindow\CustomControl\CarLocationEdit.h" />
     <QtMoc Include="CTCMainWindow\CustomControl\TextSignLable.h" />
     <QtMoc Include="CTCMainWindow\StationViewTKY\ModuleWidget\EditingInterfaceTKY.h" />
+    <QtMoc Include="CTCMainWindow\CommonWidget\SealTechnique.h" />
     <ClInclude Include="CTCObject\CTCObject.h" />
     <ClInclude Include="CultivateObject\Subject.h" />
     <ClInclude Include="Global.h" />
     <ClInclude Include="resource.h" />
-    <QtMoc Include="SealTechnique.h" />
     <ClInclude Include="SocketObject\HttpClient.h" />
     <ClInclude Include="StationObject\Device\StaAutoBlock.h" />
     <ClInclude Include="StationObject\Device\StaBraidLine.h" />
@@ -271,6 +271,7 @@
     <QtUic Include="CTCMainWindow\CommonWidget\ModeChangeRow.ui" />
     <QtUic Include="CTCMainWindow\CommonWidget\ModeChangeWnd.ui" />
     <QtUic Include="CTCMainWindow\CommonWidget\PointReport.ui" />
+    <QtUic Include="CTCMainWindow\CommonWidget\SealTechnique.ui" />
     <QtUic Include="CTCMainWindow\CommonWidget\StagePlanSign.ui" />
     <QtUic Include="CTCMainWindow\CommonWidget\TrafficMsgLog.ui" />
     <QtUic Include="CTCMainWindow\CommonWidget\UserLoginDlg.ui" />
@@ -302,7 +303,6 @@
     <QtUic Include="CTCMainWindow\StationViewTKY\StationView\StationCtrlDispTKY.ui" />
     <QtUic Include="CTCMainWindow\StationViewTKY\StationView\StationLogDispTKY.ui" />
     <QtUic Include="CTCMainWindow\StationViewTKY\StationView\StationMultiDispTKY.ui" />
-    <QtUic Include="SealTechnique.ui" />
   </ItemGroup>
   <ItemGroup>
     <QtRcc Include="Resource.qrc" />

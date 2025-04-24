@@ -1,9 +1,9 @@
 #include "AuxiliaryMenuWnd.h"
-
+#include "SealTechnique.h"
+#include "Global.h"
 #pragma execution_character_set("utf-8")
 
 namespace CTCWindows {
-	QStringList AuxiliaryMenuWnd::m_stringList;
 	AuxiliaryMenuWnd::AuxiliaryMenuWnd(QWidget* parent)
 		: QDialog(parent)
 	{
@@ -31,25 +31,12 @@ namespace CTCWindows {
 		setFixedHeight(m_nButtonNum * 40);
 		return pBtn;
 	}
+
 	void AuxiliaryMenuWnd::ShowSealTechnique()
 	{
-	
-		m_pSealTechnique = new SealTechnique;
-		m_pSealTechnique->SetTable();
+		SealTechnique* m_pSealTechnique = new SealTechnique;
+		m_pSealTechnique->setAttribute(Qt::WA_DeleteOnClose);
+		m_pSealTechnique->UpdaTableWidget(Station::MainStation());
 		m_pSealTechnique->show();
-
-	}
-	void AuxiliaryMenuWnd::addString(QString LampStr)
-	{
-		for (QString str: m_stringList) {
-			if (str == LampStr) {
-				return;
-			}
-		}
-		m_stringList.append(LampStr);
-	}
-	QStringList  AuxiliaryMenuWnd::getStrList()
-	{
-		return m_stringList;
 	}
 }

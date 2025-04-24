@@ -2,9 +2,9 @@
 #include <QTabBar>
 #include <QMouseEvent>
 #include <QDebug>
-//#include <Global.cpp>
 
 #pragma execution_character_set("utf-8")
+
 namespace CTCWindows {
 	namespace CASCO {
 
@@ -17,8 +17,7 @@ namespace CTCWindows {
 				qDebug() << "Switched to page index:" << index;
 				ui.tabWidget->setCurrentIndex(index);
 				SetTableWidgetStation(index, 0);
-				});
-			
+			});
 			
 			InitTable();
 			InitControl();
@@ -399,7 +398,6 @@ namespace CTCWindows {
 					{ "签收时刻", 120 },
 					{ "", 0 }	//占位
 				};
-				return vecHeadInfo;
 				break;
 			case TableSpecies::Dispatcher://调度台
 				vecHeadInfo = {
@@ -410,7 +408,6 @@ namespace CTCWindows {
 					{ "值班人", 72 },
 					{ "", 0 }	//占位
 				};
-				return vecHeadInfo;
 				break;
 			case TableSpecies::Locomot://机车
 				vecHeadInfo = {
@@ -423,7 +420,6 @@ namespace CTCWindows {
 					{ "发送时间", 96 },
 					{ "", 0 }	//占位
 				};
-				return vecHeadInfo;
 			case TableSpecies::CopyTable://抄知处所
 				vecHeadInfo = {
 					{ "编号", 96 },
@@ -435,7 +431,6 @@ namespace CTCWindows {
 					{ "发送时间", 96 },
 					{ "", 0 }	//占位
 				};
-				return vecHeadInfo;
 			case TableSpecies::ReadTable://阅读
 				vecHeadInfo = {
 					{ "编号", 96 },
@@ -447,7 +442,6 @@ namespace CTCWindows {
 					{ "发送时间", 96 },
 					{ "", 0 }	//占位
 				};
-				return vecHeadInfo;
 			case TableSpecies::DispatchTable://调度台表格
 				vecHeadInfo = {
 					{ "编号", 96 },
@@ -459,7 +453,6 @@ namespace CTCWindows {
 					{ "发送时间", 96 },
 					{ "", 0 }	//占位
 				};
-				return vecHeadInfo;
 			case TableSpecies::LocomotTable://机车表格
 				vecHeadInfo = {
 					{ "编号", 96 },
@@ -471,13 +464,11 @@ namespace CTCWindows {
 					{ "发送时间", 96 },
 					{ "", 0 }	//占位
 				};
-				return vecHeadInfo;
 				break;
 			default:
 				break;
 			}
-
+			return vecHeadInfo;
 		}
-
 	}
 }

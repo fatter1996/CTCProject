@@ -1,6 +1,6 @@
 ﻿#pragma once
 #include "DeviceBase.h"
-#include "SealTechnique.h"
+
 namespace Station {
     namespace Device {
         enum class LowFrequency : int {
@@ -78,7 +78,7 @@ namespace Station {
         private:
             static LowFrequency m_nLowFrequency;
             static Direction m_nDirection;
-            SealTechnique* m_pSealTechnique = nullptr;
+
             QString m_strTrackType; //股道类型
             bool m_bSpeedLimit = false;       //是否限速（临时限速）
             bool m_bShuntFault = false;        //是否分路不良

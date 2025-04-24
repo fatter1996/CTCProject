@@ -800,7 +800,7 @@ namespace Station {
                 StaTrain* pTrain = new StaTrain;
                 pTrain->m_nPosCode = nCode;
                 if (CTCWindows::LeadSealDlg::LeadSealPassword(CTCWindows::KeyInputType::AddTrain, pTrain)) {
-                    m_pTrain = pTrain;
+                    qDebug() << "车次添加成功";
                 }
             });
             QAction* pAction2 = new QAction("删除车次号");
@@ -855,9 +855,7 @@ namespace Station {
                     pDialog->close();
                 });
                 pLayout2->addWidget(pPushButton2);
-
                 pLayout->addLayout(pLayout2);
-
                 pDialog->exec();
             });
             QAction* pAction3 = new QAction("车次号确认");

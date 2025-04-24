@@ -173,12 +173,6 @@
     <ClCompile Include="CTCMainWindow\CommonWidget\UserLoginDlg.cpp">
       <Filter>CTCMainWindow\CommonWidget\SourceFiles</Filter>
     </ClCompile>
-    <ClCompile Include="CTCMainWindow\CommonWidget\ModeChangeRow.cpp">
-      <Filter>CTCMainWindow\CommonWidget</Filter>
-    </ClCompile>
-    <ClCompile Include="CTCMainWindow\CommonWidget\ModeChangeWnd.cpp">
-      <Filter>CTCMainWindow\CommonWidget</Filter>
-    </ClCompile>
     <ClCompile Include="CTCMainWindow\StationViewKSK\ModuleWidget\StaDispatchOrderKSK.cpp">
       <Filter>CTCMainWindow\StationViewKSK\ModuleWidget</Filter>
     </ClCompile>
@@ -198,9 +192,6 @@
       <Filter>CTCMainWindow\StationViewTH\StationView</Filter>
     </ClCompile>
     <ClCompile Include="Global.cpp" />
-    <ClCompile Include="SealTechnique.cpp">
-      <Filter>CTCMainWindow\CommonWidget\SourceFiles</Filter>
-    </ClCompile>
     <ClCompile Include="CTCMainWindow\BaseWndClass\StationView\StationCtrlDisp.cpp">
       <Filter>CTCMainWindow\BaseWndClass\StationView</Filter>
     </ClCompile>
@@ -219,10 +210,24 @@
     <ClCompile Include="CTCMainWindow\StationViewKSK\ModuleWidget\StaAlarmWindowKSK.cpp">
       <Filter>CTCMainWindow\StationViewKSK\ModuleWidget</Filter>
     </ClCompile>
-    <ClCompile Include="CTCMainWindow\CommonWidget\VehicleManage.cpp">
-      <Filter>CTCMainWindow\CommonWidget</Filter>
-    </ClCompile>
     <ClCompile Include="CTCMainWindow\CustomControl\CarLocationEdit.cpp">
+      <Filter>CTCMainWindow\CustomControl</Filter>
+    </ClCompile>
+    <ClCompile Include="CTCMainWindow\StationViewTKY\ModuleWidget\EditingInterfaceTKY.cpp" />
+    <ClCompile Include="StationObject\Device\StaTextSign.cpp" />
+    <ClCompile Include="CTCMainWindow\CommonWidget\ModeChangeRow.cpp">
+      <Filter>CTCMainWindow\CommonWidget\SourceFiles</Filter>
+    </ClCompile>
+    <ClCompile Include="CTCMainWindow\CommonWidget\ModeChangeWnd.cpp">
+      <Filter>CTCMainWindow\CommonWidget\SourceFiles</Filter>
+    </ClCompile>
+    <ClCompile Include="CTCMainWindow\CommonWidget\VehicleManage.cpp">
+      <Filter>CTCMainWindow\CommonWidget\SourceFiles</Filter>
+    </ClCompile>
+    <ClCompile Include="CTCMainWindow\CommonWidget\SealTechnique.cpp">
+      <Filter>CTCMainWindow\CommonWidget\SourceFiles</Filter>
+    </ClCompile>
+    <ClCompile Include="CTCMainWindow\CustomControl\TextSignLable.cpp">
       <Filter>CTCMainWindow\CustomControl</Filter>
     </ClCompile>
   </ItemGroup>
@@ -295,7 +300,7 @@
     </ClInclude>
     <ClInclude Include="Config.h" />
     <ClInclude Include="resource.h" />
-     <ClInclude Include="Global.h" />
+    <ClInclude Include="Global.h" />
     <ClInclude Include="StationObject\Device\StaTextSign.h">
       <Filter>StationObject\Device</Filter>
     </ClInclude>
@@ -483,12 +488,6 @@
     <QtMoc Include="CTCMainWindow\CommonWidget\UserLoginDlg.h">
       <Filter>CTCMainWindow\CommonWidget\HeaderFiles</Filter>
     </QtMoc>
-    <QtMoc Include="CTCMainWindow\CommonWidget\ModeChangeRow.h">
-      <Filter>CTCMainWindow\CommonWidget</Filter>
-    </QtMoc>
-    <QtMoc Include="CTCMainWindow\CommonWidget\ModeChangeWnd.h">
-      <Filter>CTCMainWindow\CommonWidget</Filter>
-    </QtMoc>
     <QtMoc Include="CTCMainWindow\StationViewKSK\ModuleWidget\StaDispatchOrderKSK.h">
       <Filter>CTCMainWindow\StationViewKSK\ModuleWidget</Filter>
     </QtMoc>
@@ -506,9 +505,6 @@
     </QtMoc>
     <QtMoc Include="CTCMainWindow\StationViewTH\StationView\StationMultiDispTH.h">
       <Filter>CTCMainWindow\StationViewTH\StationView</Filter>
-    </QtMoc>
-    <QtMoc Include="SealTechnique.h">
-      <Filter>CTCMainWindow\CommonWidget\HeaderFiles</Filter>
     </QtMoc>
     <QtMoc Include="CTCMainWindow\BaseWndClass\StationView\StationCtrlDisp.h">
       <Filter>CTCMainWindow\BaseWndClass\StationView</Filter>
@@ -531,16 +527,25 @@
     <QtMoc Include="CTCMainWindow\StationViewKSK\ModuleWidget\StaAlarmWindowKSK.h">
       <Filter>CTCMainWindow\StationViewKSK\ModuleWidget</Filter>
     </QtMoc>
-    <QtMoc Include="CTCMainWindow\CommonWidget\VehicleManage.h">
-      <Filter>CTCMainWindow\CommonWidget</Filter>
-    </QtMoc>
     <QtMoc Include="CTCMainWindow\CustomControl\CarLocationEdit.h">
       <Filter>CTCMainWindow\CustomControl</Filter>
     </QtMoc>
-      <QtMoc Include="CTCMainWindow\CustomControl\TextSignLable.h">
+    <QtMoc Include="CTCMainWindow\CustomControl\TextSignLable.h">
       <Filter>CTCMainWindow\CustomControl</Filter>
     </QtMoc>
-    <QtMoc Include="SealTechnique.h" />
+    <QtMoc Include="CTCMainWindow\StationViewTKY\ModuleWidget\EditingInterfaceTKY.h" />
+    <QtMoc Include="CTCMainWindow\CommonWidget\ModeChangeRow.h">
+      <Filter>CTCMainWindow\CommonWidget\HeaderFiles</Filter>
+    </QtMoc>
+    <QtMoc Include="CTCMainWindow\CommonWidget\ModeChangeWnd.h">
+      <Filter>CTCMainWindow\CommonWidget\HeaderFiles</Filter>
+    </QtMoc>
+    <QtMoc Include="CTCMainWindow\CommonWidget\VehicleManage.h">
+      <Filter>CTCMainWindow\CommonWidget\HeaderFiles</Filter>
+    </QtMoc>
+    <QtMoc Include="CTCMainWindow\CommonWidget\SealTechnique.h">
+      <Filter>CTCMainWindow\CommonWidget\HeaderFiles</Filter>
+    </QtMoc>
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="CTCMainWindow\StationViewTKY\StationViewTKY.ui">
@@ -609,12 +614,6 @@
     <QtUic Include="CTCMainWindow\CommonWidget\UserLoginDlg.ui">
       <Filter>CTCMainWindow\CommonWidget\FormFiles</Filter>
     </QtUic>
-    <QtUic Include="CTCMainWindow\CommonWidget\ModeChangeRow.ui">
-      <Filter>CTCMainWindow\CommonWidget</Filter>
-    </QtUic>
-    <QtUic Include="CTCMainWindow\CommonWidget\ModeChangeWnd.ui">
-      <Filter>CTCMainWindow\CommonWidget</Filter>
-    </QtUic>
     <QtUic Include="CTCMainWindow\StationViewKSK\ModuleWidget\StaDispatchOrderKSK.ui">
       <Filter>CTCMainWindow\StationViewKSK\ModuleWidget</Filter>
     </QtUic>
@@ -633,9 +632,6 @@
     <QtUic Include="CTCMainWindow\StationViewTH\StationView\StationMultiDispTH.ui">
       <Filter>CTCMainWindow\StationViewTH\StationView</Filter>
     </QtUic>
-    <QtUic Include="SealTechnique.ui">
-      <Filter>CTCMainWindow\CommonWidget\FormFiles</Filter>
-    </QtUic>
     <QtUic Include="CTCMainWindow\CustomControl\LntervallogicCheck.ui">
       <Filter>CTCMainWindow\CustomControl</Filter>
     </QtUic>
@@ -648,11 +644,21 @@
     <QtUic Include="CTCMainWindow\StationViewKSK\ModuleWidget\StaAlarmWindowKSK.ui">
       <Filter>CTCMainWindow\StationViewKSK\ModuleWidget</Filter>
     </QtUic>
-    <QtUic Include="CTCMainWindow\CommonWidget\VehicleManage.ui">
-      <Filter>CTCMainWindow\CommonWidget</Filter>
-    </QtUic>
     <QtUic Include="CTCMainWindow\CustomControl\CarLocationEdit.ui">
       <Filter>CTCMainWindow\CustomControl</Filter>
+    </QtUic>
+    <QtUic Include="CTCMainWindow\StationViewTKY\ModuleWidget\EditingInterfaceTKY.ui" />
+    <QtUic Include="CTCMainWindow\CommonWidget\ModeChangeWnd.ui">
+      <Filter>CTCMainWindow\CommonWidget\FormFiles</Filter>
+    </QtUic>
+    <QtUic Include="CTCMainWindow\CommonWidget\ModeChangeRow.ui">
+      <Filter>CTCMainWindow\CommonWidget\FormFiles</Filter>
+    </QtUic>
+    <QtUic Include="CTCMainWindow\CommonWidget\VehicleManage.ui">
+      <Filter>CTCMainWindow\CommonWidget\FormFiles</Filter>
+    </QtUic>
+    <QtUic Include="CTCMainWindow\CommonWidget\SealTechnique.ui">
+      <Filter>CTCMainWindow\CommonWidget\FormFiles</Filter>
     </QtUic>
   </ItemGroup>
   <ItemGroup>

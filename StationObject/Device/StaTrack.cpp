@@ -3,7 +3,7 @@
 #include <QMessageBox>
 #include "qmath.h"
 #include "CommonWidget/LeadSealDlg.h"
-
+#include "CommonWidget/SealTechnique.h"
 
 #pragma execution_character_set("utf-8")
 
@@ -201,40 +201,39 @@ namespace Station {
                 pMenu->addAction(pAction1);
                 QObject::connect(pAction1, &QAction::triggered, [=]() {
                     if (QMessageBox::question(nullptr, MSGBOX_TITTLE, QString("下发\"封锁/解封[股道:%1]\"命令吗?").arg(m_strName), "确定", "取消") == 0) {
-                        
                         MainStation()->AddSelectDevice(this);
                         MainStation()->SendPacketMsg(TARGET_INTERLOCK, 0x40, (m_nState & SECTION_STATE_BLOCK) ? 0x0b : 0x0a, 0x12);
                     }
-                    });
+                });
                 QAction* pAction2 = new QAction("区故解");
                 pMenu->addAction(pAction2);
                 QObject::connect(pAction2, &QAction::triggered, [=]() {
                     if (QMessageBox::question(nullptr, MSGBOX_TITTLE, QString("下发\"区故解[股道:%1]\"命令吗?").arg(m_strName), "确定", "取消") == 0) {
                         if (CTCWindows::LeadSealDlg::LeadSealPassword(CTCWindows::KeyInputType::LeadSeal)) {
-                            SealTechnique::InsertSealRecord(stationName, "区故解");
+                            CTCWindows::SealTechnique::InsertSealRecord(stationName, "区故解");
                             MainStation()->AddSelectDevice(this);
                             MainStation()->SendPacketMsg(TARGET_INTERLOCK, 0x40, 0x0d, 0x12);
                         }
                     }
-                    });
+                });
 
                 QAction* pAction3 = new QAction("分路不良");
                 pMenu->addAction(pAction3);
                 QObject::connect(pAction3, &QAction::triggered, [=]() {
                     if (QMessageBox::question(nullptr, MSGBOX_TITTLE, QString("下发\"分路不良[股道:%1]\"命令吗?").arg(m_strName), "确定", "取消") == 0) {
                         if (CTCWindows::LeadSealDlg::LeadSealPassword(CTCWindows::KeyInputType::LeadSeal)) {
-                            SealTechnique::InsertSealRecord(stationName, "分路不良");
+                            CTCWindows::SealTechnique::InsertSealRecord(stationName, "分路不良");
                             MainStation()->AddSelectDevice(this);
                             MainStation()->SendPacketMsg(TARGET_INTERLOCK, 0x40, 0x11, 0x12);
                         }
                     }
-                    });
+                });
 
                 QAction* pAction4 = new QAction("股道无电");
                 pMenu->addAction(pAction4);
                 QObject::connect(pAction4, &QAction::triggered, [=]() {
                     m_nPowerCut = true;
-                    });
+                });
 
                 pMenu->exec(QCursor::pos());
             }
@@ -251,7 +250,6 @@ namespace Station {
         }
         void StaTrack::DrawLowTriangulation()
         {
-
             if (m_strTrackType == "JJ_QD") {
                 switch (m_nLowFrequency)
                 {

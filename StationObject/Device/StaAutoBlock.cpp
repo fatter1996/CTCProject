@@ -4,6 +4,7 @@
 #include <QJsonObject>
 #include "CommonWidget/LeadSealDlg.h"
 #include "CommonWidget/AuxiliaryMenuWnd.h"
+#include "CommonWidget/SealTechnique.h"
 #include "StaAutoBlock.h"
 #include "Global.h"
 #pragma execution_character_set("utf-8")
@@ -187,10 +188,8 @@ namespace Station {
             font.setPixelSize(Scale(m_nFontSize));//字号
             m_pPainter.setFont(font);//设置字体
             m_pPainter.setPen(QPen(COLOR_LIGHT_WHITE, 2));
-            CTCWindows::AuxiliaryMenuWnd* auxiliary = new CTCWindows::AuxiliaryMenuWnd;
             m_pPainter.setRenderHint(QPainter::Antialiasing, true);
             for (StaBlockLamp& lamp : m_vecBlockLamp) { 
-                auxiliary->addString(lamp.m_strName);
                 m_pPainter.drawText(Scale(lamp.m_rcName), lamp.m_strName, QTextOption(Qt::AlignCenter));
                 m_pPainter.setBrush((lamp.m_nState & 0x10) ? COLOR_LIGHT_RED : COLOR_LIGHT_BLACK);
                 m_pPainter.drawEllipse(Scale(lamp.m_rcLamp));
@@ -307,17 +306,12 @@ namespace Station {
             m_mapClickEvent[m_strType].insert(CTCWindows::FunType::FunBtn, [](DeviceBase* pDevice) {
                 if (CTCWindows::LeadSealDlg::LeadSealPassword(CTCWindows::KeyInputType::LeadSeal)) {
                     dynamic_cast<StaAutoBlock*>(pDevice)->OnButtonClick();
-                    QString stationName = MainStation()->getStationName();
-                    SealTechnique::InsertSealRecord(stationName, "功能按钮");
-
                 }
             });
         }
 
         void StaAutoBlock::ShowDeviceMenu(const QPoint& ptPos)
         {
-
-     
             for (TrainFrame* pTrainFrame : m_vecTrainFrame) {
                 if (pTrainFrame->m_rcFrame.contains(ptPos)) {   //车次号
                     ShowTrainMenu(QCursor::pos(), m_nCode);
@@ -343,12 +337,9 @@ namespace Station {
                     QObject::connect(pAction2, &QAction::triggered, [=]() {
                         if (QMessageBox::question(nullptr, MSGBOX_TITTLE, QString("下发\"分路不良[区间轨道:%1]\"命令吗?").arg(track.m_strName), "确定", "取消") == 0) {
                             if (CTCWindows::LeadSealDlg::LeadSealPassword(CTCWindows::KeyInputType::LeadSeal)) {
-
                                 Station::MainStationObject* Station = Station::MainStation();
-
                                 QString stationName = Station->getStationName();
-                                SealTechnique::InsertSealRecord(stationName, "分路不良");
-
+                                CTCWindows::SealTechnique::InsertSealRecord(stationName, "分路不良");
                                 MainStation()->AddSelectDevice(this);
                                 MainStation()->SendPacketMsg(TARGET_INTERLOCK, 0x40, 0x11, 0x12);
                             }
@@ -372,14 +363,14 @@ namespace Station {
                 {
                 case 0x01: 
                     CTCWindows::BaseWnd::StaFunBtnToolBar::setOperObjType((m_nBtnState & 0x10) ? 
-                        CTCWindows::OperObjType::TotalAuxUp : CTCWindows::OperObjType::TotalAux);         
+                        CTCWindows::OperObjType::TotalAuxUp : CTCWindows::OperObjType::TotalAux);  
                     break;
                 case 0x02 : 
-                    CTCWindows::BaseWnd::StaFunBtnToolBar::setOperObjType(CTCWindows::OperObjType::PickUpAux);       
+                    CTCWindows::BaseWnd::StaFunBtnToolBar::setOperObjType(CTCWindows::OperObjType::PickUpAux);      
                     m_nTimerIdJF = startTimer(25000);
                     break;
                 case 0x04 : 
-                    CTCWindows::BaseWnd::StaFunBtnToolBar::setOperObjType(CTCWindows::OperObjType::DepartureAux);    
+                    CTCWindows::BaseWnd::StaFunBtnToolBar::setOperObjType(CTCWindows::OperObjType::DepartureAux);   
                     m_nTimerIdFF = startTimer(25000);
                     break;
                 case 0x08 : 
@@ -503,6 +494,17 @@ namespace Station {
                 pTrack.m_nState = nState & 0x03;
                 nState = nState >> 2;
             }
+        }
+
+        bool StaAutoBlock::IsHaveAllowBtn()
+        {
+            bool bHave = false;
+            for (const StaBlockBtn& btnBlock : m_vecBlockBtn) {
+                if (btnBlock.m_strName.contains("允许发车")) {
+                    bHave = true;
+                }
+            }
+            return bHave;
         }
     }
 }

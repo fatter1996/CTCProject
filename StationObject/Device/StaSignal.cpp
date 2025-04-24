@@ -6,6 +6,7 @@
 #include <QPainterPath>
 #include <QMessageBox>
 #include "CommonWidget/LeadSealDlg.h"
+#include "CommonWidget/SealTechnique.h"
 #pragma execution_character_set("utf-8")
 
 namespace Station {
@@ -515,8 +516,11 @@ namespace Station {
                 pMenu->addAction(pAction5);
                 QObject::connect(pAction5, &QAction::triggered, [=]() {
                     if (QMessageBox::question(nullptr, MSGBOX_TITTLE, QString("下发\"总人解[信号机:%1]\"命令吗?").arg(m_strName), "确定", "取消") == 0) {
-                        MainStation()->AddSelectDevice(this);
-                        MainStation()->SendPacketMsg(TARGET_INTERLOCK, 0x40, 0x0c, 0x01);
+                        if (CTCWindows::LeadSealDlg::LeadSealPassword(CTCWindows::KeyInputType::LeadSeal)) {
+                            CTCWindows::SealTechnique::InsertSealRecord(Station::MainStation()->getStationName(), "总人解");
+                            MainStation()->AddSelectDevice(this);
+                            MainStation()->SendPacketMsg(TARGET_INTERLOCK, 0x40, 0x0c, 0x01);
+                        }
                     }
                 });
             }
@@ -562,8 +566,11 @@ namespace Station {
                 pMenu->addAction(pAction5);
                 QObject::connect(pAction5, &QAction::triggered, [=]() {
                     if (QMessageBox::question(nullptr, MSGBOX_TITTLE, QString("下发\"总人解[信号机:%1]\"命令吗?").arg(m_strName), "确定", "取消") == 0) {
-                        MainStation()->AddSelectDevice(this);
-                        MainStation()->SendPacketMsg(TARGET_INTERLOCK, 0x40, 0x0c, 0x02);
+                        if (CTCWindows::LeadSealDlg::LeadSealPassword(CTCWindows::KeyInputType::LeadSeal)) {
+                            CTCWindows::SealTechnique::InsertSealRecord(Station::MainStation()->getStationName(), "总人解");
+                            MainStation()->AddSelectDevice(this);
+                            MainStation()->SendPacketMsg(TARGET_INTERLOCK, 0x40, 0x0c, 0x02);
+                        }
                     }
                 });
             }
@@ -575,8 +582,11 @@ namespace Station {
                     pMenu->addAction(pAction1);
                     QObject::connect(pAction1, &QAction::triggered, [=]() {
                         if (QMessageBox::question(nullptr, MSGBOX_TITTLE, QString("下发\"引导[信号机:%1]\"命令吗?").arg(m_strName), "确定", "取消") == 0) {
-                            MainStation()->AddSelectDevice(this);
-                            MainStation()->SendPacketMsg(TARGET_INTERLOCK, 0x40, 0x02, 0x05);
+                            if (CTCWindows::LeadSealDlg::LeadSealPassword(CTCWindows::KeyInputType::LeadSeal)) {
+                                CTCWindows::SealTechnique::InsertSealRecord(Station::MainStation()->getStationName(), "引导按钮");
+                                MainStation()->AddSelectDevice(this);
+                                MainStation()->SendPacketMsg(TARGET_INTERLOCK, 0x40, 0x02, 0x05);
+                            }
                         }
                     });
                 }
@@ -585,8 +595,11 @@ namespace Station {
                 pMenu->addAction(pAction1);
                 QObject::connect(pAction1, &QAction::triggered, [=]() {
                     if (QMessageBox::question(nullptr, MSGBOX_TITTLE, QString("下发\"点灯/灭灯[信号机:%1]\"命令吗?").arg(m_strName), "确定", "取消") == 0) {
-                        MainStation()->AddSelectDevice(this);
-                        MainStation()->SendPacketMsg(TARGET_INTERLOCK, 0x40, (static_cast<SignalState>(m_nState & 0x0f) == SignalState::U) ? 0x0e : 0x0f, 0x13);
+                        if (CTCWindows::LeadSealDlg::LeadSealPassword(CTCWindows::KeyInputType::LeadSeal)) {
+                            CTCWindows::SealTechnique::InsertSealRecord(Station::MainStation()->getStationName(), (static_cast<SignalState>(m_nState & 0x0f) == SignalState::U) ? "点灯" : "灭灯");
+                            MainStation()->AddSelectDevice(this);
+                            MainStation()->SendPacketMsg(TARGET_INTERLOCK, 0x40, (static_cast<SignalState>(m_nState & 0x0f) == SignalState::U) ? 0x0e : 0x0f, 0x13);
+                        }
                     }
                 });
             }
