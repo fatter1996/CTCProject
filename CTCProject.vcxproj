@@ -105,10 +105,12 @@
     <ClCompile Include="CTCMainWindow\BaseWndClass\ModuleWidget\StaDispatchOrder.cpp" />
     <ClCompile Include="CTCMainWindow\BaseWndClass\ModuleWidget\StaFunBtnToolBar.cpp" />
     <ClCompile Include="CTCMainWindow\BaseWndClass\ModuleWidget\StaRoutePlan.cpp" />
+    <ClCompile Include="CTCMainWindow\BaseWndClass\ModuleWidget\StaTreeNode.cpp" />
     <ClCompile Include="CTCMainWindow\BaseWndClass\ModuleWidget\StaVisibleSet.cpp" />
     <ClCompile Include="CTCMainWindow\BaseWndClass\StationView\StationCtrlDisp.cpp" />
     <ClCompile Include="CTCMainWindow\BaseWndClass\StationView\StationLogDisp.cpp" />
     <ClCompile Include="CTCMainWindow\BaseWndClass\StationView\StationMultiDisp.cpp" />
+    <ClCompile Include="CTCMainWindow\BaseWndClass\StationView\StaTraindiagramwidget.cpp" />
     <ClCompile Include="CTCMainWindow\CommonWidget\AuxiliaryMenuWnd.cpp" />
     <ClCompile Include="CTCMainWindow\CommonWidget\DispatchOrderSign.cpp" />
     <ClCompile Include="CTCMainWindow\CommonWidget\LeadSealDlg.cpp" />
@@ -129,7 +131,9 @@
     <ClCompile Include="CTCMainWindow\StationViewKSK\ModuleWidget\StaDispatchOrderKSK.cpp" />
     <ClCompile Include="CTCMainWindow\StationViewKSK\ModuleWidget\StaFunBtnToolBarKSK.cpp" />
     <ClCompile Include="CTCMainWindow\StationViewKSK\ModuleWidget\StaRoutePlanKSK.cpp" />
+    <ClCompile Include="CTCMainWindow\StationViewKSK\ModuleWidget\StaTraindiagramwidgetKSK.cpp" />
     <ClCompile Include="CTCMainWindow\StationViewKSK\ModuleWidget\StaVisibleSetKSK.cpp" />
+    <ClCompile Include="CTCMainWindow\StationViewKSK\ModuleWidget\TrainInformationInterfaceKSK.cpp" />
     <ClCompile Include="CTCMainWindow\StationViewKSK\StationViewKSK.cpp" />
     <ClCompile Include="CTCMainWindow\StationViewKSK\StationView\StationCtrlDispKSK.cpp" />
     <ClCompile Include="CTCMainWindow\StationViewKSK\StationView\StationLogDispKSK.cpp" />
@@ -231,6 +235,10 @@
     <QtMoc Include="CTCMainWindow\CustomControl\CarLocationEdit.h" />
     <QtMoc Include="CTCMainWindow\CustomControl\TextSignLable.h" />
     <QtMoc Include="CTCMainWindow\StationViewTKY\ModuleWidget\EditingInterfaceTKY.h" />
+    <QtMoc Include="CTCMainWindow\StationViewKSK\ModuleWidget\TrainInformationInterfaceKSK.h" />
+    <QtMoc Include="CTCMainWindow\BaseWndClass\ModuleWidget\StaTreeNode.h" />
+    <ClInclude Include="CTCMainWindow\BaseWndClass\StationView\StaTraindiagramwidget.h" />
+    <QtMoc Include="CTCMainWindow\StationViewKSK\ModuleWidget\StaTraindiagramwidgetKSK.h" />
     <ClInclude Include="CTCObject\CTCObject.h" />
     <ClInclude Include="CultivateObject\Subject.h" />
     <ClInclude Include="Global.h" />
@@ -282,7 +290,9 @@
     <QtUic Include="CTCMainWindow\StationViewKSK\ModuleWidget\StaDispatchOrderKSK.ui" />
     <QtUic Include="CTCMainWindow\StationViewKSK\ModuleWidget\StaFunBtnToolBarKSK.ui" />
     <QtUic Include="CTCMainWindow\StationViewKSK\ModuleWidget\StaRoutePlanKSK.ui" />
+    <QtUic Include="CTCMainWindow\StationViewKSK\ModuleWidget\StaTraindiagramwidgetKSK.ui" />
     <QtUic Include="CTCMainWindow\StationViewKSK\ModuleWidget\StaVisibleSetKSK.ui" />
+    <QtUic Include="CTCMainWindow\StationViewKSK\ModuleWidget\TrainInformationInterfaceKSK.ui" />
     <QtUic Include="CTCMainWindow\StationViewKSK\StationViewKSK.ui" />
     <QtUic Include="CTCMainWindow\StationViewKSK\StationView\StationCtrlDispKSK.ui" />
     <QtUic Include="CTCMainWindow\StationViewKSK\StationView\StationLogDispKSK.ui" />

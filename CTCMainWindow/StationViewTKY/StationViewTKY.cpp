@@ -460,7 +460,7 @@ namespace CTCWindows {
 			//调度命令
 			QPushButton* pDispatBtn = new QPushButton(m_pSignForToolBar);
 			pDispatBtn->setText("调度命令");
-			pDispatBtn->setObjectName("dispatchOrderBtn");
+			pDispatBtn->setObjectName("dispatchBtn");
 			pDispatBtn->setFixedSize(96, 28);
 			connect(pDispatBtn, &QPushButton::clicked, this, &StationViewTKY::ShowDispatchOrderWnd);
 			m_pSignForToolBar->addWidget(pDispatBtn);
@@ -535,6 +535,51 @@ namespace CTCWindows {
 			}
 			return QObject::eventFilter(obj, event);
 		}
+		BaseWnd::StaTraindiagramwidget* StationViewTKY::CreateStaTraindiagramwidget()
+		{
+			return nullptr;
+		}
+		void StationViewTKY::InitStaTraindiagramwidget()
+		{
+		}
+
+		void StationViewTKY::timerEvent(QTimerEvent* event)
+		{
+			if (TimerId == event->timerId()) {
+				upDateTime();
+			}
+			return QMainWindow::timerEvent(event);
+		}
+
+		QString StationViewTKY::getWeekday(const QDateTime& dateTime) {
+			int weekday = dateTime.date().dayOfWeek();
+			switch (weekday) {
+			case 1:
+				return "星期一";
+			case 2:
+				return "星期二";
+			case 3:
+				return "星期三";
+			case 4:
+				return "星期四";
+			case 5:
+				return "星期五";
+			case 6:
+				return "星期六";
+			case 7:
+				return "星期日";
+			default:
+				return "";
+			}
+		}
+		void StationViewTKY::upDateTime()
+		{
+			QDateTime currentDateTime = QDateTime::currentDateTime();
+			QString timeStr = currentDateTime.toString("yyyy-MM-dd hh:mm:ss");
+			TimeLabel->setText(QString("%1  %2").arg(timeStr).arg(getWeekday(currentDateTime)));
+
+		}
+
 		void StationViewTKY::InitbottomTrafficLogToolBar()
 		{
 			m_pBottomStationViewToolBar = new QToolBar(this);
@@ -587,6 +632,46 @@ namespace CTCWindows {
 			m_pBottomStationViewToolBar->addWidget(pAdjacentStationDepartureBtn);
 			connect(pAdjacentStationDepartureBtn, &QPushButton::clicked, this, [&] {});
 			addToolBar(m_pBottomStationViewToolBar);
+
+		}
+		void StationViewTKY::InitStatusBar()
+		{
+			TimerId = startTimer(500);
+			m_pStatusBar = new QStatusBar(this);
+			QWidget* m_pStatusBarWidget = new QWidget;
+			QHBoxLayout* StatusLayout = new QHBoxLayout(m_pStatusBarWidget);
+			m_pStatusBar->setFixedHeight(25);
+			m_pStatusBarWidget->setFixedHeight(25);
+			StatusLayout->setMargin(0);
+			QLabel* permanentLabel = new QLabel("中国铁道科学研究院");
+			permanentLabel->setStyleSheet(" border: 0.5px solid #ccc;");
+			QDateTime currentDateTime = QDateTime::currentDateTime();
+			QString timeStr = currentDateTime.toString("yyyy-MM-dd hh:mm:ss");
+			TimeLabel = new QLabel(QString("%1  %2").arg(timeStr).arg(getWeekday(currentDateTime)));
+			QLabel* permanentLabel3 = new QLabel(QString("本站名：%1").arg(Station::MainStation()->getStationName()));
+
+
+			QWidget* LabelWidget = new QWidget(m_pStatusBar);
+			LabelWidget->setObjectName("LabelName");
+
+			LabelWidget->setStyleSheet("QWidget#LabelName{border: 0.5px solid #ccc;}");
+			QLabel* Label1 = new QLabel(QString("1"));
+			QLabel* Label2 = new QLabel(QString("安六台"));
+			QSpacerItem* spacer = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
+			QHBoxLayout* Labellayout = new QHBoxLayout(LabelWidget);
+			Labellayout->setMargin(0);
+
+			Labellayout->addWidget(Label1);
+			Labellayout->addWidget(Label2);
+			Labellayout->addItem(spacer);
+			TimeLabel->setStyleSheet(" border: 0.5px solid #ccc;");
+			permanentLabel3->setStyleSheet(" border: 0.5px solid #ccc;");
+			StatusLayout->addWidget(permanentLabel, 1);
+			StatusLayout->addWidget(TimeLabel, 1);
+			StatusLayout->addWidget(permanentLabel3, 8);
+			StatusLayout->addWidget(LabelWidget, 0);
+
+			m_pStatusBar->addWidget(m_pStatusBarWidget, 1);
 
 		}
 	}

@@ -63,6 +63,17 @@ namespace CTCWindows {
 		{
 			return new StaVisibleSetKSK(this);
 		} 
+		void StationViewKSK::InitStaTraindiagramwidget()
+		{
+			m_pStaTraindiagram = new StaTraindiagramwidgetKSK(this);
+		}
+		void StationViewKSK::InitStatusBar()
+		{
+		}
+		BaseWnd::StaTraindiagramwidget* StationViewKSK::CreateStaTraindiagramwidget()
+		{
+			return new StaTraindiagramwidgetKSK(this);
+		}
 
 		void StationViewKSK::InitStationViewMenuBar()
 		{
@@ -203,8 +214,8 @@ namespace CTCWindows {
 
 		void StationViewKSK::InitStationViewToolBar()
 		{
-			qDebug() << "InitStationViewToolBarTKY";
 			m_pStationViewToolBar = new QToolBar(this);
+			qDebug() << "InitStationViewToolBarTKY";
 			connect(AddToolBarBtn(":/CTCProject/icon/CASCO/multi.png", "站间透明", STAVIEW_TOOL), &QPushButton::clicked, this, &CTCMainWindow::TurnToStationMultiDisp);
 			connect(AddToolBarBtn(":/CTCProject/icon/CASCO/station.png", "单站界面", STAVIEW_TOOL), &QPushButton::clicked, this, &CTCMainWindow::TurnToStationCtrlDisp);
 			connect(AddToolBarBtn(":/CTCProject/icon/CASCO/textSet.png", "显示设置", STAVIEW_TOOL), &QPushButton::clicked, this, &CTCMainWindow::ShowVisibleSetWnd);
@@ -257,14 +268,27 @@ namespace CTCWindows {
 		void StationViewKSK::InitTrafficLogToolBar()
 		{
 			qDebug() << "InitTrafficLogToolBarTKY";
-			m_pTrafficLogToolBar = new QToolBar(this);
+			m_pTrafficLogToolBar = new QToolBar(this); 
 			connect(AddToolBarBtn(":/CTCProject/icon/CASCO/print.png", "打印", LOGVIEW_TOOL), &QPushButton::clicked, [=]() {});
 			connect(AddToolBarBtn(":/CTCProject/icon/CASCO/preview.png", "打印预览", LOGVIEW_TOOL), &QPushButton::clicked, [=]() {});
-			connect(AddToolBarBtn(":/CTCProject/icon/CASCO/diagram.png", "运行图", LOGVIEW_TOOL), &QPushButton::clicked, [=]() {});
+			connect(AddToolBarBtn(":/CTCProject/icon/CASCO/diagram.png", "运行图", LOGVIEW_TOOL), &QPushButton::clicked, this, &CTCMainWindow::TurnToTraindiagramDisp);
 			connect(AddToolBarBtn(":/CTCProject/icon/CASCO/newTrain.png", "新增车辆", LOGVIEW_TOOL), &QPushButton::clicked, [=]() {});
 			connect(AddToolBarBtn(":/CTCProject/icon/CASCO/user.png", "用户管理", LOGVIEW_TOOL), &QPushButton::clicked, [=]() {});
 			connect(AddToolBarBtn(":/CTCProject/icon/CASCO/history.png", "历史报表查询", LOGVIEW_TOOL), &QPushButton::clicked, [=]() {});
-			connect(AddToolBarBtn(":/CTCProject/icon/CASCO/view.png", "视图", LOGVIEW_TOOL), &QPushButton::clicked, [=]() {});
+			connect(AddToolBarBtn(":/CTCProject/icon/CASCO/view.png", "视图", LOGVIEW_TOOL), &QPushButton::clicked, [=]() {
+				m_pTrainFormation = new TrainInformationInterfaceKSK;
+				m_pTrainFormation->InitMyTree();
+				m_pTrainFormation->show();
+				connect(m_pTrainFormation, &TrainInformationInterfaceKSK::CheckComplete, m_pStationLog, [](TrainInformationInterfaceKSK* pTrainInforma) {
+					//QTableWidget* tableHHead = mQFormList->getTableWidgetFormType(0x11);
+					//QTableWidget* tableData = mQFormList->getTableWidgetFormType(0x33);
+					
+					//m_pTrainFormation->SetShowState(tableHHead);
+					//m_pTrainFormation->SetShowState(tableData);
+
+					//mQFormList->headerHorIndexReSet();
+					});
+				});
 			connect(AddToolBarBtn(":/CTCProject/icon/CASCO/upward.png", "显示上行车次", LOGVIEW_TOOL), &QPushButton::clicked, [=]() {});
 			connect(AddToolBarBtn(":/CTCProject/icon/CASCO/downward.png", "显示下行车次", LOGVIEW_TOOL), &QPushButton::clicked, [=]() {});
 			connect(AddToolBarBtn(":/CTCProject/icon/CASCO/allTrain.png", "显示上下行车次", LOGVIEW_TOOL), &QPushButton::clicked, [=]() {});
@@ -293,6 +317,7 @@ namespace CTCWindows {
 			pDispatBtn->setObjectName("dispatchBtn");
 			pDispatBtn->setFixedSize(96, 28);
 			connect(pDispatBtn, &QPushButton::clicked, this, &CTCMainWindow::ShowDispatchOrderSignWnd);
+
 			m_pSignForToolBar->addWidget(pDispatBtn);
 			//间隔
 			QLabel* pLabel = new QLabel(m_pSignForToolBar);
@@ -346,7 +371,7 @@ namespace CTCWindows {
 			pTimeLabel->setFrameShadow(QFrame::Sunken);
 			pTimeLabel->setFont(QFont("微软雅黑", 11));
 			pTimeLabel->setAlignment(Qt::AlignCenter);
-			pTimeLabel->setText(QDateTime::currentDateTime().toString("yyyy-mm-dd hh:MM:ss"));
+			pTimeLabel->setText(QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss"));
 			pTimeLabel->setObjectName("timeLabel");
 			pTimeLabel->setFixedSize(180, 28);
 			m_pStateToolBar->addWidget(pTimeLabel);
@@ -383,6 +408,8 @@ namespace CTCWindows {
 
 			addToolBar(m_pStateToolBar);
 		}
+
+
 
 	}
 }

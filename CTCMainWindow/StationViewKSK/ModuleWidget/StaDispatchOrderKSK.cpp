@@ -3,7 +3,8 @@
 #include <QMouseEvent>
 #include <QDebug>
 //#include <Global.cpp>
-
+#include <QTreeWidget>
+#include <Global.h>
 #pragma execution_character_set("utf-8")
 namespace CTCWindows {
 	namespace CASCO {
@@ -14,118 +15,155 @@ namespace CTCWindows {
 			ui.setupUi(this);
 			ui.tabWidget->tabBar()->hide();
 			connect(ui.toolBox, &QToolBox::currentChanged, [=](int index) {
-				qDebug() << "Switched to page index:" << index;
 				ui.tabWidget->setCurrentIndex(index);
 				SetTableWidgetStation(index, 0);
 				});
-			
-			
+			connect(ui.pushButton_2, &QPushButton::clicked, [=]() {
+				this->close();
+				});
+			connect(ui.pushButton_6, &QPushButton::clicked, [=]() {
+				SignForDispatchOrder();
+				DispatchOrderListUpData();
+
+				});
+			connect(ui.pushButton, &QPushButton::clicked, [=]() {
+				if (ui.label_19->text().contains("预收令箱")) {
+					m_pStationOrder->removeRow(m_nrow);
+					m_vecStationAdvanceReceiptDispatchOrder.clear();
+					//m_vecStationAdvanceReceiptDispatchOrder.removeAt(m_nrow);
+				}
+				else if (ui.label_21->text().contains("储令箱")) {
+					m_pDispatcherCommand->removeRow(m_nrow);
+				}
+				else if ( ui.label_22->text().contains("储令箱")) {
+					m_pLocomotiveOrder->removeRow(m_nrow);
+				}
+				SignForDispatchOrder();
+				DispatchOrderListUpData();
+				});
 			InitTable();
 			InitControl();
-			SetTableWidgetStation(0);
+			DispatchOrderListUpData();
+
+			for (Station::StaDispatchOrder* pCurDispatch : m_vecStationClosedDispatchOrder) {
+				m_pCurDispatch = pCurDispatch;
+				SetTableWidgetStation(0, 0);
+			}
 		}
 
 		StaDispatchOrderKSK::~StaDispatchOrderKSK()
 		{}
-		QVector<QStringList> StaDispatchOrderKSK::GetDispatcherReceivingData(QString strTrainNum, Station::StaDispatchOrder* pRoute, DataType type)//调度台数据
+
+		void StaDispatchOrderKSK::SignForDispatchOrder()
+		{
+			if (m_pCurDispatch) {
+				QByteArray btResult;
+				if (Http::HttpClient::SignForDispatchOrder(m_pCurDispatch->m_nOrderId, btResult)) {
+					m_pCurDispatch->m_nStateDisOrder = 1;
+				}
+			}
+			CurDispatchOrderUpData();
+		}
+		QVector<QStringList> StaDispatchOrderKSK::GetDispatcherReceivingData(QString strTrainNum, QVector<Station::StaDispatchOrder*> vecDispatch, DataType type)//调度台数据
 		{
 			QVector<QStringList> TableDataList;
-			if (!pRoute) {
-				return QVector<QStringList>();
-			}
 			switch (type)
 			{
 			case CTCWindows::CASCO::DataType::ReserveOrder:
-				if (pRoute->m_nSendState == 3) {
-					TableDataList.append({
-						strTrainNum,
-						pRoute->m_strOrderTip,
-						pRoute->m_tSendTime.toString("hh:mm"),
-						pRoute->m_tSendTime.toString("hh:mm"),
-						pRoute->m_strSignName,
-						});
-					return TableDataList;
+				for (Station::StaDispatchOrder* pRoute : vecDispatch) {
+					if (pRoute->m_nSendState == 3) {
+						TableDataList.append({
+							pRoute->m_strOrderNum,
+							pRoute->m_strOrderTip,
+							pRoute->m_tSendTime.toString("hh:mm"),
+							pRoute->m_tSendTime.toString("hh:mm"),
+							pRoute->m_strSignName,
+							});
+					}
 				}
-				break;
+				return TableDataList;
 			case CTCWindows::CASCO::DataType::PendingOrder:
-				if (pRoute->m_nSendState == 3) {
-					TableDataList.append({
-						strTrainNum,
-						pRoute->m_strOrderTip,
-						pRoute->m_tSendTime.toString("hh:mm"),
-						pRoute->m_tSendTime.toString("hh:mm"),
-						pRoute->m_strSignName,
-						});
-					return TableDataList;
+				for (Station::StaDispatchOrder* pRoute : vecDispatch) {
+					if (pRoute->m_nSendState == 3) {
+						TableDataList.append({
+							pRoute->m_strOrderNum,
+							pRoute->m_strOrderTip,
+							pRoute->m_tSendTime.toString("hh:mm"),
+							pRoute->m_tSendTime.toString("hh:mm"),
+							pRoute->m_strSignName,
+							});
+					}
 				}
-				break;
+				return TableDataList;
 			case CTCWindows::CASCO::DataType::IssueAnOrder:
-				if (pRoute->m_nSendState == 3) {
-					TableDataList.append({
-						strTrainNum,
-						pRoute->m_strOrderTip,
-						pRoute->m_tSendTime.toString("hh:mm"),
-						pRoute->m_tSendTime.toString("hh:mm"),
-						pRoute->m_strSignName,
-						});
-					return TableDataList;
+				for (Station::StaDispatchOrder* pRoute : vecDispatch) {
+					if (pRoute->m_nSendState == 3) {
+						TableDataList.append({
+							pRoute->m_strOrderNum,
+							pRoute->m_strOrderTip,
+							pRoute->m_tSendTime.toString("hh:mm"),
+							pRoute->m_tSendTime.toString("hh:mm"),
+							pRoute->m_strSignName,
+							});
+					}
 				}
-				break;
+				return TableDataList;
 			default:
 				break;
 
 			}
 			return TableDataList;
 		}
-		QVector<QStringList> StaDispatchOrderKSK::GetTheLocomotiveCollectionData(QString strTrainNum, Station::StaDispatchOrder* pRoute, DataType type)//机车数据
+		QVector<QStringList> StaDispatchOrderKSK::GetTheLocomotiveCollectionData(QString strTrainNum, QVector<Station::StaDispatchOrder*> vecDispatch, DataType type)//机车数据
 		{
 			QVector<QStringList> TableDataList;
 			QString Text;
-			if (!pRoute) {
-				return QVector<QStringList>();
-			}
 			switch (type)
 			{
 			case CTCWindows::CASCO::DataType::ReserveOrder:
-				if (pRoute->m_nSendState == 1) {
-					TableDataList.append({
-						strTrainNum,
-						pRoute->m_strType,
-						pRoute->m_strSendAgency,
-						pRoute->m_strSendName,
-						pRoute->m_tSendTime.toString("hh:mm"),
-						pRoute->m_tSendTime.toString("hh:mm")
-						});
-					return TableDataList;
+				for (Station::StaDispatchOrder* pRoute : vecDispatch) {
+					if (pRoute->m_nSendState == 1) {
+						TableDataList.append({
+							pRoute->m_strOrderNum,
+							pRoute->m_strType,
+							pRoute->m_strSendAgency,
+							pRoute->m_strSendName,
+							pRoute->m_tSendTime.toString("hh:mm"),
+							pRoute->m_tSendTime.toString("hh:mm")
+							});
+					}
 				}
-				break;
+				return TableDataList;
 		
 			case CTCWindows::CASCO::DataType::PendingOrder:
-				if (pRoute->m_nSendState == 2) {
-					TableDataList.append({
-						strTrainNum,
-						pRoute->m_strType,
-						pRoute->m_strSendAgency,
-						pRoute->m_strSendName,
-						pRoute->m_tSendTime.toString("hh:mm"),
-						pRoute->m_tSendTime.toString("hh:mm")
-						});
-					return TableDataList;
+				for (Station::StaDispatchOrder* pRoute : vecDispatch) {
+					if (pRoute->m_nSendState == 2) {
+
+						TableDataList.append({
+							pRoute->m_strOrderNum,
+							pRoute->m_strType,
+							pRoute->m_strSendAgency,
+							pRoute->m_strSendName,
+							pRoute->m_tSendTime.toString("hh:mm"),
+							pRoute->m_tSendTime.toString("hh:mm")
+							});
+					}
 				}
-				break;
+				return TableDataList;
 			case CTCWindows::CASCO::DataType::IssueAnOrder:
-				if (pRoute->m_nSendState == 3) {
-					TableDataList.append({
-						strTrainNum,
-						pRoute->m_strType,
-						pRoute->m_strSendAgency,
-						pRoute->m_strSendName,
-						pRoute->m_tSendTime.toString("hh:mm"),
-						pRoute->m_tSendTime.toString("hh:mm")
-						});
-					return TableDataList;
+				for (Station::StaDispatchOrder* pRoute : vecDispatch) {
+					if (pRoute->m_nSendState == 3) {
+						TableDataList.append({
+							pRoute->m_strOrderNum,
+							pRoute->m_strType,
+							pRoute->m_strSendAgency,
+							pRoute->m_strSendName,
+							pRoute->m_tSendTime.toString("hh:mm"),
+							pRoute->m_tSendTime.toString("hh:mm")
+							});
+					}
 				}
-				break;
+				return TableDataList;
 
 			default:
 				break;
@@ -133,47 +171,110 @@ namespace CTCWindows {
 			}
 			return TableDataList;
 		}
-		QVector<QStringList> StaDispatchOrderKSK::GetStationOrderData(QString strTrainNum, Station::StaDispatchOrder* pRoute, DataType type)//车站收令数据
+		void StaDispatchOrderKSK::DispatchOrderListUpData()
+		{
+			m_vecStationAdvanceReceiptDispatchOrder.clear();
+			m_vecStationClosedDispatchOrder.clear();
+			m_vecConsoleHairDispatchOrder.clear();
+			m_vecConsoleStorageImpDispatchOrder.clear();
+			m_vecConsoleTobesentDispatchOrder.clear();
+			m_vecLocomotiveHairDispatchOrder.clear();
+			m_vecLocomotiveStorageImpDispatchOrder.clear();
+			m_vecLocomotiveTobesentDispatchOrder.clear();
+			int nReceiveNum = 0;
+			QTreeWidgetItem* pItem = nullptr;
+			for (Station::StaDispatchOrder* pDispatch : Station::MainStation()->DispatchOrderList()) {
+
+				pItem = new QTreeWidgetItem();
+				//pItem->setText(0, pDispatch->m_strOrderNum);
+				pItem->setText(0, pDispatch->m_strOrderTip);
+				if (pDispatch->m_nOrderType == 1) {//车站
+					if (pDispatch->m_nStateDisOrder == 0) {
+						m_vecStationAdvanceReceiptDispatchOrder.append(pDispatch);
+					}
+					else if (pDispatch->m_nStateDisOrder == 1|| pDispatch->m_nStateDisOrder == 2) {
+						m_vecStationClosedDispatchOrder.append(pDispatch);
+					}
+				}
+				else if (pDispatch->m_nOrderType == 2) {
+					if (pDispatch->m_nSendState == 1) {
+						m_vecConsoleHairDispatchOrder.append(pDispatch);
+					}
+					else if (pDispatch->m_nSendState == 2) {
+						m_vecConsoleStorageImpDispatchOrder.append(pDispatch);
+					}
+					else if (pDispatch->m_nSendState == 3) {
+						m_vecConsoleTobesentDispatchOrder.append(pDispatch);
+					}
+				}
+				else if (pDispatch->m_nOrderType == 3) {
+					if (pDispatch->m_nSendState == 1) {
+						m_vecLocomotiveHairDispatchOrder.append(pDispatch);
+					}
+					else if (pDispatch->m_nSendState == 2) {
+						m_vecLocomotiveStorageImpDispatchOrder.append(pDispatch);
+					}
+					else if (pDispatch->m_nSendState == 3) {
+						m_vecLocomotiveTobesentDispatchOrder.append(pDispatch);
+					}
+				}
+
+				if (pDispatch->m_nStateDisOrder == 1) {
+					nReceiveNum++;
+				}
+			}
+	
+		}
+		void StaDispatchOrderKSK::CurDispatchOrderUpData()
+		{
+		}
+		void StaDispatchOrderKSK::TrainDispatchOrderListUpData()
+		{
+		}
+		void StaDispatchOrderKSK::CurTrainDispatchOrderUpData()
+		{
+		}
+		QVector<QStringList> StaDispatchOrderKSK::GetStationOrderData(QString strTrainNum, QVector<Station::StaDispatchOrder*> vecDispatch, DataType type)//车站收令数据
 		{
 			QVector<QStringList> TableDataList;
 			QString Text;
-			if (!pRoute) {
-				return QVector<QStringList>();
-			}
+
 			switch (type)
 			{
 			case CTCWindows::CASCO::DataType::RetakeOrder:
-				if (pRoute->m_nStateDisOrder == 1 || pRoute->m_nStateDisOrder == 2) {
-					QString statusText = (pRoute->m_nStateDisOrder == 1) ? "签收" : "拒签";
-					TableDataList.append({
-						strTrainNum,
-						pRoute->m_strType,
-						pRoute->m_tSendTime.toString("hh:mm"),
-						pRoute->m_strSendAgency,
-						pRoute->m_strSendName,
-						statusText,
-						pRoute->m_strSignName,
-						pRoute->m_tSignTime.toString("hh:mm")
-						});
-					return TableDataList;
+				for (Station::StaDispatchOrder* pRoute : vecDispatch) {
+					if (pRoute->m_nStateDisOrder == 1 || pRoute->m_nStateDisOrder == 2) {
+						QString statusText = (pRoute->m_nStateDisOrder == 1) ? "签收" : "拒签";
+						TableDataList.append({
+							pRoute->m_strOrderNum,
+							pRoute->m_strType,
+							pRoute->m_tSendTime.toString("hh:mm"),
+							pRoute->m_strSendAgency,
+							pRoute->m_strSendName,
+							statusText,
+							pRoute->m_strSignName,
+							pRoute->m_tSignTime.toString("hh:mm")
+							});
+					}
 				}
-				break;
+				return TableDataList;
 			case CTCWindows::CASCO::DataType::PrecollectionOrder:
-				if (pRoute->m_nStateDisOrder == 0) {
-					Text = "未签收";
-					TableDataList.append({
-						strTrainNum,
-						pRoute->m_strType,
-						pRoute->m_tSendTime.toString("hh:mm"),
-						pRoute->m_strSendAgency,
-						pRoute->m_strSendName,
-						Text,
-						pRoute->m_strSignName,
-						pRoute->m_tSignTime.toString("hh:mm")
-						});
-					return TableDataList;
+				for (Station::StaDispatchOrder* pRoute : vecDispatch) {
+					if (pRoute->m_nStateDisOrder == 0) {
+						Text = "未签收";
+						TableDataList.append({
+							pRoute->m_strOrderNum,
+							pRoute->m_strType,
+							pRoute->m_tSendTime.toString("hh:mm"),
+							pRoute->m_strSendAgency,
+							pRoute->m_strSendName,
+							Text,
+							pRoute->m_strSignName,
+							pRoute->m_tSignTime.toString("hh:mm")
+							});
+					}
 				}
-				break;
+				return TableDataList;
 			default:
 				break;
 			}
@@ -186,9 +287,12 @@ namespace CTCWindows {
                     QMouseEvent* mouseEvent = static_cast<QMouseEvent*>(event);
                     if (mouseEvent->button() == Qt::LeftButton) {
 						ui.label_19->setText(QString("车站命令%1").arg(ui.label_2->text()));
+						m_pStationOrder->RemoveAllRows();
 						ui.tabWidget->setCurrentIndex(0);
-						
-						SetTableWidgetStation(0,0);
+						for (Station::StaDispatchOrder* pCurDispatch : m_vecStationClosedDispatchOrder) {
+							m_pCurDispatch = pCurDispatch;
+							SetTableWidgetStation(0, 0);
+						}
                     }
                 }
 
@@ -199,7 +303,13 @@ namespace CTCWindows {
 					if (mouseEvent->button() == Qt::LeftButton) {
 						ui.label_19->setText(QString("车站命令%1").arg(ui.label_4->text()));
 						ui.tabWidget->setCurrentIndex(0);
-						SetTableWidgetStation(0,1);
+						m_pStationOrder->RemoveAllRows();
+						for (Station::StaDispatchOrder* pCurDispatch : m_vecStationAdvanceReceiptDispatchOrder) {
+							m_pCurDispatch = pCurDispatch;
+							SetTableWidgetStation(0, 1);
+
+						}
+
 					}
 				}
 			}
@@ -208,8 +318,12 @@ namespace CTCWindows {
 					QMouseEvent* mouseEvent = static_cast<QMouseEvent*>(event);
 					if (mouseEvent->button() == Qt::LeftButton) {
 						ui.label_21->setText(QString("调度台命令%1").arg(ui.label_8->text()));
-						ui.tabWidget->setCurrentIndex(1);
-						SetTableWidgetStation(1,0);
+						m_pDispatcherCommand->RemoveAllRows();
+						for (Station::StaDispatchOrder* pCurDispatch : m_vecConsoleHairDispatchOrder) {
+							m_pCurDispatch = pCurDispatch;
+							ui.tabWidget->setCurrentIndex(1);
+							SetTableWidgetStation(1, 0);
+						}
 					}
 				}
 			}
@@ -218,8 +332,12 @@ namespace CTCWindows {
 					QMouseEvent* mouseEvent = static_cast<QMouseEvent*>(event);
 					if (mouseEvent->button() == Qt::LeftButton) {
 						ui.label_21->setText(QString("调度台命令%1").arg(ui.label_10->text()));
+						m_pDispatcherCommand->RemoveAllRows();
 						ui.tabWidget->setCurrentIndex(1);
-						SetTableWidgetStation(1,1);
+						for (Station::StaDispatchOrder* pCurDispatch : m_vecConsoleStorageImpDispatchOrder) {
+							m_pCurDispatch = pCurDispatch;
+							SetTableWidgetStation(1, 1);
+						}
 					}
 				}
 			}
@@ -228,8 +346,12 @@ namespace CTCWindows {
 					QMouseEvent* mouseEvent = static_cast<QMouseEvent*>(event);
 					if (mouseEvent->button() == Qt::LeftButton) {
 						ui.label_21->setText(QString("调度台命令%1").arg(ui.label_12->text()));
-						ui.tabWidget->setCurrentIndex(1);
-						SetTableWidgetStation(1,2);
+						m_pDispatcherCommand->RemoveAllRows();
+						for (Station::StaDispatchOrder* pCurDispatch : m_vecConsoleTobesentDispatchOrder) {
+							m_pCurDispatch = pCurDispatch;
+							ui.tabWidget->setCurrentIndex(1);
+							SetTableWidgetStation(1, 2);
+						}
 					}
 				}
 			}
@@ -238,8 +360,13 @@ namespace CTCWindows {
 					QMouseEvent* mouseEvent = static_cast<QMouseEvent*>(event);
 					if (mouseEvent->button() == Qt::LeftButton) {
 						ui.label_22->setText(QString("机车命令%1").arg(ui.label_14->text()));
+						m_pLocomotiveOrder->RemoveAllRows();
 						ui.tabWidget->setCurrentIndex(2);
-						SetTableWidgetStation(2,0);
+						for (Station::StaDispatchOrder* pCurDispatch : m_vecLocomotiveHairDispatchOrder) {
+							m_pCurDispatch = pCurDispatch;
+
+							SetTableWidgetStation(2, 0);
+						}
 					}
 				}
 			}
@@ -248,8 +375,12 @@ namespace CTCWindows {
 					QMouseEvent* mouseEvent = static_cast<QMouseEvent*>(event);
 					if (mouseEvent->button() == Qt::LeftButton) {
 						ui.label_22->setText(QString("机车命令%1").arg(ui.label_16->text()));
+						m_pLocomotiveOrder->RemoveAllRows();
 						ui.tabWidget->setCurrentIndex(2);
-						SetTableWidgetStation(2,1);
+						for (Station::StaDispatchOrder* pCurDispatch : m_vecLocomotiveStorageImpDispatchOrder) {
+							m_pCurDispatch = pCurDispatch;
+							SetTableWidgetStation(2, 1);
+						}
 					}
 				}
 			}
@@ -258,13 +389,15 @@ namespace CTCWindows {
 					QMouseEvent* mouseEvent = static_cast<QMouseEvent*>(event);
 					if (mouseEvent->button() == Qt::LeftButton) {
 						ui.label_22->setText(QString("机车命令%1").arg(ui.label_18->text()));
+						m_pLocomotiveOrder->RemoveAllRows();
 						ui.tabWidget->setCurrentIndex(2);
-						SetTableWidgetStation(2,2);
+						for (Station::StaDispatchOrder* pCurDispatch : m_vecLocomotiveTobesentDispatchOrder) {
+							m_pCurDispatch = pCurDispatch;
+							SetTableWidgetStation(2, 2);
+						}
 					}
 				}
 			}
-
-
             return StaDispatchOrder::eventFilter(watched, event);
 		}
 
@@ -294,6 +427,16 @@ namespace CTCWindows {
 			ui.widget_7->setMouseTracking(true);
 			ui.widget_8->setMouseTracking(true);
 			ui.widget_9->setMouseTracking(true);
+
+
+			m_pStationOrder->setEditTriggers(QAbstractItemView::NoEditTriggers);
+			m_pDispatcherCommand->setEditTriggers(QAbstractItemView::NoEditTriggers);
+			m_pLocomotiveOrder->setEditTriggers(QAbstractItemView::NoEditTriggers);
+			m_pCopyTable->setEditTriggers(QAbstractItemView::NoEditTriggers);
+			m_pReadTable->setEditTriggers(QAbstractItemView::NoEditTriggers);
+			m_pdispatchTable->setEditTriggers(QAbstractItemView::NoEditTriggers);
+			m_pLocomotiveTable->setEditTriggers(QAbstractItemView::NoEditTriggers);
+
 		}
 
 		void StaDispatchOrderKSK::SetTableWidgetStation(int index, int flag)
@@ -302,42 +445,45 @@ namespace CTCWindows {
 			if (m_pCurDispatch == nullptr) {
 				return;
 			}
-			QVector<QStringList> TableDataList;
 			if (index == 0) {//车站
 				if (flag == 0) {
-					TableDataList = GetStationOrderData(m_pCurDispatch->m_strOrderNum, m_pCurDispatch,DataType::RetakeOrder);
+					TableDataList = GetStationOrderData(m_pCurDispatch->m_strOrderNum, m_vecStationClosedDispatchOrder,DataType::RetakeOrder);
 					m_pStationOrder->ResetTableRows(TableDataList);
 				}
 				else if (flag == 1) {
-					TableDataList = GetStationOrderData(m_pCurDispatch->m_strOrderNum, m_pCurDispatch,DataType::PrecollectionOrder);
 
+					TableDataList = GetStationOrderData(m_pCurDispatch->m_strOrderNum, m_vecStationAdvanceReceiptDispatchOrder, DataType::PrecollectionOrder);
 					m_pStationOrder->ResetTableRows(TableDataList);
 				}
 			}
 			else if (index == 1) {//调度台
 				if (flag == 0) {//发送
-					TableDataList = GetDispatcherReceivingData(m_pCurDispatch->m_strOrderNum, m_pCurDispatch, DataType::IssueAnOrder);
+	
+					TableDataList = GetDispatcherReceivingData(m_pCurDispatch->m_strOrderNum, m_vecConsoleHairDispatchOrder, DataType::IssueAnOrder);
 					m_pDispatcherCommand->ResetTableRows(TableDataList);
 				}
 				else if (flag == 1) {//储令
-					TableDataList = GetDispatcherReceivingData(m_pCurDispatch->m_strOrderNum, m_pCurDispatch, DataType::ReserveOrder);
+					TableDataList = GetDispatcherReceivingData(m_pCurDispatch->m_strOrderNum, m_vecConsoleStorageImpDispatchOrder, DataType::ReserveOrder);
+					m_pDispatcherCommand->ResetTableRows(TableDataList);
 				}
+				
 				else if (flag == 2) {//待发
-					TableDataList = GetDispatcherReceivingData(m_pCurDispatch->m_strOrderNum, m_pCurDispatch, DataType::PendingOrder);
+					TableDataList = GetDispatcherReceivingData(m_pCurDispatch->m_strOrderNum, m_vecConsoleTobesentDispatchOrder, DataType::PendingOrder);
 					m_pDispatcherCommand->ResetTableRows(TableDataList);
 				}
 			}
 			else if (index == 2) {//机车
 				if (flag == 0) {//发送
-					TableDataList = GetTheLocomotiveCollectionData(m_pCurDispatch->m_strOrderNum, m_pCurDispatch, DataType::IssueAnOrder);
+					
+					TableDataList = GetTheLocomotiveCollectionData(m_pCurDispatch->m_strOrderNum, m_vecLocomotiveHairDispatchOrder, DataType::IssueAnOrder);
 					m_pLocomotiveOrder->ResetTableRows(TableDataList);
 				}
 				else if (flag == 1) {//储令
-					TableDataList = GetTheLocomotiveCollectionData(m_pCurDispatch->m_strOrderNum, m_pCurDispatch, DataType::ReserveOrder);
+					TableDataList = GetTheLocomotiveCollectionData(m_pCurDispatch->m_strOrderNum, m_vecLocomotiveStorageImpDispatchOrder, DataType::ReserveOrder);
 					m_pLocomotiveOrder->ResetTableRows(TableDataList);
 				}
 				else if (flag == 2) {//待发
-					TableDataList = GetTheLocomotiveCollectionData(m_pCurDispatch->m_strOrderNum, m_pCurDispatch, DataType::PendingOrder);
+					TableDataList = GetTheLocomotiveCollectionData(m_pCurDispatch->m_strOrderNum, m_vecLocomotiveTobesentDispatchOrder, DataType::PendingOrder);
 					m_pLocomotiveOrder->ResetTableRows(TableDataList);
 				}
 			}
@@ -350,41 +496,74 @@ namespace CTCWindows {
 			m_pStationOrder->SetHeadData(GetTrainRouteTableHeadInfo(TableSpecies::station), HHead);
 			ui.frame->layout()->addWidget(m_pStationOrder); 
 
+			connect(m_pStationOrder, &CTCWindows::Control::TableView::clicked, [=](const QModelIndex& index) {
+				qDebug() << "单击行:" << index.row()<<"车站"<< ui.label_19->text();
+				m_nrow = index.row();
+			});
+
 			m_pDispatcherCommand = new Control::TableView(this);//调度台
 			m_pDispatcherCommand->SetSectionText("序", 36);
 			m_pDispatcherCommand->SetHeadData(GetTrainRouteTableHeadInfo(TableSpecies::Dispatcher), HHead);
 			ui.frame_4->layout()->addWidget(m_pDispatcherCommand);
+
+			connect(m_pDispatcherCommand, &CTCWindows::Control::TableView::clicked, [=](const QModelIndex& index) {
+				qDebug() << "单击行:" << index.row() << "调度台";
+				m_nrow = index.row();
+				});
 
 			m_pLocomotiveOrder = new Control::TableView(this);//机车
 			m_pLocomotiveOrder->SetSectionText("序", 36);
 			m_pLocomotiveOrder->SetHeadData(GetTrainRouteTableHeadInfo(TableSpecies::Locomot), HHead);
 			ui.frame_7->layout()->addWidget(m_pLocomotiveOrder);
 
+			connect(m_pLocomotiveOrder, &CTCWindows::Control::TableView::clicked, [=](const QModelIndex& index) {
+				qDebug() << "单击行:" << index.row() << "机车";
+				m_nrow = index.row();
+				});
+
 			m_pCopyTable = new Control::TableView(this);;	//抄知处所表格
 			m_pCopyTable->SetSectionText("序", 36);
 			m_pCopyTable->SetHeadData(GetTrainRouteTableHeadInfo(TableSpecies::CopyTable), HHead);
 			ui.frame_2->layout()->addWidget(m_pCopyTable);
+
+			connect(m_pCopyTable, &CTCWindows::Control::TableView::clicked, [=](const QModelIndex& index) {
+				qDebug() << "单击行:" << index.row() << "抄知处所";
+
+				});
 
 			m_pReadTable = new Control::TableView(this);;	//阅读表格
 			m_pReadTable->SetSectionText("序", 36);
 			m_pReadTable->SetHeadData(GetTrainRouteTableHeadInfo(TableSpecies::ReadTable), HHead);
 			ui.frame_3->layout()->addWidget(m_pReadTable);
 
+			connect(m_pReadTable, &CTCWindows::Control::TableView::clicked, [=](const QModelIndex& index) {
+				qDebug() << "单击行:" << index.row() << "阅读表格";
+				});
+
 			m_pdispatchTable = new Control::TableView(this);;	//调度台接收表格
 			m_pdispatchTable->SetSectionText("序", 36);
 			m_pdispatchTable->SetHeadData(GetTrainRouteTableHeadInfo(TableSpecies::DispatchTable), HHead);
 			ui.frame_5->layout()->addWidget(m_pdispatchTable);
+
+			connect(m_pdispatchTable, &CTCWindows::Control::TableView::clicked, [=](const QModelIndex& index) {
+				qDebug() << "单击行:" << index.row() << "调度台接收";
+				});
 
 			m_pLocomotiveTable = new Control::TableView(this);;	//机车接收表格
 			m_pLocomotiveTable->SetSectionText("序", 36);
 			m_pLocomotiveTable->SetHeadData(GetTrainRouteTableHeadInfo(TableSpecies::LocomotTable), HHead);
 			ui.frame_6->layout()->addWidget(m_pLocomotiveTable);
 
+			connect(m_pLocomotiveTable, &CTCWindows::Control::TableView::clicked, [=](const QModelIndex& index) {
+				qDebug() << "单击行:" << index.row() << "机车接收表格";
+				});
+
 		}
 
 		QVector<Control::TableViewHeadInfo> StaDispatchOrderKSK::GetTrainRouteTableHeadInfo(TableSpecies m_intSpecies)
 		{
 			QVector<Control::TableViewHeadInfo> vecHeadInfo;
+
 			switch (m_intSpecies)
 			{
 			case TableSpecies::station://车站
@@ -400,7 +579,6 @@ namespace CTCWindows {
 					{ "", 0 }	//占位
 				};
 				return vecHeadInfo;
-				break;
 			case TableSpecies::Dispatcher://调度台
 				vecHeadInfo = {
 					{ "编号", 96 },
@@ -411,7 +589,6 @@ namespace CTCWindows {
 					{ "", 0 }	//占位
 				};
 				return vecHeadInfo;
-				break;
 			case TableSpecies::Locomot://机车
 				vecHeadInfo = {
 					{ "编号", 96 },
@@ -472,11 +649,10 @@ namespace CTCWindows {
 					{ "", 0 }	//占位
 				};
 				return vecHeadInfo;
-				break;
 			default:
 				break;
 			}
-
+			return vecHeadInfo;
 		}
 
 	}

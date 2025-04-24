@@ -18,6 +18,8 @@ namespace CTCWindows {
 			// 初始化工具栏-底部行车日志工具栏
 			void InitbottomTrafficLogToolBar() override;
 
+			BaseWnd::StaTraindiagramwidget* CreateStaTraindiagramwidget() override;
+			
 			//创建单站界面
 			BaseWnd::StationCtrlDisp* CreateStationCtrlDisp() override;
 			//创建站间透明界面
@@ -31,6 +33,7 @@ namespace CTCWindows {
 			//创建显示设置界面
 			BaseWnd::StaVisibleSet* CreateStaVisibleSet() override;
 
+			void InitStaTraindiagramwidget() override;
 			//初始化主菜单
 			void InitStationViewMenuBar() override;
 			//初始化工具栏-主工具栏
@@ -42,7 +45,7 @@ namespace CTCWindows {
 			//初始化工具栏-状态工具栏
 			void InitStateToolBar() override;
 			QLayout* WidgetLayout() override { return ui.centralWidget->layout(); }
-
+			void InitStatusBar() override {};
 		private:
 			Ui::StationViewTH ui;
 		};

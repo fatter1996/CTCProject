@@ -35,6 +35,9 @@ namespace CTCWindows {
         m_pStationLog = CreateTrafficLogDisp();
         //创建进路序列窗口
         m_pRoutePlanWnd = CreateStaRoutePlanWnd();
+        m_pStaTrain = CreateStaTraindiagramwidget();
+        //图标转换界面
+        //m_pStaTrain
         //初始化主菜单
         InitStationViewMenuBar();
         //初始化工具栏-主工具栏
@@ -46,9 +49,11 @@ namespace CTCWindows {
         //初始化工具栏-签收工具栏
         InitStateToolBar();
         InitbottomTrafficLogToolBar();
+        InitStaTraindiagramwidget();
         InitStatusBar();
-        //初始化界面布局
 
+        //初始化界面布局
+        m_buttonTimerId = startTimer(200);
         InitViewLayout();
     }
 
@@ -77,6 +82,10 @@ namespace CTCWindows {
             if (pServerComLabel) {
                 pServerComLabel->hide();
             }
+        }
+        if (m_pStaTrain) {
+            WidgetLayout()->addWidget(m_pStaTrain);
+            m_pStaTrain->hide();
         }
         if (m_pStationLog) {
             WidgetLayout()->addWidget(m_pStationLog);
@@ -151,79 +160,22 @@ namespace CTCWindows {
     }
     void CTCMainWindow::timerEvent(QTimerEvent* event)
     {
-        if (TimerId == event->timerId()) {
-            upDateTime();
+
+        if (Station::MainStation()->NewDispatchOrder()) {
+            QPushButton* pDispatchBtn = m_pSignForToolBar->findChild<QPushButton*>("dispatchBtn");
+            if (pDispatchBtn) {
+                if (Station::Device::DeviceBase::getElapsed()) {
+                    pDispatchBtn->setStyleSheet("QPushButton{background-color: rgb(210, 210, 210);}");
+                }
+                else {
+                    pDispatchBtn->setStyleSheet("QPushButton{background-color: #FD0C0C;}");
+                }
+                m_pSignForToolBar->update();
+            }
         }
         return QMainWindow::timerEvent(event);
     }
-    void CTCMainWindow::InitStatusBar()
-    {
-        TimerId = startTimer(1000);
-        m_pStatusBar = new QStatusBar(this);
-        QWidget* m_pStatusBarWidget = new QWidget;
-        QHBoxLayout* StatusLayout = new QHBoxLayout(m_pStatusBarWidget);
-        m_pStatusBar->setFixedHeight(25);
-        m_pStatusBarWidget->setFixedHeight(25);
-        StatusLayout->setMargin(0);
-        QLabel* permanentLabel = new QLabel("中国铁道科学研究院");
-        permanentLabel->setStyleSheet(" border: 0.5px solid #ccc;");
-        QDateTime currentDateTime = QDateTime::currentDateTime();
-        QString timeStr = currentDateTime.toString("yyyy-MM-dd hh:mm:ss");
-        TimeLabel = new QLabel(QString("%1  %2").arg(timeStr).arg(getWeekday(currentDateTime)));
-        QLabel* permanentLabel3 = new QLabel(QString("本站名：%1").arg(Station::MainStation()->getStationName()));
 
-
-        QWidget* LabelWidget = new QWidget(m_pStatusBar);
-        LabelWidget->setObjectName("LabelName");
-
-        LabelWidget->setStyleSheet("QWidget#LabelName{border: 0.5px solid #ccc;}");
-        QLabel* Label1 = new QLabel(QString("1"));
-        QLabel* Label2 = new QLabel(QString("安六台"));
-        QSpacerItem* spacer = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
-        QHBoxLayout* Labellayout = new QHBoxLayout(LabelWidget);
-        Labellayout->setMargin(0);
-
-        Labellayout->addWidget(Label1);
-        Labellayout->addWidget(Label2);
-        Labellayout->addItem(spacer);
-        TimeLabel->setStyleSheet(" border: 0.5px solid #ccc;");
-        permanentLabel3->setStyleSheet(" border: 0.5px solid #ccc;");
-        StatusLayout->addWidget(permanentLabel, 1);
-        StatusLayout->addWidget(TimeLabel, 1);
-        StatusLayout->addWidget(permanentLabel3, 8);
-        StatusLayout->addWidget(LabelWidget, 0);
-
-        m_pStatusBar->addWidget(m_pStatusBarWidget, 1);
-
-    }
-    QString CTCMainWindow::getWeekday(const QDateTime& dateTime) {
-        int weekday = dateTime.date().dayOfWeek();
-        switch (weekday) {
-        case 1:
-            return "星期一";
-        case 2:
-            return "星期二";
-        case 3:
-            return "星期三";
-        case 4:
-            return "星期四";
-        case 5:
-            return "星期五";
-        case 6:
-            return "星期六";
-        case 7:
-            return "星期日";
-        default:
-            return "";
-        }
-    }
-    void CTCMainWindow::upDateTime()
-    {
-        QDateTime currentDateTime = QDateTime::currentDateTime();
-        QString timeStr = currentDateTime.toString("yyyy-MM-dd hh:mm:ss");
-        TimeLabel->setText(QString("%1  %2").arg(timeStr).arg(getWeekday(currentDateTime)));
-
-    }
     void CTCMainWindow::TurnToStationCtrlDisp()
     {
         if (m_pCurShowView != m_pStationCtrl) {
@@ -264,7 +216,11 @@ namespace CTCWindows {
             m_pCurShowView = m_pStationMulti;
             m_pCurShowView->show();
         }
-
+        if (m_pCurShowView != m_pStaTrain) {
+            m_pCurShowView->hide();
+            m_pCurShowView = m_pStaTrain;
+            m_pCurShowView->show();
+        }
         if (m_pCurToolBar != m_pStationViewToolBar) {
             m_pCurToolBar->hide();
             m_pCurToolBar = m_pStationViewToolBar;
@@ -288,6 +244,21 @@ namespace CTCWindows {
         setMouseState(MouseState::Default);
     }
 
+    void CTCMainWindow::TurnToTraindiagramDisp()
+    {
+        if (m_pCurShowView != m_pStaTrain) {
+            m_pCurShowView->hide();
+            m_pCurShowView = m_pStaTrain;
+            m_pCurShowView->show();
+        }
+        else if (m_pCurShowView == m_pStaTrain) {
+            m_pCurShowView->hide();
+            m_pCurShowView = m_pStationLog;
+            m_pCurShowView->show();
+        }
+        emit DrawLine();
+    }
+
     void CTCMainWindow::TurnToTrafficLogDisp()
     {
         if (m_pCurShowView != m_pStationLog) {
@@ -302,6 +273,7 @@ namespace CTCWindows {
             m_pCurToolBar = m_pTrafficLogToolBar;
             m_pCurToolBar->show();
         }
+        //if(m_pCurShowView != )
 
         QPushButton* pSendPlanBtn = m_pStateToolBar->findChild<QPushButton*>("sendPlanBtn");
         if (pSendPlanBtn) {
@@ -344,6 +316,13 @@ namespace CTCWindows {
 
     void CTCMainWindow::ShowDispatchOrderWnd()
     {
+        Station::MainStation()->ClearNewDispatchOrder();
+        if (Station::MainStation()->NewDispatchOrder() == nullptr) {
+            if (m_pSignForToolBar->findChild<QPushButton*>("dispatchBtn") != nullptr) {
+                QPushButton* pDispatchBtn = m_pSignForToolBar->findChild<QPushButton*>("dispatchBtn");
+                pDispatchBtn->setStyleSheet("QPushButton{background-color: rgb(210, 210, 210);}");
+            }
+        }
         BaseWnd::StaDispatchOrder* pDispatchOrderWnd = CreateStaDispatchOrder();
         pDispatchOrderWnd->setAttribute(Qt::WA_DeleteOnClose);
         pDispatchOrderWnd->ViewPermission(Station::LimitsOfAuthority::employee);
@@ -356,10 +335,17 @@ namespace CTCWindows {
             QMessageBox::warning(this, MSGBOX_TITTLE, "没有收到调度命令", "确定");
             return;
         }
+
         DispatchOrderSign* pDispatchOrderSign = new DispatchOrderSign(this);
         pDispatchOrderSign->setAttribute(Qt::WA_DeleteOnClose);
         pDispatchOrderSign->InitNewDispatchOrder(Station::MainStation()->NewDispatchOrder());
         pDispatchOrderSign->exec();
+        if (Station::MainStation()->NewDispatchOrder() == nullptr) {
+            if (m_pSignForToolBar->findChild<QPushButton*>("dispatchBtn") != nullptr) {
+                QPushButton* pDispatchBtn = m_pSignForToolBar->findChild<QPushButton*>("dispatchBtn");
+                pDispatchBtn->setStyleSheet("QPushButton{background-color: rgb(210, 210, 210);}");
+            }
+        }
     }
 
     void CTCMainWindow::ShowVisibleSetWnd()

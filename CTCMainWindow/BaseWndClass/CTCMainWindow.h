@@ -15,7 +15,7 @@
 #include "ModuleWidget/StaRoutePlan.h"
 #include "ModuleWidget/StaDispatchOrder.h"
 #include "ModuleWidget/StaVisibleSet.h"
-
+#include "StationView//StaTraindiagramwidget.h"
 #define STAVIEW_TOOL  1
 #define LOGVIEW_TOOL  2
 
@@ -91,6 +91,7 @@ namespace CTCWindows {
 		virtual BaseWnd::StaRoutePlan* CreateStaRoutePlanWnd() = 0;
 		virtual BaseWnd::StaDispatchOrder* CreateStaDispatchOrder() = 0;
 		virtual BaseWnd::StaVisibleSet* CreateStaVisibleSet() = 0;
+		virtual BaseWnd::StaTraindiagramwidget* CreateStaTraindiagramwidget() = 0;
 
 		//初始化主菜单
 		virtual void InitStationViewMenuBar() = 0;
@@ -104,17 +105,25 @@ namespace CTCWindows {
 		virtual void InitStateToolBar() = 0;
 		// 初始化工具栏-底部行车日志工具栏
 		virtual void InitbottomTrafficLogToolBar() = 0 ;
+
+		virtual void InitStaTraindiagramwidget() = 0;
+
 		virtual QLayout* WidgetLayout() = 0;
+		virtual void InitStatusBar() = 0;
 	private:
 		//初始化界面布局
 		void InitViewLayout();
 	signals:
 		void ModifyContent(QString Content, int TextColor, int BackColor, Station::Device::StaTextSign* pTextSign);
+	signals:
+		void DrawLine();
+
 	public slots:
 		void onButtonToggled(bool checked);
-		void InitStatusBar();
+	
 		void TurnToStationCtrlDisp();
 		void TurnToStationMultiDisp();
+		void TurnToTraindiagramDisp();
 		void TurnToTrafficLogDisp();
 		void ShowStagePlanSignWnd();
 		void ShowStaRoutePlanWnd(bool bShow = true);
@@ -127,8 +136,7 @@ namespace CTCWindows {
 			bool bCheckable = false, bool bChecked = false, bool bEnabled = true, const QString& strIconFile2 = "");
 		void AddToolBarSeparator(int nType);
 		void timerEvent(QTimerEvent* event);
-		QString getWeekday(const QDateTime& dateTime);
-		void upDateTime();
+
 	public:
 		BaseWnd::StationCtrlDisp* StaCtrlDisp() const { return m_pStationCtrl; }
 		BaseWnd::StationMultiDisp* MultiDisp() const { return m_pStationMulti; }
@@ -143,11 +151,11 @@ namespace CTCWindows {
 		bool IsShowToolbar() const { return !m_pStationViewToolBar->isHidden(); }
 
 	protected:
-		int TimerId = 0;
-		QLabel* TimeLabel = nullptr;
+
 		BaseWnd::StationCtrlDisp* m_pStationCtrl = nullptr;	//单站界面
 		BaseWnd::StationMultiDisp* m_pStationMulti = nullptr; //站间透明
 		BaseWnd::StationLogDisp* m_pStationLog = nullptr; //行车日志
+		BaseWnd::StaTraindiagramwidget* m_pStaTrain = nullptr;//图标转换
 		QMenuBar* m_pMenuBar = nullptr; //主菜单
 		QVector<MenuBarInfo*> m_vecMenuBarInfo;
 		QStatusBar* m_pStatusBar = nullptr;//底部状态栏
@@ -166,7 +174,7 @@ namespace CTCWindows {
 		MouseState m_eMouseState = MouseState::Default;
 		MenuSyncAction m_stuMenuSyncAction;
 		QAction* m_pRoutePlanAction = nullptr;
-
+		int m_buttonTimerId = 0;
 		bool m_bShowToolbarBtn = true;
 		bool m_bShowToolbarLabel = true;
 	};

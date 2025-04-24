@@ -228,6 +228,14 @@ namespace Station {
 
 	public:
 		static void Init(StaDispatchOrder* pDispatch, const QJsonObject& subObj);
+		void setOrderNum() {
+			int i = 0;
+			// 找到第一个非 0 字符的位置
+			while (i < m_strOrderNum.length() && m_strOrderNum[i] == '0') {
+				++i;
+			}
+			m_strOrderNum = m_strOrderNum.mid(i);
+		}
 		static QMap<QString,QString> GetOrder(int m_nOrderId,int m_nOrderType, int m_nSendState);
 	};
 

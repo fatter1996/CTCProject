@@ -10,6 +10,7 @@ namespace CTCWindows {
 		{
 			ui.setupUi(this);
 			ui.receiveTree->setColumnCount(2);
+			ui.receiveTree->setColumnWidth(0,240);
 			ui.receiveTree->setHeaderHidden(true);
 			ui.importantTree->setColumnCount(2);
 			ui.importantTree->setHeaderHidden(true);

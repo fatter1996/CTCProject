@@ -192,7 +192,7 @@ namespace Station {
         {
             if (dataAyyay[16] == 0x01) {   //下发
                 StaStagePlan* pStaStagePlan = new StaStagePlan;
-                pStaStagePlan->m_strPlanNum = dataAyyay.mid(12, 4);
+                pStaStagePlan->m_strPlanNum = QString::fromLocal8Bit(dataAyyay.mid(12, 4).toHex());
                 int nFlag = 17;
                 pStaStagePlan->m_nPlanType = dataAyyay[nFlag++];
                 int len = dataAyyay[nFlag++];
@@ -247,7 +247,7 @@ namespace Station {
         {
             StaDispatchOrder* pDispatch = new StaDispatchOrder;
             int flag = 12;
-            pDispatch->m_strOrderNum = QString::fromLocal8Bit(dataAyyay.mid(flag, 8));
+            pDispatch->m_strOrderNum = QString::fromLocal8Bit(dataAyyay.mid(flag, 8).toHex());
             flag += 8;
             QString strDepartTime = QString("%1-%2-%3T%4:%5:%6")
                 .arg((dataAyyay[flag] & 0xFF) + (dataAyyay[flag + 1] & 0xFF) * 256)

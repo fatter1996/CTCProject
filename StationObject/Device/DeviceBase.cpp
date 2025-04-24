@@ -354,6 +354,20 @@ namespace Station {
             if (m_mapClickEvent[m_strType].contains(CTCWindows::BaseWnd::StaFunBtnToolBar::getCurrFunType())) {
                 m_mapClickEvent[m_strType][CTCWindows::BaseWnd::StaFunBtnToolBar::getCurrFunType()](this);
             }
+            Station::Device::StaSignal* pSignal = nullptr;
+            if (m_strType == "XHD") {
+                qDebug() << Station::MainStation()->getSignalBtn().size() ;
+                for (signalBtn* pSignalBtn : Station::MainStation()->getSignalBtn()) {
+                    if (pSignalBtn->Signame == getName()) {
+                        for (Station::Device::DeviceBase* pDevice : Station::MainStation()->getDeviceVectorByType(SIGNALLAMP)) {
+                            pSignal = dynamic_cast<Station::Device::StaSignal*>(pDevice);
+                            if (pSignalBtn->Btnname.contains(pSignal->getName())) {
+                                qDebug() << pSignal->getName() << pSignalBtn->Signame << pSignalBtn->Btnname;
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         StaSection::StaSection(QObject* pParent)

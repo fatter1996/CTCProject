@@ -3,7 +3,7 @@
 #include <QAbstractButton>
 #include <QEvent>
 #include <QStylePainter>
-
+#include <QDebug>
 #pragma execution_character_set("utf-8")
 
 namespace CTCWindows {
@@ -18,6 +18,7 @@ namespace CTCWindows {
             horizontalHeader()->setMinimumHeight(16);
             setContextMenuPolicy(Qt::CustomContextMenu);
             setMinimumHeight(64);
+
         }
 
         TableView::~TableView()
@@ -84,6 +85,7 @@ namespace CTCWindows {
             setRowCount(vecTableData.size() + nStartRow);
             QTableWidgetItem* item = nullptr;
             QString strData;
+
             for (int i = nStartRow; i < vecTableData.size() + nStartRow; i++) {
                 for (int j = 0; j < vecTableData[i].size(); j++) {
                     if (j < columnCount()) {
@@ -103,6 +105,7 @@ namespace CTCWindows {
 
         void TableView::RemoveAllRows()
         {
+            int num = rowCount();
             while (rowCount() > 0) {
                 removeRow(0); // 从第一行开始删除
             }

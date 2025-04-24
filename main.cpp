@@ -8,6 +8,7 @@ int main(int argc, char *argv[])
     QApplication a(argc, argv);
     //LntervallogicCheck* check = new LntervallogicCheck;
     //check->show();
+
     CTCDoc::CTCObject CTCObject;
     QMainWindow* mainWnd = CTCObject.CreatCTCMainWnd();
     if (mainWnd) {

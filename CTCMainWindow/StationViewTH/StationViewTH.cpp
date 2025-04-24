@@ -32,6 +32,11 @@ namespace CTCWindows {
 		{
 		}
 
+		BaseWnd::StaTraindiagramwidget* StationViewTH::CreateStaTraindiagramwidget()
+		{
+			return nullptr;
+		}
+
 
 		BaseWnd::StationCtrlDisp* StationViewTH::CreateStationCtrlDisp()
 		{
@@ -61,6 +66,10 @@ namespace CTCWindows {
 		BaseWnd::StaVisibleSet* StationViewTH::CreateStaVisibleSet()
 		{
 			return new CASCO::StaVisibleSetKSK(this);
+		}
+
+		void StationViewTH::InitStaTraindiagramwidget()
+		{
 		}
 
 		void StationViewTH::InitStationViewMenuBar()

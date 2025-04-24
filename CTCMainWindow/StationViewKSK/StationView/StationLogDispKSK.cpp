@@ -173,6 +173,7 @@ namespace CTCWindows {
 				{ 0, 66, 1, 5, "ÖØµã"},	
 			};
 			pTrafficLogTable->TableHeadInit(5, 67, vecTableHeadInfo);
+			
 		}
 
 		void StationLogDispKSK::AddTrafficLogTable()

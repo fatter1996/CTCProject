@@ -106,7 +106,7 @@ namespace CTCWindows {
             void InitTrafficLogTable();
             virtual void InitTrafficLogTableHead() = 0;
             virtual void AddTrafficLogTable() = 0;
-
+			
         public slots:
 			virtual void OnTrafficLogTableUpData() = 0;
 			virtual void ShowTableHead(bool bShow = true) {};
@@ -132,7 +132,6 @@ namespace CTCWindows {
             virtual void AdjacentStationDepart(const QDateTime& tReportTime = QDateTime());
             //邻站到达
             virtual void AdjacentStationArrival(const QDateTime& tReportTime = QDateTime());
-
         protected:
             Control::RichTableView* pTrafficLogTable = nullptr;
             Station::StaTrafficLog* m_pCurTrafficLog = nullptr;

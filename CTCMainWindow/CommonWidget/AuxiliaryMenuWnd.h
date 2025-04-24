@@ -17,8 +17,6 @@ namespace CTCWindows {
 
 		QPushButton* AddNewAuxiliaryBtn(QString strName, std::function<void()> CallBack);
 		void ShowSealTechnique();
-		void addString(QString LampStr);
-		QStringList  getStrList();
 	private:
 		SealTechnique* m_pSealTechnique = nullptr;
 		static QStringList m_stringList;

@@ -234,6 +234,7 @@ namespace Station {
 
         void StaSignal::DrawDeviceNameRange()
         {
+            
             m_pPainter.setPen(QPen(COLOR_TRACK_WHITE, 1, Qt::DashLine));
             m_pPainter.setBrush(COLOR_TRACK_SELECT_BLUE);
             m_pPainter.drawRect(Scale(OutSideRect(m_rcTextRect, 2, 0)));
@@ -245,6 +246,7 @@ namespace Station {
             m_pPainter.setBrush(COLOR_LIGHT_BLACK);
 
             if (m_nSelectType & 0x02) {   //列车信号机按钮
+                qDebug() << "1";
                 m_pPainter.drawRect(Scale(OutSideRect(m_rcTrainBtn, 1, 1)));
             }
             if (m_nSelectType & 0x04) {   //调车信号机按钮

@@ -190,7 +190,6 @@ namespace Station {
             CTCWindows::AuxiliaryMenuWnd* auxiliary = new CTCWindows::AuxiliaryMenuWnd;
             m_pPainter.setRenderHint(QPainter::Antialiasing, true);
             for (StaBlockLamp& lamp : m_vecBlockLamp) { 
-                auxiliary->addString(lamp.m_strName);
                 m_pPainter.drawText(Scale(lamp.m_rcName), lamp.m_strName, QTextOption(Qt::AlignCenter));
                 m_pPainter.setBrush((lamp.m_nState & 0x10) ? COLOR_LIGHT_RED : COLOR_LIGHT_BLACK);
                 m_pPainter.drawEllipse(Scale(lamp.m_rcLamp));
@@ -241,7 +240,9 @@ namespace Station {
             
             while (nIndex < 3) {
                 m_pPainter.setBrush(Qt::NoBrush);
+                m_pPainter.setPen(Qt::white);
                 m_pPainter.drawRect(Scale(rcTeainNum[nIndex]));
+
                 if (nIndex < vecTrainRoute.size()) {
                     pTrain = MainStation()->getStaTrainById(vecTrainRoute[nIndex]->m_nTrainId);
                     StaTrainRoute* pRoute = vecTrainRoute[nIndex];

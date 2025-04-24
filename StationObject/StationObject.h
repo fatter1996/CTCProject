@@ -16,7 +16,21 @@ namespace Station {
         reduce,     //缩小
         revert      //还原
     };
-
+    struct RailwayLine {
+        QString startStation;
+        QString middleStation;
+        QString endStation;
+    };
+    struct TrainDiagramInfo //运行图界面定义
+    {
+        int width = 0;
+        int height = 0;
+        int linenum = 0;
+        int miniteDistance = 0; //十分格距离
+        int stationDistance = 0; //车站间距离
+        int lintDistance = 0; //线路间距离
+        QVector<RailwayLine> vectRailwayLine;
+    }; //运行图
     enum class DiploidRatio : int {
         StaDiploid,             //站场图缩放
         StaTrainNumDiploid,     //车次缩放
@@ -28,6 +42,12 @@ namespace Station {
     {
         QString m_strName;
         QString m_strPassWord;
+    };
+    struct signalBtn 
+    {
+        QString Signame;
+        QStringList Btnname;
+        QStringList DBtnname;
     };
 
     class StationObject : public QObject { 
@@ -42,8 +62,11 @@ namespace Station {
         int ReadStationInfoByTxt(const QString& filePath); //解析"station.txt"
         void InitStaDevice();   //站场设备初始化
         int ReadDeviceConfig(const QString& filePath); //解析"DeviceConfig.json"
+        int ReadChartConfig(const QString& filePath); //解析"Chart_Conversion.json"
+        int ReadInterLock(const QString& filePath);   //解析"InterlockTable.txt"
         void SetVisible(VisibleDev devType, bool bVisible);
         bool IsVisible(VisibleDev devType);
+        void InterLockfileAnalysis(QString Line);
         void AddNewTextSign(const QString& strText, const QPoint& ptPos, const QColor& colFont = Qt::black, const QColor& colBackground = Qt::white, int nSize = 10);
         void ClearAllTextSign();
     signals:
@@ -76,6 +99,8 @@ namespace Station {
         bool IsMainStation() const { return m_bMainStation; }
         QWidget* ShowWidget() const { return m_pShowWidget; }
         QStringList ReadMapDevice();
+        QVector<signalBtn*> getSignalBtn() { return m_vecSignalBtn; }
+        TrainDiagramInfo* getTrainDiagram() { return &TrainDiagram; }
     public:
         static void InitCreatDeviceMap();
 
@@ -94,8 +119,9 @@ namespace Station {
         QWidget* m_pShowWidget = nullptr;
 
     private:
-
+        static QVector<signalBtn*> m_vecSignalBtn;
         static int UpState;
+        static TrainDiagramInfo TrainDiagram;
         static QXmlStreamReader* m_pDeviceInfoReader;  //XML解析器
         static QMap<QString, std::function<Device::DeviceBase* (StationObject*)>> m_mapCreatDeviceVector;
         int m_nTimerId_500;
@@ -186,7 +212,7 @@ namespace Station {
         };
         int getStaLimits(Limits type);
         void setStaLimits(Limits type, int nValue);
-
+        QVector<StaTrafficLog*> getvecTrafficLog() { return m_vecStaTrafficLog;}
     public slots:
         void onReciveData(const QByteArray& dataAyyay);
         void onOrderIssued();

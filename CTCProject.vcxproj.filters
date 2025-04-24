@@ -225,6 +225,27 @@
     <ClCompile Include="CTCMainWindow\CustomControl\CarLocationEdit.cpp">
       <Filter>CTCMainWindow\CustomControl</Filter>
     </ClCompile>
+    <ClCompile Include="CTCMainWindow\CustomControl\TextSignLable.cpp">
+      <Filter>StationObject\Device</Filter>
+    </ClCompile>
+    <ClCompile Include="StationObject\Device\StaTextSign.cpp">
+      <Filter>StationObject\Device</Filter>
+    </ClCompile>
+    <ClCompile Include="CTCMainWindow\StationViewTKY\ModuleWidget\EditingInterfaceTKY.cpp">
+      <Filter>CTCMainWindow\StationViewTKY\ModuleWidget</Filter>
+    </ClCompile>
+    <ClCompile Include="CTCMainWindow\StationViewKSK\ModuleWidget\TrainInformationInterfaceKSK.cpp">
+      <Filter>CTCMainWindow\StationViewKSK\ModuleWidget</Filter>
+    </ClCompile>
+    <ClCompile Include="CTCMainWindow\BaseWndClass\ModuleWidget\StaTreeNode.cpp">
+      <Filter>CTCMainWindow\BaseWndClass\ModuleWidget</Filter>
+    </ClCompile>
+    <ClCompile Include="CTCMainWindow\BaseWndClass\StationView\StaTraindiagramwidget.cpp">
+      <Filter>CTCMainWindow\BaseWndClass\StationView</Filter>
+    </ClCompile>
+    <ClCompile Include="CTCMainWindow\StationViewKSK\ModuleWidget\StaTraindiagramwidgetKSK.cpp">
+      <Filter>CTCMainWindow\StationViewKSK\ModuleWidget</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CTCObject\CTCObject.h">
@@ -295,9 +316,12 @@
     </ClInclude>
     <ClInclude Include="Config.h" />
     <ClInclude Include="resource.h" />
-     <ClInclude Include="Global.h" />
+    <ClInclude Include="Global.h" />
     <ClInclude Include="StationObject\Device\StaTextSign.h">
       <Filter>StationObject\Device</Filter>
+    </ClInclude>
+    <ClInclude Include="CTCMainWindow\BaseWndClass\StationView\StaTraindiagramwidget.h">
+      <Filter>CTCMainWindow\BaseWndClass\StationView</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -386,9 +410,6 @@
     </QtMoc>
     <QtMoc Include="StationObject\Device\DeviceBase.h">
       <Filter>StationObject\Device</Filter>
-    </QtMoc>
-    <QtMoc Include="StationObject\StationObject.h">
-      <Filter>StationObject</Filter>
     </QtMoc>
     <QtMoc Include="CTCMainWindow\BaseWndClass\CTCMainWindow.h">
       <Filter>CTCMainWindow\BaseWndClass</Filter>
@@ -537,8 +558,23 @@
     <QtMoc Include="CTCMainWindow\CustomControl\CarLocationEdit.h">
       <Filter>CTCMainWindow\CustomControl</Filter>
     </QtMoc>
-      <QtMoc Include="CTCMainWindow\CustomControl\TextSignLable.h">
-      <Filter>CTCMainWindow\CustomControl</Filter>
+    <QtMoc Include="CTCMainWindow\CustomControl\TextSignLable.h">
+      <Filter>StationObject\Device</Filter>
+    </QtMoc>
+    <QtMoc Include="CTCMainWindow\StationViewTKY\ModuleWidget\EditingInterfaceTKY.h">
+      <Filter>CTCMainWindow\StationViewTKY\ModuleWidget</Filter>
+    </QtMoc>
+    <QtMoc Include="CTCMainWindow\StationViewKSK\ModuleWidget\TrainInformationInterfaceKSK.h">
+      <Filter>CTCMainWindow\StationViewKSK\ModuleWidget</Filter>
+    </QtMoc>
+    <QtMoc Include="CTCMainWindow\BaseWndClass\ModuleWidget\StaTreeNode.h">
+      <Filter>CTCMainWindow\BaseWndClass\ModuleWidget</Filter>
+    </QtMoc>
+    <QtMoc Include="CTCMainWindow\StationViewKSK\ModuleWidget\StaTraindiagramwidgetKSK.h">
+      <Filter>CTCMainWindow\StationViewKSK\ModuleWidget</Filter>
+    </QtMoc>
+    <QtMoc Include="StationObject\StationObject.h">
+      <Filter>StationObject</Filter>
     </QtMoc>
   </ItemGroup>
   <ItemGroup>
@@ -652,6 +688,15 @@
     </QtUic>
     <QtUic Include="CTCMainWindow\CustomControl\CarLocationEdit.ui">
       <Filter>CTCMainWindow\CustomControl</Filter>
+    </QtUic>
+    <QtUic Include="CTCMainWindow\StationViewTKY\ModuleWidget\EditingInterfaceTKY.ui">
+      <Filter>CTCMainWindow\StationViewTKY\ModuleWidget</Filter>
+    </QtUic>
+    <QtUic Include="CTCMainWindow\StationViewKSK\ModuleWidget\TrainInformationInterfaceKSK.ui">
+      <Filter>CTCMainWindow\StationViewKSK\ModuleWidget</Filter>
+    </QtUic>
+    <QtUic Include="CTCMainWindow\StationViewKSK\ModuleWidget\StaTraindiagramwidgetKSK.ui">
+      <Filter>CTCMainWindow\StationViewKSK\ModuleWidget</Filter>
     </QtUic>
   </ItemGroup>
   <ItemGroup>

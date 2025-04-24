@@ -104,7 +104,7 @@ namespace CTCWindows {
 				else if(pTrain) {
 					strTrainNum = pTrain->m_strTrainNum;
 				}
-				vecTableData.append(GetTrainRouteTableDataByRoute(strTrainNum, pRoute));
+				vecTableData.append(GetTrainRouteTableDataByRoute(pRoute->m_strTrainNum, pRoute));
 				pRoute->m_nRowIndex = nRowIndex++;
 				for (int nRouteId : pRoute->m_vecSubRouteId) {
 					if (nRouteId != 0) {

@@ -154,6 +154,14 @@ namespace CTCDoc{
 				qDebug() << "无效的json文件.";
 				continue;
 			}
+			if (pStation->ReadChartConfig(subObj.value("chartconversion").toString()) < 0) {
+				qDebug() << "无效的json文件.";
+				continue;
+			}
+			if (pStation->ReadInterLock(subObj.value("interlockTable").toString()) < 0) {
+				qDebug() << "无效的txt文件.";
+				continue;
+			}
 			//初始化站场设备
 			pStation->InitStaDevice();
 			m_vecMultiStation.append(pStation);
