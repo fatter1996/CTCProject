@@ -2,6 +2,7 @@
 
 #include <QDialog>
 #include "ui_LeadSealDlg.h"
+#include "StationObject/GlobalStruct.h"
 #include <QLineEdit>
 #include <QCheckBox>
 #define PASSWORD	"123"
@@ -27,10 +28,10 @@ namespace CTCWindows {
 		LeadSealDlg(QWidget* parent = nullptr);
 		~LeadSealDlg();
 
-		void Init(KeyInputType type, void* pAttrObject);
-		void InitAddTrain(void* pAttrObject);
-		void InitChangeTrainNum(QString strTrainNum);
-		void InitChangeTrainAttr(void* pAttrObject);
+		void Init(KeyInputType type, void* pAttrObject = nullptr);
+		void InitAddTrain(Station::StaTrain* pTrain);
+		void InitChangeTrainNum(Station::StaTrain* pTrain);
+		void InitChangeTrainAttr(Station::StaTrain* pTrain);
 
 	public:
 		static bool LeadSealPassword(KeyInputType type, void* pAttrObject = nullptr);

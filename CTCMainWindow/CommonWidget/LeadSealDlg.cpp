@@ -66,7 +66,6 @@ namespace CTCWindows {
 
 			connect(ui.confirmBtn, &QPushButton::clicked, [&]() {
 				m_bResult = (m_pCurrLineEdit->text() == PASSWORD);
-				//qDebug() << m_bResult;
 				this->close();
 			});
 		}
@@ -84,7 +83,7 @@ namespace CTCWindows {
 			connect(ui.confirmBtn, &QPushButton::clicked, [&]() {
 				qDebug() << m_pCurrLineEdit->text();
 				this->close();
-				});
+			});
 		}
 		else if (type == KeyInputType::InputShuntingTime) {
 			ui.tiplabel->setText("调车作业钩时分");
@@ -119,18 +118,15 @@ namespace CTCWindows {
 	
 			if (type == KeyInputType::AddTrain) {
 				ui.tiplabel->setText("添加车次");
-				InitAddTrain(pAttrObject);
+				InitAddTrain(pTrain);
 			}
 
 			if (type == KeyInputType::ConfirmTrain || type == KeyInputType::AmendTrain) {
 				ui.tiplabel->setText("确认车次号");
-				InitChangeTrainNum(pTrain->m_strTrainNum);
+				InitChangeTrainNum(pTrain);
 				connect(ui.confirmBtn, &QPushButton::clicked, [=]() {
 					if (pTrain->m_strTrainNum != m_pCurrLineEdit->text()) {
-						QByteArray btResult;
-						if (Http::HttpClient::ChangeTrainNum(pTrain->m_nTrainId, m_pCurrLineEdit->text(), btResult)) {
-							pTrain->m_strTrainNum = m_pCurrLineEdit->text();
-						}
+						
 					}
 					m_bResult = true;
 					this->close();
@@ -139,7 +135,7 @@ namespace CTCWindows {
 
 			if (type == KeyInputType::ChangeTrain) {
 				ui.tiplabel->setText("修改车次号");
-				InitChangeTrainNum(pTrain->m_strTrainNum);
+				InitChangeTrainNum(pTrain);
 				connect(ui.confirmBtn, &QPushButton::clicked, [=]() {
 					m_bResult = Station::MainStation()->ChangeTrainNum(pTrain, m_pCurrLineEdit->text());
 					this->close();
@@ -147,14 +143,13 @@ namespace CTCWindows {
 			}
 			if (type == KeyInputType::ChangeTrainAttr) {
 				ui.tiplabel->setText("修改车次属性");
-				InitChangeTrainAttr(pAttrObject);
+				InitChangeTrainAttr(pTrain);
 			}
 		}
 	}
 
-	void LeadSealDlg::InitAddTrain(void* pAttrObject)
+	void LeadSealDlg::InitAddTrain(Station::StaTrain* pTrain)
 	{
-		Station::StaTrain* pTrain = static_cast<Station::StaTrain*>(pAttrObject);
 		QGridLayout* pLayout = new QGridLayout();
 		pLayout->setHorizontalSpacing(8);
 		pLayout->setVerticalSpacing(8);
@@ -215,7 +210,7 @@ namespace CTCWindows {
 		});
 	}
 
-	void LeadSealDlg::InitChangeTrainNum(QString strTrainNum)
+	void LeadSealDlg::InitChangeTrainNum(Station::StaTrain* pTrain)
 	{
 		QGridLayout* pLayout = new QGridLayout();
 		pLayout->setHorizontalSpacing(8);
@@ -228,7 +223,7 @@ namespace CTCWindows {
 		pLayout->addWidget(pTxetLabel1, 0, 0);
 		QLineEdit* pEdit1 = new QLineEdit(this);
 		pEdit1->setFixedHeight(24);
-		pEdit1->setText(strTrainNum);
+		pEdit1->setText(pTrain->m_strTrainNum);
 		pEdit1->setEnabled(false);
 		pLayout->addWidget(pEdit1, 0, 1);
 
@@ -244,9 +239,8 @@ namespace CTCWindows {
 		static_cast<QVBoxLayout*>(ui.contentWidget->layout())->addLayout(pLayout);
 	}
 
-	void LeadSealDlg::InitChangeTrainAttr(void* pAttrObject)
+	void LeadSealDlg::InitChangeTrainAttr(Station::StaTrain* pTrain)
 	{
-		Station::StaTrain* pTrain = static_cast<Station::StaTrain*>(pAttrObject);
 		QGridLayout* pLayout = new QGridLayout();
 		pLayout->setHorizontalSpacing(8);
 		pLayout->setVerticalSpacing(8);

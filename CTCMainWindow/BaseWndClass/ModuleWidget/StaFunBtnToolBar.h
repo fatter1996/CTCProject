@@ -7,7 +7,7 @@
 #include <QPushButton>
 #include <QButtonGroup>
 #include "CommonWidget/AuxiliaryMenuWnd.h"
-#include "SealTechnique.h"
+
 namespace CTCWindows {
     //功能按钮类型
     enum class FunType : int {

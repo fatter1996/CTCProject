@@ -70,8 +70,8 @@ namespace Station {
         void AddNewTextSign(const QString& strText, const QPoint& ptPos, const QColor& colFont = Qt::black, const QColor& colBackground = Qt::white, int nSize = 10);
         void ClearAllTextSign();
     signals:
-        void TextSignEdit(QString text,Station::Device::StaTextSign* pTextSign);
-        void DeleteTextSign(Station::Device::StaTextSign* pTextSign);
+        void TextSignEdit(QString text, Device::StaTextSign* pTextSign);
+        void DeleteTextSign(Device::StaTextSign* pTextSign);
       
     private:    //内部初始化
         void ReadDeviceInfoHead(); //解析"station.xml" HEAD
@@ -103,7 +103,7 @@ namespace Station {
         TrainDiagramInfo* getTrainDiagram() { return &TrainDiagram; }
     public:
         static void InitCreatDeviceMap();
-
+ 
     private:
         friend class MainStationObject;
         
@@ -124,7 +124,7 @@ namespace Station {
         static TrainDiagramInfo TrainDiagram;
         static QXmlStreamReader* m_pDeviceInfoReader;  //XML解析器
         static QMap<QString, std::function<Device::DeviceBase* (StationObject*)>> m_mapCreatDeviceVector;
-        int m_nTimerId_500;
+        static int m_nTimerId_500;
         static int UpStateTimer;
     };
 
@@ -163,6 +163,7 @@ namespace Station {
         void CreatTrainRouteByTrafficLog(StaTrafficLog* pTrafficLog);
 
         StaTrain* getStaTrainById(int nTrainId);
+        StaTrain* getStaTempTrainById(int nTrainId);
         StaTrainRoute* getStaTrainRouteById(int nRouteId);
         QVector<StaTrainRoute*>  getStaTrainRouteByTrain(int nTrainID);
         StaTrainRoute* getStaTrainRouteByRowIndex(int nRow);
@@ -187,11 +188,14 @@ namespace Station {
         CultivateObject::Subject* getCurSubject() const { return m_pCurSubject; }
         bool IsOverturn() const { return m_bOverturn; }
         
-        QVector<StaTrain*>& TrainList() { return m_vecStaTrain; }
-        QVector<StaStagePlan*>& StagePlanList() { return m_vecStaStagePlan; }
-        QVector<StaTrainRoute*>& TrainRouteList() { return m_vecStaTrainRoute; }
-        QVector<StaDispatchOrder*>& DispatchOrderList() { return m_vecStaDispatchOrder; }
-        QVector<StaTrafficLog*>& TrafficLogList() { return m_vecStaTrafficLog; }
+        const QVector<StaTrain*>& TrainList() { return m_vecStaTrain; }
+        void AddTrain(StaTrain* pTrain) { m_vecStaTrain.append(pTrain); }
+        void RemoveTrain(StaTrain* pTrain) { m_vecStaTempTrain.removeOne(pTrain); }
+        void RemoveTempTrain(StaTrain* pTrain) { m_vecStaTempTrain.removeOne(pTrain); }
+        const QVector<StaStagePlan*>& StagePlanList() { return m_vecStaStagePlan; }
+        const QVector<StaTrainRoute*>& TrainRouteList() { return m_vecStaTrainRoute; }
+        const QVector<StaDispatchOrder*>& DispatchOrderList() { return m_vecStaDispatchOrder; }
+        const QVector<StaTrafficLog*>& TrafficLogList() { return m_vecStaTrafficLog; }
         StaStagePlan* NewStagePlan() { return m_pNewStagePlan; }
         void ClearNewStagePlan() { m_pNewStagePlan = nullptr; };
         StaDispatchOrder* NewDispatchOrder() { return m_pNewDispatchOrder; }
@@ -243,6 +247,7 @@ namespace Station {
         int m_nCountdown = 0;
         int m_nTimerId_1000 = -1;
         QVector<StaTrain*> m_vecStaTrain;
+        QVector<StaTrain*> m_vecStaTempTrain;
         QVector<StaStagePlan*> m_vecStaStagePlan;
         QVector<StaTrainRoute*> m_vecStaTrainRoute;
         QVector<StaDispatchOrder*> m_vecStaDispatchOrder;

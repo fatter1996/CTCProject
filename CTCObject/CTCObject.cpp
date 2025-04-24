@@ -191,12 +191,12 @@ namespace CTCDoc{
 		QJsonObject rootObj = josnDoc.object();
 		QJsonObject trainNumTypeObj = rootObj.value("trainNumType").toObject();
 
-		QJsonArray passengeTrainArray = trainNumTypeObj.value("passengetrain").toArray();
+		QJsonArray passengeTrainArray = trainNumTypeObj.value("passengeTrain").toArray();
 		for (int i = 0; i < passengeTrainArray.size(); i++) {
 			InsterTrainType(PASSENGE_TYPE, i, passengeTrainArray.at(i).toString());
 		}
 
-		QJsonArray freighTrainArray = trainNumTypeObj.value("freightrain").toArray();
+		QJsonArray freighTrainArray = trainNumTypeObj.value("freightTrain").toArray();
 		for (int i = 0; i < freighTrainArray.size(); i++) {
 			InsterTrainType(FREIGH_TYPE, i, freighTrainArray.at(i).toString());
 		}

@@ -19,7 +19,7 @@ namespace Station {
                         return PackSubject(nAttr1, btAttr3);
                     }
                 }},
-                { 0x60, [&](int nTrainId, int nType, QByteArray btTrainNum) { return PackTrain(nTrainId, nType, btTrainNum); }},
+                { 0x60, [&](int nTrainId, int nType, QByteArray) { return PackTrain(nTrainId, nType); }},
                 { 0x61, [&](int nRouteId, int nType, QByteArray) { return PackTrainRoute(nRouteId, nType); }},
                 { 0x70, [&](int nType, int nValue, QByteArray) { return PackLimits(nType, nValue); }},
             };
@@ -143,18 +143,19 @@ namespace Station {
             return byteOrder;
         }
 
-        QByteArray StaPacket::PackTrain(int nTrainId, int nType, QByteArray btTrainNum)
+        QByteArray StaPacket::PackTrain(int nTrainId, int nType)
         {
             QByteArray byteOperation;
-            StaTrain* pTrain = MainStation()->getStaTrainById(nTrainId);
+            StaTrain* pTrain = MainStation()->getStaTempTrainById(nTrainId);
             if (!pTrain) {
                 return QByteArray();
             }
             byteOperation.append(nType);
             byteOperation.append(pTrain->m_nTrainId);
-            byteOperation.append(btTrainNum.length());
-            byteOperation.append(btTrainNum);
+            
             if (nType == 0x01) {    //Ìí¼Ó³µ´Î
+                byteOperation.append(pTrain->m_strTrainNum.toLocal8Bit().length());
+                byteOperation.append(pTrain->m_strTrainNum.toLocal8Bit());
                 byteOperation.append(pTrain->m_nPosCode & 0xff);
                 byteOperation.append(pTrain->m_nPosCode >> 8);
                 byteOperation.append(pTrain->m_bRight);
@@ -177,6 +178,7 @@ namespace Station {
                 byteOperation.append(pTrain->m_nSpeed);
                 byteOperation.append(pTrain->m_bElectric);
             }
+            MainStation()->RemoveTempTrain(pTrain);
             return byteOperation;
         }
 

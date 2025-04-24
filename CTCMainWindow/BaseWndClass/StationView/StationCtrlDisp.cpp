@@ -10,7 +10,6 @@ namespace CTCWindows {
 		StationCtrlDisp::StationCtrlDisp(QWidget* parent)
 		{
 			m_nTimerId_500 = startTimer(500);
-			startTimer(500);
 			installEventFilter(this);
 			setMouseTracking(true);
 		}
@@ -52,6 +51,7 @@ namespace CTCWindows {
 			}
 			return QWidget::eventFilter(obj, event);
 		}
+
 		void StationCtrlDisp::timerEvent(QTimerEvent* event)
 		{
 			if (event->timerId() == m_nTimerId_500) {
@@ -60,6 +60,7 @@ namespace CTCWindows {
 			}
 			return QWidget::timerEvent(event);
 		}
+
 		QAction* StationCtrlDisp::AddActionToMenu(const QString& strText, std::function<void(bool)> callback, bool bEnabled, bool bCheckable, bool bChecked, QMenu* pSubMenu)
 		{
 			QAction* pAction = new QAction(strText);

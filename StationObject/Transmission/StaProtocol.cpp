@@ -87,7 +87,6 @@ namespace Station {
 
         QByteArray StaProtocol::UnpackStaViewState(const QByteArray& dataAyyay)
         {
-        
             int nFlag = 11;
             //道岔
             {
@@ -103,21 +102,21 @@ namespace Station {
             {  
                 bool bAddByte = false;
                 StaSwitchSection* pSection = nullptr;
-                 for (DeviceBase* pDevice : m_mapDeviceVector[SECTION]) {
+                for (DeviceBase* pDevice : m_mapDeviceVector[SECTION]) {
                     pSection = dynamic_cast<StaSwitchSection*>(pDevice);
-
+                    
                     DeviceBase* pSubDevice = nullptr;
                     for (int nSubDeviceCode : pSection->m_vecSectionsCode) {
                         pSubDevice = MainStation()->getDeviceByCode(nSubDeviceCode);
                         if (pSubDevice->getType() == 1) {
                         }
                     }
-
+                    
                     if (!bAddByte) {
                         if (pSubDevice->getStrType() != "DC") {
                             pSubDevice->setState(dataAyyay[nFlag] & 0x0f);
                         }
-
+                    
                         if (pSection == m_mapDeviceVector[SECTION].at(m_mapDeviceVector[SECTION].size() - 1)) {
                             nFlag++;
                         }
@@ -126,7 +125,6 @@ namespace Station {
                         if (pSubDevice->getStrType() != "DC") {
                             pSubDevice->setState((dataAyyay[nFlag] >> 4) & 0x0f);
                         }
-                        
                         nFlag++;
                     }
                     bAddByte = !bAddByte;
@@ -192,10 +190,13 @@ namespace Station {
         {
             if (dataAyyay[16] == 0x01) {   //下发
                 StaStagePlan* pStaStagePlan = new StaStagePlan;
-                pStaStagePlan->m_strPlanNum = QString::fromLocal8Bit(dataAyyay.mid(12, 4).toHex());
-                int nFlag = 17;
-                pStaStagePlan->m_nPlanType = dataAyyay[nFlag++];
-                int len = dataAyyay[nFlag++];
+                int nFlag = 11;
+                pStaStagePlan->m_nPlanId = dataAyyay[nFlag++] & 0xFF;
+                pStaStagePlan->m_strPlanNum = dataAyyay.mid(nFlag, 4);
+                nFlag += 4;
+                nFlag++;
+                pStaStagePlan->m_nPlanType = dataAyyay[nFlag++] & 0xFF;
+                int len = dataAyyay[nFlag++] & 0xFF;
                 pStaStagePlan->m_strArrivalTrainNum = dataAyyay.mid(nFlag, len);
                 nFlag += len;
                 pStaStagePlan->m_nArrivalTrackCode = (dataAyyay[nFlag] & 0xFF) + (dataAyyay[nFlag + 1] & 0xFF) * 256;
@@ -237,8 +238,8 @@ namespace Station {
                     pStaStagePlan->m_strArrivalTrack = "";
                     pStaStagePlan->m_strDepartTrack = "";
                 }
-                //QtConcurrent::run(MainStation(), &MainStationObject::AddNewStagePlan, pStaStagePlan);
-                MainStation()->AddNewStagePlan(pStaStagePlan);
+                QtConcurrent::run(MainStation(), &MainStationObject::AddNewStagePlan, pStaStagePlan);
+                //MainStation()->AddNewStagePlan(pStaStagePlan);
             }
             return QByteArray();
         }
@@ -246,34 +247,35 @@ namespace Station {
         QByteArray StaProtocol::UnpackStaDispatchOrder(const QByteArray& dataAyyay)
         {
             StaDispatchOrder* pDispatch = new StaDispatchOrder;
-            int flag = 12;
-            pDispatch->m_strOrderNum = QString::fromLocal8Bit(dataAyyay.mid(flag, 8).toHex());
-            flag += 8;
+            int nFlag = 11;
+            pDispatch->m_nOrderId = dataAyyay[nFlag++] & 0xFF;
+            pDispatch->m_strOrderNum = QString::fromLocal8Bit(dataAyyay.mid(nFlag, 8));
+            nFlag += 8;
             QString strDepartTime = QString("%1-%2-%3T%4:%5:%6")
-                .arg((dataAyyay[flag] & 0xFF) + (dataAyyay[flag + 1] & 0xFF) * 256)
-                .arg(dataAyyay[flag + 2] & 0xFF, 2, 10, QLatin1Char('0'))
-                .arg(dataAyyay[flag + 3] & 0xFF, 2, 10, QLatin1Char('0'))
-                .arg(dataAyyay[flag + 4] & 0xFF, 2, 10, QLatin1Char('0'))
-                .arg(dataAyyay[flag + 5] & 0xFF, 2, 10, QLatin1Char('0'))
-                .arg(dataAyyay[flag + 6] & 0xFF, 2, 10, QLatin1Char('0'));
+                .arg((dataAyyay[nFlag] & 0xFF) + (dataAyyay[nFlag + 1] & 0xFF) * 256)
+                .arg(dataAyyay[nFlag + 2] & 0xFF, 2, 10, QLatin1Char('0'))
+                .arg(dataAyyay[nFlag + 3] & 0xFF, 2, 10, QLatin1Char('0'))
+                .arg(dataAyyay[nFlag + 4] & 0xFF, 2, 10, QLatin1Char('0'))
+                .arg(dataAyyay[nFlag + 5] & 0xFF, 2, 10, QLatin1Char('0'))
+                .arg(dataAyyay[nFlag + 6] & 0xFF, 2, 10, QLatin1Char('0'));
             pDispatch->m_tSendTime = QDateTime::fromString(strDepartTime, Qt::ISODate);
-            flag += 7;
-            int len = dataAyyay[flag++] & 0xFF;
-            pDispatch->m_strSendName = QString::fromLocal8Bit(dataAyyay.mid(flag, len));
-            flag += len;
-            len = dataAyyay[flag++] & 0xFF;
-            pDispatch->m_strSendAgency = QString::fromLocal8Bit(dataAyyay.mid(flag, len));
-            flag += len;
-            len = dataAyyay[flag++] & 0xFF;
-            pDispatch->m_strOrderTip = QString::fromLocal8Bit(dataAyyay.mid(flag, len));
-            flag += len;
-            len = (dataAyyay[flag] & 0xFF) + (dataAyyay[flag + 1] & 0xFF) * 256;
-            flag += 2;
-            pDispatch->m_strContent = QString::fromLocal8Bit(dataAyyay.mid(flag, len));
-            flag += len;
-            len = dataAyyay[flag++] & 0xFF;
-            flag += len;
-            QtConcurrent::run(MainStation(), &MainStationObject::AddNewDispatchOrder, pDispatch);
+            nFlag += 7;
+            int len = dataAyyay[nFlag++] & 0xFF;
+            pDispatch->m_strSendName = QString::fromLocal8Bit(dataAyyay.mid(nFlag, len));
+            nFlag += len;
+            len = dataAyyay[nFlag++] & 0xFF;
+            pDispatch->m_strSendAgency = QString::fromLocal8Bit(dataAyyay.mid(nFlag, len));
+            nFlag += len;
+            len = dataAyyay[nFlag++] & 0xFF;
+            pDispatch->m_strOrderTip = QString::fromLocal8Bit(dataAyyay.mid(nFlag, len));
+            nFlag += len;
+            len = (dataAyyay[nFlag] & 0xFF) + (dataAyyay[nFlag + 1] & 0xFF) * 256;
+            nFlag += 2;
+            pDispatch->m_strContent = QString::fromLocal8Bit(dataAyyay.mid(nFlag, len));
+            nFlag += len;
+            len = dataAyyay[nFlag++] & 0xFF;
+            nFlag += len;
+            MainStation()->AddNewDispatchOrder(pDispatch);
             return QByteArray();
         }
 
@@ -353,8 +355,6 @@ namespace Station {
 
         QByteArray StaProtocol::UnpackTrain(const QByteArray& dataAyyay)
         {
-            int nFlag = 13;
-            
             if (dataAyyay[11] == 0x01) {   //添加车次
                 QByteArray btResult;
                 if (Http::HttpClient::SelectStaTrain(dataAyyay[12] & 0xFF, btResult)) {
@@ -366,70 +366,48 @@ namespace Station {
                     }
                     StaTrain* pTrain = new StaTrain;
                     StaTrain::Init(pTrain, josnDoc.object());
-                    MainStation()->TrainList().append(pTrain);
-                    DeviceBase* pDevice = MainStation()->getDeviceByCode(pTrain->m_nPosCode);
-                    if (!pDevice) {
-                        pDevice = MainStation()->getDeviceByCode(pTrain->m_nPosCode);
-                    }
-                    if (pDevice && (pDevice->getStrType() == TRACK || pDevice->getStrType() == AUTOBLOCK)) {
-                        dynamic_cast<Device::StaTrack*>(pDevice)->SetTrain(pTrain);
+                    MainStation()->AddTrain(pTrain);
+                    DeviceTrain* pDevice = dynamic_cast<Device::DeviceTrain*>(MainStation()->getDeviceByCode(pTrain->m_nPosCode));
+                    if (pDevice) {
+                        pDevice->SetTrain(pTrain);
                     }
                     else {
                         qDebug() << "未找到设备:" << pTrain->m_nPosCode;
                     }
                 }
             }
-            else if (dataAyyay[11] == 0x02) {   //删除车次
-                QByteArray btResult;
+            else {
                 StaTrain* pTrain = MainStation()->getStaTrainById(dataAyyay[12]);
-                if (pTrain) {
-                    DeviceTrain* pDevice = dynamic_cast<DeviceTrain*>(MainStation()->getDeviceByCode(pTrain->m_nPosCode));
-                    if (pDevice) {
-                        pDevice->SetTrain(nullptr);
-                    }
-                    MainStation()->TrainList().removeOne(pTrain);
+                if (!pTrain) {
+                    return QByteArray();
                 }
-            }
-            else if (dataAyyay[11] == 0x03) {   //变更车次
-                int nNewTrainNumLen = dataAyyay[nFlag++] & 0xFF;
-                QString strNewTrainNum = QString(dataAyyay.mid(nFlag, nNewTrainNumLen));
-                nFlag += nNewTrainNumLen;
-                StaTrain* pTrain = MainStation()->getStaTrainById(dataAyyay[12]);
-                if (pTrain) {
-                    pTrain->m_strTrainNum = strNewTrainNum;
+
+                if (dataAyyay[11] == 0x02) {   //删除车次
+                    MainStation()->RemoveTrain(pTrain);
                 }
-            }
-            else if (dataAyyay[11] == 0x04) {   //车次停稳
-                StaTrain* pTrain = MainStation()->getStaTrainById(dataAyyay[12]);
-                if (pTrain) {
+                else if (dataAyyay[11] == 0x03) {   //变更车次
+                    pTrain->m_strTrainNum = QString(dataAyyay.mid(14, dataAyyay[13] & 0xFF));;
+                }
+                else if (dataAyyay[11] == 0x04) {   //车次停稳
                     pTrain->m_bRunning = false;
                 }
-            }
-            else if (dataAyyay[11] == 0x05) {   //车次启动
-                StaTrain* pTrain = MainStation()->getStaTrainById(dataAyyay[12]);
-                if (pTrain) {
+                else if (dataAyyay[11] == 0x05) {   //车次启动
                     pTrain->m_bRunning = true;
                 }
-            }
-            else if (dataAyyay[11] == 0x06) {   //更新位置
-                StaTrain* pTrain = MainStation()->getStaTrainById(dataAyyay[12]);
-                if (pTrain) {
-                    DeviceBase* pDeviceTrain = MainStation()->getSwitchBySectionCode(pTrain->m_nPosCode);
+                else if (dataAyyay[11] == 0x06) {   //更新位置
+                    DeviceBase* pDeviceTrain = MainStation()->getDeviceByCode(pTrain->m_nPosCode);
                     if (!pDeviceTrain) {
-                        pDeviceTrain = MainStation()->getDeviceByCode(pTrain->m_nPosCode);
+                        return QByteArray();
                     }
-                    if (dynamic_cast<DeviceTrain*>(pDeviceTrain)) {
-                        pTrain->m_nPosCode = (dataAyyay[nFlag] & 0xFF) + (dataAyyay[nFlag + 1] & 0xFF) * 256;
-                        DeviceBase* pNextDevice = MainStation()->getSwitchBySectionCode(pTrain->m_nPosCode);
-                        if (!pNextDevice) {
-                            pNextDevice = MainStation()->getDeviceByCode(pTrain->m_nPosCode);
-                        }
-                        if (pNextDevice) {
-                            if (pNextDevice != pDeviceTrain) { 
-                                dynamic_cast<DeviceTrain*>(pDeviceTrain)->MoveTo(dynamic_cast<DeviceTrain*>(pNextDevice));
-                                qDebug() << "MoveTo" << pNextDevice->getName();
-                            }
-                            
+                    pTrain->m_nPosCode = (dataAyyay[13] & 0xFF) + (dataAyyay[34] & 0xFF) * 256;
+                    DeviceBase* pNextDevice = MainStation()->getDeviceByCode(pTrain->m_nPosCode);
+                    if (!pNextDevice) {
+                        pNextDevice = MainStation()->getSwitchBySectionCode(pTrain->m_nPosCode);
+                    }
+                    if (pNextDevice) {
+                        if (pNextDevice != pDeviceTrain) {
+                            dynamic_cast<DeviceTrain*>(pDeviceTrain)->MoveTo(dynamic_cast<DeviceTrain*>(pNextDevice));
+                            qDebug() << "MoveTo" << pNextDevice->getName();
                         }
                     }
                 }

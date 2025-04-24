@@ -6,6 +6,7 @@
 #include <QTreeWidget>
 #include <Global.h>
 #pragma execution_character_set("utf-8")
+
 namespace CTCWindows {
 	namespace CASCO {
 
@@ -600,7 +601,6 @@ namespace CTCWindows {
 					{ "发送时间", 96 },
 					{ "", 0 }	//占位
 				};
-				return vecHeadInfo;
 			case TableSpecies::CopyTable://抄知处所
 				vecHeadInfo = {
 					{ "编号", 96 },
@@ -612,7 +612,6 @@ namespace CTCWindows {
 					{ "发送时间", 96 },
 					{ "", 0 }	//占位
 				};
-				return vecHeadInfo;
 			case TableSpecies::ReadTable://阅读
 				vecHeadInfo = {
 					{ "编号", 96 },
@@ -624,7 +623,6 @@ namespace CTCWindows {
 					{ "发送时间", 96 },
 					{ "", 0 }	//占位
 				};
-				return vecHeadInfo;
 			case TableSpecies::DispatchTable://调度台表格
 				vecHeadInfo = {
 					{ "编号", 96 },
@@ -636,7 +634,6 @@ namespace CTCWindows {
 					{ "发送时间", 96 },
 					{ "", 0 }	//占位
 				};
-				return vecHeadInfo;
 			case TableSpecies::LocomotTable://机车表格
 				vecHeadInfo = {
 					{ "编号", 96 },
@@ -654,6 +651,5 @@ namespace CTCWindows {
 			}
 			return vecHeadInfo;
 		}
-
 	}
 }

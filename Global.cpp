@@ -191,14 +191,14 @@ namespace Station {
         
 
         //½øÂ·ÃèÊö
-        QString strSignalName;
-        Device::DeviceBase* pArrivaSignal = MainStation()->getDeviceByCode(m_nSignalCode);
         if (m_strTrack == "") {
             m_strRouteDescrip.append(pTrafficLog->m_strArrivaSignal);
             m_strRouteDescrip.append(",");
             m_strRouteDescrip.append(pTrafficLog->m_strDepartSignal);
         }
         else {
+            QString strSignalName;
+            Device::DeviceBase* pArrivaSignal = MainStation()->getDeviceByCode(m_nSignalCode);
             for (Device::DeviceBase* pSignal : MainStation()->getDeviceVectorByType(SIGNALLAMP)) {
                 if (pSignal->getSXThroat() == pArrivaSignal->getSXThroat() && (pSignal->getAttr() & SIGNAL_FCXH) &&
                     pSignal->getName().mid(1) == m_strTrack.left(m_strTrack.indexOf("G"))) {
