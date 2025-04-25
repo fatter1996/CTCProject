@@ -12,6 +12,7 @@ namespace CTCWindows {
 		public:
 			StationViewTH(QWidget* parent = nullptr);
 			~StationViewTH();
+
 		public:
 			//´´½¨¿¨Ë¹¿ÂCTC
 			static StationViewTH* CreatStationView(QWidget* parent = nullptr);

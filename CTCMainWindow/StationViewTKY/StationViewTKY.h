@@ -6,6 +6,7 @@
 #include "CTCMainWindow/CustomControl/LntervallogicCheck.h"
 #include "CTCMainWindow/CommonWidget/VehicleManage.h"
 #include "ModuleWidget/EditingInterfaceTKY.h"
+
 namespace CTCWindows {
 	namespace CARS {
 		class StationViewTKY : public CTCMainWindow
@@ -15,6 +16,7 @@ namespace CTCWindows {
 		public:
 			StationViewTKY(QWidget* parent = nullptr);
 			~StationViewTKY();
+
 		public:
 			//创建CTC
 			static StationViewTKY* CreatStationView(QWidget* parent = nullptr);
@@ -47,12 +49,14 @@ namespace CTCWindows {
 			QLayout* WidgetLayout() override { return ui.centralWidget->layout(); }
 			//void onButtonToggled(bool checked);
 
+		public:
+			void ShowEditingInterface(void* pTextSign) override;
+
 		signals:
 			void clickFunbutton(FunType eSelectType);
 			void countdownStarts();
 
 		private:
-			EditingInterfaceTKY* m_pEditInterFace = nullptr;
 			VehicleManage* m_pVehicleManage = nullptr;
 			StaAlarmWindowTKY*  m_pStaAlarm = nullptr;
 			LntervallogicCheck* m_pLntervallogic = nullptr;

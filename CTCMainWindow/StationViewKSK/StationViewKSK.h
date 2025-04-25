@@ -12,12 +12,12 @@ namespace CTCWindows {
 		public:
 			StationViewKSK(QWidget *parent = nullptr);
 			~StationViewKSK();
+
 		public:
 			//创建卡斯柯CTC
 			static StationViewKSK* CreatStationView(QWidget* parent = nullptr);
 			// 初始化工具栏-底部行车日志工具栏
 			void InitbottomTrafficLogToolBar() override;
-
 			//创建单站界面
 			BaseWnd::StationCtrlDisp* CreateStationCtrlDisp() override;
 			//创建站间透明界面

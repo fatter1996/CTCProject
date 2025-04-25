@@ -30,7 +30,7 @@ namespace Socket {
 
     void SocketUDP::onRecvData()
     {
-        QByteArray recvDataArray;
+        QByteArray   recvDataArray;
         QHostAddress clientAddress;
         quint16 nPort = 0;
 
@@ -38,9 +38,8 @@ namespace Socket {
             recvDataArray.resize(m_pUdpSocket->pendingDatagramSize());
             m_pUdpSocket->readDatagram(recvDataArray.data(), recvDataArray.size(), &clientAddress, &nPort);
             //发送信号
-            if (recvDataArray.size() >= 16) {
+            if(recvDataArray.size() >= 16)
                 emit recvData(recvDataArray);
-            } 
         }
     }
 

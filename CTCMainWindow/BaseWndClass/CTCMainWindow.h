@@ -84,6 +84,9 @@ namespace CTCWindows {
 		void setFixedSize(const QSize& size);
 		void SetShowToolbar(bool bShowBtn, bool bShowLabel);
 
+	public:
+		virtual void ShowEditingInterface(void* pTextSign) {};
+
 	private:
 		virtual BaseWnd::StationCtrlDisp* CreateStationCtrlDisp() = 0;
 		virtual BaseWnd::StationMultiDisp* CreateMultiStationDisp() = 0;
@@ -105,11 +108,14 @@ namespace CTCWindows {
 		// 初始化工具栏-底部行车日志工具栏
 		virtual void InitbottomTrafficLogToolBar() = 0 ;
 		virtual QLayout* WidgetLayout() = 0;
+
 	private:
 		//初始化界面布局
 		void InitViewLayout();
+
 	signals:
 		void ModifyContent(QString Content, int TextColor, int BackColor, Station::Device::StaTextSign* pTextSign);
+
 	public slots:
 		void onButtonToggled(bool checked);
 		void InitStatusBar();
@@ -129,6 +135,7 @@ namespace CTCWindows {
 		void timerEvent(QTimerEvent* event);
 		QString getWeekday(const QDateTime& dateTime);
 		void upDateTime();
+
 	public:
 		BaseWnd::StationCtrlDisp* StaCtrlDisp() const { return m_pStationCtrl; }
 		BaseWnd::StationMultiDisp* MultiDisp() const { return m_pStationMulti; }

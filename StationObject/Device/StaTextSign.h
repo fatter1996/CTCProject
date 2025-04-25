@@ -19,10 +19,15 @@ namespace Station {
             //’æ≥°ªÊ÷∆
             void Draw(bool isMulti = false) override;
             void InitTextSign(const QString& strText, const QPoint& ptPos, const QColor& colFont = Qt::black, const QColor& colBackground = Qt::white, int nSize = 10);
+        
+        public:
+            const QPoint& getShowPos() { return m_ptShowPos; };
+            const QString& getText() { return m_strText; };
+
         private:
             void DrawTextSign();
-        signals:
-            void EditingInterface();
+
+
         private:
             bool m_bIsShow = true;
             QString m_strText;

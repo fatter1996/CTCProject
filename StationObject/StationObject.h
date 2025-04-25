@@ -45,10 +45,8 @@ namespace Station {
         void SetVisible(VisibleDev devType, bool bVisible);
         bool IsVisible(VisibleDev devType);
         void AddNewTextSign(const QString& strText, const QPoint& ptPos, const QColor& colFont = Qt::black, const QColor& colBackground = Qt::white, int nSize = 10);
-        void ClearAllTextSign();
-    signals:
-        void TextSignEdit(QString text, Device::StaTextSign* pTextSign);
         void DeleteTextSign(Device::StaTextSign* pTextSign);
+        void ClearAllTextSign();
       
     private:    //内部初始化
         void ReadDeviceInfoHead(); //解析"station.xml" HEAD
@@ -56,13 +54,7 @@ namespace Station {
         void InitDeviceMap();
         
     public:
-        QVector<Device::DeviceBase*>& getDeviceVectorByType(QString strType) { return m_mapDeviceVector[strType];
-        
-        }
-        static QMap<QString, std::function<Device::DeviceBase* (StationObject*)>> getmapDeviceVector() {
-            return m_mapCreatDeviceVector; 
-        }
-
+        QVector<Device::DeviceBase*>& getDeviceVectorByType(QString strType) { return m_mapDeviceVector[strType]; }
         void setStationName(const QString& strName) { m_strStationName = strName; }
         QString getStationName() { return m_strStationName; }
         Device::DeviceBase* getDeviceByCode(const uint& nCode);
@@ -94,12 +86,10 @@ namespace Station {
         QWidget* m_pShowWidget = nullptr;
 
     private:
-
-        static int UpState;
+        static int m_UpState;
         static QXmlStreamReader* m_pDeviceInfoReader;  //XML解析器
         static QMap<QString, std::function<Device::DeviceBase* (StationObject*)>> m_mapCreatDeviceVector;
         static int m_nTimerId_500;
-        static int UpStateTimer;
     };
 
     
@@ -197,8 +187,6 @@ namespace Station {
         void onOrderClear(bool bClearTwinkle = false);
         void onUserLogin(QString strUserName, QString strPassword);
  
-
-     
     signals:
         void FunBtnStateReset();
         void SendDataToUDP(const QByteArray&);
@@ -230,7 +218,6 @@ namespace Station {
         QMap<Order, std::function<StaOrder*()>> m_mapCreatStationOrder;
         QMap<Order, std::function<void(void*, const QJsonObject&)>> m_mapStationOrder;
         QMap<DiploidRatio, double> m_mapDiploidRatio;
-
 
         StaStagePlan* m_pNewStagePlan = nullptr;
         StaDispatchOrder* m_pNewDispatchOrder = nullptr;

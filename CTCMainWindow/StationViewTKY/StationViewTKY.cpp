@@ -17,12 +17,6 @@ namespace CTCWindows {
 			: CTCMainWindow(parent)
 		{
 			ui.setupUi(this);
-			connect(Station::MainStation(), &StationObject::TextSignEdit,
-				this, [=](QString Text, Station::Device::StaTextSign* pTextSign) {
-					m_pEditInterFace = new EditingInterfaceTKY();
-					m_pEditInterFace->setLinEditText(Text, pTextSign);
-					m_pEditInterFace->show();
-				});
 		}
 
 		StationViewTKY::~StationViewTKY()
@@ -520,6 +514,7 @@ namespace CTCWindows {
 			m_pStateToolBar->installEventFilter(this);
 			addToolBar(m_pStateToolBar);
 		}
+
 		bool StationViewTKY::eventFilter(QObject* obj, QEvent* event) {
 			if (obj == m_pBottomStationViewToolBar && event->type() == QEvent::ContextMenu) {
 				return true; // 直接拦截右键事件
@@ -535,6 +530,7 @@ namespace CTCWindows {
 			}
 			return QObject::eventFilter(obj, event);
 		}
+
 		void StationViewTKY::InitbottomTrafficLogToolBar()
 		{
 			m_pBottomStationViewToolBar = new QToolBar(this);
@@ -588,6 +584,14 @@ namespace CTCWindows {
 			connect(pAdjacentStationDepartureBtn, &QPushButton::clicked, this, [&] {});
 			addToolBar(m_pBottomStationViewToolBar);
 
+		}
+
+		void StationViewTKY::ShowEditingInterface(void* pTextSign)
+		{
+			EditingInterfaceTKY* m_pEditInterFace = new EditingInterfaceTKY();
+			m_pEditInterFace->setAttribute(Qt::WA_DeleteOnClose);
+			m_pEditInterFace->setLinEditText(static_cast<Station::Device::StaTextSign*>(pTextSign));
+			m_pEditInterFace->show();
 		}
 	}
 }

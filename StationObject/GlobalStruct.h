@@ -232,7 +232,6 @@ namespace Station {
 
 	public:
 		static void Init(StaDispatchOrder* pDispatch, const QJsonObject& subObj);
-		static QMap<QString,QString> GetOrder(int m_nOrderId,int m_nOrderType, int m_nSendState);
 	};
 
 	struct StaTrafficLog : public StaOrder //行车日志
