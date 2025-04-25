@@ -85,7 +85,9 @@ namespace Station {
             void setDirection(const QString& strDirection) { m_strDirection = strDirection; }
             QString getDirection() const { return m_strDirection; }
             QString getXHDTYpe() { return m_strXHDType; }
-
+            uint getSelectType() { return m_nSelectType; }
+            QRectF getRcTrainbtn() { return m_rcTrainBtn; }
+            QRectF getRcShuntbtn() { return m_rcShuntBtn; }
         private:
             QPointF p12, p7, p8, p9, p10, p13, p14; //绘制坐标
             uint m_nXHDType = 0; //信号机类型

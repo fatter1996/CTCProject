@@ -40,17 +40,4 @@ namespace CTCWindows {
 		m_pSealTechnique->show();
 
 	}
-	void AuxiliaryMenuWnd::addString(QString LampStr)
-	{
-		for (QString str: m_stringList) {
-			if (str == LampStr) {
-				return;
-			}
-		}
-		m_stringList.append(LampStr);
-	}
-	QStringList  AuxiliaryMenuWnd::getStrList()
-	{
-		return m_stringList;
-	}
 }

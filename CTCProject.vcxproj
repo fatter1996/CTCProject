@@ -239,6 +239,7 @@
     <QtMoc Include="CTCMainWindow\BaseWndClass\ModuleWidget\StaTreeNode.h" />
     <ClInclude Include="CTCMainWindow\BaseWndClass\StationView\StaTraindiagramwidget.h" />
     <QtMoc Include="CTCMainWindow\StationViewKSK\ModuleWidget\StaTraindiagramwidgetKSK.h" />
+    <QtMoc Include="CTCMainWindow\CommonWidget\SealTechnique.h" />
     <ClInclude Include="CTCObject\CTCObject.h" />
     <ClInclude Include="CultivateObject\Subject.h" />
     <ClInclude Include="Global.h" />

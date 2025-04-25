@@ -46,7 +46,7 @@ namespace Station {
     struct signalBtn 
     {
         QString Signame;
-        QStringList Btnname;
+        QStringList LBtnname;
         QStringList DBtnname;
     };
 
@@ -172,6 +172,7 @@ namespace Station {
         void SendPacketMsg(int nTargetCode, int nOrderType = 0, int nAttr1 = -1, int nAttr2 = -1, QByteArray btAttr3 = QByteArray());
         void SubmitCurSubject(); //提交当前题目
         void AddSelectDevice(Device::DeviceBase* pDevice); 
+        void AddLinkDevice(Device::DeviceBase* pDevice);
         bool IsAllowStaOperation(); //是否可操作
         void CompareResult(const QByteArray& dataAyyay);
 
@@ -192,6 +193,7 @@ namespace Station {
         void AddTrain(StaTrain* pTrain) { m_vecStaTrain.append(pTrain); }
         void RemoveTrain(StaTrain* pTrain) { m_vecStaTempTrain.removeOne(pTrain); }
         void RemoveTempTrain(StaTrain* pTrain) { m_vecStaTempTrain.removeOne(pTrain); }
+        void RemoveTrainRoute(StaTrainRoute* pTrainRoute) { m_vecStaTrainRoute.removeOne(pTrainRoute); }
         const QVector<StaStagePlan*>& StagePlanList() { return m_vecStaStagePlan; }
         const QVector<StaTrainRoute*>& TrainRouteList() { return m_vecStaTrainRoute; }
         const QVector<StaDispatchOrder*>& DispatchOrderList() { return m_vecStaDispatchOrder; }
@@ -239,6 +241,7 @@ namespace Station {
     private:
         StaLimits m_StaLimits;
         QVector<Device::DeviceBase*> m_vecSelectDevice;
+        QVector<Device::DeviceBase*> m_vecLinkDevice;
         UserInfo m_infoCurrUser;
         QString m_strOrderToInterLock;
         int m_nUserId = 0;
@@ -257,7 +260,7 @@ namespace Station {
         QMap<Order, std::function<void(void*, const QJsonObject&)>> m_mapStationOrder;
         QMap<DiploidRatio, double> m_mapDiploidRatio;
 
-
+       // static int m_nTimerId_500 ;
         StaStagePlan* m_pNewStagePlan = nullptr;
         StaDispatchOrder* m_pNewDispatchOrder = nullptr;
     };

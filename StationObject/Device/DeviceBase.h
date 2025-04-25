@@ -205,18 +205,21 @@ namespace Station {
         public:
             explicit DeviceBtn();
             ~DeviceBtn();
+            int getFirstType() { return m_nFirstBtnType; }
+            int getBtnState() { return m_nBtnState; }
+            void DrawButton(QPainter& pPainter, const QRectF rcButton, const QColor& cBtnColor, bool bBtnDown, int nType = 1,
+                const QColor cBtnDownColor = COLOR_BTN_BLUE, const QColor cBtnElapsedColor = COLOR_BTN_WHITE);
 
         protected:
             //绘制按钮
-            void DrawButton(QPainter& pPainter, const QRectF rcButton, const QColor& cBtnColor, bool bBtnDown, int nType = 1, 
-                const QColor cBtnDownColor = COLOR_BTN_BLUE, const QColor cBtnElapsedColor = COLOR_BTN_WHITE);
-            //按钮点击事件
+              //按钮点击事件
             void OnButtonClick();
             virtual void SetBtnState() = 0;
             //按钮状态重置
             void BtnStateReset();
+       
         public:
-            void setBtnState(int nState) { m_nBtnState = m_nBtnState; }
+            void setBtnState(int nState) { m_nBtnState = nState; }
 
         protected:
             int m_nBtnState = 0; //按钮状态

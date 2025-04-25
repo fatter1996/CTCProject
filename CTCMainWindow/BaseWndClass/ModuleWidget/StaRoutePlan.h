@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include <QWidget>
 #include "CustomControl/TableView.h"
 #include "StationObject/GlobalStruct.h"
@@ -13,17 +13,17 @@ namespace CTCWindows {
 			~StaRoutePlan();
 
 		public:
-			//ÁĞ³µ½øÂ·ĞòÁĞ
+			//åˆ—è½¦è¿›è·¯åºåˆ—
 			void InitTrainRouteTable();
 			virtual QVector<Control::TableViewHeadInfo> GetTrainRouteTableHeadInfo() = 0;
 			virtual QStringList GetTrainRouteTableDataByRoute(QString strTrainNum, Station::StaTrainRoute* pRoute) = 0;
 			
-			//µ÷³µ½øÂ·ĞòÁĞ
+			//è°ƒè½¦è¿›è·¯åºåˆ—
 			void InitShuntRouteTable();
 			virtual QVector<Control::TableViewHeadInfo> GetShuntRouteTableHeadInfo() {
 				return QVector<Control::TableViewHeadInfo>();
 			}
-			//¹´¼Æ»®
+			//å‹¾è®¡åˆ’
 			void InitHookPlanTable();
 			virtual QVector<Control::TableViewHeadInfo> GetHookPlanTableHeadInfo() {
 				return QVector<Control::TableViewHeadInfo>();
@@ -51,9 +51,9 @@ namespace CTCWindows {
 			void OnTriggerTypeChange(Station::StaTrainRoute* pTrainRoute, bool bAutoTouch);
 
 		protected:
-			Control::TableView* m_pTrainRouteTable = nullptr;	//ÁĞ³µ½øÂ·±í¸ñ
-			Control::TableView* m_pShuntRouteTable = nullptr;	//µ÷³µ½øÂ·±í¸ñ
-			Control::TableView* m_pHookPlanTable = nullptr;		//¹´¼Æ»®±í¸ñ
+			Control::TableView* m_pTrainRouteTable = nullptr;	//åˆ—è½¦è¿›è·¯è¡¨æ ¼
+			Control::TableView* m_pShuntRouteTable = nullptr;	//è°ƒè½¦è¿›è·¯è¡¨æ ¼
+			Control::TableView* m_pHookPlanTable = nullptr;		//å‹¾è®¡åˆ’è¡¨æ ¼
 
 			int m_nTrackRow = -1;
 			int m_nTriggerRow = -1;
