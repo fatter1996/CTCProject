@@ -7,8 +7,6 @@
 
 #pragma execution_character_set("utf-8")
 
-Station::Device::LowFrequency Station::Device::StaTrack::m_nLowFrequency;
-Station::Device::Direction Station::Device::StaTrack::m_nDirection;
 namespace Station {
     namespace Device {
 
@@ -64,7 +62,7 @@ namespace Station {
 
             }
             
-            DrawLowTriangulation();
+            //DrawLowTriangulation();
             //绘制车次
             DrawTrain(m_pPainter);
             index++;
@@ -254,84 +252,84 @@ namespace Station {
                 switch (m_nLowFrequency)
                 {
                 case LowFrequency::L6:
-                    DrawTriangulation(COLOR_TRACK_GREEN, COLOR_LIGHT_BLACK, m_nDirection, "6");
+                    DrawTriangulation(COLOR_TRACK_GREEN, COLOR_LIGHT_BLACK, "6");
                     return;
                 case LowFrequency::L5:
-                    DrawTriangulation(COLOR_TRACK_GREEN, COLOR_LIGHT_BLACK, m_nDirection, "5");
+                    DrawTriangulation(COLOR_TRACK_GREEN, COLOR_LIGHT_BLACK, "5");
                     return;
                 case LowFrequency::L4:
-                    DrawTriangulation(COLOR_TRACK_GREEN, COLOR_LIGHT_BLACK, m_nDirection, "4");
+                    DrawTriangulation(COLOR_TRACK_GREEN, COLOR_LIGHT_BLACK, "4");
                     return;
                 case LowFrequency::L3:
-                    DrawTriangulation(COLOR_TRACK_GREEN, COLOR_LIGHT_BLACK, m_nDirection, "3");
+                    DrawTriangulation(COLOR_TRACK_GREEN, COLOR_LIGHT_BLACK, "3");
                     return;
                 case LowFrequency::L2:
-                    DrawTriangulation(COLOR_TRACK_GREEN, COLOR_LIGHT_BLACK, m_nDirection, "2");
+                    DrawTriangulation(COLOR_TRACK_GREEN, COLOR_LIGHT_BLACK, "2");
                     return;
                 case LowFrequency::L:
-                    DrawTriangulation(COLOR_TRACK_GREEN, COLOR_LIGHT_BLACK, m_nDirection);
+                    DrawTriangulation(COLOR_TRACK_GREEN, COLOR_LIGHT_BLACK);
                     return;
                 case LowFrequency::LU:
-                    DrawTriangulation(COLOR_BTN_YELLOW, COLOR_LIGHT_BLACK, m_nDirection);
-                    DrawMinTriangulation(COLOR_TRACK_GREEN, m_nDirection);
+                    DrawTriangulation(COLOR_BTN_YELLOW, COLOR_LIGHT_BLACK);
+                    DrawMinTriangulation(COLOR_TRACK_GREEN);
                     return;
                 case LowFrequency::LU2:
-                    DrawTriangulation(COLOR_BTN_YELLOW, COLOR_LIGHT_BLACK, m_nDirection);
+                    DrawTriangulation(COLOR_BTN_YELLOW, COLOR_LIGHT_BLACK);
                     return;
                 case LowFrequency::U:
-                    DrawTriangulation(COLOR_BTN_YELLOW, COLOR_LIGHT_BLACK, m_nDirection);
+                    DrawTriangulation(COLOR_BTN_YELLOW, COLOR_LIGHT_BLACK);
                     return;
                 case LowFrequency::U2:
-                    DrawTriangulation(COLOR_BTN_YELLOW, COLOR_LIGHT_BLACK, m_nDirection, "2");
+                    DrawTriangulation(COLOR_BTN_YELLOW, COLOR_LIGHT_BLACK, "2");
                     return;
                 case LowFrequency::U2S:
-                    DrawTriangulation(COLOR_BTN_YELLOW, COLOR_LIGHT_BLACK, m_nDirection, "2");
+                    DrawTriangulation(COLOR_BTN_YELLOW, COLOR_LIGHT_BLACK, "2");
                     DrawTriangulationLine();
                     return;
                 case LowFrequency::UU:
-                    DrawTriangulation(COLOR_BTN_YELLOW, COLOR_LIGHT_BLACK, m_nDirection);
-                    DrawMinTriangulation(COLOR_BTN_YELLOW, m_nDirection);
+                    DrawTriangulation(COLOR_BTN_YELLOW, COLOR_LIGHT_BLACK);
+                    DrawMinTriangulation(COLOR_BTN_YELLOW);
                     return;
                 case LowFrequency::UUS:
                     DrawTriangulationLine();
-                    DrawTriangulation(COLOR_TRACK_GREEN, COLOR_LIGHT_BLACK, m_nDirection);
-                    DrawMinTriangulation(COLOR_BTN_YELLOW, m_nDirection);
+                    DrawTriangulation(COLOR_TRACK_GREEN, COLOR_LIGHT_BLACK);
+                    DrawMinTriangulation(COLOR_BTN_YELLOW);
                   
                     return;
                 case LowFrequency::HU:
-                    DrawTriangulation(COLOR_TRACK_RED, COLOR_LIGHT_BLACK, m_nDirection);
-                    DrawMinTriangulation(COLOR_BTN_YELLOW, m_nDirection);
+                    DrawTriangulation(COLOR_TRACK_RED, COLOR_LIGHT_BLACK);
+                    DrawMinTriangulation(COLOR_BTN_YELLOW);
                     return;
                 case LowFrequency::HB:
                     DrawTriangulationLine();
-                    DrawTriangulation(COLOR_TRACK_RED, COLOR_LIGHT_BLACK, m_nDirection);
-                    DrawMinTriangulation(COLOR_BTN_YELLOW, m_nDirection);
+                    DrawTriangulation(COLOR_TRACK_RED, COLOR_LIGHT_BLACK);
+                    DrawMinTriangulation(COLOR_BTN_YELLOW);
                 
                     return;
                 case LowFrequency::H:
-                    DrawTriangulation(COLOR_TRACK_RED, COLOR_LIGHT_BLACK, m_nDirection);
+                    DrawTriangulation(COLOR_TRACK_RED, COLOR_LIGHT_BLACK);
                     return;
                 case LowFrequency::O:
-                    DrawTriangulation(COLOR_BTN_GRAY, COLOR_LIGHT_BLACK, m_nDirection);
+                    DrawTriangulation(COLOR_BTN_GRAY, COLOR_LIGHT_BLACK);
                     return;
                 default: 
                     break;
                 }
             }
         }
-        void StaTrack::DrawTriangulation(QColor Pencolor, QColor Textcolor, Direction m_nDirection, QString Text)
+        void StaTrack::DrawTriangulation(QColor Pencolor, QColor Textcolor, QString Text)
         {
             QRectF trRect1(
                 Scale(QPointF(p12.x() + (p34.x() - p12.x()) / 4, p12.y() - 12)),
                 QSizeF(Scale((p34.x() - p12.x()) / 3), Scale(p34.y() - p12.y() + 24))
             );
             QPointF trPoint1[3];
-            if (m_nDirection == Direction::Right) {
+            if (!m_bUpDown) {
                 trPoint1[0] = trRect1.topLeft();
                 trPoint1[1] = trRect1.bottomLeft();
                 trPoint1[2] = QPointF(trRect1.right(), trRect1.center().y());
             }
-            else if (m_nDirection == Direction::Left) {
+            else {
                 trPoint1[0] = trRect1.topRight();
                 trPoint1[1] = trRect1.bottomRight();
                 trPoint1[2] = QPointF(trRect1.left(), trRect1.center().y());
@@ -351,13 +349,13 @@ namespace Station {
             m_pPainter.drawText(textRect, Qt::AlignCenter, text);
         }
 
-        void StaTrack::DrawMinTriangulation(QColor Pencolor, Direction m_nDirection) {
+        void StaTrack::DrawMinTriangulation(QColor Pencolor) {
 
             QPen pen(Qt::black, 2);
             m_pPainter.setPen(pen);
             m_pPainter.setBrush(QBrush(Pencolor, Qt::SolidPattern));
 
-            if (m_nDirection == Direction::Right) {
+            if (!m_bUpDown) {
                 QRectF trRect2(
                     Scale(QPointF(p12.x() + (p34.x() - p12.x() + 35) / 4, p12.y() - 8)),
                     QSizeF(Scale((p34.x() - p12.x() - 16) / 4), Scale(p34.y() - p12.y() + 16))
@@ -368,7 +366,7 @@ namespace Station {
                 trPoint2[2] = QPointF(trRect2.right(), trRect2.center().y());
                 m_pPainter.drawPolygon(trPoint2, 3);
             }
-            else if (m_nDirection == Direction::Left) {
+            else {
                 QRectF trRect2(
                     Scale(QPointF(p12.x() + (p34.x() - p12.x() - 10) / 4, p12.y() - 8)),
                     QSizeF(Scale((p34.x() - p12.x()) / 4), Scale(p34.y() - p12.y() + 16))
@@ -389,13 +387,13 @@ namespace Station {
             );
             qreal offsetDistance=0.0;
             QPointF trPoint1[3];
-            if (m_nDirection == Direction::Right) {
+            if (!m_bUpDown) {
                 offsetDistance = 5.0; // 边外偏移量
                 trPoint1[0] = trRect1.topLeft();
                 trPoint1[1] = trRect1.bottomLeft();
                 trPoint1[2] = QPointF(trRect1.right(), trRect1.center().y());
             }
-            else if (m_nDirection == Direction::Left) {
+            else {
                 offsetDistance = -10.0; // 边外偏移量
                 trPoint1[0] = trRect1.topRight();
                 trPoint1[1] = trRect1.bottomRight();
@@ -447,10 +445,6 @@ namespace Station {
                     m_pPainter.drawLine(QLineF(startPoint, endPoint));
                 }
             }
-        }
-        void StaTrack::SetTrack()
-        {
-            m_nPowerCut = true;
         }
     }
 }

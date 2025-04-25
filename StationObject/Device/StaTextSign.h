@@ -6,7 +6,6 @@ namespace Station {
         //ÎÄ×Ö±ê×¢
         class StaTextSign : public DeviceBase
         {
-    
         public:
             explicit StaTextSign(QObject* pParent = nullptr);
             ~StaTextSign();
@@ -26,7 +25,6 @@ namespace Station {
 
         private:
             void DrawTextSign();
-
 
         private:
             bool m_bIsShow = true;

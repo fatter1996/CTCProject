@@ -23,7 +23,7 @@ namespace Station {
             US,		    //黄闪
             LS,		    //绿闪
             HS,		    //红闪
-            USU	    //黄闪黄
+            USU		    //黄闪黄
         };
 
         //信号机
@@ -76,9 +76,7 @@ namespace Station {
             //状态重置
             void ResetDevState() override;
 
-          
         public:
-            int GetBtnState() { return m_nBtnState; }
             void setRelatedBtn(const DeviceBase* pDevice) { m_pRelatedBtn = const_cast<DeviceBase*>(pDevice); }
             bool IsIsHaveBSQ() const { return m_bIsIsHaveBSQ; }
             void setBSQState(const uint& nBSQState) { m_nBSQState = nBSQState; }
@@ -106,8 +104,6 @@ namespace Station {
             uint m_nSelectType = 0x0;  //选中类型(0-未选中; 0x01-选中信号机名称; 0x02-选中列车按钮; 0x04-选中调车按钮; 0x08-选中通过按钮; 0x1f-选中信号机灯位)
             uint m_nLightNum = 0;   //灯位个数
             DeviceBase* m_pRelatedBtn = nullptr; //关联通过按钮
-
-            static int m_nBState;
 
             QRectF m_rcLightTotal;   //灯位总范围
             QRectF m_rcLight1;    //灯位1范围

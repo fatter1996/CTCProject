@@ -20,7 +20,6 @@ namespace Station {
         void StaTextSign::InitAttributeMap()
         {
 
-           
         }
 
         void StaTextSign::Draw(bool isMulti)

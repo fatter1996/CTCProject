@@ -11,7 +11,7 @@
 
 namespace Station {
     namespace Device {
-        int Station::Device::StaSignal::m_nBState = 0;
+
         StaSignal::StaSignal(QObject* pParent)
             : DeviceBase(pParent)
         {
@@ -631,7 +631,6 @@ namespace Station {
                     m_nFirstBtnType = 4;
                 }
             }
-            m_nBState = m_nBtnState;
         }
 
         void StaSignal::OrderClear(bool bClearTwinkle)

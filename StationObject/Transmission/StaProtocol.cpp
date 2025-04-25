@@ -356,24 +356,32 @@ namespace Station {
         QByteArray StaProtocol::UnpackTrain(const QByteArray& dataAyyay)
         {
             if (dataAyyay[11] == 0x01) {   //添加车次
-                QByteArray btResult;
-                if (Http::HttpClient::SelectStaTrain(dataAyyay[12] & 0xFF, btResult)) {
-                    QJsonParseError error;
-                    QJsonDocument josnDoc = QJsonDocument::fromJson(btResult, &error);
-                    if (josnDoc.isNull()) {
-                        qDebug() << "无效的JSON格式:" << error.errorString();
-                        return QByteArray();
-                    }
-                    StaTrain* pTrain = new StaTrain;
-                    StaTrain::Init(pTrain, josnDoc.object());
-                    MainStation()->AddTrain(pTrain);
-                    DeviceTrain* pDevice = dynamic_cast<Device::DeviceTrain*>(MainStation()->getDeviceByCode(pTrain->m_nPosCode));
-                    if (pDevice) {
-                        pDevice->SetTrain(pTrain);
-                    }
-                    else {
-                        qDebug() << "未找到设备:" << pTrain->m_nPosCode;
-                    }
+                StaTrain* pTrain = new StaTrain;
+                int nFlag = 12;
+                pTrain->m_nTrainId = dataAyyay[nFlag++] & 0xFF;
+                int nLen = dataAyyay[nFlag++] & 0xFF;
+                pTrain->m_strTrainNum = dataAyyay.mid(nFlag, nLen);
+                nFlag += nLen;
+                pTrain->m_nPosCode = (dataAyyay[nFlag] & 0xFF) + (dataAyyay[nFlag + 1] & 0xFF) * 256;
+                nFlag += 2;
+
+                pTrain->m_bRight = dataAyyay[nFlag++] & 0xFF;
+                pTrain->m_bElectric = dataAyyay[nFlag++] & 0xFF;
+                pTrain->m_bFreightTrain = dataAyyay[nFlag++] & 0xFF;
+                pTrain->m_nOverLimitLevel = dataAyyay[nFlag++] & 0xFF;
+                pTrain->m_nSpeed = dataAyyay[nFlag++] & 0xFF;
+                nLen = dataAyyay[nFlag++] & 0xFF;
+                pTrain->m_strTrainType = dataAyyay.mid(nFlag, nLen);
+                nFlag += nLen;
+                
+                MainStation()->AddTrain(pTrain);
+
+                DeviceTrain* pDevice = dynamic_cast<Device::DeviceTrain*>(MainStation()->getDeviceByCode(pTrain->m_nPosCode));
+                if (pDevice) {
+                    pDevice->SetTrain(pTrain);
+                }
+                else {
+                    qDebug() << "未找到设备:" << pTrain->m_nPosCode;
                 }
             }
             else {
@@ -399,7 +407,7 @@ namespace Station {
                     if (!pDeviceTrain) {
                         return QByteArray();
                     }
-                    pTrain->m_nPosCode = (dataAyyay[13] & 0xFF) + (dataAyyay[34] & 0xFF) * 256;
+                    pTrain->m_nPosCode = (dataAyyay[13] & 0xFF) + (dataAyyay[14] & 0xFF) * 256;
                     DeviceBase* pNextDevice = MainStation()->getDeviceByCode(pTrain->m_nPosCode);
                     if (!pNextDevice) {
                         pNextDevice = MainStation()->getSwitchBySectionCode(pTrain->m_nPosCode);

@@ -59,7 +59,7 @@ namespace CTCWindows {
 				QVector<Station::Device::DeviceBase*> vect = Station::MainStation()->getDeviceVectorByType(TRACK);
 				for (int i = 0; i < vect.size(); i++) {
 					pStaDevice = dynamic_cast<Station::Device::StaTrack*>(vect.at(i));
-					pStaDevice->SetTrack();
+					pStaDevice->setSectionPowerCut(0x01);
 				}
 
 				pAuxiliary->close();
@@ -71,7 +71,6 @@ namespace CTCWindows {
 				pAuxiliary->close();
 			});
 			pAuxiliary->AddNewAuxiliaryBtn("ÆÆ·âÍ³¼Æ", [=]() {
-
 				pAuxiliary->ShowSealTechnique();
 				pAuxiliary->close();
 			});

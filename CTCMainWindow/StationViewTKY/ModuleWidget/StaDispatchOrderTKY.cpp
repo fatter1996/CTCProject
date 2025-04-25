@@ -104,7 +104,6 @@ namespace CTCWindows {
 				ui.trainWidget->hide();
 				ui.forwardCheckBox->hide();
 			}
-
 		}
 
 		void StaDispatchOrderTKY::DispatchOrderListUpData()

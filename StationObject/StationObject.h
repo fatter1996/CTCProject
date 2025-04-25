@@ -158,13 +158,13 @@ namespace Station {
         void RemoveTempTrain(StaTrain* pTrain) { m_vecStaTempTrain.removeOne(pTrain); }
         const QVector<StaStagePlan*>& StagePlanList() { return m_vecStaStagePlan; }
         const QVector<StaTrainRoute*>& TrainRouteList() { return m_vecStaTrainRoute; }
+        void RemoveTrainRoute(StaTrainRoute* pTrainRoute) { m_vecStaTrainRoute.removeOne(pTrainRoute); }
         const QVector<StaDispatchOrder*>& DispatchOrderList() { return m_vecStaDispatchOrder; }
         const QVector<StaTrafficLog*>& TrafficLogList() { return m_vecStaTrafficLog; }
         StaStagePlan* NewStagePlan() { return m_pNewStagePlan; }
         void ClearNewStagePlan() { m_pNewStagePlan = nullptr; };
         StaDispatchOrder* NewDispatchOrder() { return m_pNewDispatchOrder; }
         void ClearNewDispatchOrder() { m_pNewDispatchOrder = nullptr; };
-        
         void setDiploid(DiploidOperate operate, int nType = STAVIEW); //站场大小缩放
         double getDiploid(DiploidRatio ratio) const { return m_mapDiploidRatio[ratio]; }
 

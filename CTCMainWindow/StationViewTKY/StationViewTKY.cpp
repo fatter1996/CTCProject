@@ -104,13 +104,13 @@ namespace CTCWindows {
 					pDispatchOrderWnd->setAttribute(Qt::WA_DeleteOnClose);
 					pDispatchOrderWnd->ViewPermission(Station::LimitsOfAuthority::admin);
 					pDispatchOrderWnd->exec();
-					});
+				});
 				connect(pMenuBarInfo3->addNewAction("调度命令查询", 1, 1), &QAction::triggered, [&]() {
 					BaseWnd::StaDispatchOrder* pDispatchOrderWnd = CreateStaDispatchOrder();
 					pDispatchOrderWnd->setAttribute(Qt::WA_DeleteOnClose);
 					pDispatchOrderWnd->ViewPermission(Station::LimitsOfAuthority::employee);
 					pDispatchOrderWnd->exec();
-					});
+				});
 				connect(pMenuBarInfo3->addNewAction("行车凭证管理", 1, 2), &QAction::triggered, [&]() {});
 				connect(pMenuBarInfo3->addNewAction("行车凭证查询", 1, 3), &QAction::triggered, [&]() {});
 			}

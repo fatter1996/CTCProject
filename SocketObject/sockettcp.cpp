@@ -34,7 +34,7 @@ namespace Socket {
     bool SocketTCP::InitClient()
     {
        if (1/*m_pTcpSocket->bind(QHostAddress::Any, m_nLocalPort)*/) {
-           qDebug() << QString("Init TCP socket %1:%2 succeeded!").arg(m_hLocalIp.toString()).arg(m_nLocalPort);
+           //qDebug() << QString("Init TCP socket %1:%2 succeeded!").arg(m_hLocalIp.toString()).arg(m_nLocalPort);
            //连接
            m_pTcpSocket->setSocketOption(QAbstractSocket::KeepAliveOption, 1);
            m_pTcpSocket->connectToHost(m_hServerIp, m_nServerPort);
@@ -50,6 +50,7 @@ namespace Socket {
     void SocketTCP::onConnected()
     {
         qDebug() << QString("TCP connect to %1:%2 succeeded!").arg(m_hServerIp.toString()).arg(m_nServerPort);
+        //m_pTcpSocket->write("1111111111111111");
         if (m_nTimer >= 0) {
             killTimer(m_nTimer);
             m_nTimer = -1;
@@ -70,7 +71,6 @@ namespace Socket {
     void SocketTCP::onSendData(const QByteArray& dataArray)
     {
         m_pTcpSocket->write(dataArray);
-        qDebug() << dataArray.toHex();
     }
 
     void SocketTCP::timerEvent(QTimerEvent* event)

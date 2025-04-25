@@ -47,7 +47,7 @@ namespace Http {
 
 		if (postReply->error() == QNetworkReply::NoError) {
 			btResult = postReply->readAll();
-			qDebug() << QString::fromUtf8(btResult);
+			qDebug() << strUrl << strContent << QString::fromUtf8(btResult);
 			postReply->deleteLater(); //É¾³ýreply¶ÔÏó
 			delete m_pManager;
 			return true;
@@ -152,7 +152,6 @@ namespace Http {
 			.arg(pTrain->m_bArmy)
 			.arg(pTrain->m_bImportant)
 			.arg(pTrain->m_nTrainId);
-
 		return PostRequest("/trainProperty/saveTrainProperty", strContent, btResult);
 	}
 

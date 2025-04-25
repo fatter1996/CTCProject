@@ -200,6 +200,7 @@ namespace CTCWindows {
         m_pStatusBar->addWidget(m_pStatusBarWidget, 1);
 
     }
+    
     QString CTCMainWindow::getWeekday(const QDateTime& dateTime) {
         int weekday = dateTime.date().dayOfWeek();
         switch (weekday) {
@@ -221,13 +222,14 @@ namespace CTCWindows {
             return "";
         }
     }
+    
     void CTCMainWindow::upDateTime()
     {
         QDateTime currentDateTime = QDateTime::currentDateTime();
         QString timeStr = currentDateTime.toString("yyyy-MM-dd hh:mm:ss");
         TimeLabel->setText(QString("%1  %2").arg(timeStr).arg(getWeekday(currentDateTime)));
-
     }
+
     void CTCMainWindow::TurnToStationCtrlDisp()
     {
         if (m_pCurShowView != m_pStationCtrl) {
@@ -319,7 +321,7 @@ namespace CTCWindows {
         if (pServerComLabel) {
             pServerComLabel->show();
         }
-
+        m_pStationLog->OnTrafficLogTableUpData();
         m_eViewFlag = ViewFlag::TifficLogView;
         setMouseState(MouseState::Default);
     }

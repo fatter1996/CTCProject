@@ -397,12 +397,12 @@ namespace CTCWindows {
 							StaTrainRoute* pSubTrainRoute = nullptr;
 							for (int nSubRouteId : pTrainRoute->m_vecSubRouteId) {
 								if (Http::HttpClient::DeleteStaTrainRoute(nSubRouteId, btResult)) {
-									MainStation()->TrainRouteList().removeOne(MainStation()->getStaTrainRouteById(nSubRouteId));
+									MainStation()->RemoveTrainRoute(MainStation()->getStaTrainRouteById(nSubRouteId));
 								}
 							}
 						}
 						if (Http::HttpClient::DeleteStaTrainRoute(pTrainRoute->m_nRouteId, btResult)) {
-							MainStation()->TrainRouteList().removeOne(pTrainRoute);
+							MainStation()->RemoveTrainRoute(pTrainRoute);
 						}
 					}
 				});
