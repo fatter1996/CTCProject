@@ -290,7 +290,7 @@ namespace CTCWindows {
         if (pServerComLabel) {
             pServerComLabel->show();
         }
-
+        m_pStationLog->OnTrafficLogTableUpData();
         m_eViewFlag = ViewFlag::TifficLogView;
         setMouseState(MouseState::Default);
     }

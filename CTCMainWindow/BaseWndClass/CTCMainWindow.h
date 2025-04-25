@@ -84,6 +84,9 @@ namespace CTCWindows {
 		void setFixedSize(const QSize& size);
 		void SetShowToolbar(bool bShowBtn, bool bShowLabel);
 
+	public:
+		virtual void ShowEditingInterface(void* pTextSign) {};
+
 	private:
 		virtual BaseWnd::StationCtrlDisp* CreateStationCtrlDisp() = 0;
 		virtual BaseWnd::StationMultiDisp* CreateMultiStationDisp() = 0;
@@ -113,6 +116,7 @@ namespace CTCWindows {
 	private:
 		//初始化界面布局
 		void InitViewLayout();
+
 	signals:
 		void ModifyContent(QString Content, int TextColor, int BackColor, Station::Device::StaTextSign* pTextSign);
 	signals:

@@ -66,7 +66,7 @@ namespace CTCDoc{
 			m_pMainStation->InitDeviceEventFilter(m_pCTCMainWindow->StaPaintView());
 			StaOperationConnect();
 			//车站命令信息
-			m_pMainStation->SelectStationOrder();
+			//m_pMainStation->SelectStationOrder();
 			m_pCTCMainWindow->MultiDisp()->InitMultiStation(m_vecMultiStation);
 			QtConcurrent::run(m_pMainStation, &MainStationObject::SelectStationOrder);
 			m_pMainStation->OnLine();
@@ -215,7 +215,7 @@ namespace CTCDoc{
 		QObject::connect(m_pSocketUDP, &Socket::SocketUDP::recvData, m_pMainStation, &MainStationObject::onReciveData);
 		QObject::connect(m_pMainStation, &MainStationObject::SendDataToUDP, m_pSocketUDP, &Socket::SocketUDP::onSendData);
 		QObject::connect(m_pSocketTCP, &Socket::SocketTCP::recvData, m_pMainStation, &MainStationObject::onReciveData);
-		QObject::connect(m_pMainStation, &MainStationObject::SendDataToTCP, m_pSocketTCP, &Socket::SocketTCP::onSendData, Qt::DirectConnection);
+		QObject::connect(m_pMainStation, &MainStationObject::SendDataToTCP, m_pSocketTCP, &Socket::SocketTCP::onSendData);
 	}
 
 

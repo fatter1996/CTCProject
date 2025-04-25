@@ -103,12 +103,7 @@ namespace Station {
             virtual void ResetDevState() {}
 
         public:
-            void setState(const uint& nState) { 
-                m_nState = nState; 
-                if (m_strName == "8" && nState == 8) {
-                    m_nState = nState;
-                }
-            }
+            void setState(const uint& nState) { m_nState = nState; }
             uint getType() const { return m_nType; }
             void setStrType(const QString& strType) { m_strType = strType; }
             QString getStrType() const { return m_strType; }
@@ -189,14 +184,15 @@ namespace Station {
             void DrawTrackLine(const QPen& pen, const QPointF& ptStart, const QPointF& ptEnd, const bool bOutSide = false, const int nOffset = 0);
             //获取股道颜色
             QColor getTrackColor();
+            
+        public:
+            void setSectionPowerCut(int nState) { m_nPowerCut ^= nState; }
 
         protected:
             uint m_nZ = 0; //折点数
             QPointF p1, p2, p3, p4, p12, p34, pz12, pz34; //绘制坐标
             QRectF m_rcRespondRect;
             uint m_nPowerCut = 0;  //是否停电(1-定位,2-反位,4-岔前)(可组合)
-
-
         };
 
         

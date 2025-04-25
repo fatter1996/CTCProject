@@ -320,15 +320,6 @@ namespace Station {
         pDispatch->m_nStateDisOrder = subObj.value("stateDisOrder").toInt();
     }
 
-    QMap<QString, QString> StaDispatchOrder::GetOrder(int m_nOrderId, int m_nOrderType, int m_nSendState)
-    {
-        QMap<QString, QString> m_mapOredr;
-        m_mapOredr.insert("命令ID",QString("%1").arg(m_nOrderId));
-        m_mapOredr.insert("命令类型", QString("%1").arg(m_nOrderType));
-        m_mapOredr.insert("发送状态", QString("%1").arg(m_nSendState));
-        return QMap<QString, QString>();
-    }
-
     StaDispatchOrder* StaTrainDispatch::getParentOrder()
     {
         for (StaDispatchOrder* pOrder : MainStation()->DispatchOrderList()) {
@@ -380,8 +371,77 @@ namespace Station {
             && m_tAdjAgrDepartTime.isNull() && m_tAdjArrivalTime.isNull();
     }
 
-    void StaTrafficLog::Init(StaTrafficLog* pTrain, const QJsonObject& subObj)
+    void StaTrafficLog::Init(StaTrafficLog* pTrafficLog, const QJsonObject& subObj)
     {
+        pTrafficLog->m_nLogId = subObj.value("id").toInt();
+        pTrafficLog->m_nTrainId = subObj.value("trainId").toInt();
+        pTrafficLog->m_nPlanType = subObj.value("trainId").toInt();
+
+        //到达信息
+        pTrafficLog->m_strArrivalTrainNum = subObj.value("arrivalTrainNumber").toString();
+        pTrafficLog->m_nArrivalTrackCode = subObj.value("arrivalTrack").toInt();
+        pTrafficLog->m_strArrivalTrack = MainStation()->getDeviceByCode(pTrafficLog->m_nArrivalTrackCode)->getName();
+        pTrafficLog->m_nArrivalSignalCode = subObj.value("homeSignalCode").toInt();
+        pTrafficLog->m_strArrivaSignal = MainStation()->getDeviceByCode(pTrafficLog->m_nArrivalSignalCode)->getName();
+        pTrafficLog->m_tProvArrivalTime = QDateTime::fromString(subObj.value("provArrivalTime").toString(), Qt::ISODate);
+        pTrafficLog->m_tRealArrivalTime = QDateTime::fromString(subObj.value("realArrivalTime").toString(), Qt::ISODate);
+        pTrafficLog->m_tAgrAdjDepartTime = QDateTime::fromString(subObj.value("agrAdjDepartTime").toString(), Qt::ISODate);
+        pTrafficLog->m_tAdjDepartTime = QDateTime::fromString(subObj.value("adjDepartTime").toString(), Qt::ISODate);
+        pTrafficLog->m_nArrivalLimit = subObj.value("arrivalLimit").toInt();
+        pTrafficLog->m_nArrivalRouteId = subObj.value("arrivalRouteId").toInt();
+        pTrafficLog->m_strArrivalLocomotive = subObj.value("arrivalLocomotive").toString();
+        pTrafficLog->m_strArrivalDriver = subObj.value("arrivalDriver").toString();
+        pTrafficLog->m_nArrivalTrainMaster = subObj.value("arrivalLength").toString();
+        pTrafficLog->m_nArrivalTrainValue = subObj.value("arrivalTrainNum").toInt();
+        pTrafficLog->m_nArrivalChange = subObj.value("arrivalChange").toInt();
+        pTrafficLog->m_nArrivalWeight = subObj.value("arrivalWeight").toInt();
+
+        //出发信息
+        pTrafficLog->m_strDepartTrainNum = subObj.value("departTrainNumber").toString();
+        pTrafficLog->m_nDepartTrackCode = subObj.value("departTrack").toInt();
+        pTrafficLog->m_strDepartTrack = MainStation()->getDeviceByCode(pTrafficLog->m_nDepartTrackCode)->getName();
+        pTrafficLog->m_nDepartSignalCode = subObj.value("startingSignalCode").toInt();
+        pTrafficLog->m_strDepartSignal = MainStation()->getDeviceByCode(pTrafficLog->m_nDepartSignalCode)->getName();
+        pTrafficLog->m_tProvDepartTime = QDateTime::fromString(subObj.value("provDepartTime").toString(), Qt::ISODate);
+        pTrafficLog->m_tRealDepartTime = QDateTime::fromString(subObj.value("realDepartTime").toString(), Qt::ISODate);
+        pTrafficLog->m_tAdjAgrDepartTime = QDateTime::fromString(subObj.value("adjAgrDepartTime").toString(), Qt::ISODate);
+        pTrafficLog->m_tAdjArrivalTime = QDateTime::fromString(subObj.value("adjArrivalTime").toString(), Qt::ISODate);
+        pTrafficLog->m_nDepartLimit = subObj.value("departLimit").toInt();
+        pTrafficLog->m_nDepartRouteId = subObj.value("departRouteId").toInt();
+        pTrafficLog->m_strDepartLocomotive = subObj.value("departLocomotive").toString();
+        pTrafficLog->m_strDepartDriver = subObj.value("departDriver").toString();
+        pTrafficLog->m_nDepartTrainMaster = subObj.value("departLength").toString();
+        pTrafficLog->m_nDepartTrainValue = subObj.value("departTrainNum").toInt();
+        pTrafficLog->m_nDepartChange = subObj.value("departChange").toInt();
+        pTrafficLog->m_nDepartWeight = subObj.value("departWeight").toInt();
+
+        pTrafficLog->m_strDelayReason = subObj.value("delayReason").toString();
+        pTrafficLog->m_bUpDown = subObj.value("upDown").toBool();
+        pTrafficLog->m_bDeleteFlag = subObj.value("deleteFlag").toBool();
+        pTrafficLog->m_strTrainArr = subObj.value("strTrainArr").toString();
+        pTrafficLog->m_strNotes = subObj.value("notes").toString();
+        pTrafficLog->m_bPassenger = subObj.value("passenger").toBool();
+        pTrafficLog->m_bAllowTrackNotMatch = subObj.value("allowTrackNotMatch").toBool();
+        pTrafficLog->m_bAllowSignalNotMatch = subObj.value("allowSignalNotMatch").toBool();
+
+        pTrafficLog->m_bLJStatus = subObj.value("ljStatus").toBool();
+        pTrafficLog->m_bJLStatus = subObj.value("jlStatus").toBool();
+        pTrafficLog->m_bJPStatus = subObj.value("jpStatus").toBool();
+        pTrafficLog->m_bLWStatus = subObj.value("lwStatus").toBool();
+        pTrafficLog->m_bJCStatus = subObj.value("jcStatus").toBool();
+        pTrafficLog->m_bHJStatus = subObj.value("hjStatus").toBool();
+        pTrafficLog->m_bCJStatus = subObj.value("cjStatus").toBool();
+        pTrafficLog->m_bSSStatus = subObj.value("ssStatus").toBool();
+        pTrafficLog->m_bZGStatus = subObj.value("zgStatus").toBool();
+        pTrafficLog->m_bHCStatus = subObj.value("hcStatus").toBool();
+        pTrafficLog->m_bZXStatus = subObj.value("zxStatus").toBool();
+        pTrafficLog->m_bXWStatus = subObj.value("xwStatus").toBool();
+        pTrafficLog->m_bDKStatus = subObj.value("dkStatus").toBool();
+        pTrafficLog->m_bCHStatus = subObj.value("chStatus").toBool();
+        pTrafficLog->m_bZWStatus = subObj.value("zwStatus").toBool();
+        pTrafficLog->m_bZKStatus = subObj.value("zkStatus").toBool();
+        pTrafficLog->m_strTrainPosStatus = subObj.value("trainPosStatus").toString();
+        pTrafficLog->m_strProc = subObj.value("proc").toString();
     }
 }
 

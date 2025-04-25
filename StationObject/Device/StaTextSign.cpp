@@ -20,7 +20,6 @@ namespace Station {
         void StaTextSign::InitAttributeMap()
         {
 
-           
         }
 
         void StaTextSign::Draw(bool isMulti)
@@ -41,77 +40,11 @@ namespace Station {
             QFont font;
             font.setFamily("微软雅黑");
             font.setPixelSize(Scale(m_nFontSize));//字号
-            
+
+            // 根据范围调整字体大小
             QFontMetrics fm(font);
             int textWidth = fm.horizontalAdvance(m_strText);
             int textHeight = fm.height();
-            connect(CTCWindows::MainWindow(), &CTCWindows::CTCMainWindow::ModifyContent, [=](QString Content, int TextColor, int BackColor, StaTextSign* pTextSign) {
-                if (pTextSign == this) {
-                    qDebug() << Content << TextColor << BackColor << m_colBackground << m_colText << m_strText;
-                    if (Content != "") {
-                        m_strText = Content;
-                    }
-                    QFont font;
-                    QFontMetrics fm(font);
-                    int textWidth = fm.horizontalAdvance(m_strText);
-                    int textHeight = fm.height();
-                    m_rcBackground = QRect(m_ptShowPos.x() - 4, m_ptShowPos.y() - 4, 8, 8);
-
-                    m_rcBackground.setWidth(textWidth + 8);
-                    m_rcBackground.setHeight(textHeight + 8);
-                    switch (TextColor)
-                    {
-                    case 0:
-                        m_colText = Qt::black;
-                        break;
-                    case 1:
-                        m_colText = Qt::white;
-                        break;
-                    case 2:
-                        m_colText = Qt::red;
-                        break;
-                    case 3:
-                        m_colText = Qt::yellow;
-                        break;
-                    case 4:
-                        m_colText = Qt::blue;
-                        break;
-                    case 5:
-                        m_colText = Qt::green;
-                        break;
-                    default:
-                        m_colText = Qt::black;
-                        break;
-                    }
-
-                    switch (BackColor)
-                    {
-                    case 0:
-                        m_colBackground = Qt::white;
-                        break;
-                    case 1:
-                        m_colBackground = Qt::yellow;
-                        break;
-                    case 2:
-                        m_colBackground = Qt::blue;
-                        break;
-                    case 3:
-                        m_colBackground = Qt::green;
-                        break;
-                    case 4:
-                        m_colBackground = Qt::red;
-                        break;
-                    case 5:
-                        m_colBackground = Qt::black;
-                        break;
-                    default:
-                        m_colBackground = Qt::white;
-                        break;
-                    }
-                    Draw();
-                }
-                });
-            // 根据范围调整字体大小
             if (m_rcTextRect != QRectF()) {
                 while (textWidth > Scale(m_rcTextRect).width() || textHeight > Scale(m_rcTextRect).height()) {
                     font.setPixelSize(font.pixelSize() - 1);
@@ -124,10 +57,12 @@ namespace Station {
             m_rcBackground.setWidth(textWidth + 8);
             m_rcBackground.setHeight(textHeight + 8);
         }
+
         bool StaTextSign::IsMouseWheel(const QPoint& ptPos)
         {
             return false;
         }
+
         void StaTextSign::ShowDeviceMenu(const QPoint& ptPos)
         {
             QMenu* pMenu = new QMenu();
@@ -135,22 +70,21 @@ namespace Station {
             QAction* pAction1 = new QAction("编辑");
             pMenu->addAction(pAction1);
             QObject::connect(pAction1, &QAction::triggered, [=]() {
-                emit Station::MainStation()->TextSignEdit(m_strText,this);
-                });
+                CTCWindows::MainWindow()->ShowEditingInterface(this);
+            });
             QAction* pAction2 = new QAction("删除");
             pMenu->addAction(pAction2);
             QObject::connect(pAction2, &QAction::triggered, [=]() {
-                //m_rcBackground = QRect(0,0,0,0);
-                
-                emit Station::MainStation()->DeleteTextSign(this);
-                
-                });
+                MainStation()->DeleteTextSign(this);
+            });
             pMenu->exec(QCursor::pos());
         }
+
         bool StaTextSign::Contains(const QPoint& ptPos)
         {
             return Scale(m_rcTextRect).contains(ptPos) || Scale(m_rcBackground).contains(ptPos);
         }
+
         void StaTextSign::DrawTextSign()
         {
             m_pPainter.setPen(m_colBackground);

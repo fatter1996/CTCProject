@@ -68,10 +68,8 @@ namespace Station {
         bool IsVisible(VisibleDev devType);
         void InterLockfileAnalysis(QString Line);
         void AddNewTextSign(const QString& strText, const QPoint& ptPos, const QColor& colFont = Qt::black, const QColor& colBackground = Qt::white, int nSize = 10);
-        void ClearAllTextSign();
-    signals:
-        void TextSignEdit(QString text, Device::StaTextSign* pTextSign);
         void DeleteTextSign(Device::StaTextSign* pTextSign);
+        void ClearAllTextSign();
       
     private:    //内部初始化
         void ReadDeviceInfoHead(); //解析"station.xml" HEAD
@@ -79,13 +77,7 @@ namespace Station {
         void InitDeviceMap();
         
     public:
-        QVector<Device::DeviceBase*>& getDeviceVectorByType(QString strType) { return m_mapDeviceVector[strType];
-        
-        }
-        static QMap<QString, std::function<Device::DeviceBase* (StationObject*)>> getmapDeviceVector() {
-            return m_mapCreatDeviceVector; 
-        }
-
+        QVector<Device::DeviceBase*>& getDeviceVectorByType(QString strType) { return m_mapDeviceVector[strType]; }
         void setStationName(const QString& strName) { m_strStationName = strName; }
         QString getStationName() { return m_strStationName; }
         Device::DeviceBase* getDeviceByCode(const uint& nCode);
@@ -125,7 +117,6 @@ namespace Station {
         static QXmlStreamReader* m_pDeviceInfoReader;  //XML解析器
         static QMap<QString, std::function<Device::DeviceBase* (StationObject*)>> m_mapCreatDeviceVector;
         static int m_nTimerId_500;
-        static int UpStateTimer;
     };
 
     
@@ -196,13 +187,13 @@ namespace Station {
         void RemoveTrainRoute(StaTrainRoute* pTrainRoute) { m_vecStaTrainRoute.removeOne(pTrainRoute); }
         const QVector<StaStagePlan*>& StagePlanList() { return m_vecStaStagePlan; }
         const QVector<StaTrainRoute*>& TrainRouteList() { return m_vecStaTrainRoute; }
+        void RemoveTrainRoute(StaTrainRoute* pTrainRoute) { m_vecStaTrainRoute.removeOne(pTrainRoute); }
         const QVector<StaDispatchOrder*>& DispatchOrderList() { return m_vecStaDispatchOrder; }
         const QVector<StaTrafficLog*>& TrafficLogList() { return m_vecStaTrafficLog; }
         StaStagePlan* NewStagePlan() { return m_pNewStagePlan; }
         void ClearNewStagePlan() { m_pNewStagePlan = nullptr; };
         StaDispatchOrder* NewDispatchOrder() { return m_pNewDispatchOrder; }
         void ClearNewDispatchOrder() { m_pNewDispatchOrder = nullptr; };
-        
         void setDiploid(DiploidOperate operate, int nType = STAVIEW); //站场大小缩放
         double getDiploid(DiploidRatio ratio) const { return m_mapDiploidRatio[ratio]; }
 
@@ -225,8 +216,6 @@ namespace Station {
         void onOrderClear(bool bClearTwinkle = false);
         void onUserLogin(QString strUserName, QString strPassword);
  
-
-     
     signals:
         void FunBtnStateReset();
         void SendDataToUDP(const QByteArray&);
@@ -260,7 +249,7 @@ namespace Station {
         QMap<Order, std::function<void(void*, const QJsonObject&)>> m_mapStationOrder;
         QMap<DiploidRatio, double> m_mapDiploidRatio;
 
-       // static int m_nTimerId_500 ;
+
         StaStagePlan* m_pNewStagePlan = nullptr;
         StaDispatchOrder* m_pNewDispatchOrder = nullptr;
     };

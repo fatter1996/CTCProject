@@ -154,11 +154,12 @@ namespace CTCWindows {
 				pTextSignLable->move(ptMouseT);
 				connect(pTextSignLable, &Control::TextSignLable::addTextSignLable, [ptMouseT](const QString& strText) {
 					Station::MainStation()->AddNewTextSign(strText, ptMouseT);
-					});
-				}));
+				});
+			}));
+
 			pMenu->addAction(AddActionToMenu("Çå¿ÕÎÄ×Ö±ê×¢", [=](bool) {
 				Station::MainStation()->ClearAllTextSign();
-				}));
+			}));
 
 		}
 

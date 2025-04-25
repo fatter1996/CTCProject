@@ -6,6 +6,7 @@
 #include "CTCMainWindow/CustomControl/LntervallogicCheck.h"
 #include "CTCMainWindow/CommonWidget/VehicleManage.h"
 #include "ModuleWidget/EditingInterfaceTKY.h"
+
 namespace CTCWindows {
 	namespace CARS {
 		class StationViewTKY : public CTCMainWindow
@@ -15,6 +16,7 @@ namespace CTCWindows {
 		public:
 			StationViewTKY(QWidget* parent = nullptr);
 			~StationViewTKY();
+
 		public:
 			//创建CTC
 			static StationViewTKY* CreatStationView(QWidget* parent = nullptr);

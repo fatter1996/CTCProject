@@ -12,9 +12,10 @@
 
 namespace Station {
 	enum class LimitsOfAuthority : int {
-		admin,		//管理
-		employee    //成员
+		admin,		
+		employee    
 	};
+
 	enum class VisibleDev : int {
 		button,					//按钮
 		trainButton,			//列车按钮
@@ -89,8 +90,8 @@ namespace Station {
 		int m_nTrainId = 0; //车次ID 
 		QString m_strTrainNum; //车次号
 		bool m_bRight = true; //方向(左行-false 右行-true)
-		int  m_nTrainLengh = 0; //编组长度
-		int  m_nSpeed = 0; //速度
+		int m_nTrainLengh = 0; //编组长度
+		int m_nSpeed = 0; //速度
 		bool m_bElectric = true; //电力
 		int m_nOverLimitLevel = 0; //超限等级
 		bool m_bFreightTrain = false; //列货类型(列车-false, 货车-true)
@@ -319,6 +320,6 @@ namespace Station {
 		StaTrafficLog() {}
 		StaTrafficLog(StaStagePlan* pStaStagePlan, int nTrainId);
 		bool IsReportedPoints();
-		static void Init(StaTrafficLog* pTrain, const QJsonObject& subObj);
+		static void Init(StaTrafficLog* pTrafficLog, const QJsonObject& subObj);
 	};
 }

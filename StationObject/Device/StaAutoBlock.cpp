@@ -216,13 +216,6 @@ namespace Station {
 
         void StaAutoBlock::DrawRoutePreviewWnd()
         {
-            QFont font = m_pPainter.font();
-            font.setPointSizeF(14);
-            QPen pen;
-            pen.setColor(Qt::white);
-            pen.setStyle(Qt::SolidLine);
-            m_pPainter.setPen(pen);
-            m_pPainter.setFont(font);
             QRectF rcTeainNum[3];
             rcTeainNum[0] = { m_ptRouteWnd.x(), m_ptRouteWnd.y(), 120, 32 };
             rcTeainNum[1] = { m_ptRouteWnd.x(), m_ptRouteWnd.y() + 32, 120, 32 };
@@ -230,43 +223,50 @@ namespace Station {
             
             QVector<StaTrainRoute*> vecTrainRoute;
             for (StaTrainRoute* pRoute : MainStation()->TrainRouteList()) {
-                
                 if (pRoute->m_strSignal == m_strDirection) {
                     vecTrainRoute.append(pRoute);
                 }
             }
             int nIndex = 0;
             StaTrain* pTrain = nullptr;
-            
+            QFont font = m_pPainter.font();
+            font.setPointSizeF(14);
+            m_pPainter.setFont(font);
+            StaTrainRoute* pRoute = nullptr;
             while (nIndex < 3) {
+                m_pPainter.setPen(QPen(Qt::white));
                 m_pPainter.setBrush(Qt::NoBrush);
                 m_pPainter.setPen(Qt::white);
                 m_pPainter.drawRect(Scale(rcTeainNum[nIndex]));
 
                 if (nIndex < vecTrainRoute.size()) {
+                    
+                    pRoute = vecTrainRoute[nIndex];
+                    if (!pRoute->m_bAutoTouch) {//人工触发-false
+                        m_pPainter.setPen(QPen(COLOR_LIGHT_RED, 1));
+                    }
+                    else if(pRoute->m_bAutoTouch) {//自动触发-true
+                        m_pPainter.setPen(QPen(COLOR_BTN_YELLOW, 1));
+                    }
+               
+                    if (pRoute->m_nRouteState == 2) {//触发成功
+                        m_pPainter.setPen(QPen(COLOR_BTN_GREEN_TG, 1));
+                    }
                     pTrain = MainStation()->getStaTrainById(vecTrainRoute[nIndex]->m_nTrainId);
-                    StaTrainRoute* pRoute = vecTrainRoute[nIndex];
-                        if (!pRoute->m_bAutoTouch) {//人工触发-false
-                            m_pPainter.setPen(QPen(COLOR_LIGHT_RED, 1));
-                        }
-                        else if(pRoute->m_bAutoTouch) {//自动触发-true
-                            m_pPainter.setPen(QPen(COLOR_BTN_YELLOW, 1));
-                        }
-               
-                        if (pRoute->m_nRouteState == 2) {//触发成功
-                            m_pPainter.setPen(QPen(COLOR_BTN_GREEN_TG, 1));
-                        }
-               
-                        if (pRoute->m_bArrivaRoute)//接发类型 (接车-true 发车-false 通过)
-                        {
-                            m_pPainter.drawText(Scale(rcTeainNum[nIndex]), pTrain->m_strTrainNum + "  J" + pRoute->m_strTrack, QTextOption(Qt::AlignCenter));
-                        }
-                        else if (!pRoute->m_bArrivaRoute) {
-                            m_pPainter.drawText(Scale(rcTeainNum[nIndex]), pTrain->m_strTrainNum + "  F" + pRoute->m_strTrack, QTextOption(Qt::AlignCenter));
-                        }
-                        else {
-                            m_pPainter.drawText(Scale(rcTeainNum[nIndex]), pTrain->m_strTrainNum + "  T" + pRoute->m_strTrack, QTextOption(Qt::AlignCenter));
-                        }     
+                    if (!pTrain) {
+                        nIndex++;
+                        continue;
+                    }
+                    if (pRoute->m_bArrivaRoute)//接发类型 (接车-true 发车-false 通过)
+                    {
+                        m_pPainter.drawText(Scale(rcTeainNum[nIndex]), pTrain->m_strTrainNum + "  J" + pRoute->m_strTrack, QTextOption(Qt::AlignCenter));
+                    }
+                    else if (!pRoute->m_bArrivaRoute) {
+                        m_pPainter.drawText(Scale(rcTeainNum[nIndex]), pTrain->m_strTrainNum + "  F" + pRoute->m_strTrack, QTextOption(Qt::AlignCenter));
+                    }
+                    else {
+                        m_pPainter.drawText(Scale(rcTeainNum[nIndex]), pTrain->m_strTrainNum + "  T" + pRoute->m_strTrack, QTextOption(Qt::AlignCenter));
+                    }     
                 }
                 nIndex++;
             } 

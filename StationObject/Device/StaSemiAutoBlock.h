@@ -38,6 +38,7 @@ namespace Station {
             void AddBlockBtn(QString strType, const QString& strElement);
 
             void DrawRoutePreviewWnd();
+
         private:
             QPointF m_ptRouteWnd;
             QVector<StaBlockBtn> m_vecBlockBtn;
