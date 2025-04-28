@@ -2,7 +2,6 @@
 #include <QButtonGroup>
 #include <QAbstractButton>
 #include "Global.h"
-
 #include "CommonWidget/LeadSealDlg.h"
 #pragma execution_character_set("utf-8")
 

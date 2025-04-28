@@ -434,10 +434,9 @@
         {
             "#m_nType": "类型,暂定统一为510",
             "#m_strName": "名称",
-            "#pName": "文字范围",
-            "#m_lampRect": "灯范围"
+            "#pName": "文字左上坐标",
+            "#m_ptLamp": "灯左上坐标"
         }
-        
     ],
     "#PermillSix": "千分之六",
     "PermillSix": [
@@ -488,11 +487,6 @@
             },
             "#m_Color": "颜色(0-白,1-红,2-黄,3-绿)",
             "#m_Rect": "显示范围"
-        },
-        {
-            "m_nType": 611,
-            "m_Color": 3,
-            "m_Rect": "540, 200, 600, 240"
         }
     ],
     "Direction": {

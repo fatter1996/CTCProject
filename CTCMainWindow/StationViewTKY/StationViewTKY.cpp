@@ -17,12 +17,41 @@ namespace CTCWindows {
 			: CTCMainWindow(parent)
 		{
 			ui.setupUi(this);
+			installEventFilter(this);
+			m_pCountdownLabel = new QLabel(this);
+			m_pCountdownLabel->setFixedSize(48, 48);
+			m_pCountdownLabel->setAlignment(Qt::AlignCenter);
+			m_pCountdownLabel->move(16, 72);
+			m_pCountdownLabel->setStyleSheet(
+				"background-color: rgba(128,128,128,160);"
+				"border: 2px solid rgba(128,128,128,200);;"
+				"font-size: 15px;"
+				"font-family: 宋体;"
+				"color:red;"
+			);
+			m_pCountdownLabel->hide();
+
+			m_nTimerId = startTimer(1000);
+			
+			m_pTimeLabel = new QLabel(this);
+			m_pTimeLabel->setFixedSize(80, 48);
+			m_pTimeLabel->setAlignment(Qt::AlignCenter);
+			m_pTimeLabel->move(width() - 108, 72);
+			m_pTimeLabel->setStyleSheet(
+				"background-color: rgba(128,128,128,160);"
+				"border: 2px solid rgba(128,128,128,200);;"
+				"font-family: 宋体;"
+				"font-size: 15px;"
+				"color:white;"
+			);
+			
 		}
 
 		StationViewTKY::~StationViewTKY()
 		{
-
+			killTimer(m_nTimerId);
 		}
+
 		StationViewTKY* StationViewTKY::CreatStationView(QWidget* parent)
 		{
 			return new StationViewTKY(parent);
@@ -516,74 +545,103 @@ namespace CTCWindows {
 		}
 
 		bool StationViewTKY::eventFilter(QObject* obj, QEvent* event) {
-			if (obj == m_pBottomStationViewToolBar && event->type() == QEvent::ContextMenu) {
-				return true; // 直接拦截右键事件
-			}
-			if (obj == m_pStateToolBar && event->type() == QEvent::ContextMenu) {
-				return true; // 直接拦截右键事件
-			}
-			if (obj == m_pStationViewToolBar && event->type() == QEvent::ContextMenu) {
-				return true; // 直接拦截右键事件
-			}
-			if (obj == m_pSignForToolBar && event->type() == QEvent::ContextMenu) {
-				return true; // 直接拦截右键事件
+			if (event->type() == QEvent::Resize) {
+				m_pTimeLabel->move(width() - 108, 72);
 			}
 			return QObject::eventFilter(obj, event);
 		}
 
-		void StationViewTKY::InitbottomTrafficLogToolBar()
+		void StationViewTKY::timerEvent(QTimerEvent* event)
 		{
-			m_pBottomStationViewToolBar = new QToolBar(this);
-			m_pBottomStationViewToolBar->installEventFilter(this);
+			if (m_nTimerId == event->timerId()) {
+				UpdataDateTime();
+				m_pTimeLabel->setText(QDateTime::currentDateTime().toString("hh:mm:ss"));
+
+				if (BaseWnd::StaFunBtnToolBar::getCountdown() > 0) {
+					m_pCountdownLabel->show();
+					m_pCountdownLabel->setText(QString::number(BaseWnd::StaFunBtnToolBar::getCountdown() / 2));
+				}
+				else {
+					m_pCountdownLabel->hide();
+				}
+			}
+			return CTCMainWindow::timerEvent(event);
+		}
+
+		void StationViewTKY::InitBottomToolBar()
+		{
+			m_pBottomToolBar = new QToolBar(this);
+			m_pBottomToolBar->installEventFilter(this);
 			QPushButton* pDispatBtn = new QPushButton("行车日志");
 			pDispatBtn->setCheckable(true);
 			pDispatBtn->setFixedSize(64, 20);
 			pDispatBtn->setStyleSheet("QPushButton {background-color: rgb(250, 250, 250);}");
-			m_pBottomStationViewToolBar->addWidget(pDispatBtn);
+			m_pBottomToolBar->addWidget(pDispatBtn);
 			connect(pDispatBtn, &QPushButton::clicked, this, &CTCMainWindow::TurnToTrafficLogDisp);
-			connect(pDispatBtn, &QPushButton::toggled, this, &CTCMainWindow::onButtonToggled);
-			addToolBar(m_pBottomStationViewToolBar);
 
 			QPushButton* pTrainformaBtn = new QPushButton("列车编组");
 			pTrainformaBtn->setCheckable(true);
 			pTrainformaBtn->setFixedSize(64, 20);
 			pTrainformaBtn->setStyleSheet("QPushButton {background-color: rgb(250, 250, 250);}");
-			m_pBottomStationViewToolBar->addWidget(pTrainformaBtn);
+			m_pBottomToolBar->addWidget(pTrainformaBtn);
 			connect(pTrainformaBtn, &QPushButton::clicked, this, [&] {});
-			addToolBar(m_pBottomStationViewToolBar);
 
 			QPushButton* pTelephonerecordBtn = new QPushButton("电话记录");
 			pTelephonerecordBtn->setCheckable(true);
 			pTelephonerecordBtn->setFixedSize(64, 20);
 			pTelephonerecordBtn->setStyleSheet("QPushButton {background-color: rgb(250, 250, 250);}");
-			m_pBottomStationViewToolBar->addWidget(pTelephonerecordBtn);
+			m_pBottomToolBar->addWidget(pTelephonerecordBtn);
 			connect(pTelephonerecordBtn, &QPushButton::clicked, this, [&] {});
-			addToolBar(m_pBottomStationViewToolBar);
 
 			QPushButton* pAdjacentStationBtn = new QPushButton("邻站站名");
 			pAdjacentStationBtn->setCheckable(true);
 			pAdjacentStationBtn->setFixedSize(64, 20);
 			pAdjacentStationBtn->setStyleSheet("QPushButton {background-color: rgb(250, 250, 250);}");
-			m_pBottomStationViewToolBar->addWidget(pAdjacentStationBtn);
+			m_pBottomToolBar->addWidget(pAdjacentStationBtn);
 			connect(pAdjacentStationBtn, &QPushButton::clicked, this, [&] {});
-			addToolBar(m_pBottomStationViewToolBar);
 
 			QPushButton* pMapTimeBtn = new QPushButton("图定时间");
 			pMapTimeBtn->setCheckable(true);
 			pMapTimeBtn->setFixedSize(64, 20);
 			pMapTimeBtn->setStyleSheet("QPushButton {background-color: rgb(250, 250, 250);}");
-			m_pBottomStationViewToolBar->addWidget(pMapTimeBtn);
+			m_pBottomToolBar->addWidget(pMapTimeBtn);
 			connect(pMapTimeBtn, &QPushButton::clicked, this, [&] {});
-			addToolBar(m_pBottomStationViewToolBar);
 
 			QPushButton* pAdjacentStationDepartureBtn = new QPushButton("邻站发车");
 			pAdjacentStationDepartureBtn->setCheckable(true);
 			pAdjacentStationDepartureBtn->setFixedSize(64, 20);
 			pAdjacentStationDepartureBtn->setStyleSheet("QPushButton {background-color: rgb(250, 250, 250);}");
-			m_pBottomStationViewToolBar->addWidget(pAdjacentStationDepartureBtn);
+			m_pBottomToolBar->addWidget(pAdjacentStationDepartureBtn);
 			connect(pAdjacentStationDepartureBtn, &QPushButton::clicked, this, [&] {});
-			addToolBar(m_pBottomStationViewToolBar);
+			addToolBar(Qt::BottomToolBarArea, m_pBottomToolBar);
+		}
 
+		void StationViewTKY::InitStatusBar()
+		{
+			m_pStatusBar = new QStatusBar(this);
+			m_pStatusBar->setFixedHeight(28);
+
+			QLabel* permanentLabel = new QLabel;
+			permanentLabel->setStyleSheet("border: 0.5px solid #CCCCCC;");
+			permanentLabel->setFixedWidth(160);
+			permanentLabel->setAlignment(Qt::AlignVCenter);
+			permanentLabel->setText("中国铁道科学研究院");
+
+			m_pBottomTimeLabel = new QLabel;
+			m_pBottomTimeLabel->setStyleSheet("border: 0.5px solid #CCCCCC;");
+			m_pBottomTimeLabel->setFixedWidth(180);
+			m_pBottomTimeLabel->setAlignment(Qt::AlignVCenter);
+
+			QLabel* permanentLabe2 = new QLabel;
+			permanentLabe2->setStyleSheet("border: 0.5px solid #CCCCCC;");
+			permanentLabe2->setFixedWidth(120);
+			permanentLabe2->setAlignment(Qt::AlignVCenter);
+			permanentLabe2->setText(QString("本站名：%1").arg(Station::MainStation()->getStationName()));
+
+			m_pStatusBar->addWidget(permanentLabel);
+			m_pStatusBar->addWidget(m_pBottomTimeLabel);
+			m_pStatusBar->addWidget(permanentLabe2);
+			setStatusBar(m_pStatusBar);
 		}
 
 		void StationViewTKY::ShowEditingInterface(void* pTextSign)

@@ -206,8 +206,6 @@ namespace Station {
         int m_nUserId = 0;
         CultivateObject::Subject* m_pCurSubject = nullptr;
         bool m_bAutoSendPlan = true;
-        int m_nCountdown = 0;
-        int m_nTimerId_1000 = -1;
         QVector<StaTrain*> m_vecStaTrain;
         QVector<StaTrain*> m_vecStaTempTrain;
         QVector<StaStagePlan*> m_vecStaStagePlan;

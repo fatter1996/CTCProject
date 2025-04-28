@@ -106,7 +106,8 @@ namespace CTCWindows {
 		//初始化工具栏-状态工具栏
 		virtual void InitStateToolBar() = 0;
 		// 初始化工具栏-底部行车日志工具栏
-		virtual void InitbottomTrafficLogToolBar() = 0 ;
+		virtual void InitBottomToolBar() {}
+		virtual void InitStatusBar() {}
 		virtual QLayout* WidgetLayout() = 0;
 
 	private:
@@ -117,8 +118,6 @@ namespace CTCWindows {
 		void ModifyContent(QString Content, int TextColor, int BackColor, Station::Device::StaTextSign* pTextSign);
 
 	public slots:
-		void onButtonToggled(bool checked);
-		void InitStatusBar();
 		void TurnToStationCtrlDisp();
 		void TurnToStationMultiDisp();
 		void TurnToTrafficLogDisp();
@@ -132,9 +131,7 @@ namespace CTCWindows {
 		QPushButton* AddToolBarBtn(const QString& strIconFile, const QString& strToolTip, int nType, 
 			bool bCheckable = false, bool bChecked = false, bool bEnabled = true, const QString& strIconFile2 = "");
 		void AddToolBarSeparator(int nType);
-		void timerEvent(QTimerEvent* event);
-		QString getWeekday(const QDateTime& dateTime);
-		void upDateTime();
+		void UpdataDateTime();
 
 	public:
 		BaseWnd::StationCtrlDisp* StaCtrlDisp() const { return m_pStationCtrl; }
@@ -150,8 +147,7 @@ namespace CTCWindows {
 		bool IsShowToolbar() const { return !m_pStationViewToolBar->isHidden(); }
 
 	protected:
-		int TimerId = 0;
-		QLabel* TimeLabel = nullptr;
+		QLabel* m_pBottomTimeLabel = nullptr;
 		BaseWnd::StationCtrlDisp* m_pStationCtrl = nullptr;	//单站界面
 		BaseWnd::StationMultiDisp* m_pStationMulti = nullptr; //站间透明
 		BaseWnd::StationLogDisp* m_pStationLog = nullptr; //行车日志
@@ -162,10 +158,8 @@ namespace CTCWindows {
 		QToolBar* m_pTrafficLogToolBar = nullptr; //行车日志界面工具栏
 		QToolBar* m_pSignForToolBar = nullptr; //签收工具栏
 		QToolBar* m_pStateToolBar = nullptr; //状态工具栏
-		QToolBar* m_pBottomStationViewToolBar = nullptr; //底部行车日志工具栏
-
+		QToolBar* m_pBottomToolBar = nullptr; //底部行车日志工具栏
 		QDockWidget* m_pPlanDock = nullptr; //进路序列停靠窗口
-
 		BaseWnd::StaRoutePlan* m_pRoutePlanWnd = nullptr; //进路序列窗口
 		QWidget* m_pCurShowView = nullptr;
 		QToolBar* m_pCurToolBar = nullptr;

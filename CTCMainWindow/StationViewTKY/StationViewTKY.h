@@ -17,6 +17,10 @@ namespace CTCWindows {
 			StationViewTKY(QWidget* parent = nullptr);
 			~StationViewTKY();
 
+		private:
+			bool eventFilter(QObject* obj, QEvent* event) override;
+			void timerEvent(QTimerEvent* event) override;
+
 		public:
 			//创建CTC
 			static StationViewTKY* CreatStationView(QWidget* parent = nullptr);
@@ -32,7 +36,7 @@ namespace CTCWindows {
 			BaseWnd::StaDispatchOrder* CreateStaDispatchOrder() override;
 			//创建显示设置界面
 			BaseWnd::StaVisibleSet* CreateStaVisibleSet() override;
-			bool eventFilter(QObject* obj, QEvent* event);
+			
 			//初始化主菜单
 			void InitStationViewMenuBar() override;
 			//初始化工具栏-主工具栏
@@ -44,7 +48,9 @@ namespace CTCWindows {
 			//初始化工具栏-状态工具栏
 			void InitStateToolBar() override;
 			// 初始化工具栏-底部行车日志工具栏
-			void InitbottomTrafficLogToolBar() override;
+			void InitBottomToolBar() override;
+			// 初始化工具栏-底部状态栏
+			void InitStatusBar() override;
 			//初始化界面布局
 			QLayout* WidgetLayout() override { return ui.centralWidget->layout(); }
 			//void onButtonToggled(bool checked);
@@ -60,6 +66,9 @@ namespace CTCWindows {
 			VehicleManage* m_pVehicleManage = nullptr;
 			StaAlarmWindowTKY*  m_pStaAlarm = nullptr;
 			LntervallogicCheck* m_pLntervallogic = nullptr;
+			QLabel* m_pCountdownLabel = nullptr;
+			QLabel* m_pTimeLabel = nullptr;
+			int m_nTimerId = 0;
 			Ui::StationViewTKY ui;
 		};
 	}

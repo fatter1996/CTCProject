@@ -37,7 +37,6 @@ namespace CTCWindows {
 			QVector<QStringList> GetStationOrderData(QString strTrainNum, Station::StaDispatchOrder* pRoute, DataType type);				//	获取车站收令数据
 			QVector<QStringList> GetDispatcherReceivingData(QString strTrainNum, Station::StaDispatchOrder* pRoute, DataType type);		//	获取调度台收令数据
 			QVector<QStringList> GetTheLocomotiveCollectionData(QString strTrainNum, Station::StaDispatchOrder* pRoute, DataType type);	//	获取机车收令数据
-			void ViewPermission(Station::LimitsOfAuthority operate) {}
 			void DispatchOrderListUpData() {}
 			void CurDispatchOrderUpData() {}
 			void TrainDispatchOrderListUpData() {}

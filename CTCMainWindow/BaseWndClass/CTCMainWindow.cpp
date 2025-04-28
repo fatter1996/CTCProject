@@ -5,16 +5,14 @@
 #include <QToolBar>
 #include <QMessageBox>
 #include <QDebug>
-#include <QLabel>
 #include "Global.h"
-#include "CTCObject/CTCObject.h"
 #pragma execution_character_set("utf-8")
 
 namespace CTCWindows {
 
     CTCMainWindow::CTCMainWindow(QWidget* parent) : QMainWindow(parent)
     {
-
+        this->setContextMenuPolicy(Qt::NoContextMenu);
     }
 
     CTCMainWindow::~CTCMainWindow()
@@ -45,22 +43,12 @@ namespace CTCWindows {
         InitSignForToolBar();
         //初始化工具栏-签收工具栏
         InitStateToolBar();
-        InitbottomTrafficLogToolBar();
+        InitBottomToolBar();
         InitStatusBar();
         //初始化界面布局
-
         InitViewLayout();
-    }
+	}
 
-    void CTCMainWindow::onButtonToggled(bool checked)
-    {
-        if (checked) {
-            qDebug() << "按钮被按下";
-        }
-        else {
-            qDebug() << "按钮被弹回";
-        }
-    }
     void CTCMainWindow::InitViewLayout()
     {
         if (m_pStationCtrl) {
@@ -98,16 +86,14 @@ namespace CTCWindows {
                         m_pRoutePlanAction->setChecked(false);
                     }
                     m_vecMenuBarInfo[1]->getSubActionByIndex(2, 0, 3)->m_pAction->setChecked(false);
-                    });
+                });
             }
             m_pPlanDock->setWidget(m_pRoutePlanWnd);
             m_pPlanDock->setFloating(false);
             m_pPlanDock->setFeatures(QDockWidget::DockWidgetClosable | QDockWidget::DockWidgetVerticalTitleBar);
             m_pPlanDock->setAllowedAreas(Qt::BottomDockWidgetArea);
             addDockWidget(Qt::BottomDockWidgetArea, m_pPlanDock);
-
         }
-
 
         if (!m_bShowToolbarBtn) {
             m_pStationViewToolBar->hide();
@@ -115,13 +101,6 @@ namespace CTCWindows {
       
         if (!m_bShowToolbarLabel) {
             m_pStateToolBar->hide();
-        }
-        if (m_pBottomStationViewToolBar) {
-            addToolBar(Qt::BottomToolBarArea, m_pBottomStationViewToolBar);
-            //addToolBar(m_pBottomStationViewToolBar);
-        }
-        if (m_pStatusBar) {
-            setStatusBar(m_pStatusBar);
         }
     }
 
@@ -151,83 +130,24 @@ namespace CTCWindows {
         tempSize.setHeight(size.height() < 926 ? 926 : size.height());
         StaPaintView()->setFixedSize(tempSize);
     }
-
-    void CTCMainWindow::timerEvent(QTimerEvent* event)
-    {
-        if (TimerId == event->timerId()) {
-            upDateTime();
-        }
-        return QMainWindow::timerEvent(event);
-    }
-
-    void CTCMainWindow::InitStatusBar()
-    {
-        TimerId = startTimer(1000);
-        m_pStatusBar = new QStatusBar(this);
-        QWidget* m_pStatusBarWidget = new QWidget;
-        QHBoxLayout* StatusLayout = new QHBoxLayout(m_pStatusBarWidget);
-        m_pStatusBar->setFixedHeight(25);
-        m_pStatusBarWidget->setFixedHeight(25);
-        StatusLayout->setMargin(0);
-        QLabel* permanentLabel = new QLabel("中国铁道科学研究院");
-        permanentLabel->setStyleSheet(" border: 0.5px solid #ccc;");
-        QDateTime currentDateTime = QDateTime::currentDateTime();
-        QString timeStr = currentDateTime.toString("yyyy-MM-dd hh:mm:ss");
-        TimeLabel = new QLabel(QString("%1  %2").arg(timeStr).arg(getWeekday(currentDateTime)));
-        QLabel* permanentLabel3 = new QLabel(QString("本站名：%1").arg(Station::MainStation()->getStationName()));
-
-
-        QWidget* LabelWidget = new QWidget(m_pStatusBar);
-        LabelWidget->setObjectName("LabelName");
-
-        LabelWidget->setStyleSheet("QWidget#LabelName{border: 0.5px solid #ccc;}");
-        QLabel* Label1 = new QLabel(QString("1"));
-        QLabel* Label2 = new QLabel(QString("安六台"));
-        QSpacerItem* spacer = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
-        QHBoxLayout* Labellayout = new QHBoxLayout(LabelWidget);
-        Labellayout->setMargin(0);
-
-        Labellayout->addWidget(Label1);
-        Labellayout->addWidget(Label2);
-        Labellayout->addItem(spacer);
-        TimeLabel->setStyleSheet(" border: 0.5px solid #ccc;");
-        permanentLabel3->setStyleSheet(" border: 0.5px solid #ccc;");
-        StatusLayout->addWidget(permanentLabel, 1);
-        StatusLayout->addWidget(TimeLabel, 1);
-        StatusLayout->addWidget(permanentLabel3, 8);
-        StatusLayout->addWidget(LabelWidget, 0);
-
-        m_pStatusBar->addWidget(m_pStatusBarWidget, 1);
-
-    }
     
-    QString CTCMainWindow::getWeekday(const QDateTime& dateTime) {
-        int weekday = dateTime.date().dayOfWeek();
-        switch (weekday) {
-        case 1:
-            return "星期一";
-        case 2:
-            return "星期二";
-        case 3:
-            return "星期三";
-        case 4:
-            return "星期四";
-        case 5:
-            return "星期五";
-        case 6:
-            return "星期六";
-        case 7:
-            return "星期日";
-        default:
-            return "";
-        }
-    }
-    
-    void CTCMainWindow::upDateTime()
+    void CTCMainWindow::UpdataDateTime()
     {
-        QDateTime currentDateTime = QDateTime::currentDateTime();
-        QString timeStr = currentDateTime.toString("yyyy-MM-dd hh:mm:ss");
-        TimeLabel->setText(QString("%1  %2").arg(timeStr).arg(getWeekday(currentDateTime)));
+        if (!m_pBottomTimeLabel) {
+            return;
+        }
+        QDateTime date = QDateTime::currentDateTime();
+        QString strWeek;
+        switch (date.date().dayOfWeek()) {
+        case 1: strWeek = "星期一"; break;
+        case 2: strWeek = "星期二"; break;
+        case 3: strWeek = "星期三"; break;
+        case 4: strWeek = "星期四"; break;
+        case 5: strWeek = "星期五"; break;
+        case 6: strWeek = "星期六"; break;
+        case 7: strWeek = "星期日"; break;
+        }
+        m_pBottomTimeLabel->setText(QString("%1  %2").arg(date.toString("yyyy-MM-dd hh:mm:ss")).arg(strWeek));
     }
 
     void CTCMainWindow::TurnToStationCtrlDisp()

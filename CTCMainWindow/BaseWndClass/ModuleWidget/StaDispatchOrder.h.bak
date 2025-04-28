@@ -1,6 +1,6 @@
 #pragma once
 #include <QDialog>
-#include "StationObject/GlobalStruct.h" 
+#include <StationObject/GlobalStruct.h>
 
 namespace CTCWindows {
 	namespace BaseWnd {

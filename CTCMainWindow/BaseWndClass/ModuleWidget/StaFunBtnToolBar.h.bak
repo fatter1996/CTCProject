@@ -87,7 +87,6 @@ namespace CTCWindows {
             static FunType getCurrFunType() { return m_SelectFunType; }
             static void setOperObjType(OperObjType eType) { m_nOperObjType = eType; }
             static OperObjType getOperObjType() { return m_nOperObjType; }
-            static int getCountdown() { return m_nCountdown; }
 
         public slots:
             void onButtonClicked(QAbstractButton* pButton);
@@ -111,7 +110,6 @@ namespace CTCWindows {
             int m_nTimerID_500 = -1;
 
         protected:
-            static int m_nCountdown;
             static FunType m_SelectFunType;
             static OperObjType m_nOperObjType;
         };
