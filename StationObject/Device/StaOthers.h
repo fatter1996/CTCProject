@@ -61,7 +61,7 @@ namespace Station {
             struct NeutralText
             {
                 QString strContent;
-                QRectF rcText;
+                QPointF ptText;
                 QColor cTextColor;
             };
 

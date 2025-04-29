@@ -98,6 +98,7 @@ namespace CTCDoc{
 		//站名
 		m_pMainStation->setStationName(rootObj.value("staName").toString());
 		m_pMainStation->setStationId(rootObj.value("stationID").toInt());
+		m_pMainStation->setStaFixedSize(rootObj.value("stationWidth").toInt(), rootObj.value("stationHeight").toInt());
 		//站场界面类型
 		m_nStationViewType = rootObj.value("stationType").toInt();
 		m_bShowToolbarBtn = rootObj.value("isShowToolBarBtn").toInt();
@@ -110,6 +111,11 @@ namespace CTCDoc{
 		m_pSocketTCP->setServerAddress(QHostAddress(addressObj.value("serverIp").toString()), addressObj.value("serverPortTCP").toInt());
 		Http::HttpClient::setServerAddress(QHostAddress(addressObj.value("HttpServerIp").toString()), addressObj.value("HttpServerPort").toInt());
 		
+		//if (strList[1] == "STATIONWIDTH") {
+		//	m_szStation.setWidth(strList[2].toInt());
+		//}
+		//if (strList[1] == "STATIONHEIGHT") {
+		//	m_szStation.setHeight(strList[2].toInt());
 		//解析站场设备
 		QString strFileName = rootObj.value("stationInfo").toString();
 		if (strFileName.right(3) == "xml") {
@@ -144,6 +150,9 @@ namespace CTCDoc{
 		for (const QJsonValue& value : multiArray) {
 			subObj = value.toObject();
 			StationObject* pStation = new StationObject;
+			pStation->setStationName(subObj.value("staName").toString());
+			pStation->setStationId(subObj.value("stationID").toInt());
+			pStation->setStaFixedSize(subObj.value("stationWidth").toInt(), subObj.value("stationHeight").toInt());
 			//解析站场设备
 			strFileName = subObj.value("stationInfo").toString();
 			if (strFileName.right(3) == "xml") {

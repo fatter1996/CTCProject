@@ -14,30 +14,33 @@ namespace CTCWindows {
 		connect(ui.checkBox1, &QCheckBox::clicked, [&](bool bChecked) {
 			emit SubCheckBtnChecked();
 		});
+		ui.buttonGroup->setId(ui.radioBtn1, 0);
+		ui.buttonGroup->setId(ui.radioBtn2, 1);
+		ui.buttonGroup->setId(ui.radioBtn3, 2);
 	}
 
 	ModeChangeRow::~ModeChangeRow()
 	{
 	}
 
-	void ModeChangeRow::InitRow(QString strName, int nType)
+	void ModeChangeRow::InitRow(Station::MainStationObject* pStation, int nType)
 	{
-		ui.staNameLabel->setText(strName);
+		ui.staNameLabel->setText(pStation->getStationName());
 		if (nType == MODO_CHANGE) {
 			ui.colFrame1_2->hide();
 			ui.radioBtn1->setText("中心控制");
 			ui.radioBtn2->setText("车站控制");
 			ui.radioBtn3->setText("车站调车");
-			int nControlMode = Station::MainStation()->getStaLimits(Station::Limits::ControlMode);
-			if (nControlMode == 0) {
+			m_nCurrState = pStation->getStaLimits(Station::Limits::ControlMode);
+			if (m_nCurrState == 0) {
 				ui.radioBtn1->setStyleSheet("color: rgb(255, 0, 0);");
 				ui.radioBtn1->setChecked(true);
 			}
-			else if (nControlMode == 1) {
+			else if (m_nCurrState == 1) {
 				ui.radioBtn2->setStyleSheet("color: rgb(255, 0, 0);");
 				ui.radioBtn2->setChecked(true);
 			}
-			else if (nControlMode == 2) {
+			else if (m_nCurrState == 2) {
 				ui.radioBtn3->setStyleSheet("color: rgb(255, 0, 0);");
 				ui.radioBtn3->setChecked(true);
 			}
@@ -49,27 +52,35 @@ namespace CTCWindows {
 			ui.radioBtn2->setText("车站控制");
 			ui.radioBtn3->setText("车站调车");
 
-			int nControlMode = Station::MainStation()->getStaLimits(Station::Limits::ControlMode);   //控制模式, 0 - 中心控制，1 - 车站控制，2 - 车站调车
-			int nApplyControlMode = Station::MainStation()->getStaLimits(Station::Limits::ApplyControlMode);
-			if (nControlMode == 0) {
+			ui.radioBtn1->setEnabled(false);
+			ui.radioBtn2->setEnabled(false);
+			ui.radioBtn3->setEnabled(false);
+
+			m_nCurrState = pStation->getStaLimits(Station::Limits::ControlMode);   //控制模式, 0 - 中心控制，1 - 车站控制，2 - 车站调车
+			
+			if (m_nCurrState == 0) {
 				ui.radioBtn1->setStyleSheet("color: rgb(255, 0, 0);");
+				ui.radioBtn1->setChecked(true);
 			}
-			else if (nControlMode == 1) {
+			else if (m_nCurrState == 1) {
 				ui.radioBtn2->setStyleSheet("color: rgb(255, 0, 0);");
+				ui.radioBtn2->setChecked(true);
 			}
-			else if (nControlMode == 2) {
+			else if (m_nCurrState == 2) {
 				ui.radioBtn3->setStyleSheet("color: rgb(255, 0, 0);");
+				ui.radioBtn3->setChecked(true);
 			}
 
-			if (nApplyControlMode == 0) {
+			m_nCurrState = pStation->getStaLimits(Station::Limits::ApplyControlMode);
+			if (m_nCurrState == 0) {
 				ui.radioBtn1->setStyleSheet("color: rgb(255, 170, 0);");
 				ui.radioBtn1->setChecked(true);
 			}
-			else if (nApplyControlMode == 1) {
+			else if (m_nCurrState == 1) {
 				ui.radioBtn2->setStyleSheet("color: rgb(255, 170, 0);");
 				ui.radioBtn2->setChecked(true);
 			}
-			else if (nApplyControlMode == 2) {
+			else if (m_nCurrState == 2) {
 				ui.radioBtn3->setStyleSheet("color: rgb(255, 170, 0);");
 				ui.radioBtn3->setChecked(true);
 			}
@@ -81,12 +92,12 @@ namespace CTCWindows {
 			ui.radioBtn1->setText("按图排路");
 			ui.radioBtn2->setText("手工排路");
 
-			int nPlanMode = Station::MainStation()->getStaLimits(Station::Limits::PlanMode);   //计划模式，0 - 手工排路，1 - 按图排路
-			if (nPlanMode == 0) {
+			m_nCurrState = pStation->getStaLimits(Station::Limits::PlanMode);   //计划模式，0 - 手工排路，1 - 按图排路
+			if (m_nCurrState == 0) {
 				ui.radioBtn1->setStyleSheet("color: rgb(255, 0, 0);");
 				ui.radioBtn1->setChecked(true);
 			}
-			else if (nPlanMode == 1) {
+			else if (m_nCurrState == 1) {
 				ui.radioBtn2->setStyleSheet("color: rgb(255, 0, 0);");
 				ui.radioBtn2->setChecked(true);
 			}
@@ -103,11 +114,13 @@ namespace CTCWindows {
 		ui.checkBox1->setChecked(bChecked);
 	}
 
-	int ModeChangeRow::GetState(int nType, bool* bChecked)
+	int ModeChangeRow::GetState(int nType)
 	{
 		if (nType == MODO_CHANGE_AGREE) {
-			*bChecked = ui.checkBox1->isChecked();
+			return ui.checkBox1->isChecked();
 		}
-		return ui.buttonGroup->id(ui.buttonGroup->checkedButton());
+		else {
+			return ui.buttonGroup->id(ui.buttonGroup->checkedButton());
+		}
 	}
 }

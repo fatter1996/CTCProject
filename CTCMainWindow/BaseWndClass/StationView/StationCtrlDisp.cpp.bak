@@ -91,49 +91,49 @@ namespace CTCWindows {
 
 			pMenu->addAction(AddActionToMenu("主工具条", [](bool bChecked) {
 				MainWindow()->SetShowToolbar(bChecked, bChecked);
-			}, true, true, MainWindow()->IsShowToolbar()));
+				}, true, true, MainWindow()->IsShowToolbar()));
 			pMenu->addAction(AddActionToMenu("CTC按钮", [=](bool bChecked) {
 				m_pStaFunBtnToolBar->setHidden(!bChecked);
-			}, true, true, true));
+				}, true, true, true));
 			pMenu->addAction(AddActionToMenu("文字显示", [=](bool) {
 				MainWindow()->ShowVisibleSetWnd();
-			}));
+				}));
 			pMenu->addAction(AddActionToMenu("绝缘节", [=](bool bChecked) {
 				Station::MainStation()->SetVisible(Station::VisibleDev::insulationNode, bChecked);
-			}, true, true, Station::MainStation()->IsVisible(Station::VisibleDev::insulationNode)));
+				}, true, true, Station::MainStation()->IsVisible(Station::VisibleDev::insulationNode)));
 
 			pMenu->addSeparator();
 
 			pMenu->addAction(AddActionToMenu("还原 站场图", [=](bool) {
 				Station::MainStation()->setDiploid(Station::DiploidOperate::revert, STAVIEW);
-			}, !(Station::MainStation()->getDiploid(Station::DiploidRatio::StaDiploid) == 1.0)));
+				}, !(Station::MainStation()->getDiploid(Station::DiploidRatio::StaDiploid) == 1.0)));
 			pMenu->addAction(AddActionToMenu("放大 站场图", [=](bool) {
 				MainWindow()->setMouseState(MouseState::Amplify);
-			}));
+				}));
 			pMenu->addAction(AddActionToMenu("缩小 站场图", [=](bool) {
 				MainWindow()->setMouseState(MouseState::Reduce);
-			}));
+				}));
 			pMenu->addAction(AddActionToMenu("站场图全景", [=](bool) {}));
 
 			pMenu->addSeparator();
 
 			pMenu->addAction(AddActionToMenu("还原 车次窗", [=](bool) {
 				Station::MainStation()->setDiploid(Station::DiploidOperate::revert, TRAINNUM);
-			}, !(Station::MainStation()->getDiploid(Station::DiploidRatio::StaTrainNumDiploid) == 1.0)));
+				}, !(Station::MainStation()->getDiploid(Station::DiploidRatio::StaTrainNumDiploid) == 1.0)));
 			pMenu->addAction(AddActionToMenu("放大 车次窗", [=](bool) {
 				Station::MainStation()->setDiploid(Station::DiploidOperate::amplify, TRAINNUM);
-			}));
+				}));
 			pMenu->addAction(AddActionToMenu("缩小 车次窗", [=](bool) {
 				Station::MainStation()->setDiploid(Station::DiploidOperate::reduce, TRAINNUM);
-			}));
+				}));
 
 			pMenu->addSeparator();
 
 			pMenu->addAction(AddActionToMenu("车次窗位置", [=](bool bChecked) {
 				Station::MainStation()->SetVisible(Station::VisibleDev::trainNumWnd, bChecked);
-			}, true, true, Station::MainStation()->IsVisible(Station::VisibleDev::trainNumWnd)));
+				}, true, true, Station::MainStation()->IsVisible(Station::VisibleDev::trainNumWnd)));
 			pMenu->addAction(AddActionToMenu("查找车次窗", [=](bool) {}));
-			
+
 			pMenu->addSeparator();
 
 			pMenu->addAction(AddActionToMenu("接通光带", [=](bool) {}));

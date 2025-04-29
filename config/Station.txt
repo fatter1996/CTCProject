@@ -19,6 +19,8 @@
 #define XX_OUT_NUM 0
 #define FRAMELENGTH 500
 #define STATELENGTH 500
+#define STATIONWIDTH 1920
+#define STATIONHEIGHT 1080
 #define STATIONID 100
 
 ##DC
@@ -1932,7 +1934,7 @@ gd.pz34=P(190,320);
 gd.center=P(175,320);
 ADD_29;
 ##BS
-bs.m_strName="SJ方向";
+bs.m_strName="SJ    ";
 bs.m_nCode=0x73;
 bs.RelayQD="IVBG";
 bs.Module_Code=0x;
@@ -1941,7 +1943,7 @@ bs.m_nSX=0;
 bs.isXN=0;
 ADD_0;
 ##BS
-bs.m_strName="XJ方向";
+bs.m_strName="XJ    ";
 bs.m_nCode=0x74;
 bs.RelayQD="IVAG";
 bs.Module_Code=0x;
@@ -1990,14 +1992,14 @@ ls.m_nType=300;
 ls.m_nCode=0x79;
 ls.m_nModuleNum=1;
 ls.m_nModule[0]=0x;
-ls.mName[0]="熔丝报警";
-ls.mName[1]="主副电源";
-ls.mName[2]="上行轨道停电";
-ls.mName[3]="下行轨道停电";
-ls.mName[4]="上行总锁闭";
-ls.mName[5]="下行总锁闭";
-ls.mName[6]="上行灯丝断丝";
-ls.mName[7]="下行灯丝断丝";
+ls.mName[0]="  丝    ";
+ls.mName[1]="      源";
+ls.mName[2]="   泄  停  ";
+ls.mName[3]="   泄  停  ";
+ls.mName[4]="          ";
+ls.mName[5]="          ";
+ls.mName[6]="   械 丝  丝";
+ls.mName[7]="   械 丝  丝";
 ls.mRsbjRect=R(410,666,470,679);
 ls.mZFdyRect=R(510,666,570,679);
 ls.mGdtdRect[0]=R(595,666,685,679);
@@ -2008,25 +2010,25 @@ ls.mDsdsRect[0]=R(1095,666,1185,679);
 ls.mDsdsRect[1]=R(1195,666,1285,679);
 ADD_8;
 ##TX
-txt.m_strName="标准站";
+txt.m_strName="  准站";
 txt.m_DCname="";
 txt.m_nSize=30;
 txt.m_textRect=R(880,40,1012,125);
 ADD_5;
 ##TX
-txt.m_strName="安全线";
+txt.m_strName="  全  ";
 txt.m_DCname="";
 txt.m_nSize=12;
 txt.m_textRect=R(1440,270,1482,300);
 ADD_33;
 ##TX
-txt.m_strName="丁站方面";
+txt.m_strName="  站    ";
 txt.m_DCname="";
 txt.m_nSize=12;
 txt.m_textRect=R(50,310,98,322);
 ADD_56;
 ##TX
-txt.m_strName="甲";
+txt.m_strName="  ";
 txt.m_DCname="";
 txt.m_nSize=12;
 txt.m_textRect=R(10,360,22,372);
@@ -2038,13 +2040,13 @@ txt.m_nSize=12;
 txt.m_textRect=R(10,390,22,402);
 ADD_58;
 ##TX
-txt.m_strName="方";
+txt.m_strName="  ";
 txt.m_DCname="";
 txt.m_nSize=12;
 txt.m_textRect=R(10,420,22,432);
 ADD_59;
 ##TX
-txt.m_strName="面";
+txt.m_strName="  ";
 txt.m_DCname="";
 txt.m_nSize=12;
 txt.m_textRect=R(10,450,22,462);
@@ -2152,13 +2154,13 @@ txt.m_nSize=15;
 txt.m_textRect=R(1260,300,1309,315);
 ADD_102;
 ##TX
-txt.m_strName="戊站方面";
+txt.m_strName="  站    ";
 txt.m_DCname="";
 txt.m_nSize=12;
 txt.m_textRect=R(1810,310,1858,322);
 ADD_121;
 ##TX
-txt.m_strName="丙";
+txt.m_strName="  ";
 txt.m_DCname="";
 txt.m_nSize=12;
 txt.m_textRect=R(1870,360,1882,372);
@@ -2170,13 +2172,13 @@ txt.m_nSize=12;
 txt.m_textRect=R(1870,390,1882,402);
 ADD_123;
 ##TX
-txt.m_strName="方";
+txt.m_strName="  ";
 txt.m_DCname="";
 txt.m_nSize=12;
 txt.m_textRect=R(1870,420,1882,432);
 ADD_124;
 ##TX
-txt.m_strName="面";
+txt.m_strName="  ";
 txt.m_DCname="";
 txt.m_nSize=12;
 txt.m_textRect=R(1870,450,1882,462);

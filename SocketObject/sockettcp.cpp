@@ -50,7 +50,6 @@ namespace Socket {
     void SocketTCP::onConnected()
     {
         qDebug() << QString("TCP connect to %1:%2 succeeded!").arg(m_hServerIp.toString()).arg(m_nServerPort);
-        //m_pTcpSocket->write("1111111111111111");
         if (m_nTimer >= 0) {
             killTimer(m_nTimer);
             m_nTimer = -1;

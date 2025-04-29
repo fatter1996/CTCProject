@@ -79,8 +79,6 @@ namespace CTCWindows {
             StaFunBtnToolBar(QWidget* parent = nullptr);
             ~StaFunBtnToolBar();
 
-        public:
-            void InitConnect();
             virtual void InitAuxiliaryMenu(AuxiliaryMenuWnd* pAuxiliary) = 0;
             void ButtonClicked(FunType eSelectType);
             void timerEvent(QTimerEvent* event) override;
@@ -89,7 +87,6 @@ namespace CTCWindows {
             static FunType getCurrFunType() { return m_SelectFunType; }
             static void setOperObjType(OperObjType eType) { m_nOperObjType = eType; }
             static OperObjType getOperObjType() { return m_nOperObjType; }
-            static int getCountdown() { return m_nCountdown; }
 
         public slots:
             void onButtonClicked(QAbstractButton* pButton);
@@ -108,13 +105,11 @@ namespace CTCWindows {
             QPushButton* m_pCommandIssuedBtn = nullptr;
             QPushButton* m_pRouteBuildBtn = nullptr;
             QPushButton* m_pAuxiliaryMenuBtn = nullptr;
-            QPushButton* m_pMethodConvert = nullptr;
           
         private:
             int m_nTimerID_500 = -1;
 
         protected:
-            static int m_nCountdown;
             static FunType m_SelectFunType;
             static OperObjType m_nOperObjType;
         };

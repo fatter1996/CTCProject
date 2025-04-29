@@ -232,6 +232,9 @@ namespace Station {
                     .arg(dataAyyay[nFlag + 6] & 0xFF, 2, 10, QLatin1Char('0'));
                 nFlag += 7;
                 pStaStagePlan->m_tDepartTime = QDateTime::fromString(strDepartTime, Qt::ISODate);
+                pStaStagePlan->m_bElectric = dataAyyay[nFlag++] & 0xFF;
+                pStaStagePlan->m_nOverLimitLevel = dataAyyay[nFlag++] & 0xFF;
+                pStaStagePlan->m_bFreightTrain = dataAyyay[nFlag++] & 0xFF;
                 pStaStagePlan->m_nJJQDCode = (dataAyyay[nFlag] & 0xFF) + (dataAyyay[nFlag + 1] & 0xFF) * 256;
                 if (pStaStagePlan->m_nArrivalTrackCode == 0 || pStaStagePlan->m_nDepartTrackCode == 0) {
                     pStaStagePlan->m_nPlanType = 5;
@@ -446,17 +449,17 @@ namespace Station {
             else if (dataAyyay[11] == 0x02) {
                 Station::MainStation()->setStaLimits(Station::Limits::ExStaControl, dataAyyay[12]);
             }
-            if (dataAyyay[11] == 0x03) {
+            else if (dataAyyay[11] == 0x03) {
                 Station::MainStation()->setStaLimits(Station::Limits::ApplyControlMode, dataAyyay[12]);
             }
-            if (dataAyyay[11] == 0x04) {
+            else if (dataAyyay[11] == 0x04) {
                 Station::MainStation()->setStaLimits(Station::Limits::PlanControl, dataAyyay[12]);
             }
-            if (dataAyyay[11] == 0x04) {
+            else if (dataAyyay[11] == 0x05) {
                 if (dataAyyay[12]) {
                     Station::MainStation()->setStaLimits(Station::Limits::ControlMode, 
-                        Station::MainStation()->getStaLimits(Station::Limits::ApplyControlMode));
-                    Station::MainStation()->setStaLimits(Station::Limits::ApplyControlMode, -1);
+                        Station::MainStation()->getStaLimits(Station::Limits::ActiveApplyControlMode));
+                    Station::MainStation()->setStaLimits(Station::Limits::ActiveApplyControlMode, -1);
                 }
             }
             return QByteArray();

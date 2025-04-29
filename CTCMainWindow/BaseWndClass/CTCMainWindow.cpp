@@ -5,16 +5,14 @@
 #include <QToolBar>
 #include <QMessageBox>
 #include <QDebug>
-#include <QLabel>
 #include "Global.h"
-#include "CTCObject/CTCObject.h"
 #pragma execution_character_set("utf-8")
 
 namespace CTCWindows {
 
     CTCMainWindow::CTCMainWindow(QWidget* parent) : QMainWindow(parent)
     {
-
+        this->setContextMenuPolicy(Qt::NoContextMenu);
     }
 
     CTCMainWindow::~CTCMainWindow()
@@ -29,6 +27,7 @@ namespace CTCWindows {
         m_pStationCtrl = CreateStationCtrlDisp();
         //创建功能按钮栏
         m_pStationCtrl->CreatStaFunBtnToolBar();
+        m_pStationCtrl->StaFunBtnBar()->InitConnect();
         //创建站间透明界面
         m_pStationMulti = CreateMultiStationDisp();
         //创建行车日志界面
@@ -55,17 +54,8 @@ namespace CTCWindows {
         //初始化界面布局
         m_buttonTimerId = startTimer(200);
         InitViewLayout();
-    }
+	}
 
-    void CTCMainWindow::onButtonToggled(bool checked)
-    {
-        if (checked) {
-            qDebug() << "按钮被按下";
-        }
-        else {
-            qDebug() << "按钮被弹回";
-        }
-    }
     void CTCMainWindow::InitViewLayout()
     {
         if (m_pStationCtrl) {
@@ -107,16 +97,14 @@ namespace CTCWindows {
                         m_pRoutePlanAction->setChecked(false);
                     }
                     m_vecMenuBarInfo[1]->getSubActionByIndex(2, 0, 3)->m_pAction->setChecked(false);
-                    });
+                });
             }
             m_pPlanDock->setWidget(m_pRoutePlanWnd);
             m_pPlanDock->setFloating(false);
             m_pPlanDock->setFeatures(QDockWidget::DockWidgetClosable | QDockWidget::DockWidgetVerticalTitleBar);
             m_pPlanDock->setAllowedAreas(Qt::BottomDockWidgetArea);
             addDockWidget(Qt::BottomDockWidgetArea, m_pPlanDock);
-
         }
-
 
         if (!m_bShowToolbarBtn) {
             m_pStationViewToolBar->hide();
@@ -124,13 +112,6 @@ namespace CTCWindows {
       
         if (!m_bShowToolbarLabel) {
             m_pStateToolBar->hide();
-        }
-        if (m_pBottomStationViewToolBar) {
-            addToolBar(Qt::BottomToolBarArea, m_pBottomStationViewToolBar);
-            //addToolBar(m_pBottomStationViewToolBar);
-        }
-        if (m_pStatusBar) {
-            setStatusBar(m_pStatusBar);
         }
     }
 
@@ -160,8 +141,8 @@ namespace CTCWindows {
         tempSize.setHeight(size.height() < 926 ? 926 : size.height());
         StaPaintView()->setFixedSize(tempSize);
     }
-
-    void CTCMainWindow::timerEvent(QTimerEvent* event)
+    
+    void CTCMainWindow::UpdataDateTime()
     {
 
         if (Station::MainStation()->NewDispatchOrder()) {

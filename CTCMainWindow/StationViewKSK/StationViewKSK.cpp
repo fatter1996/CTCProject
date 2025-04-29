@@ -30,10 +30,6 @@ namespace CTCWindows {
 			return new StationViewKSK(parent);
 		}
 
-		void StationViewKSK::InitbottomTrafficLogToolBar()
-		{
-		}
-
 		BaseWnd::StationCtrlDisp* StationViewKSK::CreateStationCtrlDisp()
 		{
 			return new StationCtrlDispKSK(this);

@@ -2,22 +2,34 @@
 #include "Global.h"
 #include "CommonWidget/LeadSealDlg.h"
 #include "CommonWidget/ModeChangeWnd.h"
+
 #pragma execution_character_set("utf-8")
 namespace CTCWindows {
 	namespace BaseWnd {
+		int StaFunBtnToolBar::m_nCountdown = 0;
 		FunType StaFunBtnToolBar::m_SelectFunType = FunType::RouteBuild;
 		OperObjType StaFunBtnToolBar::m_nOperObjType = OperObjType::Defult;
 
 		StaFunBtnToolBar::StaFunBtnToolBar(QWidget* parent)
 			: QWidget(parent)
 		{
-
 			m_nTimerID_500 = startTimer(500);
+			
 		}
 
 		StaFunBtnToolBar::~StaFunBtnToolBar()
 		{
 
+		}
+
+		void StaFunBtnToolBar::InitConnect()
+		{
+			connect(m_pCommandClearBtn, &QPushButton::clicked, [&]() { emit OrderClear(true); });
+			connect(m_pCommandIssuedBtn, &QPushButton::clicked, [&]() { emit OrderIssued(); });
+			connect(m_pAuxiliaryMenuBtn, &QPushButton::clicked, this, &StaFunBtnToolBar::onAuxiliaryMenuBtnClicked);
+			connect(m_pMethodConvert, &QPushButton::clicked, this, &StaFunBtnToolBar::onMethodConvertBtnClicked);
+			connect(m_pButtonGroup, qOverload<QAbstractButton*>(&QButtonGroup::buttonClicked), this, &StaFunBtnToolBar::onButtonClicked);
+			onFunBtnStateReset();
 		}
 
 		void StaFunBtnToolBar::onButtonClicked(QAbstractButton* pButton)
@@ -31,78 +43,28 @@ namespace CTCWindows {
 			switch (m_SelectFunType)
 			{
 			case CTCWindows::FunType::GuideBtn:			//引导按钮
-				if (!CTCWindows::LeadSealDlg::LeadSealPassword(CTCWindows::KeyInputType::LeadSeal)) {
-					onFunBtnStateReset();
-				}
-				else {
-					emit countdownStarts();
-				}
-				break;
 			case CTCWindows::FunType::GuideClock:		//引导总锁
-				if (!CTCWindows::LeadSealDlg::LeadSealPassword(CTCWindows::KeyInputType::LeadSeal)) {
-					onFunBtnStateReset();
-				}
-				else {
-					emit countdownStarts();
-				}
-				break;
 			case CTCWindows::FunType::TotalRelieve:	    //总人解
-				if (!CTCWindows::LeadSealDlg::LeadSealPassword(CTCWindows::KeyInputType::LeadSeal)) {
-					onFunBtnStateReset();
-				}
-				else {
-					emit countdownStarts();
-				}
-				break;
 			case CTCWindows::FunType::RegionRelieve:	//区故解
-				if (!CTCWindows::LeadSealDlg::LeadSealPassword(CTCWindows::KeyInputType::LeadSeal)) {
-					onFunBtnStateReset();
-					
-				}
-				else {
-					emit countdownStarts();
-				}
-				break;
 			case CTCWindows::FunType::Lighting:		//点灯
-				if (!CTCWindows::LeadSealDlg::LeadSealPassword(CTCWindows::KeyInputType::LeadSeal)) {
-					onFunBtnStateReset();
-				}
-				else {
-					emit countdownStarts();
-				}
-				break;
 			case CTCWindows::FunType::UnLighting:		//灭灯
-				if (!CTCWindows::LeadSealDlg::LeadSealPassword(CTCWindows::KeyInputType::LeadSeal)) {
-					onFunBtnStateReset();
-				}
-				else {
-					emit countdownStarts();
-				}
-				break;
 			case CTCWindows::FunType::RampUnlock:	    //坡道解锁
-				if (!CTCWindows::LeadSealDlg::LeadSealPassword(CTCWindows::KeyInputType::LeadSeal)) {
-					onFunBtnStateReset();
-				}
-				else {
-					emit countdownStarts();
-				}
-				break;
 			case CTCWindows::FunType::PoorRoute: {		//分路不良
 				if (!CTCWindows::LeadSealDlg::LeadSealPassword(CTCWindows::KeyInputType::LeadSeal)) {
 					onFunBtnStateReset();
 				}
 				else {
-					Station::MainStationObject* Station = Station::MainStation();
-					emit countdownStarts();
+					m_nCountdown = 30;
 				}
 			} break;
 			case CTCWindows::FunType::CommandClear: 
 			case CTCWindows::FunType::AuxiliaryMenu: 
 			case CTCWindows::FunType::StateChange:
 			case CTCWindows::FunType::MethodConvert: 
-			case CTCWindows::FunType::CommandIssued:break;
+			case CTCWindows::FunType::CommandIssued:
+				break;
 			default:	
-				emit countdownStarts();
+				m_nCountdown = 30;
 				break;																								  
 			}
 
@@ -117,6 +79,10 @@ namespace CTCWindows {
 				}
 				if (m_pCommandIssuedBtn) {
 					m_pCommandIssuedBtn->setEnabled(Station::MainStation()->IsAllowStaOperation());
+				}
+
+				if (m_nCountdown > 0) {
+					m_nCountdown--;
 				}
 			}
 			return QWidget::timerEvent(event);
@@ -133,10 +99,29 @@ namespace CTCWindows {
 
 		void StaFunBtnToolBar::onMethodConvertBtnClicked()
 		{
-			ModeChangeWnd* pModeChange = new ModeChangeWnd;
-			pModeChange->setAttribute(Qt::WA_DeleteOnClose);
-			pModeChange->Init(MODO_CHANGE);
-			pModeChange->exec();
+			QMenu* pMenu = new QMenu();
+			pMenu->setAttribute(Qt::WA_DeleteOnClose);
+			QAction* pAction = new QAction("模式申请");
+			connect(pAction, &QAction::triggered, [=]() {
+				QList<Station::MainStationObject*> vecMainStation;
+				vecMainStation.append(Station::MainStation());
+				ModeChangeWnd* pModeChange = new ModeChangeWnd;
+				pModeChange->setAttribute(Qt::WA_DeleteOnClose);
+				pModeChange->InitModeChange(MODO_CHANGE, vecMainStation);
+				pModeChange->exec();
+			});
+			pMenu->addAction(pAction);
+			QAction* pAction2 = new QAction("同意模式申请");
+			connect(pAction2, &QAction::triggered, [=]() {
+				QList<Station::MainStationObject*> vecMainStation;
+				vecMainStation.append(Station::MainStation());
+				ModeChangeWnd* pModeChange = new ModeChangeWnd;
+				pModeChange->setAttribute(Qt::WA_DeleteOnClose);
+				pModeChange->InitModeChange(MODO_CHANGE_AGREE, vecMainStation);
+				pModeChange->exec();
+			});
+			pMenu->addAction(pAction2);
+			pMenu->exec(QCursor::pos());
 		}
 
 		void StaFunBtnToolBar::onFunBtnStateReset()
@@ -144,6 +129,8 @@ namespace CTCWindows {
 			if (!m_pButtonGroup) {
 				return;
 			}
+			m_nCountdown = 0;
+
 			for (QAbstractButton* pButton : m_pButtonGroup->buttons()) {
 				pButton->setEnabled(Station::MainStation()->IsAllowStaOperation());
 			}

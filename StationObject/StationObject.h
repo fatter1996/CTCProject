@@ -79,6 +79,7 @@ namespace Station {
         Device::DeviceBase* getDeviceByName(const QString& strName, QString strType = "Device");
         Device::DeviceBase* getSwitchBySectionCode(int nCode);
         QSize getStaFixedSize(); //获取站场实际大小
+        void setStaFixedSize(int nWidth, int nHeight);
         uint getStationId() const { return m_nStationId; }
         void setStationId(uint nStationID)  { m_nStationId = nStationID; }
         QString getStationName() const { return m_strStationName; }
@@ -203,8 +204,9 @@ namespace Station {
             bool bExStaControl = false;   //非常站控
             int nControlMode = 0;   //控制模式, 0 - 中心控制，1 - 车站控制，2 - 车站调车
             int nApplyControlMode = -1;   //申请控制模式, 0 - 中心控制，1 - 车站控制，2 - 车站调车
-            int nPlanMode = 0;  //计划模式，0 - 手工排路，1 - 按图排路
+            bool nPlanMode = 0;  //计划模式，0 - 手工排路，1 - 按图排路
             bool nPlanControl = false;  //计划控制
+            int nActiveApplyControlMode = -1;
         };
         int getStaLimits(Limits type);
         void setStaLimits(Limits type, int nValue);
@@ -238,8 +240,6 @@ namespace Station {
         int m_nUserId = 0;
         CultivateObject::Subject* m_pCurSubject = nullptr;
         bool m_bAutoSendPlan = true;
-        int m_nCountdown = 0;
-        int m_nTimerId_1000 = -1;
         QVector<StaTrain*> m_vecStaTrain;
         QVector<StaTrain*> m_vecStaTempTrain;
         QVector<StaStagePlan*> m_vecStaStagePlan;

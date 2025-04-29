@@ -139,7 +139,7 @@ namespace Station {
                         if (value.isObject()) {
                             pText = new NeutralText;
                             pText->strContent = value.toObject().value("m_strContent").toString();
-                            pText->rcText = QStringToQRectF(value.toObject().value("m_textRect").toString());
+                            pText->ptText = QStringToQPointF(value.toObject().value("pName").toString());
                             switch (value.toObject().value("m_textColor").toInt())
                             {
                             case 0:  pText->cTextColor = Qt::white;  break;
@@ -171,9 +171,12 @@ namespace Station {
             QFont font = m_pPainter.font();
             font.setPointSize(10);
             m_pPainter.setFont(font);
+            QFontMetrics  fontMetrics(font);
             for (NeutralText* pText : m_vecNeutralText) {
                 m_pPainter.setPen(QPen(pText->cTextColor, 1));
-                m_pPainter.drawText(Scale(pText->rcText), pText->strContent, QTextOption(Qt::AlignHCenter));
+                m_pPainter.drawText(
+                    Scale(QRectF(pText->ptText, fontMetrics.size(Qt::TextSingleLine, pText->strContent))),
+                    pText->strContent, QTextOption(Qt::AlignHCenter));
             }
         }
         

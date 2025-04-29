@@ -75,7 +75,8 @@ namespace Station {
 		ControlMode,
 		PlanMode,
 		PlanControl,
-		ApplyControlMode
+		ApplyControlMode,
+		ActiveApplyControlMode
 	};
 
 	struct StaOrder {

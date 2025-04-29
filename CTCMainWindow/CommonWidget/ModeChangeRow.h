@@ -2,10 +2,11 @@
 
 #include <QWidget>
 #include "ui_ModeChangeRow.h"
+#include "StationObject/StationObject.h"
 
-#define		MODO_CHANGE				1
-#define		MODO_CHANGE_AGREE		2
-#define		MANNER_CHANGE			3
+#define		MODO_CHANGE				3
+#define		MANNER_CHANGE			4
+#define		MODO_CHANGE_AGREE		5
 
 namespace CTCWindows {
 	class ModeChangeRow : public QWidget
@@ -16,10 +17,13 @@ namespace CTCWindows {
 		ModeChangeRow(QWidget* parent = nullptr);
 		~ModeChangeRow();
 
-		void InitRow(QString strName, int nType);
+		void InitRow(Station::MainStationObject* pStation, int nType);
 		void SetRadioBtnChecked(int nIndex, bool bChecked);
 		void SetCheckBtnChecked(bool bChecked);
-		int GetState(int nType, bool* bChecked = nullptr);
+		int GetState(int nType);
+
+	public:
+		int getCurrState() { return m_nCurrState; }
 
 	signals:
 		void SubRadioBtnChecked();
@@ -27,5 +31,6 @@ namespace CTCWindows {
 
 	private:
 		Ui::ModeChangeRow ui;
+		int m_nCurrState = 0;
 	};
 }

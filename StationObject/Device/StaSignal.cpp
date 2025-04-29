@@ -320,7 +320,7 @@ namespace Station {
 
         void StaSignal::InitSignalLightColor()
         {
-            m_mapLightColor.insert(SignalState::DS, [&]() { m_cLightColor1 = COLOR_LIGHT_WHITE; m_cLightColor2 = COLOR_LIGHT_BLACK; });
+            //m_mapLightColor.insert(SignalState::DS, [&]() { m_cLightColor1 = COLOR_LIGHT_WHITE; m_cLightColor2 = COLOR_LIGHT_BLACK; });
             m_mapLightColor.insert(SignalState::A, [&]() { m_cLightColor1 = COLOR_LIGHT_BLUE; m_cLightColor2 = COLOR_LIGHT_BLACK; });
             m_mapLightColor.insert(SignalState::H, [&]() { m_cLightColor1 = COLOR_LIGHT_RED; m_cLightColor2 = COLOR_LIGHT_BLACK; });
             m_mapLightColor.insert(SignalState::L, [&]() { m_cLightColor1 = COLOR_LIGHT_BLACK; m_cLightColor2 = COLOR_LIGHT_GREEN; });
@@ -335,7 +335,15 @@ namespace Station {
             m_mapLightColor.insert(SignalState::LS, [&]() { m_cLightColor1 = COLOR_LIGHT_BLACK;   m_cLightColor2 = m_bElapsed ? COLOR_LIGHT_GREEN : COLOR_LIGHT_BLACK; });
             m_mapLightColor.insert(SignalState::USU, [&]() {m_cLightColor1 = m_bElapsed ? COLOR_LIGHT_YELLOW : COLOR_LIGHT_BLACK; m_cLightColor2 = COLOR_LIGHT_YELLOW; });
             m_mapLightColor.insert(SignalState::US, [&]() { m_cLightColor1 = m_bElapsed ? COLOR_LIGHT_YELLOW : COLOR_LIGHT_BLACK; m_cLightColor2 = COLOR_LIGHT_BLACK; });
-            m_mapLightColor.insert(SignalState::DS, [&]() { m_cLightColor1 = m_bElapsed ? COLOR_LIGHT_RED : COLOR_LIGHT_BLACK; m_cLightColor2 = COLOR_LIGHT_BLACK; });
+            m_mapLightColor.insert(SignalState::DS, [&]() { 
+                if (m_nType == 32 || m_nType == 34) {
+                    m_cLightColor1 = m_bElapsed ? COLOR_LIGHT_RED : COLOR_LIGHT_BLACK; m_cLightColor2 = COLOR_LIGHT_BLACK;
+                }
+                else {
+                    m_cLightColor1 = m_bElapsed ? COLOR_LIGHT_BLUE : COLOR_LIGHT_BLACK; m_cLightColor2 = COLOR_LIGHT_BLACK;
+                }
+                
+            });
         }
 
         void StaSignal::GetSignalLightColor()

@@ -213,8 +213,6 @@
     <ClCompile Include="CTCMainWindow\CustomControl\CarLocationEdit.cpp">
       <Filter>CTCMainWindow\CustomControl</Filter>
     </ClCompile>
-    <ClCompile Include="CTCMainWindow\StationViewTKY\ModuleWidget\EditingInterfaceTKY.cpp" />
-    <ClCompile Include="StationObject\Device\StaTextSign.cpp" />
     <ClCompile Include="CTCMainWindow\CommonWidget\ModeChangeRow.cpp">
       <Filter>CTCMainWindow\CommonWidget\SourceFiles</Filter>
     </ClCompile>
@@ -229,6 +227,12 @@
     </ClCompile>
     <ClCompile Include="CTCMainWindow\CustomControl\TextSignLable.cpp">
       <Filter>CTCMainWindow\CustomControl</Filter>
+    </ClCompile>
+    <ClCompile Include="CTCMainWindow\StationViewTKY\ModuleWidget\EditingInterfaceTKY.cpp">
+      <Filter>CTCMainWindow\StationViewTKY\ModuleWidget</Filter>
+    </ClCompile>
+    <ClCompile Include="StationObject\Device\StaTextSign.cpp">
+      <Filter>StationObject\Device</Filter>
     </ClCompile>
     <ClCompile Include="CTCMainWindow\CustomControl\TextSignLable.cpp">
       <Filter>StationObject\Device</Filter>
@@ -569,7 +573,6 @@
     <QtMoc Include="StationObject\StationObject.h">
       <Filter>StationObject</Filter>
     </QtMoc>
-    <QtMoc Include="CTCMainWindow\StationViewTKY\ModuleWidget\EditingInterfaceTKY.h" />
     <QtMoc Include="CTCMainWindow\CommonWidget\ModeChangeRow.h">
       <Filter>CTCMainWindow\CommonWidget\HeaderFiles</Filter>
     </QtMoc>
@@ -581,6 +584,9 @@
     </QtMoc>
     <QtMoc Include="CTCMainWindow\CommonWidget\SealTechnique.h">
       <Filter>CTCMainWindow\CommonWidget\HeaderFiles</Filter>
+    </QtMoc>
+    <QtMoc Include="CTCMainWindow\StationViewTKY\ModuleWidget\EditingInterfaceTKY.h">
+      <Filter>CTCMainWindow\StationViewTKY\ModuleWidget</Filter>
     </QtMoc>
   </ItemGroup>
   <ItemGroup>
@@ -683,7 +689,6 @@
     <QtUic Include="CTCMainWindow\CustomControl\CarLocationEdit.ui">
       <Filter>CTCMainWindow\CustomControl</Filter>
     </QtUic>
-    <QtUic Include="CTCMainWindow\StationViewTKY\ModuleWidget\EditingInterfaceTKY.ui" />
     <QtUic Include="CTCMainWindow\CommonWidget\ModeChangeWnd.ui">
       <Filter>CTCMainWindow\CommonWidget\FormFiles</Filter>
     </QtUic>
@@ -695,6 +700,9 @@
     </QtUic>
     <QtUic Include="CTCMainWindow\CommonWidget\SealTechnique.ui">
       <Filter>CTCMainWindow\CommonWidget\FormFiles</Filter>
+    </QtUic>
+    <QtUic Include="CTCMainWindow\StationViewTKY\ModuleWidget\EditingInterfaceTKY.ui">
+      <Filter>CTCMainWindow\StationViewTKY\ModuleWidget</Filter>
     </QtUic>
     <QtUic Include="CTCMainWindow\StationViewTKY\ModuleWidget\EditingInterfaceTKY.ui">
       <Filter>CTCMainWindow\StationViewTKY\ModuleWidget</Filter>
