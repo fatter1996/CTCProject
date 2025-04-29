@@ -20,6 +20,9 @@ namespace Station {
         QString startStation;
         QString middleStation;
         QString endStation;
+        int startY;
+        int middleY;
+        int endY;
     };
     struct TrainDiagramInfo //运行图界面定义
     {
@@ -43,12 +46,7 @@ namespace Station {
         QString m_strName;
         QString m_strPassWord;
     };
-    struct signalBtn 
-    {
-        QString Signame;
-        QStringList LBtnname;
-        QStringList DBtnname;
-    };
+    
 
     class StationObject : public QObject { 
         Q_OBJECT
@@ -62,11 +60,8 @@ namespace Station {
         int ReadStationInfoByTxt(const QString& filePath); //解析"station.txt"
         void InitStaDevice();   //站场设备初始化
         int ReadDeviceConfig(const QString& filePath); //解析"DeviceConfig.json"
-        int ReadChartConfig(const QString& filePath); //解析"Chart_Conversion.json"
-        int ReadInterLock(const QString& filePath);   //解析"InterlockTable.txt"
         void SetVisible(VisibleDev devType, bool bVisible);
         bool IsVisible(VisibleDev devType);
-        void InterLockfileAnalysis(QString Line);
         void AddNewTextSign(const QString& strText, const QPoint& ptPos, const QColor& colFont = Qt::black, const QColor& colBackground = Qt::white, int nSize = 10);
         void DeleteTextSign(Device::StaTextSign* pTextSign);
         void ClearAllTextSign();
@@ -81,7 +76,7 @@ namespace Station {
         void setStationName(const QString& strName) { m_strStationName = strName; }
         QString getStationName() { return m_strStationName; }
         Device::DeviceBase* getDeviceByCode(const uint& nCode);
-        Device::DeviceBase* getDeviceByName(const QString& strName);
+        Device::DeviceBase* getDeviceByName(const QString& strName, QString strType = "Device");
         Device::DeviceBase* getSwitchBySectionCode(int nCode);
         QSize getStaFixedSize(); //获取站场实际大小
         uint getStationId() const { return m_nStationId; }
@@ -90,9 +85,8 @@ namespace Station {
         QPoint getOffset() const { return m_ptOffset; }
         bool IsMainStation() const { return m_bMainStation; }
         QWidget* ShowWidget() const { return m_pShowWidget; }
-        QStringList ReadMapDevice();
-        QVector<signalBtn*> getSignalBtn() { return m_vecSignalBtn; }
-        TrainDiagramInfo* getTrainDiagram() { return &TrainDiagram; }
+        
+ 
     public:
         static void InitCreatDeviceMap();
  
@@ -109,14 +103,15 @@ namespace Station {
         QMap<QString, QVector<Device::DeviceBase*>> m_mapDeviceVector;
         QMap<VisibleDev, bool> m_mapVisible;
         QWidget* m_pShowWidget = nullptr;
-
+        
     private:
-        static QVector<signalBtn*> m_vecSignalBtn;
+        
         static int UpState;
-        static TrainDiagramInfo TrainDiagram;
         static QXmlStreamReader* m_pDeviceInfoReader;  //XML解析器
         static QMap<QString, std::function<Device::DeviceBase* (StationObject*)>> m_mapCreatDeviceVector;
         static int m_nTimerId_500;
+        static int UpStateTimer;
+        static int m_UpState;
     };
 
     
@@ -152,7 +147,10 @@ namespace Station {
         int AddNewDispatchOrder(StaDispatchOrder* pDispatchOrder); //添加调度命令
         int AddNewTrafficLog(StaTrafficLog* pTrafficLog); //添加行车日志
         void CreatTrainRouteByTrafficLog(StaTrafficLog* pTrafficLog);
+        int ReadInterLock(const QString& filePath);   //解析"InterlockTable.txt"
+        void InterLockfileAnalysis(QString Line);
 
+        int ReadChartConfig(const QString& filePath); //解析"Chart_Conversion.json"
         StaTrain* getStaTrainById(int nTrainId);
         StaTrain* getStaTempTrainById(int nTrainId);
         StaTrainRoute* getStaTrainRouteById(int nRouteId);
@@ -163,7 +161,6 @@ namespace Station {
         void SendPacketMsg(int nTargetCode, int nOrderType = 0, int nAttr1 = -1, int nAttr2 = -1, QByteArray btAttr3 = QByteArray());
         void SubmitCurSubject(); //提交当前题目
         void AddSelectDevice(Device::DeviceBase* pDevice); 
-        void AddLinkDevice(Device::DeviceBase* pDevice);
         bool IsAllowStaOperation(); //是否可操作
         void CompareResult(const QByteArray& dataAyyay);
 
@@ -187,7 +184,6 @@ namespace Station {
         void RemoveTrainRoute(StaTrainRoute* pTrainRoute) { m_vecStaTrainRoute.removeOne(pTrainRoute); }
         const QVector<StaStagePlan*>& StagePlanList() { return m_vecStaStagePlan; }
         const QVector<StaTrainRoute*>& TrainRouteList() { return m_vecStaTrainRoute; }
-        void RemoveTrainRoute(StaTrainRoute* pTrainRoute) { m_vecStaTrainRoute.removeOne(pTrainRoute); }
         const QVector<StaDispatchOrder*>& DispatchOrderList() { return m_vecStaDispatchOrder; }
         const QVector<StaTrafficLog*>& TrafficLogList() { return m_vecStaTrafficLog; }
         StaStagePlan* NewStagePlan() { return m_pNewStagePlan; }
@@ -196,8 +192,11 @@ namespace Station {
         void ClearNewDispatchOrder() { m_pNewDispatchOrder = nullptr; };
         void setDiploid(DiploidOperate operate, int nType = STAVIEW); //站场大小缩放
         double getDiploid(DiploidRatio ratio) const { return m_mapDiploidRatio[ratio]; }
+        QList<Device::SignalBtn*>* getSignalBtn() { return &m_vecSignalBtn; }
 
     public:
+        TrainDiagramInfo TrainDiagram;
+        TrainDiagramInfo* getTrainDiagram() { return &TrainDiagram; }
         struct StaLimits {
             int nRouteLimits = 0; //进路权限，0 - 联锁，1 - 在CTC，2 - 占线板
             bool bAutoSignStage = false;   //自动签收阶段计划
@@ -228,9 +227,12 @@ namespace Station {
         Transmission::StaPacket* m_pStaPacket = nullptr;
        
     private:
+        
         StaLimits m_StaLimits;
+
         QVector<Device::DeviceBase*> m_vecSelectDevice;
-        QVector<Device::DeviceBase*> m_vecLinkDevice;
+
+
         UserInfo m_infoCurrUser;
         QString m_strOrderToInterLock;
         int m_nUserId = 0;
@@ -248,7 +250,7 @@ namespace Station {
         QMap<Order, std::function<StaOrder*()>> m_mapCreatStationOrder;
         QMap<Order, std::function<void(void*, const QJsonObject&)>> m_mapStationOrder;
         QMap<DiploidRatio, double> m_mapDiploidRatio;
-
+        QList<Device::SignalBtn*> m_vecSignalBtn;
 
         StaStagePlan* m_pNewStagePlan = nullptr;
         StaDispatchOrder* m_pNewDispatchOrder = nullptr;

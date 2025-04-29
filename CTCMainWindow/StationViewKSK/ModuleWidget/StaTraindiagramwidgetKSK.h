@@ -22,12 +22,15 @@ public:
 	void drawStationName();
 	void drawTrainPlan();
 	int getDirectionIndex(Station::StaTrafficLog* pTrafficLog); 
-	void setPenInfoByPoint(QPainter* painter, bool isNull, int nLHFlg);
-	void drawEndFlag(QPainter* painter, int X, int Y, bool isUpgoing);
-	void drawTrainNum(QPainter* painter, int X, int Y, QString trainNum, bool isUpgoing);
+	void setPenInfoByPoint(QPainter* painter);
+	void drawEndFlag(QPainter* painter, bool UPDown, int X, int Y);
+	void drawTrainNum(QPainter* painter, int X, int Y, QString trainNum);
 	int getPointXByTime(QTime time);
 	void timerEvent(QTimerEvent* event);
 	bool eventFilter(QObject* obj, QEvent* event);
+
+	void drawRouteLine(QPainter* painter, Station::RailwayLine* TrainDiagram, Station::StaTrafficLog* pTrafficLog, Station::StaTrainRoute* pRoute, int& startX, int& endX, int& nEndY);
+
 private:
 	Ui::StaTraindiagramwidgetKSKClass ui;
 	Station::TrainDiagramInfo* TrainDiagram = nullptr;

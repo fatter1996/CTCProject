@@ -1,6 +1,7 @@
 ﻿#include "StaButton.h"
 #include "Global.h"
 #include <QMouseEvent>
+#pragma execution_character_set("utf-8")
 
 namespace Station {
     namespace Device {
@@ -107,10 +108,10 @@ namespace Station {
         {
             if (CTCWindows::BaseWnd::StaFunBtnToolBar::getCurrFunType() == CTCWindows::FunType::RouteBuild) {
                 if (m_nType == 81 && m_nFirstBtnType == 0) {    //通过按钮
-                    CTCWindows::BaseWnd::StaFunBtnToolBar::setOperObjType(CTCWindows::OperObjType::Though);
                     m_nBtnState = 1;
                     m_nFirstBtnType = 3;
-                }
+                    
+                }   
                 if ((m_nType == 380 || m_nType == 381) && m_nFirstBtnType == 1) {   //虚信号按钮
                     CTCWindows::BaseWnd::StaFunBtnToolBar::setOperObjType(CTCWindows::OperObjType::Flexibility);
                     m_nBtnState = 1;
@@ -139,7 +140,7 @@ namespace Station {
         void StaButton::OrderClear(bool bClearTwinkle)
         {
             if (bClearTwinkle) {
-                m_nBtnState ^= 0x10;
+                m_nBtnState &= 0x10;
             }
             BtnStateReset();
         }

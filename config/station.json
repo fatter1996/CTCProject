@@ -8,23 +8,24 @@
     "localPortUDP": 8099,
     "localPortTCP": 8077,
     "#serverAddress": "服务终端通信地址",
-    "serverIp": "192.168.31.69",
-    "serverPortUDP": 6655,
+    "serverIp": "192.168.31.0",
+    "serverPortUDP": 3355,
     "serverPortTCP": 3366,
     "#HttpServerAddress": "Http服务通信地址",
-    "HttpServerIp": "192.168.31.86",
-    "HttpServerPort": 6666
+    "HttpServerIp": "192.168.31.0",
+    "HttpServerPort": 6060
   },
   "stationInfo": "Station.txt",
   "deviceInfo": "DeviceConfig.json",
+  "interlockTable": "InterlockTable.txt",
+  "chartconversion": "Chart_Conversion.json",
   "isShowToolBarBtn": 1,
   "isShowToolBarLabel": 1,
   "multiStation": [
     {
       "stationInfo": "Station.txt",
-      "deviceInfo": "DeviceConfig.json",
-      "chartconversion": "Chart_Conversion.json",
-      "interlockTable": "InterlockTable.txt"
+      "deviceInfo": "DeviceConfig.json"
+
     }
   ]
 }

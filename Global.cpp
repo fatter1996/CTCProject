@@ -375,7 +375,7 @@ namespace Station {
     {
         pTrafficLog->m_nLogId = subObj.value("id").toInt();
         pTrafficLog->m_nTrainId = subObj.value("trainId").toInt();
-        pTrafficLog->m_nPlanType = subObj.value("trainId").toInt();
+        pTrafficLog->m_nPlanType = subObj.value("planType").toInt();
 
         //到达信息
         pTrafficLog->m_strArrivalTrainNum = subObj.value("arrivalTrainNumber").toString();

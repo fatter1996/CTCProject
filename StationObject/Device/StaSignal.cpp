@@ -12,6 +12,7 @@
 namespace Station {
     namespace Device {
 
+        QList<SignalBtn*> StaSignal::m_listFlashSignal;
         StaSignal::StaSignal(QObject* pParent)
             : DeviceBase(pParent)
         {
@@ -150,13 +151,19 @@ namespace Station {
 
         void StaSignal::DrawSignalButton()
         {
+            Station::Device::StaSignal* pSignal = nullptr;
+            Station::Device::DeviceBtn* pBtnType = nullptr;
+
             //列车按钮
             if ((m_nAttr & (SIGNAL_LCZD | SIGNAL_LCSD)) || m_strXHDType == "JZ_XHJ" || m_strXHDType == "CZ_XHJ") {
-                DrawButton(m_pPainter, Scale(m_rcTrainBtn), COLOR_BTN_GREEN, m_nBtnState & BTNDOWN_TRAIN);
+                DrawButton(m_pPainter, Scale(m_rcTrainBtn), COLOR_BTN_GREEN, m_nBtnState & BTNDOWN_TRAIN | (m_bFlash && m_nFirstBtnType == 1), 1, COLOR_BTN_BLUE, m_bFlash ? COLOR_BTN_YELLOW : COLOR_BTN_WHITE);
+            }
+            if (m_nFirstBtnType == 3) {
+                DrawButton(m_pPainter, Scale(m_rcTrainBtn), COLOR_BTN_GREEN, m_nBtnState & BTNDOWN_TRAIN | (m_bFlash && m_nFirstBtnType == 3), 1, COLOR_BTN_BLUE, m_bFlash ? COLOR_BTN_YELLOW : COLOR_BTN_WHITE);
             }
             //调车按钮
             if (m_nAttr & (SIGNAL_DCZD | SIGNAL_DCSD) || m_strXHDType == "DC_XHJ" || m_strXHDType == "CZ_XHJ") {
-                DrawButton(m_pPainter, Scale(m_rcShuntBtn), COLOR_BTN_DEEPGRAY, m_nBtnState & BTNDOWN_SHUNT, 2);
+                DrawButton(m_pPainter, Scale(m_rcShuntBtn), COLOR_BTN_DEEPGRAY, m_nBtnState & BTNDOWN_SHUNT | (m_bFlash && m_nFirstBtnType == 2), 2, COLOR_BTN_BLUE, m_bFlash ? COLOR_BTN_YELLOW : COLOR_BTN_WHITE );
             }
             //引导按钮,仅可作为始端
             if (m_bYDSD) {
@@ -247,7 +254,6 @@ namespace Station {
             m_pPainter.setBrush(COLOR_LIGHT_BLACK);
 
             if (m_nSelectType & 0x02) {   //列车信号机按钮
-                qDebug() << "1";
                 m_pPainter.drawRect(Scale(OutSideRect(m_rcTrainBtn, 1, 1)));
             }
             if (m_nSelectType & 0x04) {   //调车信号机按钮
@@ -400,13 +406,57 @@ namespace Station {
             }
             return false;
         }
+        void StaSignal::ButtonStatusSwitching(DeviceBase* pDevice) {
+            dynamic_cast<StaSignal*>(pDevice)->OnButtonClick();
+            StaSignal* pStaSignal = nullptr;
+            StaButton* pStaBtn = nullptr;
+            QList<SignalBtn*> listFlashSignalT;
+            QList<SignalBtn*>* listFlashSignal = MainStation()->getSignalBtn();
+            for (SignalBtn* pSignal : m_listFlashSignal) {
+                if (MainStation()->getSelectDevice().size() > 1 && pSignal->Btnname.size() >= MainStation()->getSelectDevice().size()) {
+                    pStaSignal = dynamic_cast<StaSignal*>(MainStation()->getDeviceByName(pSignal->Btnname[MainStation()->getSelectDevice().size() - 1], SIGNALLAMP));
+                    if (pStaSignal != nullptr) {
+                        pStaSignal->setFlash(false);
+                    }
+                    else { continue; }
+                }
+            }
+            if (MainStation()->getSelectDevice().size() > 1) {
+                listFlashSignal = &m_listFlashSignal;
+            }
+            for (SignalBtn* pSignal : *listFlashSignal) {
 
+                if (MainStation()->getSelectDevice().size() == 0) { return; }
+                if (pSignal->Btnname.size() < MainStation()->getSelectDevice().size()) {
+                    continue;
+                }
+                if (m_nFirstBtnType != pSignal->SigType) {
+                    continue;
+                }
+                qDebug() << MainStation()->getSelectDevice().size();
+                if (pSignal->Btnname[MainStation()->getSelectDevice().size() - 1] == pDevice->getName()) {
+                    listFlashSignalT.append(pSignal);
+                }
+            }
+            m_listFlashSignal.swap(listFlashSignalT);
+            for (SignalBtn* pSignal : m_listFlashSignal) {
+                
+                if (pSignal->Btnname.size() > MainStation()->getSelectDevice().size()) {
+                    pStaSignal = dynamic_cast<StaSignal*>(MainStation()->getDeviceByName(pSignal->Btnname[MainStation()->getSelectDevice().size()], SIGNALLAMP));
+                    pStaSignal->setFlash();
+                }
+            }
+        }
         void StaSignal::InitClickEvent()
         {
             for (int i = 0; i < static_cast<int>(CTCWindows::FunType::MethodConvert); ++i) {
                 switch (i)
                 {
                 case static_cast<int>(CTCWindows::FunType::RouteBuild):         //进路建立
+                    m_mapClickEvent[m_strType].insert(static_cast<CTCWindows::FunType>(i), [=](DeviceBase* pDevice) {
+                        ButtonStatusSwitching(pDevice);
+                    });
+                    break;
                 case static_cast<int>(CTCWindows::FunType::GuideBtn): {         //引导按钮
                     m_mapClickEvent[m_strType].insert(static_cast<CTCWindows::FunType>(i), [](DeviceBase* pDevice) {
                         dynamic_cast<StaSignal*>(pDevice)->OnButtonClick();
@@ -459,6 +509,7 @@ namespace Station {
                 }
                 }
             }
+            
         }
 
         void StaSignal::ShowDeviceMenu(const QPoint& ptPos)

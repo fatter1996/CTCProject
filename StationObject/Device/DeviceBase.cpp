@@ -349,46 +349,78 @@ namespace Station {
             }
         }
 
+
+        void DeviceBase::FindLinkDevice(DeviceBase* pSelectDevice) {
+           //Station::Device::DeviceBtn* pThisBtn = nullptr;
+           //Station::Device::DeviceBtn* pBtnType = nullptr;
+           //Station::Device::StaSignal* pSignal = nullptr; 
+           //pThisBtn = dynamic_cast<Station::Device::DeviceBtn*>(pSelectDevice);
+           //
+           //qDebug() << pThisBtn->getFirstType();
+           //for (Station::Device::DeviceBase* pDevice : Station::MainStation()->getDeviceVectorByType(SIGNALLAMP)) {
+           //
+           //    pSignal = dynamic_cast<Station::Device::StaSignal*>(pDevice);
+           //    pBtnType = dynamic_cast<Station::Device::DeviceBtn*>(pDevice);
+           //    for (signalBtn* pSignalBtn : Station::MainStation()->getSignalBtn()) {
+           //        if (pSignalBtn->Signame == "列车" && pThisBtn->getFirstType() == 1) {
+           //            if (pSignalBtn->Btnname[0] == getName()) {
+           //                if (pSignalBtn->Btnname[1] == pDevice->getName()) {
+           //                    pThisBtn->setBtnState(1);
+           //                    MainStation()->AddClickDevice(pSelectDevice);
+           //                    Station::MainStation()->AddLinkDevice(pDevice);
+           //                    qDebug() << "匹配到列车按钮" << pDevice->getName() << pSignalBtn->Btnname << "点击对象" << pSignalBtn->Signame;
+           //                }
+           //            }
+           //        }
+           //        else if (pSignalBtn->Signame == "调车" && pThisBtn->getFirstType() == 2) {
+           //            if (pSignalBtn->Btnname[0] == getName()) {
+           //               if (pSignalBtn->Btnname[1] == pDevice->getName()) {
+           //                   pBtnType->setBtnState(2);
+           //                   MainStation()->AddClickDevice(pSelectDevice);
+           //                   Station::MainStation()->AddLinkDevice(pDevice);
+           //                   qDebug() << "匹配到调车按钮" << pDevice->getName() << pSignalBtn->Btnname << "点击对象" << pSignalBtn->Signame;
+           //               }
+           //              
+           //            }
+           //        }
+           //    }
+           //    
+          //
+          //  if (pSignalBtn->Signame == getName()) {
+          //     
+          //      for (Station::Device::DeviceBase* pDevice : Station::MainStation()->getDeviceVectorByType(SIGNALLAMP)) {
+          //
+          //          pSignal = dynamic_cast<Station::Device::StaSignal*>(pDevice);
+          //          pBtnType = dynamic_cast<Station::Device::DeviceBtn*>(pDevice);
+          //          if (pThisBtn->getFirstType() == 1) {
+          //              if (pSignalBtn->Btnname.contains(pDevice->getName())) {
+          //                  pBtnType->setBtnState(1);
+          //                  qDebug() << "匹配到列车按钮" << pSignal->getName() << pSignalBtn->Btnname[0] << "点击对象" << pSignalBtn->Signame;
+          //                  MainStation()->AddLinkDevice(pDevice);
+          //                  if (pSignalBtn->Btnname[0] == pSignal->getName()) {
+          //                      Station::MainStation()->AddClickDevice(pDevice);
+          //                  }
+          //              }
+          //          }
+          //          else if (pThisBtn->getFirstType() == 2) {
+          //              if (pSignalBtn->Btnname.contains(pDevice->getName())) {
+          //                  pBtnType->setBtnState(2);
+          //                  qDebug() << "匹配到调车按钮" << pSignal->getName() << pSignalBtn->Btnname[0] << "点击对象" << pSignalBtn->Signame;
+          //                  MainStation()->AddLinkDevice(pDevice);
+          //                  if (pSignalBtn->Btnname[0] == pSignal->getName()) {
+          //                      Station::MainStation()->AddClickDevice(pDevice);
+          //                  }
+          //              }
+          //          }
+          //      }
+          //      }
+           // }
+        }
+
         void DeviceBase::onDeviceClick()
         {
             if (m_mapClickEvent[m_strType].contains(CTCWindows::BaseWnd::StaFunBtnToolBar::getCurrFunType())) {
                 m_mapClickEvent[m_strType][CTCWindows::BaseWnd::StaFunBtnToolBar::getCurrFunType()](this);
-            }
-
-            Station::Device::StaSignal* pSignal = nullptr;
-            Station::Device::DeviceBtn* pThisBtn = nullptr;
-            Station::Device::DeviceBtn* pBtnType = nullptr;
-            pThisBtn = dynamic_cast<Station::Device::DeviceBtn*>(this);
-            if (m_strType == "XHD") {
-                for (signalBtn* pSignalBtn : Station::MainStation()->getSignalBtn()) {
-                    if (pSignalBtn->Signame == getName()) {
-                        pThisBtn = dynamic_cast<Station::Device::DeviceBtn*>(this);
-                        for (Station::Device::DeviceBase* pDevice : Station::MainStation()->getDeviceVectorByType(SIGNALLAMP)) {
-
-                            pSignal = dynamic_cast<Station::Device::StaSignal*>(pDevice);
-                            pBtnType = dynamic_cast<Station::Device::DeviceBtn*>(pDevice);
-                            if (pThisBtn->getFirstType()==1) {
-                                if (pSignalBtn->LBtnname.contains(pDevice->getName())) {
-                                    pBtnType->setBtnState(1);
-                                    qDebug() << pSignal->getRcTrainbtn()<< pBtnType->getBtnState();
-                                    pBtnType->DrawButton(m_pPainter, Scale(OutSideRect(pSignal->getRcTrainbtn(), 1, 1)), COLOR_BTN_GREEN, pBtnType->getBtnState() & BTNDOWN_TRAIN);
-                                    qDebug() << "匹配到列车按钮" << pSignal->getName() << "点击对象" << pSignalBtn->Signame;
-                                    MainStation()->AddLinkDevice(pDevice);
-                                }
-                            }
-                            else if (pThisBtn->getFirstType() == 2) {
-                                if (pSignalBtn->DBtnname.contains(pDevice->getName())) {
-                                    pBtnType->setBtnState(2);
-                                    qDebug() << pSignal->getRcShuntbtn() << pBtnType->getBtnState();
-                                    pBtnType->DrawButton(m_pPainter, Scale(OutSideRect(pSignal->getRcShuntbtn(), 1, 1)), COLOR_BTN_GREEN, pBtnType->getBtnState() & BTNDOWN_SHUNT);
-                                    qDebug() << "匹配到调车按钮" << pSignal->getName() << "点击对象" << pSignalBtn->Signame;
-                                    MainStation()->AddLinkDevice(pDevice);
-                                }
-                            }
-                        }
-           
-                    }
-                }
             }
         }
 

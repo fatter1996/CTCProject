@@ -86,6 +86,10 @@ namespace Station {
             uint getSelectType() { return m_nSelectType; }
             QRectF getRcTrainbtn() { return m_rcTrainBtn; }
             QRectF getRcShuntbtn() { return m_rcShuntBtn; }
+            DeviceBase* getRelatedBtn() { return m_pRelatedBtn; }
+            void ButtonStatusSwitching(DeviceBase* pDevice);
+            void setFlash(bool bFlash = true) { m_bFlash = bFlash; }
+            static QList<SignalBtn*>* getFlashSignal() { return &m_listFlashSignal; }
         private:
             QPointF p12, p7, p8, p9, p10, p13, p14; //绘制坐标
             uint m_nXHDType = 0; //信号机类型
@@ -124,6 +128,10 @@ namespace Station {
 
             uint m_nBSQState = 0;
             QMap<SignalState, std::function<void()>> m_mapLightColor;
+            bool m_bFlash = false;
+
+        private:
+            static QList<SignalBtn*> m_listFlashSignal;
         };
     }
 }
