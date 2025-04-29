@@ -136,9 +136,10 @@ namespace Station {
             if (m_bMainStation) {
                 int nState = 0x01;
                 for (StaBlockBtn& btnBlock : m_vecBlockBtn) {
-                    DrawButton(m_pPainter, Scale(btnBlock.m_rcBtn), m_nBtnState & 0x10 ? COLOR_BTN_RED : COLOR_BTN_DEEPGRAY, m_nBtnState & nState);
+                    DrawButton(m_pPainter, Scale(btnBlock.m_rcBtn), (m_nBtnState & (nState << 4)) ? COLOR_BTN_RED : COLOR_BTN_DEEPGRAY, m_nBtnState & nState);
                     nState *= 2;
                 }
+                
             }
             for (StaLeaveTrack& track : m_vecStaLeaveTrack) {
                

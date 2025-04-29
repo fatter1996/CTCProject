@@ -23,38 +23,52 @@ namespace CTCWindows {
 	{
 	}
 
-	void ModeChangeWnd::Init(int nType)
+	void ModeChangeWnd::InitModeChange(int nType, const QList<Station::MainStationObject*>& listStation)
 	{
-		ModeChangeRow* pModeChangeRow = new ModeChangeRow();
-		pModeChangeRow->InitRow(Station::MainStation()->getStationName(), nType);
+		m_listStation = listStation;
 		if (nType == MODO_CHANGE) {
 			ui.colFrame1->hide();
 		}
-		if (nType == MANNER_CHANGE) {
+		else if (nType == MANNER_CHANGE) {
 			ui.colFrame4->hide();
 		}
-
-		connect(pModeChangeRow, &ModeChangeRow::SubRadioBtnChecked, this, &ModeChangeWnd::onSubRadioBtnChecked);
-		connect(pModeChangeRow, &ModeChangeRow::SubCheckBtnChecked, this, &ModeChangeWnd::onSubCheckBtnChecked);
-		
-		static_cast<QHBoxLayout*>(ui.frame->layout())->insertWidget(
-			ui.frame->layout()->indexOf(ui.frame_2) + 1, pModeChangeRow);
-		m_vecModeChangeRow.append(pModeChangeRow);
+		else if (nType == MODO_CHANGE_AGREE) {
+			ui.radioButton->setEnabled(false);
+			ui.radioButton_2->setEnabled(false);
+			ui.radioButton_3->setEnabled(false);
+		}
+		for (int i = 0; i < m_listStation.size(); i++) {
+			ModeChangeRow* pModeChangeRow = new ModeChangeRow();
+			pModeChangeRow->InitRow(listStation[i], nType);
+			connect(pModeChangeRow, &ModeChangeRow::SubRadioBtnChecked, this, &ModeChangeWnd::onSubRadioBtnChecked);
+			connect(pModeChangeRow, &ModeChangeRow::SubCheckBtnChecked, this, &ModeChangeWnd::onSubCheckBtnChecked);
+			static_cast<QHBoxLayout*>(ui.frame->layout())->insertWidget(i + 1, pModeChangeRow);
+			m_vecModeChangeRow.append(pModeChangeRow);
+		}
 		
 		connect(ui.enterBtn, &QPushButton::clicked, [&]() {
-			bool bChecked = true;
-			int nState = pModeChangeRow->GetState(nType, &bChecked);
-			if (nType == MODO_CHANGE) {
-				Station::MainStation()->SendPacketMsg(TARGET_TEACHER, 0x70, 0x03, nState);
-			}
-			else if (nType == MODO_CHANGE_AGREE) {
-				QByteArray btResult;
-				if (Http::HttpClient::UpdataStaLimits(Station::Limits::PlanMode, nState, btResult)) {
-					Station::MainStation()->setStaLimits(Station::Limits::ControlMode, nState);
+			int nState = 0;
+			for (int i = 0; i < m_listStation.size(); i++) {
+				nState = m_vecModeChangeRow[i]->GetState(nType);
+				if (nType == MODO_CHANGE_AGREE) {
+					if (m_vecModeChangeRow[i]->getCurrState() == -1) {
+						continue;
+					}
+					if (nState) {
+						QByteArray btResult;
+						if (Http::HttpClient::UpdataStaLimits(Station::Limits::ControlMode, m_vecModeChangeRow[i]->getCurrState(), btResult)) {
+							m_listStation[i]->setStaLimits(Station::Limits::ControlMode, m_vecModeChangeRow[i]->getCurrState());
+						}
+					}
+					m_listStation[i]->setStaLimits(Station::Limits::ApplyControlMode, -1);
+					m_listStation[i]->SendPacketMsg(TARGET_TEACHER, 0x70, 0x05, nState);
 				}
-			}
-			else if (nType == MANNER_CHANGE) {
-				Station::MainStation()->SendPacketMsg(TARGET_TEACHER, 0x70, 0x04, nState);
+				else if (m_vecModeChangeRow[i]->getCurrState() != nState) {
+					m_listStation[i]->SendPacketMsg(TARGET_TEACHER, 0x70, nType, nState);
+					if (nType == MODO_CHANGE) {
+						m_listStation[i]->setStaLimits(Station::Limits::ActiveApplyControlMode, nState);
+					}
+				}
 			}
 			this->close();
 		});
@@ -69,6 +83,7 @@ namespace CTCWindows {
 		}
 		ui.buttonGroup->setExclusive(true);
 	}
+
 	void ModeChangeWnd::onSubCheckBtnChecked()
 	{
 		ui.checkBox->setChecked(false);

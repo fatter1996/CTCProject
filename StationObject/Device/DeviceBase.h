@@ -70,7 +70,6 @@ namespace Station {
             //设备点击事件
             void onDeviceClick();
 
-
         public:
             //命令清除
             virtual void OrderClear(bool bClearTwinkle = false) {}

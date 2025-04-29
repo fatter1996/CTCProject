@@ -68,7 +68,7 @@ namespace Station {
                 DrawButton(m_pPainter, Scale(n_rcButton), COLOR_BTN_DEEPGRAY, m_nBtnState, 2);
             }
             else if (m_nType == 540) {
-                DrawButton(m_pPainter, Scale(n_rcButton), m_nBtnState & 0x10 ? COLOR_BTN_RED : COLOR_BTN_DEEPGRAY, m_nBtnState & 0x01);
+                DrawButton(m_pPainter, Scale(n_rcButton), (m_nBtnState & 0x10) ? COLOR_BTN_RED : COLOR_BTN_DEEPGRAY, m_nBtnState & 0x01);
             }
             else {
                 DrawButton(m_pPainter, Scale(n_rcButton), COLOR_BTN_DEEPGRAY, m_nBtnState);
@@ -138,7 +138,7 @@ namespace Station {
 
         void StaButton::OrderClear(bool bClearTwinkle)
         {
-            if (bClearTwinkle) {
+            if (bClearTwinkle && CTCWindows::BaseWnd::StaFunBtnToolBar::getCurrFunType() == CTCWindows::FunType::FunBtn) {
                 m_nBtnState ^= 0x10;
             }
             BtnStateReset();

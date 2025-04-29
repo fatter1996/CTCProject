@@ -58,26 +58,40 @@ namespace Station {
             if (m_nType >= 501 && m_nType <= 506) {
                 if (MainStation()->getStaLimits(Station::Limits::ExStaControl)) {
                     if (m_nType == 501) {
-                        m_nState = 0x01;
+                        m_nState = 0x02;
+                    }
+                    if (m_nType == 502 && (MainStation()->getSelectDevice().size() == 0 || 
+                        CTCWindows::BaseWnd::StaFunBtnToolBar::getCurrFunType() != CTCWindows::FunType::RouteBuild)) {
+                        m_nState = 0x03;
                     }
                 }
                 else {
-                    if (m_nType == 502) {
-                        m_nState = 0x03;
-                    }
                     if (m_nType == 503) {
                         m_nState = 0x01;
                     }
-                    if (m_nType >= 504 && m_nType <= 507) {
+                    if (m_nType >= 504 && m_nType <= 506) { //²Ù×÷Ä£Ê½
                         if (m_nType - 504 == MainStation()->getStaLimits(Station::Limits::ControlMode)) {
                             m_nState = 0x01;
                         }
-                        if (m_nType - 504 == MainStation()->getStaLimits(Station::Limits::ApplyControlMode)) {
+                        if (m_nType - 504 == MainStation()->getStaLimits(Station::Limits::ActiveApplyControlMode)) {
                             m_nState = 0x23;
                         }
                     }
                 }
             }
+
+            if (m_nType == 512) {
+                if (MainStation()->getStaLimits(Station::Limits::PlanMode)) {
+                    m_nState = 0x01;
+                }
+                else {
+                    m_nState = 0x03;
+                }
+            }
+            if (m_nType == 513 && MainStation()->getStaLimits(Station::Limits::PlanControl)) {
+                m_nState = 0x01;
+            }
+
             QColor cColor;
             switch (m_nState & 0x0F)
             {

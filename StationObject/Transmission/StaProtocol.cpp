@@ -449,17 +449,17 @@ namespace Station {
             else if (dataAyyay[11] == 0x02) {
                 Station::MainStation()->setStaLimits(Station::Limits::ExStaControl, dataAyyay[12]);
             }
-            if (dataAyyay[11] == 0x03) {
+            else if (dataAyyay[11] == 0x03) {
                 Station::MainStation()->setStaLimits(Station::Limits::ApplyControlMode, dataAyyay[12]);
             }
-            if (dataAyyay[11] == 0x04) {
+            else if (dataAyyay[11] == 0x04) {
                 Station::MainStation()->setStaLimits(Station::Limits::PlanControl, dataAyyay[12]);
             }
-            if (dataAyyay[11] == 0x04) {
+            else if (dataAyyay[11] == 0x05) {
                 if (dataAyyay[12]) {
                     Station::MainStation()->setStaLimits(Station::Limits::ControlMode, 
-                        Station::MainStation()->getStaLimits(Station::Limits::ApplyControlMode));
-                    Station::MainStation()->setStaLimits(Station::Limits::ApplyControlMode, -1);
+                        Station::MainStation()->getStaLimits(Station::Limits::ActiveApplyControlMode));
+                    Station::MainStation()->setStaLimits(Station::Limits::ActiveApplyControlMode, -1);
                 }
             }
             return QByteArray();

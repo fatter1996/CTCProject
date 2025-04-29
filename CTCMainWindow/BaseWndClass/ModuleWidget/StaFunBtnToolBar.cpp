@@ -14,11 +14,22 @@ namespace CTCWindows {
 			: QWidget(parent)
 		{
 			m_nTimerID_500 = startTimer(500);
+			
 		}
 
 		StaFunBtnToolBar::~StaFunBtnToolBar()
 		{
 
+		}
+
+		void StaFunBtnToolBar::InitConnect()
+		{
+			connect(m_pCommandClearBtn, &QPushButton::clicked, [&]() { emit OrderClear(true); });
+			connect(m_pCommandIssuedBtn, &QPushButton::clicked, [&]() { emit OrderIssued(); });
+			connect(m_pAuxiliaryMenuBtn, &QPushButton::clicked, this, &StaFunBtnToolBar::onAuxiliaryMenuBtnClicked);
+			connect(m_pMethodConvert, &QPushButton::clicked, this, &StaFunBtnToolBar::onMethodConvertBtnClicked);
+			connect(m_pButtonGroup, qOverload<QAbstractButton*>(&QButtonGroup::buttonClicked), this, &StaFunBtnToolBar::onButtonClicked);
+			onFunBtnStateReset();
 		}
 
 		void StaFunBtnToolBar::onButtonClicked(QAbstractButton* pButton)
@@ -88,10 +99,29 @@ namespace CTCWindows {
 
 		void StaFunBtnToolBar::onMethodConvertBtnClicked()
 		{
-			ModeChangeWnd* pModeChange = new ModeChangeWnd;
-			pModeChange->setAttribute(Qt::WA_DeleteOnClose);
-			pModeChange->Init(MODO_CHANGE);
-			pModeChange->exec();
+			QMenu* pMenu = new QMenu();
+			pMenu->setAttribute(Qt::WA_DeleteOnClose);
+			QAction* pAction = new QAction("模式申请");
+			connect(pAction, &QAction::triggered, [=]() {
+				QList<Station::MainStationObject*> vecMainStation;
+				vecMainStation.append(Station::MainStation());
+				ModeChangeWnd* pModeChange = new ModeChangeWnd;
+				pModeChange->setAttribute(Qt::WA_DeleteOnClose);
+				pModeChange->InitModeChange(MODO_CHANGE, vecMainStation);
+				pModeChange->exec();
+			});
+			pMenu->addAction(pAction);
+			QAction* pAction2 = new QAction("同意模式申请");
+			connect(pAction2, &QAction::triggered, [=]() {
+				QList<Station::MainStationObject*> vecMainStation;
+				vecMainStation.append(Station::MainStation());
+				ModeChangeWnd* pModeChange = new ModeChangeWnd;
+				pModeChange->setAttribute(Qt::WA_DeleteOnClose);
+				pModeChange->InitModeChange(MODO_CHANGE_AGREE, vecMainStation);
+				pModeChange->exec();
+			});
+			pMenu->addAction(pAction2);
+			pMenu->exec(QCursor::pos());
 		}
 
 		void StaFunBtnToolBar::onFunBtnStateReset()

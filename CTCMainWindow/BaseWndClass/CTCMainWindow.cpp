@@ -27,6 +27,7 @@ namespace CTCWindows {
         m_pStationCtrl = CreateStationCtrlDisp();
         //创建功能按钮栏
         m_pStationCtrl->CreatStaFunBtnToolBar();
+        m_pStationCtrl->StaFunBtnBar()->InitConnect();
         //创建站间透明界面
         m_pStationMulti = CreateMultiStationDisp();
         //创建行车日志界面

@@ -79,6 +79,8 @@ namespace CTCWindows {
             StaFunBtnToolBar(QWidget* parent = nullptr);
             ~StaFunBtnToolBar();
 
+        public:
+            void InitConnect();
             virtual void InitAuxiliaryMenu(AuxiliaryMenuWnd* pAuxiliary) = 0;
             void ButtonClicked(FunType eSelectType);
             void timerEvent(QTimerEvent* event) override;
@@ -106,6 +108,7 @@ namespace CTCWindows {
             QPushButton* m_pCommandIssuedBtn = nullptr;
             QPushButton* m_pRouteBuildBtn = nullptr;
             QPushButton* m_pAuxiliaryMenuBtn = nullptr;
+            QPushButton* m_pMethodConvert = nullptr;
           
         private:
             int m_nTimerID_500 = -1;
