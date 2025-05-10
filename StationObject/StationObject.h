@@ -111,7 +111,6 @@ namespace Station {
         static QMap<QString, std::function<Device::DeviceBase* (StationObject*)>> m_mapCreatDeviceVector;
         static int m_nTimerId_500;
         static int UpStateTimer;
-        static int m_UpState;
     };
 
     

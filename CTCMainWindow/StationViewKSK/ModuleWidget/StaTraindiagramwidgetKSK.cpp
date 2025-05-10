@@ -460,29 +460,29 @@ void StaTraindiagramwidgetKSK::drawTrainPlan()
         int nIndex = getDirectionIndex(pTrafficLog);
         m_pStaTrain = Station::MainStation()->getStaTrainById(pTrafficLog->m_nTrainId);
         Station::Device::DeviceBase* pDevice = nullptr;
-        for (int i = 0; i < TrainDiagram->vectRailwayLine.size();i++) {
-            if (pTrafficLog->m_nPlanType == 0x03) {
-                pDevice = Station::MainStation()->getDeviceByName(pTrafficLog->m_strDepartSignal);
-                if (TrainDiagram->vectRailwayLine[i].endStation == dynamic_cast<Station::Device::StaSignal*>(pDevice)->getDirection()) {
-                    nIndex = i;
-                    break;
-                }
-            }
-            else {
-                pDevice = Station::MainStation()->getDeviceByName(pTrafficLog->m_strArrivaSignal);
-                if (TrainDiagram->vectRailwayLine[i].startStation == dynamic_cast<Station::Device::StaSignal*>(pDevice)->getDirection()) {
-                    nIndex = i;
-                    if (pTrafficLog->m_strDepartSignal == "") { break; }
-                    pDevice = Station::MainStation()->getDeviceByName(pTrafficLog->m_strDepartSignal);
-                    if (TrainDiagram->vectRailwayLine[i].endStation == dynamic_cast<Station::Device::StaSignal*>(pDevice)->getDirection()) {
-                        nIndex = i;
-                        break;
-                    }
-
-                }
-            }
-           
-        }
+       //for (int i = 0; i < TrainDiagram->vectRailwayLine.size();i++) {
+       //    if (pTrafficLog->m_nPlanType == 0x03) {
+       //        pDevice = Station::MainStation()->getDeviceByName(pTrafficLog->m_strDepartSignal);
+       //        if (TrainDiagram->vectRailwayLine[i].endStation == dynamic_cast<Station::Device::StaSignal*>(pDevice)->getDirection()) {
+       //            nIndex = i;
+       //            break;
+       //        }
+       //    }
+       //    else {
+       //        pDevice = Station::MainStation()->getDeviceByName(pTrafficLog->m_strArrivaSignal);
+       //        if (TrainDiagram->vectRailwayLine[i].startStation == dynamic_cast<Station::Device::StaSignal*>(pDevice)->getDirection()) {
+       //            nIndex = i;
+       //            if (pTrafficLog->m_strDepartSignal == "") { break; }
+       //            pDevice = Station::MainStation()->getDeviceByName(pTrafficLog->m_strDepartSignal);
+       //            if (TrainDiagram->vectRailwayLine[i].endStation == dynamic_cast<Station::Device::StaSignal*>(pDevice)->getDirection()) {
+       //                nIndex = i;
+       //                break;
+       //            }
+       //
+       //        }
+       //    }
+       //   
+       //}
         
         if (pTrafficLog->m_nPlanType == 0x02) {
             Station::Device::StaSignal* pSignal = dynamic_cast<Station::Device::StaSignal*>(Station::MainStation()->getDeviceByName(pTrafficLog->m_strDepartSignal, SIGNALLAMP));

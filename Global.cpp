@@ -235,10 +235,6 @@ namespace Station {
         }
     }
 
-    QString StaTrainRoute::getRouteDescrip()
-    {
-        return "";
-    }
     QString StaTrainRoute::SortOutTheData(QMap<int, int> SingalCode, QString SingalBtnName,bool Direction) {
 
         Station::Device::DeviceBase* pEndSignal = nullptr;

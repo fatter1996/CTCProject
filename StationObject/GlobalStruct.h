@@ -160,7 +160,7 @@ namespace Station {
 	{
 		int m_nRouteId = 0; //进路序列ID
 		int m_nTrainId = 0; //车次ID
-
+		QString m_strTrainNum;
 		bool m_bArrivaRoute = true; //接发类型 (接车-true 发车-false)
 		bool m_bAutoTouch = false;//触发方式(自动触发-true 人工触发-false)
 
