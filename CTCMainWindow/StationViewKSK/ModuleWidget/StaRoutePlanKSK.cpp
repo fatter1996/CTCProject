@@ -73,6 +73,16 @@ namespace CTCWindows {
 			return strList;
 		}
 
+		void StaRoutePlanKSK::UpDataRouteLimits()
+		{
+			if (Station::MainStation()->getStaLimits(Station::Limits::RouteLimits)) {
+				ui.trainRouteBox->setTitle("列车进路序列");
+			}
+			else {
+				ui.trainRouteBox->setTitle("列车进路序列 只读(不可修改)");
+			}
+		}
+
 		QVector<Control::TableViewHeadInfo> StaRoutePlanKSK::GetShuntRouteTableHeadInfo()
 		{
 			QVector<Control::TableViewHeadInfo> vecHeadInfo = {

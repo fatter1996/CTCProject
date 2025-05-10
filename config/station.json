@@ -1,31 +1,34 @@
 ﻿{
-  "staName": "标准站",
-  "stationType": 1,
-  "stationID": 100,
-  "comAddress": {
-    "#localAddress": "本地通信地址",
-    "localIp": "192.168.31.69",
-    "localPortUDP": 8099,
-    "localPortTCP": 8077,
-    "#serverAddress": "服务终端通信地址",
-    "serverIp": "192.168.31.86",
-    "serverPortUDP": 3355,
-    "serverPortTCP": 3366,
-    "#HttpServerAddress": "Http服务通信地址",
-    "HttpServerIp": "192.168.31.86",
-    "HttpServerPort": 6060
-  },
-  "stationInfo": "Station.txt",
-  "deviceInfo": "DeviceConfig.json",
-  "interlockTable": "InterlockTable.txt",
-  "chartconversion": "Chart_Conversion.json",
-  "isShowToolBarBtn": 1,
-  "isShowToolBarLabel": 1,
-  "multiStation": [
-    {
-      "stationInfo": "Station.txt",
-      "deviceInfo": "DeviceConfig.json"
-
-    }
-  ]
+    "staName": "标准站",
+    "stationType": 1,
+    "stationID": 103,
+    "stationWidth": 1920,
+    "stationHeight": 1080,
+    "comAddress": {
+        "#localAddress": "本地通信地址",
+        "localIp": "192.168.31.86",
+        "localPortUDP": 8099,
+        "localPortTCP": 8077,
+        "#serverAddress": "服务终端通信地址",
+        "serverIp": "192.168.31.86",
+        "serverPortUDP": 3355,
+        "serverPortTCP": 3366,
+        "#HttpServerAddress": "Http服务通信地址",
+        "HttpServerIp": "192.168.31.86",
+        "HttpServerPort": 6060
+    },
+    "stationInfo": "Station.txt",
+    "deviceInfo": "DeviceConfig.json",
+    "isShowToolBarBtn": 1,
+    "isShowToolBarLabel": 1,
+    "multiStation": [
+        {
+            "staName": "标准站",
+            "stationID": 103,
+            "stationWidth": 1920,
+            "stationHeight": 1080,
+            "stationInfo": "Station.txt",
+            "deviceInfo": "DeviceConfig.json"
+        }
+    ]
 }

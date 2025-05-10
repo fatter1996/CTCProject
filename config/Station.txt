@@ -1934,7 +1934,7 @@ gd.pz34=P(190,320);
 gd.center=P(175,320);
 ADD_29;
 ##BS
-bs.m_strName="SJ    ";
+bs.m_strName="SJ";
 bs.m_nCode=0x73;
 bs.RelayQD="IVBG";
 bs.Module_Code=0x;
@@ -1943,7 +1943,7 @@ bs.m_nSX=0;
 bs.isXN=0;
 ADD_0;
 ##BS
-bs.m_strName="XJ    ";
+bs.m_strName="XJ";
 bs.m_nCode=0x74;
 bs.RelayQD="IVAG";
 bs.Module_Code=0x;

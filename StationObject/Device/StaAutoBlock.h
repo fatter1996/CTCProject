@@ -58,7 +58,7 @@ namespace Station {
             //×´Ì¬ÖØÖÃ
             void ResetDevState() override;
 
-            void AddBlockBtn(QString strType, const QString& strElement);
+            void AddBlockBtn(int nState, QString strType, const QString& strElement);
             void AddBlockLamp(QString strType, const QString& strElement);
 
         public:

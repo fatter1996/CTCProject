@@ -13,17 +13,17 @@ namespace CTCWindows {
 			~StaRoutePlan();
 
 		public:
-			//列车进路序列
+			//�г���·����
 			void InitTrainRouteTable();
 			virtual QVector<Control::TableViewHeadInfo> GetTrainRouteTableHeadInfo() = 0;
 			virtual QStringList GetTrainRouteTableDataByRoute(QString strTrainNum, Station::StaTrainRoute* pRoute) = 0;
-			
-			//调车进路序列
+			virtual void UpDataRouteLimits() = 0;
+			//������·����
 			void InitShuntRouteTable();
 			virtual QVector<Control::TableViewHeadInfo> GetShuntRouteTableHeadInfo() {
 				return QVector<Control::TableViewHeadInfo>();
 			}
-			//勾计划
+			//���ƻ�
 			void InitHookPlanTable();
 			virtual QVector<Control::TableViewHeadInfo> GetHookPlanTableHeadInfo() {
 				return QVector<Control::TableViewHeadInfo>();
@@ -51,9 +51,9 @@ namespace CTCWindows {
 			void OnTriggerTypeChange(Station::StaTrainRoute* pTrainRoute, bool bAutoTouch);
 
 		protected:
-			Control::TableView* m_pTrainRouteTable = nullptr;	//列车进路表格
-			Control::TableView* m_pShuntRouteTable = nullptr;	//调车进路表格
-			Control::TableView* m_pHookPlanTable = nullptr;		//勾计划表格
+			Control::TableView* m_pTrainRouteTable = nullptr;	//�г���·���
+			Control::TableView* m_pShuntRouteTable = nullptr;	//������·���
+			Control::TableView* m_pHookPlanTable = nullptr;		//���ƻ����
 
 			int m_nTrackRow = -1;
 			int m_nTriggerRow = -1;

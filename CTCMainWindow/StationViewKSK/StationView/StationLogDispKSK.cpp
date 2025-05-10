@@ -77,16 +77,35 @@ namespace CTCWindows {
 			};
 			ui.setupUi(this);
 			InitTrafficLogTable();
-			//connect(ui.adjPreviewBtn, &QPushButton::clicked, this, &StationLogDisp::AdjacentStationPreview);
-			//connect(ui.agreeAdjBtn, &QPushButton::clicked, this, &StationLogDisp::AgreeAdjacentStations);
-			//connect(ui.arrivalBtn, &QPushButton::clicked, this, &StationLogDisp::TrainArrival);
-			//connect(ui.departureBtn, &QPushButton::clicked, this, &StationLogDisp::TrainDeparture);
-			//connect(ui.throughBtn, &QPushButton::clicked, this, &StationLogDisp::TrainPassThrough);
-			//connect(ui.adjAgrBtn, &QPushButton::clicked, this, &StationLogDisp::AdjacentStation);
-			//
-			////connect(ui.supPointBtn, &QPushButton::clicked, this, &StationLogDisp::AdjacentStation);
-			//connect(ui.cancelBlockBtn, &QPushButton::clicked, this, &StationLogDisp::CancelBlock);
-			//connect(ui.cancelDepartBtn, &QPushButton::clicked, this, &StationLogDisp::CancelDepart);
+			m_pTrafficMsgLog = ui.widget_2;
+			connect(ui.adjPreviewBtn, &QPushButton::clicked, [=]() {
+				AdjacentStationPreview();
+			});
+			connect(ui.agreeAdjBtn, &QPushButton::clicked, [=]() {
+				AgreeAdjacentStations();
+			});
+
+			connect(ui.arrivalBtn, &QPushButton::clicked, [=]() {
+				TrainArrival();
+			});
+			connect(ui.departureBtn, &QPushButton::clicked, [=]() {
+				TrainDeparture();
+			});
+			connect(ui.throughBtn, &QPushButton::clicked, [=]() {
+				TrainPassThrough();
+			});
+			connect(ui.adjAgrBtn, &QPushButton::clicked, [=]() {
+				AdjacentStation();
+			});
+			
+			//connect(ui.supPointBtn, &QPushButton::clicked, [=]() {AdjacentStation();
+		//});
+			connect(ui.cancelBlockBtn, &QPushButton::clicked, [=]() {
+				CancelBlock();
+			});
+			connect(ui.cancelDepartBtn, &QPushButton::clicked, [=]() {
+				CancelDepart();
+			});
 		}
 
 		StationLogDispKSK::~StationLogDispKSK()

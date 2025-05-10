@@ -46,28 +46,13 @@ namespace CTCWindows {
 
 		void StaFunBtnToolBarKSK::InitAuxiliaryMenu(AuxiliaryMenuWnd* pAuxiliary)
 		{
-			pAuxiliary->AddNewAuxiliaryBtn("股道无电", [=]() {
-				pAuxiliary->close();
-			});
-			pAuxiliary->AddNewAuxiliaryBtn("接触网定位无电", [=]() {
-				pAuxiliary->close();
-			});
-			pAuxiliary->AddNewAuxiliaryBtn("接触网反位无电", [=]() {
-				pAuxiliary->close();
-			});
-			pAuxiliary->AddNewAuxiliaryBtn("破封统计", [=]() {
-				pAuxiliary->ShowSealTechnique();
-				pAuxiliary->close();
-			});
-			pAuxiliary->AddNewAuxiliaryBtn("接通光带", [=]() {
-				pAuxiliary->close();
-			});
-			pAuxiliary->AddNewAuxiliaryBtn("继续接通光带30S", [=]() {
-				pAuxiliary->close();
-			});
-			pAuxiliary->AddNewAuxiliaryBtn("退出菜单", [=]() {
-				pAuxiliary->close();
-			});
+			pAuxiliary->AddNewAuxiliaryBtn("股道无电", std::bind(&StaFunBtnToolBar::TrackPowerCut, this, std::placeholders::_1));
+			pAuxiliary->AddNewAuxiliaryBtn("接触网定位无电", std::bind(&StaFunBtnToolBar::SwitchDWPowerCut, this, std::placeholders::_1));
+			pAuxiliary->AddNewAuxiliaryBtn("接触网反位无电", std::bind(&StaFunBtnToolBar::SwitchFWPowerCut, this, std::placeholders::_1));
+			//pAuxiliary->AddNewAuxiliaryBtn("破封统计", std::bind(&StaFunBtnToolBar::ShowSealTechnique, this, std::placeholders::_1));
+			//pAuxiliary->AddNewAuxiliaryBtn("接通光带", std::bind(&StaFunBtnToolBar::PutThrough15S, this, std::placeholders::_1));
+			//pAuxiliary->AddNewAuxiliaryBtn("继续接通光带30S", std::bind(&StaFunBtnToolBar::PutThrough30S, this, std::placeholders::_1));
+			return StaFunBtnToolBar::InitAuxiliaryMenu(pAuxiliary);
 		}
 	}
 }

@@ -69,7 +69,14 @@ namespace Station {
                 DrawButton(m_pPainter, Scale(n_rcButton), COLOR_BTN_DEEPGRAY, m_nBtnState, 2);
             }
             else if (m_nType == 540) {
-                DrawButton(m_pPainter, Scale(n_rcButton), (m_nBtnState & 0x10) ? COLOR_BTN_RED : COLOR_BTN_DEEPGRAY, m_nBtnState & 0x01);
+                if ((CTCWindows::BaseWnd::StaFunBtnToolBar::getCurrFunType() == CTCWindows::FunType::GuideClock) &&
+                        MainStation()->getSelectDevice().size() == 0) {
+                    DrawButton(m_pPainter, Scale(n_rcButton), COLOR_BTN_DEEPGRAY, true, 1, COLOR_BTN_YELLOW, COLOR_BTN_DEEPGRAY);
+                }
+                else {
+                    DrawButton(m_pPainter, Scale(n_rcButton), (m_nBtnState & 0x10) ? COLOR_BTN_RED : COLOR_BTN_DEEPGRAY, m_nBtnState & 0x01);
+                }
+                
             }
             else {
                 DrawButton(m_pPainter, Scale(n_rcButton), COLOR_BTN_DEEPGRAY, m_nBtnState);
@@ -88,7 +95,7 @@ namespace Station {
                 (m_nType == 81 || m_nType == 380 || m_nType == 381)) {
                 return Scale(n_rcButton).contains(ptPos);
             }
-            else if (CTCWindows::BaseWnd::StaFunBtnToolBar::getCurrFunType() == CTCWindows::FunType::FunBtn && m_nType == 540) {
+            else if (CTCWindows::BaseWnd::StaFunBtnToolBar::getCurrFunType() == CTCWindows::FunType::GuideClock && m_nType == 540) {
                 return Scale(n_rcButton).contains(ptPos);
             }
             return false;
@@ -100,6 +107,9 @@ namespace Station {
                 dynamic_cast<StaButton*>(pDevice)->OnButtonClick();
             });
             m_mapClickEvent[m_strType].insert(CTCWindows::FunType::FunBtn, [](DeviceBase* pDevice) {
+                dynamic_cast<StaButton*>(pDevice)->OnButtonClick();
+            });
+            m_mapClickEvent[m_strType].insert(CTCWindows::FunType::GuideClock, [](DeviceBase* pDevice) {
                 dynamic_cast<StaButton*>(pDevice)->OnButtonClick();
             });
         }
@@ -119,7 +129,7 @@ namespace Station {
                 }
             }
 
-            if (CTCWindows::BaseWnd::StaFunBtnToolBar::getCurrFunType() == CTCWindows::FunType::FunBtn) {
+            if (CTCWindows::BaseWnd::StaFunBtnToolBar::getCurrFunType() == CTCWindows::FunType::GuideClock) {
                 m_nBtnState &= 0xF0;
                 if (m_nType == 540) {   //引导总锁
                     if (m_bUpDown == 0) {   //下行

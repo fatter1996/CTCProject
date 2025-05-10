@@ -14,8 +14,9 @@ namespace CTCWindows {
 			~StaRoutePlanTH();
 
 		public:
-			QVector<Control::TableViewHeadInfo> GetTrainRouteTableHeadInfo();
-			QStringList GetTrainRouteTableDataByRoute(QString strTrainNum, Station::StaTrainRoute* pRoute);
+			QVector<Control::TableViewHeadInfo> GetTrainRouteTableHeadInfo() override;
+			QStringList GetTrainRouteTableDataByRoute(QString strTrainNum, Station::StaTrainRoute* pRoute) override;
+			void UpDataRouteLimits() override {};
 
 		private:
 			Ui::StaRoutePlanTH ui;

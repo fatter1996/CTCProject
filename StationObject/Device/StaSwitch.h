@@ -39,7 +39,7 @@ namespace Station {
             void InitClickEvent() override;
             //右键菜单
             void ShowDeviceMenu(const QPoint& ptPos) override;
-             //站场翻转
+            //站场翻转
             void setVollover(const QPointF& ptBase) override;
             //状态重置
             void ResetDevState() override;
@@ -49,12 +49,12 @@ namespace Station {
             QPen getDeviceNameColor() override;
 
         public:
-            void setSwitchState(const uint& nSwitchState);
-            uint getSwitchState() { return m_nSwitchState; }
-            uint getCQSwitchCode() { return m_nQ; }
-            uint getDWSwitchCode() { return m_nD; }
-            uint getFWSwitchCode() { return m_nF; }
-            uint getQDCode() { return m_nQDCode; }
+            void setSwitchState(const uint& nSwitchState) { m_nSwitchState = nSwitchState; }
+            uint getSwitchState() const { return m_nSwitchState; }
+            uint getCQSwitchCode() const { return m_nQ; }
+            uint getDWSwitchCode() const { return m_nD; }
+            uint getFWSwitchCode() const { return m_nF; }
+            uint getQDCode() const { return m_nQDCode; }
 
         private:
             bool isSwitchSK();
@@ -76,9 +76,6 @@ namespace Station {
             int m_nD = -1;
             int m_nF = -1;
             uint m_nSwitchState = 0;  //道岔状态(1-定位,2-反位,0,3-岔前)
-            uint m_nShuntFault = 0;  //分路不良(1-定位,2-反位,4-岔前)(可组合)
-            bool m_bShuntFaultIdle = false;  //分路不良空闲
-            uint m_nSpeedLimit = 0;  //是否限速（临时限速）(1-定位,2-反位,4-岔前)(可组合)
         };
     }
 }

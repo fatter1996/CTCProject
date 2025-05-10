@@ -2,6 +2,8 @@
 #include "Global.h"
 #include "CommonWidget/LeadSealDlg.h"
 #include "CommonWidget/ModeChangeWnd.h"
+#include "CommonWidget/SealTechnique.h"
+#include <QTimer>
 
 #pragma execution_character_set("utf-8")
 namespace CTCWindows {
@@ -42,26 +44,27 @@ namespace CTCWindows {
 			m_SelectFunType = eSelectType;
 			switch (m_SelectFunType)
 			{
-			case CTCWindows::FunType::GuideBtn:			//引导按钮
-			case CTCWindows::FunType::GuideClock:		//引导总锁
-			case CTCWindows::FunType::TotalRelieve:	    //总人解
-			case CTCWindows::FunType::RegionRelieve:	//区故解
-			case CTCWindows::FunType::Lighting:		//点灯
-			case CTCWindows::FunType::UnLighting:		//灭灯
-			case CTCWindows::FunType::RampUnlock:	    //坡道解锁
-			case CTCWindows::FunType::PoorRoute: {		//分路不良
-				if (!CTCWindows::LeadSealDlg::LeadSealPassword(CTCWindows::KeyInputType::LeadSeal)) {
+			case FunType::GuideBtn:			//引导按钮
+			case FunType::GuideClock:		//引导总锁
+			case FunType::TotalRelieve:	    //总人解
+			case FunType::RegionRelieve:	//区故解
+			case FunType::Lighting:			//点灯
+			case FunType::UnLighting:		//灭灯
+			case FunType::RampUnlock:	    //坡道解锁
+			case FunType::PoorRoute:		//确认空闲
+			case FunType::IdleConfirm:{	//分路不良
+				if (!LeadSealDlg::LeadSealPassword(KeyInputType::LeadSeal)) {
 					onFunBtnStateReset();
 				}
 				else {
 					m_nCountdown = 30;
 				}
 			} break;
-			case CTCWindows::FunType::CommandClear: 
-			case CTCWindows::FunType::AuxiliaryMenu: 
-			case CTCWindows::FunType::StateChange:
-			case CTCWindows::FunType::MethodConvert: 
-			case CTCWindows::FunType::CommandIssued:
+			case FunType::CommandClear: 
+			case FunType::AuxiliaryMenu: 
+			case FunType::StateChange:
+			case FunType::MethodConvert: 
+			case FunType::CommandIssued:
 				break;
 			default:	
 				m_nCountdown = 30;
@@ -146,6 +149,31 @@ namespace CTCWindows {
 					pButton->setChecked(false);
 				}
 			}
+		}
+
+		void StaFunBtnToolBar::InitAuxiliaryMenu(AuxiliaryMenuWnd* pAuxiliary)
+		{
+			pAuxiliary->AddNewAuxiliaryBtn("退出菜单", [=](AuxiliaryMenuWnd* pAuxiliary) {
+				pAuxiliary->close();
+			});
+		}
+
+		void StaFunBtnToolBar::TrackPowerCut(AuxiliaryMenuWnd* pAuxiliary)
+		{
+			m_SelectFunType = FunType::TrackPowerCut;
+			pAuxiliary->close();
+		}
+
+		void StaFunBtnToolBar::SwitchDWPowerCut(AuxiliaryMenuWnd* pAuxiliary)
+		{
+			m_SelectFunType = FunType::SwitchDWPowerCut;
+			pAuxiliary->close();
+		}
+
+		void StaFunBtnToolBar::SwitchFWPowerCut(AuxiliaryMenuWnd* pAuxiliary)
+		{
+			m_SelectFunType = FunType::SwitchFWPowerCut;
+			pAuxiliary->close();
 		}
 	}
 }

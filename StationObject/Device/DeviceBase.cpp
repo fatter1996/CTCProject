@@ -438,10 +438,18 @@ namespace Station {
 
         QColor StaSection::getTrackColor()
         {
+            if (m_bRangeVisible) {
+                return COLOR_TRACK_SELECT_BLUE;
+            }
+
+            if (m_bPutThrough) {
+                return COLOR_TRACK_WHITE;
+            }
+
             QColor cTrackColor = COLOR_TRACK_BLUE;
 
             if (m_nState & SECTION_STATE_PRELOCK) {
-                cTrackColor = COLOR_TRACK_PRELOCK_BLUE;
+                cTrackColor = COLOR_TRACK_WHITE;
             }
             else if (m_nState & SECTION_STATE_LOCK) {
                 cTrackColor = COLOR_TRACK_WHITE;
@@ -449,21 +457,31 @@ namespace Station {
             else if (m_nState & SECTION_STATE_FAULTLOCK) {
                 cTrackColor = COLOR_TRACK_GREEN;
             }
-
-            if (m_nState & SECTION_STATE_BLOCK) {
+            else if (m_nState & SECTION_STATE_BLOCK) {
                 cTrackColor = m_bElapsed ? COLOR_TRACK_RED : cTrackColor;
             }
-
-            if (m_nState & SECTION_STATE_TAKEUP) {
+            else if (m_nState & SECTION_STATE_TAKEUP) {
                 cTrackColor = COLOR_TRACK_RED;
-            }
-
-            if (m_bRangeVisible) {
-                cTrackColor = COLOR_TRACK_SELECT_BLUE;
             }
             return cTrackColor;
         }
 
+        void StaSection::OrderClear(bool bClearTwinkle)
+        {
+            m_bSelect = false;
+        }
+
+        void StaSection::SetShuntFault(int nState)
+        {
+            switch (nState)
+            {
+            case 0x12:  m_nShuntFault ^= 0x01;  break;
+            case 0x23:  m_nShuntFault ^= 0x04;  break;
+            case 0x24:  m_nShuntFault ^= 0x01;  break;
+            case 0x25:  m_nShuntFault ^= 0x02;  break;
+            default:    m_nShuntFault ^= 0x01;  break;
+            }
+        }
 
         int DeviceBtn::m_nFirstBtnType = 0;
         int DeviceBtn::m_nSelectDevCode = -1;
@@ -931,7 +949,6 @@ namespace Station {
         void DeviceTrain::MoveTo(DeviceTrain* pNext)
         {
             if (pNext && m_pTrain) {
-                qDebug() << "MoveTo";
                 pNext->SetTrain(m_pTrain);
                 m_bTrainLeave = true;
             }

@@ -96,6 +96,7 @@ namespace CTCWindows {
             void SetDeItemDefaultWidth(int nWidth) { nItemDefaultWidth = nWidth; }
             void SetHorizontalIndexDefaultHeight(int nHeight) { nHorizontalIndexDefaultHeight = nHeight; }
             void SetVerticalIndexDefaultWidth(int nWidth) { nVerticalIndexDefaultWidth = nWidth; }
+            QTableWidget* VerticalHeadTable() { return m_pVerticalHeadTable; }
 
         private:
             QScrollBar* m_pHorizontalScrollBar = nullptr;

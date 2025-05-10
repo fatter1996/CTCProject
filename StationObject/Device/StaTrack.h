@@ -74,9 +74,6 @@ namespace Station {
         private:
             LowFrequency m_nLowFrequency = LowFrequency::H;
             QString m_strTrackType; //股道类型
-            bool m_bSpeedLimit = false;       //是否限速（临时限速）
-            bool m_bShuntFault = false;        //是否分路不良
-            bool m_bShuntFaultIdle = false;   //是否分路不良空闲
         };
     }
 }

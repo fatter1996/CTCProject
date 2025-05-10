@@ -130,15 +130,13 @@ namespace Station {
 
         void StaSignal::Draw(bool isMulti)
         {
-            if (m_nAttr & (SIGNAL_LCZD | SIGNAL_LCSD)) {
-                if (m_nAttr & SIGNAL_JCXH) {    //进站信号机
-                    m_bShowName = MainStation()->IsVisible(VisibleDev::entrySignalName);
-                }   
-                else if (m_nAttr & SIGNAL_FCXH) {    //出站信号机
-                    m_bShowName = MainStation()->IsVisible(VisibleDev::exitSignalName);
-                }
+            if (m_nAttr & SIGNAL_JCXH || m_strXHDType == "JZ_XHJ") {    //进站信号机
+                m_bShowName = MainStation()->IsVisible(VisibleDev::entrySignalName);
             }
-            else if (m_nAttr & (SIGNAL_DCZD | SIGNAL_DCSD)) {
+            else if (m_nAttr & SIGNAL_FCXH || m_strXHDType == "CZ_XHJ") {    //出站信号机
+                m_bShowName = MainStation()->IsVisible(VisibleDev::exitSignalName);
+            }
+            else if (m_nAttr & (SIGNAL_DCZD | SIGNAL_DCSD) || m_strXHDType == "DC_XHJ") {
                 m_bShowName = MainStation()->IsVisible(VisibleDev::shuntSignalName);
             }
             if (!isMulti && MainStation()->IsVisible(VisibleDev::button) && m_bMainStation) {
@@ -152,18 +150,19 @@ namespace Station {
         void StaSignal::DrawSignalButton()
         {
             //列车按钮
-            if ((m_nAttr & (SIGNAL_LCZD | SIGNAL_LCSD)) || m_strXHDType == "JZ_XHJ" || m_strXHDType == "CZ_XHJ") {
-                DrawButton(m_pPainter, Scale(m_rcTrainBtn), COLOR_BTN_GREEN, m_nBtnState & BTNDOWN_TRAIN | (m_bFlash && m_nFirstBtnType == 1), 1, COLOR_BTN_BLUE, m_bFlash ? COLOR_BTN_YELLOW : COLOR_BTN_WHITE);
+            if (MainStation()->IsVisible(VisibleDev::trainButton) && 
+                ((m_nAttr & (SIGNAL_LCZD | SIGNAL_LCSD)) || m_strXHDType == "JZ_XHJ" || m_strXHDType == "CZ_XHJ")) {
+                DrawButton(m_pPainter, Scale(m_rcTrainBtn), COLOR_BTN_GREEN, m_nBtnState & BTNDOWN_TRAIN);
             }
             if (m_nFirstBtnType == 3) {
                 DrawButton(m_pPainter, Scale(m_rcTrainBtn), COLOR_BTN_GREEN, m_nBtnState & BTNDOWN_TRAIN | (m_bFlash && m_nFirstBtnType == 3), 1, COLOR_BTN_BLUE, m_bFlash ? COLOR_BTN_YELLOW : COLOR_BTN_WHITE);
             }
             //调车按钮
-            if (m_nAttr & (SIGNAL_DCZD | SIGNAL_DCSD) || m_strXHDType == "DC_XHJ" || m_strXHDType == "CZ_XHJ") {
-                DrawButton(m_pPainter, Scale(m_rcShuntBtn), COLOR_BTN_DEEPGRAY, m_nBtnState & BTNDOWN_SHUNT | (m_bFlash && m_nFirstBtnType == 2), 2, COLOR_BTN_BLUE, m_bFlash ? COLOR_BTN_YELLOW : COLOR_BTN_WHITE );
+            if (MainStation()->IsVisible(VisibleDev::shuntButton) &&
+                (m_nAttr & (SIGNAL_DCZD | SIGNAL_DCSD) || m_strXHDType == "DC_XHJ" || m_strXHDType == "CZ_XHJ")) {
+                DrawButton(m_pPainter, Scale(m_rcShuntBtn), COLOR_BTN_DEEPGRAY, m_nBtnState & BTNDOWN_SHUNT, 2);
             }
-            //引导按钮,仅可作为始端
-            if (m_bYDSD) {
+            if (m_bYDSD ) {
                 DrawButton(m_pPainter, Scale(m_rcGuideBtn), COLOR_BTN_BLUE_YD, m_nBtnState & BTNDOWN_GUIDE);
             }
         }
@@ -453,7 +452,7 @@ namespace Station {
         }
         void StaSignal::InitClickEvent()
         {
-            for (int i = 0; i < static_cast<int>(CTCWindows::FunType::MethodConvert); ++i) {
+            for (int i = 0; i < static_cast<int>(CTCWindows::FunType::FunTypeEnd); ++i) {
                 switch (i)
                 {
                 case static_cast<int>(CTCWindows::FunType::RouteBuild):         //进路建立
@@ -471,7 +470,8 @@ namespace Station {
                     m_mapClickEvent[m_strType].insert(static_cast<CTCWindows::FunType>(i), [](DeviceBase* pDevice) {
                         if (dynamic_cast<StaSignal*>(pDevice)->m_nSelectType == 0x01 || dynamic_cast<StaSignal*>(pDevice)->m_nSelectType == 0x1f) { //点击信号机名称或信号机灯位
                             CTCWindows::BaseWnd::StaFunBtnToolBar::setOperObjType(CTCWindows::OperObjType::Signal);
-                            MainStation()->AddSelectDevice(pDevice);
+                            //MainStation()->AddSelectDevice(pDevice);
+                            dynamic_cast<StaSignal*>(pDevice)->OnButtonClick();
                         }
                     });
                     break;
@@ -494,10 +494,11 @@ namespace Station {
                                 m_nFirstBtnType = 2;
                             }
                         }
-                        else if (pSignal->m_nSelectType == 0x1f) { //点击信号灯
-                            CTCWindows::BaseWnd::StaFunBtnToolBar::setOperObjType(CTCWindows::OperObjType::Signal);
-                        }
-                        MainStation()->AddSelectDevice(pSignal);
+                        //else if (pSignal->m_nSelectType == 0x1f) { //点击信号灯
+                        //    CTCWindows::BaseWnd::StaFunBtnToolBar::setOperObjType(CTCWindows::OperObjType::Signal);
+                        //}
+                        dynamic_cast<StaSignal*>(pDevice)->OnButtonClick();
+                        //MainStation()->AddSelectDevice(pSignal);
                     });
                     break;
                 }
@@ -522,7 +523,7 @@ namespace Station {
             pMenu->setAttribute(Qt::WA_DeleteOnClose);
             if (m_pRelatedBtn) {    //通过
                 QAction* pAction1 = new QAction("办理 通过进路");
-                pAction1->setEnabled(static_cast<SignalState>(m_nState & 0x0f) == SignalState::U);
+                pAction1->setEnabled(static_cast<SignalState>(m_nState & 0x0f) == SignalState::H);
                 pMenu->addAction(pAction1);
                 QObject::connect(pAction1, &QAction::triggered, [=]() {
                     CTCWindows::BaseWnd::StaFunBtnToolBar::setOperObjType(CTCWindows::OperObjType::Though);
@@ -534,7 +535,7 @@ namespace Station {
             }
             if (m_nAttr & (SIGNAL_LCZD | SIGNAL_LCSD) || m_strXHDType == "JZ_XHJ" || m_strXHDType == "CZ_XHJ") {    //列车
                 QAction* pAction1 = new QAction("列车 进路办理");
-                pAction1->setEnabled(static_cast<SignalState>(m_nState & 0x0f) == SignalState::U);
+                pAction1->setEnabled(static_cast<SignalState>(m_nState & 0x0f) == SignalState::H);
                 pMenu->addAction(pAction1);
                 QObject::connect(pAction1, &QAction::triggered, [=]() {
                     CTCWindows::BaseWnd::StaFunBtnToolBar::setOperObjType(CTCWindows::OperObjType::Train);
@@ -542,10 +543,10 @@ namespace Station {
                     if (m_nFirstBtnType == 0) {
                         m_nFirstBtnType = 1;
                     }
-                    MainStation()->AddSelectDevice(m_pRelatedBtn);
+                    MainStation()->AddSelectDevice(this);
                 });
                 QAction* pAction2 = new QAction("取消进路");
-                pAction2->setEnabled(!(static_cast<SignalState>(m_nState & 0x0f) == SignalState::U));
+                pAction2->setEnabled(!(static_cast<SignalState>(m_nState & 0x0f) != SignalState::H));
                 pMenu->addAction(pAction2);
                 QObject::connect(pAction2, &QAction::triggered, [=]() {
                     if (QMessageBox::question(nullptr, MSGBOX_TITTLE, QString("下发\"取消进路[信号机:%1]\"命令吗?").arg(m_strName), "确定", "取消") == 0) {
@@ -584,7 +585,7 @@ namespace Station {
             if (m_nAttr & (SIGNAL_DCZD | SIGNAL_DCSD) || m_strXHDType == "DC_XHJ" || m_strXHDType == "CZ_XHJ") {    //调车
                 pMenu->addSeparator();
                 QAction* pAction1 = new QAction("调车 进路办理");
-                pAction1->setEnabled(static_cast<SignalState>(m_nState & 0x0f) == SignalState::B);
+                pAction1->setEnabled(static_cast<SignalState>(m_nState & 0x0f) == SignalState::A || static_cast<SignalState>(m_nState & 0x0f) == SignalState::H);
                 pMenu->addAction(pAction1);
                 QObject::connect(pAction1, &QAction::triggered, [=]() {
                     CTCWindows::BaseWnd::StaFunBtnToolBar::setOperObjType(CTCWindows::OperObjType::Shunt);
@@ -592,7 +593,7 @@ namespace Station {
                     if (m_nFirstBtnType == 0) {
                         m_nFirstBtnType = 2;
                     }
-                    MainStation()->AddSelectDevice(m_pRelatedBtn);
+                    MainStation()->AddSelectDevice(this);
                 });
                 QAction* pAction2 = new QAction("取消进路");
                 pAction2->setEnabled(!(static_cast<SignalState>(m_nState & 0x0f) == SignalState::B));
@@ -665,7 +666,12 @@ namespace Station {
 
         void StaSignal::SetBtnState()
         {
-            if (CTCWindows::BaseWnd::StaFunBtnToolBar::getCurrFunType() == CTCWindows::FunType::RouteBuild) {
+            if (CTCWindows::BaseWnd::StaFunBtnToolBar::getCurrFunType() == CTCWindows::FunType::RouteBuild || 
+                CTCWindows::BaseWnd::StaFunBtnToolBar::getCurrFunType() == CTCWindows::FunType::SignalReopen ||
+                CTCWindows::BaseWnd::StaFunBtnToolBar::getCurrFunType() == CTCWindows::FunType::TotalCancel ||
+                CTCWindows::BaseWnd::StaFunBtnToolBar::getCurrFunType() == CTCWindows::FunType::TotalRelieve ||
+                CTCWindows::BaseWnd::StaFunBtnToolBar::getCurrFunType() == CTCWindows::FunType::Blockade ||
+                CTCWindows::BaseWnd::StaFunBtnToolBar::getCurrFunType() == CTCWindows::FunType::UnBlockade) {
                 if (m_nSelectType == 0x02 && (m_nFirstBtnType == 0 || m_nFirstBtnType == 1 || m_nFirstBtnType == 3)) { //点击列车按钮
                     CTCWindows::BaseWnd::StaFunBtnToolBar::setOperObjType(CTCWindows::OperObjType::Train);
                     m_nBtnState |= BTNDOWN_TRAIN;

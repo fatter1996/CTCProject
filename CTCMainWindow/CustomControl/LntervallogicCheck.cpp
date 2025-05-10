@@ -8,6 +8,7 @@
 #include "./StationObject/Device/StaDevice.h"
 #include <QPushButton>
 #pragma execution_character_set("utf-8")
+
 LntervallogicCheck::LntervallogicCheck(QWidget *parent)
 	: QMainWindow(parent)
 {

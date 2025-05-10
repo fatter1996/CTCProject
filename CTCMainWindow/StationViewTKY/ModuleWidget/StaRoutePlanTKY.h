@@ -11,8 +11,10 @@ namespace CTCWindows {
 			StaRoutePlanTKY(QWidget* parent = nullptr);
 			~StaRoutePlanTKY();
 
-			QVector<Control::TableViewHeadInfo> GetTrainRouteTableHeadInfo();
-			QStringList GetTrainRouteTableDataByRoute(QString strTrainNum, Station::StaTrainRoute* pRoute);
+		public:
+			QVector<Control::TableViewHeadInfo> GetTrainRouteTableHeadInfo() override;
+			QStringList GetTrainRouteTableDataByRoute(QString strTrainNum, Station::StaTrainRoute* pRoute) override;
+			void UpDataRouteLimits() override {};
 
 		private:
 			Ui::StaRoutePlanTKY ui;

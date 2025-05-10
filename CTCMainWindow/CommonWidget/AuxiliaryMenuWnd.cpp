@@ -17,7 +17,7 @@ namespace CTCWindows {
 
 	}
 
-	QPushButton* AuxiliaryMenuWnd::AddNewAuxiliaryBtn(QString strName, std::function<void()> CallBack)
+	QPushButton* AuxiliaryMenuWnd::AddNewAuxiliaryBtn(QString strName, std::function<void(AuxiliaryMenuWnd*)> CallBack)
 	{
 		QPushButton* pBtn = new QPushButton(this);
 		pBtn->setFixedHeight(40);
@@ -26,7 +26,7 @@ namespace CTCWindows {
 		font.setBold(true);
 		pBtn->setFont(font);
 		this->layout()->addWidget(pBtn);
-		connect(pBtn, &QPushButton::clicked, [=]() { CallBack(); });
+		connect(pBtn, &QPushButton::clicked, [=]() { CallBack(this); });
 		m_nButtonNum++;
 		setFixedHeight(m_nButtonNum * 40);
 		return pBtn;
@@ -37,7 +37,20 @@ namespace CTCWindows {
 		SealTechnique* m_pSealTechnique = new SealTechnique;
 		m_pSealTechnique->setAttribute(Qt::WA_DeleteOnClose);
 		m_pSealTechnique->UpdaTableWidget(Station::MainStation());
+		this->close();
 		m_pSealTechnique->show();
 
+	}
+
+	void AuxiliaryMenuWnd::PutThrough15S()
+	{
+		Station::MainStation()->PutThrough(15);
+		this->close();
+	}
+
+	void AuxiliaryMenuWnd::PutThrough30S()
+	{
+		Station::MainStation()->PutThrough(30);
+		this->close();
 	}
 }

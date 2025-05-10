@@ -77,11 +77,11 @@ namespace Station {
                         m_mapAttribute[pDevice->getStrType()][key](pDevice, QJsonDocument(josnDoc.object().value(key).toObject()).toJson());
                     }
                 }
-                });
-            m_mapAttribute[m_strType].insert("ZFZ", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaAutoBlock*>(pDevice)->AddBlockBtn("总辅助", strElement); });
-            m_mapAttribute[m_strType].insert("JCFZ", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaAutoBlock*>(pDevice)->AddBlockBtn("接车辅助", strElement); });
-            m_mapAttribute[m_strType].insert("FCFZ", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaAutoBlock*>(pDevice)->AddBlockBtn("发车辅助", strElement); });
-            m_mapAttribute[m_strType].insert("YXGF", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaAutoBlock*>(pDevice)->AddBlockBtn("允许改方", strElement); });
+            });
+            m_mapAttribute[m_strType].insert("ZFZ", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaAutoBlock*>(pDevice)->AddBlockBtn(0x01, "总辅助", strElement); });
+            m_mapAttribute[m_strType].insert("JCFZ", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaAutoBlock*>(pDevice)->AddBlockBtn(0x02, "接车辅助", strElement); });
+            m_mapAttribute[m_strType].insert("FCFZ", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaAutoBlock*>(pDevice)->AddBlockBtn(0x04, "发车辅助", strElement); });
+            m_mapAttribute[m_strType].insert("YXGF", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaAutoBlock*>(pDevice)->AddBlockBtn(0x08, "允许改方", strElement); });
 
             m_mapAttribute[m_strType].insert("m_Lamp", [](DeviceBase* pDevice, const QString& strElement) {
                 QJsonParseError error;
@@ -95,7 +95,7 @@ namespace Station {
                         m_mapAttribute[pDevice->getStrType()][key](pDevice, QJsonDocument(josnDoc.object().value(key).toObject()).toJson());
                     }
                 }
-                });
+            });
             m_mapAttribute[m_strType].insert("Allow", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaAutoBlock*>(pDevice)->AddBlockLamp("允许发车", strElement); });
             m_mapAttribute[m_strType].insert("Assisted", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaAutoBlock*>(pDevice)->AddBlockLamp("辅助办理", strElement); });
             m_mapAttribute[m_strType].insert("Supervise", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaAutoBlock*>(pDevice)->AddBlockLamp("监督区间", strElement); });
@@ -134,10 +134,8 @@ namespace Station {
             m_bShowName = MainStation()->IsVisible(VisibleDev::direction);
             DrawArrow(m_pPainter);
             if (m_bMainStation) {
-                int nState = 0x01;
                 for (StaBlockBtn& btnBlock : m_vecBlockBtn) {
-                    DrawButton(m_pPainter, Scale(btnBlock.m_rcBtn), (m_nBtnState & (nState << 4)) ? COLOR_BTN_RED : COLOR_BTN_DEEPGRAY, m_nBtnState & nState);
-                    nState *= 2;
+                    DrawButton(m_pPainter, Scale(btnBlock.m_rcBtn), (m_nBtnState & (btnBlock.m_nState << 4)) ? COLOR_BTN_RED : COLOR_BTN_DEEPGRAY, m_nBtnState & btnBlock.m_nState);
                 }
                 
             }
@@ -286,13 +284,11 @@ namespace Station {
         {
             if (CTCWindows::BaseWnd::StaFunBtnToolBar::getCurrFunType() == CTCWindows::FunType::FunBtn) {
                 bool bContains = false;
-                int nState = 0x01;
                 for (StaBlockBtn& btnBlock : m_vecBlockBtn) {
                     if (Scale(btnBlock.m_rcBtn).contains(ptPos)) {
-                        m_nSelectBtnType = nState;
+                        m_nSelectBtnType = btnBlock.m_nState;
                         return true;
                     }
-                    nState *= 2;
                 }
             }
             return false;
@@ -436,7 +432,7 @@ namespace Station {
 
         }
 
-        void StaAutoBlock::AddBlockBtn(QString strType, const QString& strElement)
+        void StaAutoBlock::AddBlockBtn(int nState, QString strType, const QString& strElement)
         {
             QJsonParseError error;
             QJsonDocument josnDoc = QJsonDocument::fromJson(strElement.toUtf8(), &error);
@@ -449,6 +445,7 @@ namespace Station {
             font.setPixelSize(Scale(m_nFontSize));//字号
             QFontMetricsF  fontMetrics(font);
             StaBlockBtn blockBtn;
+            blockBtn.m_nState = nState;
             blockBtn.m_strName = m_strDirection + strType;
             blockBtn.m_rcName = QRectF(QStringToQPointF(josnDoc.object().value("pName").toString()), fontMetrics.size(Qt::TextSingleLine, blockBtn.m_strName));
             blockBtn.m_rcBtn = QRectF(QStringToQPointF(josnDoc.object().value("m_ptBtn").toString()), QSizeF(15, 15));
