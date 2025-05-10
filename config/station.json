@@ -1,7 +1,7 @@
 ﻿{
     "staName": "标准站",
-    "stationType": 2,
-    "stationID": 100,
+    "stationType": 1,
+    "stationID": 103,
     "stationWidth": 1920,
     "stationHeight": 1080,
     "comAddress": {
@@ -24,7 +24,7 @@
     "multiStation": [
         {
             "staName": "标准站",
-            "stationID": 101,
+            "stationID": 103,
             "stationWidth": 1920,
             "stationHeight": 1080,
             "stationInfo": "Station.txt",

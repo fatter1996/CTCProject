@@ -37,6 +37,7 @@ namespace Station {
 
     StaTrain::StaTrain(StaStagePlan* pStagePlan)
     {
+        Device::DeviceBase* pSignal = nullptr;
         switch (pStagePlan->m_nPlanType)
         {
         case PLAN_TYPE_ARRIVED:
@@ -45,7 +46,7 @@ namespace Station {
         case PLAN_TYPE_START: m_strTrainNum = pStagePlan->m_strDepartTrainNum; break;
         default:m_strTrainNum = pStagePlan->m_strArrivalTrainNum; break;
         }
-        MainStation()->getDeviceByCode(pStagePlan->m_nEntrySignalCode)->getSXThroat();
+        MainStation()->getDeviceByCode(pStagePlan->m_nEntrySignalCode, SIGNALLAMP)->getSXThroat();
         MainStation()->IsOverturn();
         switch (pStagePlan->m_nPlanType)
         {
@@ -53,14 +54,14 @@ namespace Station {
         case PLAN_TYPE_FINAL:
         case PLAN_TYPE_THROUGH: {
             m_strTrainNum = pStagePlan->m_strArrivalTrainNum;
-            QString strSignalName = MainStation()->getDeviceByCode(pStagePlan->m_nEntrySignalCode)->getName();
-            m_bRight = (strSignalName.contains("X") && !MainStation()->IsOverturn());
+            pSignal = MainStation()->getDeviceByCode(pStagePlan->m_nEntrySignalCode, SIGNALLAMP);
+            m_bRight = (pSignal->getSXThroat() && !MainStation()->IsOverturn());
         } break;
         case PLAN_TYPE_START: 
         {
             m_strTrainNum = pStagePlan->m_strDepartTrainNum;
-            QString strSignalName = MainStation()->getDeviceByCode(pStagePlan->m_nExitSignalCode)->getName();
-            m_bRight = (strSignalName.contains("S") && !MainStation()->IsOverturn());
+            pSignal = MainStation()->getDeviceByCode(pStagePlan->m_nExitSignalCode, SIGNALLAMP);
+            m_bRight = (!pSignal->getSXThroat() && !MainStation()->IsOverturn());
         } break; 
         }
         m_nPosCode = pStagePlan->m_nJJQDCode;
@@ -93,7 +94,7 @@ namespace Station {
             m_nWeight = TrafficLog->m_nDepartWeight;
         } break;
         }
-        m_bRight = TrafficLog->m_bUpDown;
+        m_bRight = TrafficLog->m_bUpDown && !MainStation()->IsOverturn();
     }
 
     QString StaTrain::OverLimitLevel()
@@ -135,16 +136,16 @@ namespace Station {
 
         pStagePlan->m_strArrivalTrainNum = subObj.value("arriveTrainNum").toString();
         pStagePlan->m_nArrivalTrackCode = subObj.value("arriveTrackCode").toInt();
-        pStagePlan->m_strArrivalTrack = MainStation()->getDeviceByCode(pStagePlan->m_nArrivalTrackCode)->getName();
+        pStagePlan->m_strArrivalTrack = MainStation()->getDeviceByCode(pStagePlan->m_nArrivalTrackCode, TRACK)->getName();
         pStagePlan->m_nEntrySignalCode = subObj.value("entrySignalCode").toInt();
-        pStagePlan->m_strEntrySignal = MainStation()->getDeviceByCode(pStagePlan->m_nEntrySignalCode)->getName();
+        pStagePlan->m_strEntrySignal = MainStation()->getDeviceByCode(pStagePlan->m_nEntrySignalCode, SIGNALLAMP)->getName();
         pStagePlan->m_tArrivalTime = QDateTime::fromString(subObj.value("arriveTime").toString(), Qt::ISODate);
 
         pStagePlan->m_strDepartTrainNum = subObj.value("departTrainNum").toString();
         pStagePlan->m_nDepartTrackCode = subObj.value("arriveTrackCode").toInt();
-        pStagePlan->m_strDepartTrack = MainStation()->getDeviceByCode(pStagePlan->m_nDepartTrackCode)->getName();
+        pStagePlan->m_strDepartTrack = MainStation()->getDeviceByCode(pStagePlan->m_nDepartTrackCode, TRACK)->getName();
         pStagePlan->m_nExitSignalCode = subObj.value("entrySignalCode").toInt();
-        pStagePlan->m_strExitSignal = MainStation()->getDeviceByCode(pStagePlan->m_nExitSignalCode)->getName();
+        pStagePlan->m_strExitSignal = MainStation()->getDeviceByCode(pStagePlan->m_nExitSignalCode, SIGNALLAMP)->getName();
         pStagePlan->m_tDepartTime = QDateTime::fromString(subObj.value("departTime").toString(), Qt::ISODate);
     }
 
@@ -170,7 +171,7 @@ namespace Station {
         }
 
         //进路方向
-        Device::StaSignal* pSignal = dynamic_cast<Device::StaSignal*>(MainStation()->getDeviceByCode(m_nSignalCode));
+        Device::StaSignal* pSignal = dynamic_cast<Device::StaSignal*>(MainStation()->getDeviceByCode(m_nSignalCode, SIGNALLAMP));
         m_strDirection = pSignal->getDirection();
         if (pSignal->getSXThroat()) {
             if (m_bArrivaRoute) {   //接车
@@ -198,9 +199,10 @@ namespace Station {
         }
         else {
             QString strSignalName;
-            Device::DeviceBase* pArrivaSignal = MainStation()->getDeviceByCode(m_nSignalCode);
+            Device::DeviceBase* pArrivaSignal = MainStation()->getDeviceByCode(m_nSignalCode, SIGNALLAMP);
             for (Device::DeviceBase* pSignal : MainStation()->getDeviceVectorByType(SIGNALLAMP)) {
-                if (pSignal->getSXThroat() == pArrivaSignal->getSXThroat() && (pSignal->getAttr() & SIGNAL_FCXH) &&
+                if (pSignal->getSXThroat() == pArrivaSignal->getSXThroat() && 
+                    (dynamic_cast<Device::StaSignal*>(pSignal)->getXHDTYpe() == "CZ_XHJ") &&
                     pSignal->getName().mid(1) == m_strTrack.left(m_strTrack.indexOf("G"))) {
                     strSignalName = pSignal->getName();
                     break;
@@ -225,7 +227,7 @@ namespace Station {
         m_strTrack = strName;
 
         QString strSignalName;
-        Device::DeviceBase* pArrivaSignal = MainStation()->getDeviceByCode(m_nSignalCode);
+        Device::DeviceBase* pArrivaSignal = MainStation()->getDeviceByCode(m_nSignalCode, SIGNALLAMP);
         for (Device::DeviceBase* pSignal : MainStation()->getDeviceVectorByType(SIGNALLAMP)) {
             if (pSignal->getSXThroat() == pArrivaSignal->getSXThroat() && (pSignal->getAttr() & SIGNAL_FCXH) &&
                 pSignal->getName().mid(1) == m_strTrack.left(m_strTrack.indexOf("G"))) {
@@ -259,6 +261,11 @@ namespace Station {
         }
     }
 
+    QString StaTrainRoute::getRouteDescrip()
+    {
+        return "";
+    }
+
 
     void StaTrainRoute::Init(StaTrainRoute* pTrainRoute, const QJsonObject& subObj)
     {
@@ -272,9 +279,9 @@ namespace Station {
         pTrainRoute->m_tCleanTime = QDateTime::fromString(subObj.value("cleanTime").toString(), Qt::ISODate);
 
         pTrainRoute->m_nTrackCode = subObj.value("trackCode").toInt();
-        pTrainRoute->m_strTrack = MainStation()->getDeviceByCode(pTrainRoute->m_nTrackCode)->getName();
+        pTrainRoute->m_strTrack = MainStation()->getDeviceByCode(pTrainRoute->m_nTrackCode, TRACK)->getName();
         pTrainRoute->m_nSignalCode = subObj.value("signalCode").toInt();
-        pTrainRoute->m_strSignal = MainStation()->getDeviceByCode(pTrainRoute->m_nSignalCode)->getName();
+        pTrainRoute->m_strSignal = MainStation()->getDeviceByCode(pTrainRoute->m_nSignalCode, SIGNALLAMP)->getName();
 
         pTrainRoute->m_strRouteDescrip = subObj.value("routeDepict").toString();
         pTrainRoute->m_strDirection = subObj.value("direction").toString();
@@ -380,9 +387,9 @@ namespace Station {
         //到达信息
         pTrafficLog->m_strArrivalTrainNum = subObj.value("arrivalTrainNumber").toString();
         pTrafficLog->m_nArrivalTrackCode = subObj.value("arrivalTrack").toInt();
-        pTrafficLog->m_strArrivalTrack = MainStation()->getDeviceByCode(pTrafficLog->m_nArrivalTrackCode)->getName();
+        pTrafficLog->m_strArrivalTrack = MainStation()->getDeviceByCode(pTrafficLog->m_nArrivalTrackCode, TRACK)->getName();
         pTrafficLog->m_nArrivalSignalCode = subObj.value("homeSignalCode").toInt();
-        pTrafficLog->m_strArrivaSignal = MainStation()->getDeviceByCode(pTrafficLog->m_nArrivalSignalCode)->getName();
+        pTrafficLog->m_strArrivaSignal = MainStation()->getDeviceByCode(pTrafficLog->m_nArrivalSignalCode, SIGNALLAMP)->getName();
         pTrafficLog->m_tProvArrivalTime = QDateTime::fromString(subObj.value("provArrivalTime").toString(), Qt::ISODate);
         pTrafficLog->m_tRealArrivalTime = QDateTime::fromString(subObj.value("realArrivalTime").toString(), Qt::ISODate);
         pTrafficLog->m_tAgrAdjDepartTime = QDateTime::fromString(subObj.value("agrAdjDepartTime").toString(), Qt::ISODate);
@@ -399,9 +406,9 @@ namespace Station {
         //出发信息
         pTrafficLog->m_strDepartTrainNum = subObj.value("departTrainNumber").toString();
         pTrafficLog->m_nDepartTrackCode = subObj.value("departTrack").toInt();
-        pTrafficLog->m_strDepartTrack = MainStation()->getDeviceByCode(pTrafficLog->m_nDepartTrackCode)->getName();
+        pTrafficLog->m_strDepartTrack = MainStation()->getDeviceByCode(pTrafficLog->m_nDepartTrackCode, TRACK)->getName();
         pTrafficLog->m_nDepartSignalCode = subObj.value("startingSignalCode").toInt();
-        pTrafficLog->m_strDepartSignal = MainStation()->getDeviceByCode(pTrafficLog->m_nDepartSignalCode)->getName();
+        pTrafficLog->m_strDepartSignal = MainStation()->getDeviceByCode(pTrafficLog->m_nDepartSignalCode, SIGNALLAMP)->getName();
         pTrafficLog->m_tProvDepartTime = QDateTime::fromString(subObj.value("provDepartTime").toString(), Qt::ISODate);
         pTrafficLog->m_tRealDepartTime = QDateTime::fromString(subObj.value("realDepartTime").toString(), Qt::ISODate);
         pTrafficLog->m_tAdjAgrDepartTime = QDateTime::fromString(subObj.value("adjAgrDepartTime").toString(), Qt::ISODate);

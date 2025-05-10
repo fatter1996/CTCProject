@@ -24,6 +24,7 @@ namespace CTCWindows {
 		void StaRoutePlan::InitTrainRouteTable()
 		{
 			m_pTrainRouteTable = new Control::TableView(this);
+			m_pTrainRouteTable->setEditTriggers(QAbstractItemView::NoEditTriggers);
 			m_pTrainRouteTable->SetSectionText("Ðò", 36);
 			m_pTrainRouteTable->SetHeadData(GetTrainRouteTableHeadInfo(), HHead);
 			connect(m_pTrainRouteTable, &Control::TableView::clicked, this, &StaRoutePlan::TrainRouteTableLeftMenu);
@@ -122,7 +123,7 @@ namespace CTCWindows {
 			QVector<StaTrainRoute*> vecStaTrainRoute = MainStation()->TrainRouteList();
 			StaTrain* pTrain = nullptr;
 			for (StaTrainRoute* pRoute : MainStation()->TrainRouteList()) {
-				if (pRoute->m_nRouteState == 1) {
+				if (pRoute->m_nRouteState == 1 || pRoute->m_nRouteState == 3) {
 					QFont font = m_pTrainRouteTable->font();
 					font.setBold(true);
 					font.setItalic(true);
@@ -159,7 +160,6 @@ namespace CTCWindows {
 					case 4: bkColor = Qt::gray; break;
 					}
 				}
-
 				m_pTrainRouteTable->SetRowItemsColor(pRoute->m_nRowIndex, bkColor, textColor);
 			}
 		}
@@ -293,7 +293,7 @@ namespace CTCWindows {
 
 		void StaRoutePlan::TrainRouteTableLeftMenu(const QModelIndex& index)
 		{
-			if (MainStation()->IsAllowStaOperation()) {
+			if (!MainStation()->IsAllowStaOperation()) {
 				return;
 			}
 			StaTrainRoute* pTrainRoute = MainStation()->getStaTrainRouteByRowIndex(index.row());
@@ -313,7 +313,7 @@ namespace CTCWindows {
 
 		void StaRoutePlan::TrainRouteTableRightMenu(const QPoint& pt)
 		{
-			if (MainStation()->IsAllowStaOperation()) {
+			if (!MainStation()->IsAllowStaOperation()) {
 				return;
 			}
 			QModelIndex index = m_pTrainRouteTable->indexAt(pt);
@@ -368,6 +368,7 @@ namespace CTCWindows {
 								//MainStation()->TrainRouteList().removeOne(pTrainRoute);
 							}
 						}
+						emit MainStation()->TrainRouteUpData();
 					}
 				});
 
@@ -404,6 +405,7 @@ namespace CTCWindows {
 						if (Http::HttpClient::DeleteStaTrainRoute(pTrainRoute->m_nRouteId, btResult)) {
 							MainStation()->RemoveTrainRoute(pTrainRoute);
 						}
+						emit MainStation()->TrainRouteUpData();
 					}
 				});
 				pMenu->exec(QCursor::pos());
@@ -419,7 +421,7 @@ namespace CTCWindows {
 					return;
 				}
 			}
-			Device::DeviceBase* pTrack = MainStation()->getDeviceByName(strTrack);
+			Device::DeviceBase* pTrack = MainStation()->getDeviceByName(strTrack, TRACK);
 			if (pTrack) {
 				QByteArray btResult;
 				for (StaTrainRoute* pRoute : vecTempRouteOrder) {

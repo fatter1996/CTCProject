@@ -342,7 +342,7 @@ namespace CTCWindows {
 			pTimeLabel->setFrameShadow(QFrame::Sunken);
 			pTimeLabel->setFont(QFont("Î¢ÈíÑÅºÚ", 11));
 			pTimeLabel->setAlignment(Qt::AlignCenter);
-			pTimeLabel->setText(QDateTime::currentDateTime().toString("yyyy-mm-dd hh:MM:ss"));
+			pTimeLabel->setText(QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss"));
 			pTimeLabel->setObjectName("timeLabel");
 			pTimeLabel->setFixedSize(180, 28);
 			m_pStateToolBar->addWidget(pTimeLabel);

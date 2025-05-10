@@ -100,8 +100,8 @@ namespace Station {
         void StaTrack::DrawDeviceOutSide()
         {
             //绘制股道外边缘-分路不良
-            if (m_bShuntFault) {
-                if (m_bSpeedLimit || m_nPowerCut) {
+            if (m_nShuntFault) {
+                if (m_nSpeedLimit || m_nPowerCut) {
                     if (m_bShuntFaultIdle || m_bElapsed) {
                         DrawTrack(QPen(COLOR_TRACK_OUTSIDE_RED, 2), true, 4);
                     }
@@ -113,7 +113,7 @@ namespace Station {
                 }
             }
             //绘制股道外边缘-临时限速,股道无电
-            if (m_bSpeedLimit) { //临时限速
+            if (m_nSpeedLimit) { //临时限速
                 DrawTrack(QPen(COLOR_TRACK_OUTSIDE_YELLOW, 2), true, 2);
             }
             else if (m_nPowerCut) { //股道无电
@@ -150,7 +150,8 @@ namespace Station {
                 CTCWindows::BaseWnd::StaFunBtnToolBar::getCurrFunType() == CTCWindows::FunType::UnBlockade ||
                 CTCWindows::BaseWnd::StaFunBtnToolBar::getCurrFunType() == CTCWindows::FunType::RampUnlock ||
                 CTCWindows::BaseWnd::StaFunBtnToolBar::getCurrFunType() == CTCWindows::FunType::PoorRoute ||
-                CTCWindows::BaseWnd::StaFunBtnToolBar::getCurrFunType() == CTCWindows::FunType::IdleConfirm) {
+                CTCWindows::BaseWnd::StaFunBtnToolBar::getCurrFunType() == CTCWindows::FunType::IdleConfirm ||
+                CTCWindows::BaseWnd::StaFunBtnToolBar::getCurrFunType() == CTCWindows::FunType::TrackPowerCut) {
                 return Contains(ptPos);
             }
             return false;
@@ -164,7 +165,7 @@ namespace Station {
 
         void StaTrack::InitClickEvent()
         {
-            for (int i = 0; i < static_cast<int>(CTCWindows::FunType::MethodConvert); ++i) {
+            for (int i = 0; i < static_cast<int>(CTCWindows::FunType::FunTypeEnd); ++i) {
                 switch (i)
                 {
                 case static_cast<int>(CTCWindows::FunType::RegionRelieve):      //区故解
@@ -177,8 +178,13 @@ namespace Station {
                         CTCWindows::BaseWnd::StaFunBtnToolBar::setOperObjType(CTCWindows::OperObjType::Track);
                         MainStation()->AddSelectDevice(pDevice);
                     });
-                    break;
-                }
+                } break;
+                case static_cast<int>(CTCWindows::FunType::TrackPowerCut): {
+                    m_mapClickEvent[m_strType].insert(static_cast<CTCWindows::FunType>(i), [](DeviceBase* pDevice) {
+                        dynamic_cast<StaTrack*>(pDevice)->setSectionPowerCut(0x01);
+                        MainStation()->onOrderClear();
+                    });
+                } break;
                 }
             }
         }
@@ -221,11 +227,25 @@ namespace Station {
                     if (QMessageBox::question(nullptr, MSGBOX_TITTLE, QString("下发\"分路不良[股道:%1]\"命令吗?").arg(m_strName), "确定", "取消") == 0) {
                         if (CTCWindows::LeadSealDlg::LeadSealPassword(CTCWindows::KeyInputType::LeadSeal)) {
                             CTCWindows::SealTechnique::InsertSealRecord(stationName, "分路不良");
+                            SetShuntFault(0x12);
                             MainStation()->AddSelectDevice(this);
                             MainStation()->SendPacketMsg(TARGET_INTERLOCK, 0x40, 0x11, 0x12);
                         }
                     }
                 });
+                if (m_nShuntFault) {
+                    QAction* pActionT = new QAction("确认空闲");
+                    pActionT->setCheckable(true);
+                    pActionT->setChecked(m_bShuntFaultIdle);
+                    pMenu->addAction(pActionT);
+                    QObject::connect(pActionT, &QAction::triggered, [=](bool checked) {
+                        if (QMessageBox::question(nullptr, MSGBOX_TITTLE, QString("下发\"分路不良[股道:%1]\"命令吗?").arg(m_strName), "确定", "取消") == 0) {
+                            m_bShuntFaultIdle = checked;
+                            MainStation()->AddSelectDevice(this);
+                            MainStation()->SendPacketMsg(TARGET_INTERLOCK, 0x40, 0x12, 0x12);
+                        }
+                    });
+                }
 
                 QAction* pAction4 = new QAction("股道无电");
                 pMenu->addAction(pAction4);

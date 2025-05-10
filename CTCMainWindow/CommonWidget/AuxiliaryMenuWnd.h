@@ -6,6 +6,7 @@
 #include <QStringList>
 
 namespace CTCWindows {
+
 	class AuxiliaryMenuWnd : public QDialog
 	{
 		Q_OBJECT
@@ -14,8 +15,11 @@ namespace CTCWindows {
 		AuxiliaryMenuWnd(QWidget* parent = nullptr);
 		~AuxiliaryMenuWnd();
 
-		QPushButton* AddNewAuxiliaryBtn(QString strName, std::function<void()> CallBack);
+	public:
+		QPushButton* AddNewAuxiliaryBtn(QString strName, std::function<void(AuxiliaryMenuWnd*)> CallBack);
 		void ShowSealTechnique();
+		void PutThrough15S();
+		void PutThrough30S();
 
 	private:
 		Ui::AuxiliaryMenuWndClass ui;

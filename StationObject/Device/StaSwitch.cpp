@@ -126,7 +126,7 @@ namespace Station {
 
         void StaSwitch::DrawSwitchCenterTrack()
         {
-            if (m_bRangeVisible) { //选中状态
+            if (m_bRangeVisible || m_bSelect) { //选中状态
                 DrawSwitchCenter(QPen(COLOR_TRACK_SELECT_BLUE, Scale(TRACK_WIDTH), Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin), SWITCH_DRAW_DW | SWITCH_DRAW_FW);
             }
             else if (m_nShuntFault) { //分路不良
@@ -184,7 +184,7 @@ namespace Station {
             int minY = MIN(MIN(p12.y(), p34.y()), p56.y());
             int maxX = MAX(MAX(p12.x(), p34.x()), p56.x());
             int maxY = MAX(MAX(p12.y(), p34.y()), p56.y());
-            m_rcDevRect = QRectF(QPointF(minX - 10, minY - 10), QPointF(maxX + 10, maxY + 10));
+            m_rcDevRect = QRectF(QPointF((qreal)minX - 10, (qreal)minY - 10), QPointF((qreal)maxX + 10, (qreal)maxY + 10));
             m_pPainter.drawRect(Scale(m_rcDevRect));
 
             //设备名称虚线框
@@ -245,7 +245,6 @@ namespace Station {
             }
         }
 
-        //绘制培训提示信息
         void StaSwitch::DrawCultivateTips()
         {
             m_pPainter.setPen(QPen(COLOR_TRACK_YELLOW, 2));
@@ -282,7 +281,6 @@ namespace Station {
             return Scale(m_rcTextRect).contains(ptPos) || Scale(m_rcRespondRect).contains(ptPos);
         }
 
-        //鼠标是否在设备上
         bool StaSwitch::IsMouseWheel(const QPoint& ptPos)
         {
             if (CTCWindows::BaseWnd::StaFunBtnToolBar::getCurrFunType() == CTCWindows::FunType::RegionRelieve ||
@@ -291,7 +289,9 @@ namespace Station {
                 CTCWindows::BaseWnd::StaFunBtnToolBar::getCurrFunType() == CTCWindows::FunType::SingleLock ||
                 CTCWindows::BaseWnd::StaFunBtnToolBar::getCurrFunType() == CTCWindows::FunType::SingleUnlock ||
                 CTCWindows::BaseWnd::StaFunBtnToolBar::getCurrFunType() == CTCWindows::FunType::Blockade ||
-                CTCWindows::BaseWnd::StaFunBtnToolBar::getCurrFunType() == CTCWindows::FunType::UnBlockade) {
+                CTCWindows::BaseWnd::StaFunBtnToolBar::getCurrFunType() == CTCWindows::FunType::UnBlockade ||
+                CTCWindows::BaseWnd::StaFunBtnToolBar::getCurrFunType() == CTCWindows::FunType::SwitchDWPowerCut ||
+                CTCWindows::BaseWnd::StaFunBtnToolBar::getCurrFunType() == CTCWindows::FunType::SwitchFWPowerCut) {
                 return Contains(ptPos);
             }
             return false;
@@ -299,7 +299,7 @@ namespace Station {
 
         void StaSwitch::InitClickEvent()
         {
-            for (int i = 0; i < static_cast<int>(CTCWindows::FunType::MethodConvert); ++i) {
+            for (int i = 0; i < static_cast<int>(CTCWindows::FunType::FunTypeEnd); ++i) {
                 switch (i)
                 {
                 case static_cast<int>(CTCWindows::FunType::RegionRelieve):      //区故解
@@ -310,12 +310,24 @@ namespace Station {
                 case static_cast<int>(CTCWindows::FunType::Blockade):           //封锁
                 case static_cast<int>(CTCWindows::FunType::UnBlockade): {       //解封
                     m_mapClickEvent[m_strType].insert(static_cast<CTCWindows::FunType>(i), [](DeviceBase* pDevice) {
+                        dynamic_cast<StaSwitch*>(pDevice)->setSelect(true);
                         CTCWindows::BaseWnd::StaFunBtnToolBar::setOperObjType(CTCWindows::OperObjType::Switch);
                         MainStation()->AddSelectDevice(pDevice);
                     });
-                break;
-                }
-                }
+                } break;
+                case static_cast<int>(CTCWindows::FunType::SwitchDWPowerCut): {
+                    m_mapClickEvent[m_strType].insert(static_cast<CTCWindows::FunType>(i), [](DeviceBase* pDevice) {
+                        dynamic_cast<StaSwitch*>(pDevice)->setSectionPowerCut(0x01);
+                        MainStation()->onOrderClear();
+                    });
+                } break;
+                case static_cast<int>(CTCWindows::FunType::SwitchFWPowerCut): {
+                    m_mapClickEvent[m_strType].insert(static_cast<CTCWindows::FunType>(i), [](DeviceBase* pDevice) {
+                        dynamic_cast<StaSwitch*>(pDevice)->setSectionPowerCut(0x02);
+                        MainStation()->onOrderClear();
+                    });
+                }break;
+                } 
             }
         }
 
@@ -391,6 +403,7 @@ namespace Station {
                     if (CTCWindows::LeadSealDlg::LeadSealPassword(CTCWindows::KeyInputType::LeadSeal)) {
                         CTCWindows::SealTechnique::InsertSealRecord(Station::MainStation()->getStationName(), "分路不良");
                         MainStation()->AddSelectDevice(this);
+                        SetShuntFault(static_cast<int>(CTCWindows::OperObjType::SwitchCQ));
                         MainStation()->SendPacketMsg(TARGET_INTERLOCK, 0x40, 0x11, 0x23);
                     }
                 }
@@ -404,6 +417,7 @@ namespace Station {
                     if (CTCWindows::LeadSealDlg::LeadSealPassword(CTCWindows::KeyInputType::LeadSeal)) {
                         CTCWindows::SealTechnique::InsertSealRecord(Station::MainStation()->getStationName(), "分路不良");
                         MainStation()->AddSelectDevice(this);
+                        SetShuntFault(static_cast<int>(CTCWindows::OperObjType::SwitchDW));
                         MainStation()->SendPacketMsg(TARGET_INTERLOCK, 0x40, 0x11, 0x24);
                     }
                 }
@@ -416,10 +430,24 @@ namespace Station {
                     if (CTCWindows::LeadSealDlg::LeadSealPassword(CTCWindows::KeyInputType::LeadSeal)) {
                         CTCWindows::SealTechnique::InsertSealRecord(Station::MainStation()->getStationName(), "分路不良");
                         MainStation()->AddSelectDevice(this);
+                        SetShuntFault(static_cast<int>(CTCWindows::OperObjType::SwitchFW));
                         MainStation()->SendPacketMsg(TARGET_INTERLOCK, 0x40, 0x11, 0x25);
                     }
                 }
             });
+            if (m_nShuntFault) {
+                QAction* pActionT = new QAction("确认空闲");
+                pActionT->setCheckable(true);
+                pActionT->setChecked(m_bShuntFaultIdle);
+                pMenu->addAction(pActionT);
+                QObject::connect(pActionT, &QAction::triggered, [=](bool checked) {
+                    if (QMessageBox::question(nullptr, MSGBOX_TITTLE, QString("下发\"分路不良[股道:%1]\"命令吗?").arg(m_strName), "确定", "取消") == 0) {
+                        m_bShuntFaultIdle = checked;
+                        MainStation()->AddSelectDevice(this);
+                        MainStation()->SendPacketMsg(TARGET_INTERLOCK, 0x40, 0x12, 0x11);
+                    }
+                    });
+            }
             pMenu->addSeparator();
             QAction* pAction10 = new QAction("接触网定位无电");
             pAction10->setEnabled(m_nSwitchState & SWITCH_STATE_LOCK);
@@ -443,13 +471,20 @@ namespace Station {
 
         void StaSwitch::ResetDevState()
         {
-
+            
         }
 
         QColor StaSwitch::getSwitchCenterColor()
         {
-            QColor cTrackColor = Qt::black;
+            if (m_bRangeVisible) {
+                return COLOR_TRACK_SELECT_BLUE;
+            }
 
+            if (m_bPutThrough) {
+                return COLOR_TRACK_WHITE;
+            }
+
+            QColor cTrackColor = Qt::black;
             if (m_nSwitchState & SWITCH_DRAW_DW && !(m_nSwitchState & SWITCH_DRAW_FW)) {
                 cTrackColor = COLOR_TRACK_GREEN;
             }
@@ -468,8 +503,7 @@ namespace Station {
                     cTrackColor = COLOR_TRACK_RED;
                 }
             }
-
-            if (m_nState & SECTION_STATE_PRELOCK) {
+            else if (m_nState & SECTION_STATE_PRELOCK) {
                 cTrackColor = COLOR_TRACK_PRELOCK_BLUE;
             }
             else if (m_nState & SECTION_STATE_LOCK) {
@@ -478,13 +512,8 @@ namespace Station {
             else if (m_nState & SECTION_STATE_FAULTLOCK) {
                 cTrackColor = COLOR_TRACK_RED;
             }
-
-            if (m_nState & SECTION_STATE_BLOCK) {
+            else if (m_nState & SECTION_STATE_BLOCK) {
                 cTrackColor = m_bElapsed ? COLOR_TRACK_RED : cTrackColor;
-            }
-
-            if (m_bRangeVisible) {
-                cTrackColor = COLOR_TRACK_SELECT_BLUE;
             }
             return cTrackColor;
         }
@@ -507,11 +536,6 @@ namespace Station {
             }
 
             return pen;
-        }
-
-        void StaSwitch::setSwitchState(const uint& nSwitchState)
-        { 
-            m_nSwitchState = nSwitchState;
         }
 
         bool StaSwitch::isSwitchSK()

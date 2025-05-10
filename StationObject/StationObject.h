@@ -57,8 +57,8 @@ namespace Station {
         QVector<Device::DeviceBase*>& getDeviceVectorByType(QString strType) { return m_mapDeviceVector[strType]; }
         void setStationName(const QString& strName) { m_strStationName = strName; }
         QString getStationName() { return m_strStationName; }
-        Device::DeviceBase* getDeviceByCode(const uint& nCode);
-        Device::DeviceBase* getDeviceByName(const QString& strName);
+        Device::DeviceBase* getDeviceByCode(const uint& nCode, QString StrType = "Device");
+        Device::DeviceBase* getDeviceByName(const QString& strName, QString StrType = "Device");
         Device::DeviceBase* getSwitchBySectionCode(int nCode);
         QSize getStaFixedSize(); //获取站场实际大小
         void setStaFixedSize(int nWidth, int nHeight);
@@ -87,7 +87,7 @@ namespace Station {
         QWidget* m_pShowWidget = nullptr;
 
     private:
-        static int m_UpState;
+        static int m_nUpState;
         static QXmlStreamReader* m_pDeviceInfoReader;  //XML解析器
         static QMap<QString, std::function<Device::DeviceBase* (StationObject*)>> m_mapCreatDeviceVector;
         static int m_nTimerId_500;
@@ -133,6 +133,8 @@ namespace Station {
         QVector<StaTrainRoute*>  getStaTrainRouteByTrain(int nTrainID);
         StaTrainRoute* getStaTrainRouteByRowIndex(int nRow);
         StaTrafficLog* getStaTrafficLogById(int nLogId);
+        StaTrafficLog* getStaTrafficLogByTrain(int nTrainID);
+        void RemoveTrain(StaTrain* pTrain);
 
         void SendPacketMsg(int nTargetCode, int nOrderType = 0, int nAttr1 = -1, int nAttr2 = -1, QByteArray btAttr3 = QByteArray());
         void SubmitCurSubject(); //提交当前题目
@@ -142,6 +144,7 @@ namespace Station {
 
         void StationReset();
         void ClearDevice(bool bClearTwinkle = false);
+        void PutThrough(int nTime);
 
     public:
         QVector<Device::DeviceBase*>& getSelectDevice() { return m_vecSelectDevice; }
@@ -155,7 +158,6 @@ namespace Station {
         
         const QVector<StaTrain*>& TrainList() { return m_vecStaTrain; }
         void AddTrain(StaTrain* pTrain) { m_vecStaTrain.append(pTrain); }
-        void RemoveTrain(StaTrain* pTrain) { m_vecStaTempTrain.removeOne(pTrain); }
         void RemoveTempTrain(StaTrain* pTrain) { m_vecStaTempTrain.removeOne(pTrain); }
         const QVector<StaStagePlan*>& StagePlanList() { return m_vecStaStagePlan; }
         const QVector<StaTrainRoute*>& TrainRouteList() { return m_vecStaTrainRoute; }
@@ -195,6 +197,7 @@ namespace Station {
         void SendDataToTCP(const QByteArray&);
         void TrainRouteUpData();
         void TrafficLogTableUpData();
+
     private:
         //数据传输
         Transmission::StaProtocol* m_pProtocol = nullptr;

@@ -17,7 +17,7 @@ namespace CTCWindows {
 			void InitTrainRouteTable();
 			virtual QVector<Control::TableViewHeadInfo> GetTrainRouteTableHeadInfo() = 0;
 			virtual QStringList GetTrainRouteTableDataByRoute(QString strTrainNum, Station::StaTrainRoute* pRoute) = 0;
-			
+			virtual void UpDataRouteLimits() = 0;
 			//调车进路序列
 			void InitShuntRouteTable();
 			virtual QVector<Control::TableViewHeadInfo> GetShuntRouteTableHeadInfo() {

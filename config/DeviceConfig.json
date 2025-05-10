@@ -90,7 +90,7 @@
         }
     ],
     "#AutoBlock": "自动闭塞",
-  "AutoBlock": [
+    "AutoBlock": [
     {
       "#m_strName": "设备名称",
       "#m_textRect": "设备名称坐标",
@@ -399,7 +399,7 @@
         },
         {
             "m_nType": 540,
-            "m_nCode": "0x7c",
+            "m_nCode": "0x7d",
             "m_strName": "X引导总锁",
             "center": "1020,660",
             "p1": "1015,640",
@@ -410,7 +410,7 @@
         },
         {
             "m_nType": 540,
-            "m_nCode": " 0x7d",
+            "m_nCode": " 0x7e",
             "m_strName": "S引导总锁",
             "center": "1120,660",
             "p1": "1115,640",
@@ -421,7 +421,7 @@
         },
         {
             "m_nType": 541,
-            "m_nCode": "0x7e",
+            "m_nCode": "0x7f",
             "m_strName": "故障通知",
             "center": "920,660",
             "p1": "915,640",

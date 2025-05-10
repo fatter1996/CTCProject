@@ -1,6 +1,7 @@
 ﻿#include "CTCMainWindow.h"
 #include "CommonWidget/DispatchOrderSign.h"
 #include "CommonWidget/StagePlanSign.h"
+#include "CommonWidget/SealTechnique.h"
 #include <QPushbutton>
 #include <QToolBar>
 #include <QMessageBox>
@@ -48,6 +49,8 @@ namespace CTCWindows {
         InitStatusBar();
         //初始化界面布局
         InitViewLayout();
+
+        SealTechnique::InitSealRecord(Station::MainStation());
 	}
 
     void CTCMainWindow::InitViewLayout()

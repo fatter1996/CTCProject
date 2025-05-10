@@ -111,7 +111,7 @@ namespace Station {
             void setRangeVisible(bool bRangeVisible) { m_bRangeVisible = bRangeVisible; }
             uint getState() const { return m_nState; }
             ulong getAttr() const { return m_nAttr; }
-            uint getSXThroat() const { return m_bUpDown; }
+            bool getSXThroat() const { return m_bUpDown; }
             void setShowTips(int nTipsType) { 
                 m_bShowTips = true; 
                 m_nTipsType = nTipsType;
@@ -178,20 +178,32 @@ namespace Station {
             //绘制绝缘节
             virtual void DrawInsulateNode() = 0;
 
+            void OrderClear(bool bClearTwinkle = false) override;
+
         protected:
             //绘制股道
             void DrawTrackLine(const QPen& pen, const QPointF& ptStart, const QPointF& ptEnd, const bool bOutSide = false, const int nOffset = 0);
             //获取股道颜色
             QColor getTrackColor();
             
+            
         public:
+            void SetShuntFault(int nState);
+            void SetShuntFaultIdle() { m_bShuntFaultIdle = !m_bShuntFaultIdle; }
             void setSectionPowerCut(int nState) { m_nPowerCut ^= nState; }
-
+            void setSelect(bool bSelect) { m_bSelect = bSelect; }
+            void setPutThrough(bool bPutThrough) { m_bPutThrough = bPutThrough; }
         protected:
             uint m_nZ = 0; //折点数
             QPointF p1, p2, p3, p4, p12, p34, pz12, pz34; //绘制坐标
             QRectF m_rcRespondRect;
             uint m_nPowerCut = 0;  //是否停电(1-定位,2-反位,4-岔前)(可组合)
+            bool m_bSelect = false;
+            bool m_bPutThrough = false;
+
+            uint m_nShuntFault = 0;  //分路不良(1-定位,2-反位,4-岔前)(可组合)
+            bool m_bShuntFaultIdle = false;  //分路不良空闲
+            uint m_nSpeedLimit = 0;  //是否限速（临时限速）(1-定位,2-反位,4-岔前)(可组合)
         };
 
         
@@ -259,6 +271,7 @@ namespace Station {
                 QRectF m_rcBtn;
                 QPointF m_ptCountdown;
                 QColor m_cTextColor;
+                int m_nState = 0;
             };
 
             struct StaBlockLamp

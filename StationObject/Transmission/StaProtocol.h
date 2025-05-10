@@ -26,6 +26,7 @@ namespace Station {
             QByteArray UnpackTrain(const QByteArray& dataAyyay);      //解析车次信息
             QByteArray UnpackTrainRoute(const QByteArray& dataAyyay);      //解析列车进路信息
             QByteArray UnpackLimits(const QByteArray& dataAyyay);      //解析权限信息
+            QByteArray UnpackAdjTimePoint(const QByteArray& dataAyyay);      //解析邻站报点
 
         private:
             QMap<QString, QVector<Device::DeviceBase*>>& m_mapDeviceVector;

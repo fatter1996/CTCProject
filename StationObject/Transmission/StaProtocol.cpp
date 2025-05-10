@@ -22,6 +22,8 @@ namespace Station {
             m_mapUnPackOrder.insert(0x60, [=](const QByteArray& dataAyyay) { return UnpackTrain(dataAyyay); });
             m_mapUnPackOrder.insert(0x61, [=](const QByteArray& dataAyyay) { return UnpackTrainRoute(dataAyyay); });
             m_mapUnPackOrder.insert(0x70, [=](const QByteArray& dataAyyay) { return UnpackLimits(dataAyyay); });
+            m_mapUnPackOrder.insert(0x72, [=](const QByteArray& dataAyyay) { return UnpackAdjTimePoint(dataAyyay); });
+
             InitSubjectProtocol();
             CultivateObject::Subject::InitConversionFun();
         }
@@ -102,16 +104,13 @@ namespace Station {
             {  
                 bool bAddByte = false;
                 StaSwitchSection* pSection = nullptr;
+                DeviceBase* pSubDevice = nullptr;
                 for (DeviceBase* pDevice : m_mapDeviceVector[SECTION]) {
                     pSection = dynamic_cast<StaSwitchSection*>(pDevice);
                     
-                    DeviceBase* pSubDevice = nullptr;
                     for (int nSubDeviceCode : pSection->m_vecSectionsCode) {
                         pSubDevice = MainStation()->getDeviceByCode(nSubDeviceCode);
-                        if (pSubDevice->getType() == 1) {
-                        }
                     }
-                    
                     if (!bAddByte) {
                         if (pSubDevice->getStrType() != "DC") {
                             pSubDevice->setState(dataAyyay[nFlag] & 0x0f);
@@ -128,6 +127,8 @@ namespace Station {
                         nFlag++;
                     }
                     bAddByte = !bAddByte;
+                    pSection = nullptr;
+                    pSubDevice = nullptr;
                 }
             }
             //信号机
@@ -201,10 +202,10 @@ namespace Station {
                 nFlag += len;
                 pStaStagePlan->m_nArrivalTrackCode = (dataAyyay[nFlag] & 0xFF) + (dataAyyay[nFlag + 1] & 0xFF) * 256;
                 nFlag += 2;
-                pStaStagePlan->m_strArrivalTrack = MainStation()->getDeviceByCode(pStaStagePlan->m_nArrivalTrackCode)->getName();
+                pStaStagePlan->m_strArrivalTrack = MainStation()->getDeviceByCode(pStaStagePlan->m_nArrivalTrackCode, TRACK)->getName();
                 pStaStagePlan->m_nEntrySignalCode = (dataAyyay[nFlag] & 0xFF) + (dataAyyay[nFlag + 1] & 0xFF) * 256;
                 nFlag += 2;
-                pStaStagePlan->m_strEntrySignal = MainStation()->getDeviceByCode(pStaStagePlan->m_nEntrySignalCode)->getName();
+                pStaStagePlan->m_strEntrySignal = MainStation()->getDeviceByCode(pStaStagePlan->m_nEntrySignalCode, SIGNALLAMP)->getName();
                 QString strArrivaTime = QString("%1-%2-%3T%4:%5:%6")
                     .arg((dataAyyay[nFlag] & 0xFF) + (dataAyyay[nFlag + 1] & 0xFF) * 256)
                     .arg(dataAyyay[nFlag + 2] & 0xFF, 2, 10, QLatin1Char('0'))
@@ -219,10 +220,10 @@ namespace Station {
                 nFlag += len2;
                 pStaStagePlan->m_nDepartTrackCode = (dataAyyay[nFlag] & 0xFF) + (dataAyyay[nFlag + 1] & 0xFF) * 256;
                 nFlag += 2;
-                pStaStagePlan->m_strDepartTrack = MainStation()->getDeviceByCode(pStaStagePlan->m_nArrivalTrackCode)->getName();
+                pStaStagePlan->m_strDepartTrack = MainStation()->getDeviceByCode(pStaStagePlan->m_nArrivalTrackCode, TRACK)->getName();
                 pStaStagePlan->m_nExitSignalCode = (dataAyyay[nFlag] & 0xFF) + (dataAyyay[nFlag + 1] & 0xFF) * 256;
                 nFlag += 2;
-                pStaStagePlan->m_strExitSignal = MainStation()->getDeviceByCode(pStaStagePlan->m_nExitSignalCode)->getName();
+                pStaStagePlan->m_strExitSignal = MainStation()->getDeviceByCode(pStaStagePlan->m_nExitSignalCode, SIGNALLAMP)->getName();
                 QString strDepartTime = QString("%1-%2-%3T%4:%5:%6")
                     .arg((dataAyyay[nFlag] & 0xFF) + (dataAyyay[nFlag + 1] & 0xFF) * 256)
                     .arg(dataAyyay[nFlag + 2] & 0xFF, 2, 10, QLatin1Char('0'))
@@ -406,8 +407,10 @@ namespace Station {
                     pTrain->m_bRunning = true;
                 }
                 else if (dataAyyay[11] == 0x06) {   //更新位置
+                    qDebug() << "MoveTo";
                     DeviceBase* pDeviceTrain = MainStation()->getDeviceByCode(pTrain->m_nPosCode);
                     if (!pDeviceTrain) {
+                        qDebug() << "Not found TrainPos";
                         return QByteArray();
                     }
                     pTrain->m_nPosCode = (dataAyyay[13] & 0xFF) + (dataAyyay[14] & 0xFF) * 256;
@@ -418,8 +421,12 @@ namespace Station {
                     if (pNextDevice) {
                         if (pNextDevice != pDeviceTrain) {
                             dynamic_cast<DeviceTrain*>(pDeviceTrain)->MoveTo(dynamic_cast<DeviceTrain*>(pNextDevice));
+                            pTrain->m_nPosCode = pNextDevice->getCode();
                             qDebug() << "MoveTo" << pNextDevice->getName();
                         }
+                    }
+                    else {
+                        qDebug() << "Not found NextDevice" << pTrain->m_nPosCode;
                     }
                 }
             }
@@ -444,23 +451,52 @@ namespace Station {
         QByteArray StaProtocol::UnpackLimits(const QByteArray& dataAyyay)
         {
             if (dataAyyay[11] == 0x01) {
-                Station::MainStation()->setStaLimits(Station::Limits::RouteLimits, dataAyyay[12]);
+                MainStation()->setStaLimits(Limits::RouteLimits, dataAyyay[12]);
+                CTCWindows::MainWindow()->RoutePlanWnd()->UpDataRouteLimits();
             }
             else if (dataAyyay[11] == 0x02) {
-                Station::MainStation()->setStaLimits(Station::Limits::ExStaControl, dataAyyay[12]);
+                MainStation()->setStaLimits(Limits::ExStaControl, dataAyyay[12]);
             }
             else if (dataAyyay[11] == 0x03) {
-                Station::MainStation()->setStaLimits(Station::Limits::ApplyControlMode, dataAyyay[12]);
+                MainStation()->setStaLimits(Limits::ApplyControlMode, dataAyyay[12]);
             }
             else if (dataAyyay[11] == 0x04) {
-                Station::MainStation()->setStaLimits(Station::Limits::PlanControl, dataAyyay[12]);
+                MainStation()->setStaLimits(Limits::PlanControl, dataAyyay[12]);
             }
             else if (dataAyyay[11] == 0x05) {
                 if (dataAyyay[12]) {
-                    Station::MainStation()->setStaLimits(Station::Limits::ControlMode, 
-                        Station::MainStation()->getStaLimits(Station::Limits::ActiveApplyControlMode));
-                    Station::MainStation()->setStaLimits(Station::Limits::ActiveApplyControlMode, -1);
+                    MainStation()->setStaLimits(Limits::ControlMode, 
+                        MainStation()->getStaLimits(Limits::ActiveApplyControlMode));
+                    MainStation()->setStaLimits(Limits::ActiveApplyControlMode, -1);
                 }
+            }
+            return QByteArray();
+        }
+
+        QByteArray StaProtocol::UnpackAdjTimePoint(const QByteArray& dataAyyay)
+        {
+            StaTrafficLog* pTrafficLog = MainStation()->getStaTrafficLogByTrain(dataAyyay[12] & 0xFF);
+            if (pTrafficLog) {
+                int nFlag = 13;
+                QString strDepartTime = QString("%1-%2-%3T%4:%5:%6")
+                    .arg((dataAyyay[nFlag] & 0xFF) + (dataAyyay[nFlag + 1] & 0xFF) * 256)
+                    .arg(dataAyyay[nFlag + 2] & 0xFF, 2, 10, QLatin1Char('0'))
+                    .arg(dataAyyay[nFlag + 3] & 0xFF, 2, 10, QLatin1Char('0'))
+                    .arg(dataAyyay[nFlag + 4] & 0xFF, 2, 10, QLatin1Char('0'))
+                    .arg(dataAyyay[nFlag + 5] & 0xFF, 2, 10, QLatin1Char('0'))
+                    .arg(dataAyyay[nFlag + 6] & 0xFF, 2, 10, QLatin1Char('0'));
+
+                QDateTime date = QDateTime::fromString(strDepartTime, Qt::ISODate);
+                switch (dataAyyay[11] & 0xFF)
+                {
+                case 0x01: pTrafficLog->m_tAdjDepartTime = date;    break;
+                case 0x02: pTrafficLog->m_tAdjArrivalTime = date;   break;
+                case 0x03: pTrafficLog->m_tAdjAgrDepartTime = date; break;
+                case 0x04: pTrafficLog->m_tAdjDepartTime = date;    break;
+                default:
+                    break;
+                }
+                emit Station::MainStation()->TrafficLogTableUpData();
             }
             return QByteArray();
         }

@@ -37,7 +37,12 @@ namespace CTCWindows {
         StateChange,            //方式转换
 
         STrackBlock,            //上引导总锁
-        XTrackBlock             //下引导总锁
+        XTrackBlock,            //下引导总锁
+
+        TrackPowerCut,          //股道停电
+        SwitchDWPowerCut,       //接触网定位无电
+        SwitchFWPowerCut,       //接触网反位无电
+        FunTypeEnd
     };
 
     enum class OperObjType : int {
@@ -54,6 +59,11 @@ namespace CTCWindows {
                           
         Ascend = 0x21,    //上行总锁
         Descend,          //下行总锁
+
+        SwitchCQ,         //岔前
+        SwitchDW,         //定位
+        SwitchFW,         //反位
+
         UnAscend = 0x29,    //上行解锁
         UnDescend,          //下行解锁
                           
@@ -81,10 +91,15 @@ namespace CTCWindows {
 
         public:
             void InitConnect();
-            virtual void InitAuxiliaryMenu(AuxiliaryMenuWnd* pAuxiliary) = 0;
             void ButtonClicked(FunType eSelectType);
             void timerEvent(QTimerEvent* event) override;
 
+        public:
+            virtual void InitAuxiliaryMenu(AuxiliaryMenuWnd* pAuxiliary);
+            void TrackPowerCut(AuxiliaryMenuWnd* pAuxiliary);
+            void SwitchDWPowerCut(AuxiliaryMenuWnd* pAuxiliary);
+            void SwitchFWPowerCut(AuxiliaryMenuWnd* pAuxiliary);
+            
         public:
             static FunType getCurrFunType() { return m_SelectFunType; }
             static void setOperObjType(OperObjType eType) { m_nOperObjType = eType; }

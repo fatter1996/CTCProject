@@ -17,7 +17,6 @@ namespace CTCWindows {
 		ui.setupUi(this);
 		InitListView();
 		InitTableWidget();
-		InitSealRecord(Station::MainStation());
 		UpdaTableWidget(Station::MainStation());
 	}
 
@@ -68,6 +67,7 @@ namespace CTCWindows {
 	{
 		m_mapStationSeal.clear();
 		QString strStationName = pStation->getStationName();
+		m_mapStationSeal.insert(strStationName, QMap<QString, int>());
 		for (Station::Device::DeviceBase* pAutoBlock : Station::MainStation()->getDeviceVectorByType(AUTOBLOCK)) {
 			m_mapStationSeal[strStationName].insert(pAutoBlock->getName() + "×Ü¸¨Öú", 0);
 			m_mapStationSeal[strStationName].insert(pAutoBlock->getName() + "½Ó³µ¸¨Öú", 0);

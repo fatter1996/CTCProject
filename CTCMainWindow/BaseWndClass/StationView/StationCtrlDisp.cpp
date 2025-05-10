@@ -136,8 +136,8 @@ namespace CTCWindows {
 			
 			pMenu->addSeparator();
 
-			pMenu->addAction(AddActionToMenu("接通光带", [=](bool) {}));
-			pMenu->addAction(AddActionToMenu("继续接通光带30s", [=](bool) {}));
+			pMenu->addAction(AddActionToMenu("接通光带", [=](bool) { Station::MainStation()->PutThrough(15); }));
+			pMenu->addAction(AddActionToMenu("继续接通光带30s", [=](bool) {Station::MainStation()->PutThrough(30); }));
 
 			pMenu->addSeparator();
 
