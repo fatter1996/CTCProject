@@ -429,42 +429,45 @@ namespace Station {
         pTrafficLog->m_nPlanType = subObj.value("planType").toInt();
 
         //到达信息
-        pTrafficLog->m_strArrivalTrainNum = subObj.value("arrivalTrainNumber").toString();
-        pTrafficLog->m_nArrivalTrackCode = subObj.value("arrivalTrack").toInt();
-        pTrafficLog->m_strArrivalTrack = MainStation()->getDeviceByCode(pTrafficLog->m_nArrivalTrackCode, TRACK)->getName();
-        pTrafficLog->m_nArrivalSignalCode = subObj.value("homeSignalCode").toInt();
-        pTrafficLog->m_strArrivaSignal = MainStation()->getDeviceByCode(pTrafficLog->m_nArrivalSignalCode, SIGNALLAMP)->getName();
-        pTrafficLog->m_tProvArrivalTime = QDateTime::fromString(subObj.value("provArrivalTime").toString(), Qt::ISODate);
-        pTrafficLog->m_tRealArrivalTime = QDateTime::fromString(subObj.value("realArrivalTime").toString(), Qt::ISODate);
-        pTrafficLog->m_tAgrAdjDepartTime = QDateTime::fromString(subObj.value("agrAdjDepartTime").toString(), Qt::ISODate);
-        pTrafficLog->m_tAdjDepartTime = QDateTime::fromString(subObj.value("adjDepartTime").toString(), Qt::ISODate);
-        pTrafficLog->m_nArrivalLimit = subObj.value("arrivalLimit").toInt();
-        pTrafficLog->m_nArrivalRouteId = subObj.value("arrivalRouteId").toInt();
-        pTrafficLog->m_strArrivalLocomotive = subObj.value("arrivalLocomotive").toString();
-        pTrafficLog->m_strArrivalDriver = subObj.value("arrivalDriver").toString();
-        pTrafficLog->m_nArrivalTrainMaster = subObj.value("arrivalLength").toString();
-        pTrafficLog->m_nArrivalTrainValue = subObj.value("arrivalTrainNum").toInt();
-        pTrafficLog->m_nArrivalChange = subObj.value("arrivalChange").toInt();
-        pTrafficLog->m_nArrivalWeight = subObj.value("arrivalWeight").toInt();
-
+        if (pTrafficLog->m_nPlanType != 0x02) {
+            pTrafficLog->m_strArrivalTrainNum = subObj.value("arrivalTrainNumber").toString();
+            pTrafficLog->m_nArrivalTrackCode = subObj.value("arrivalTrack").toInt();
+            pTrafficLog->m_strArrivalTrack = MainStation()->getDeviceByCode(pTrafficLog->m_nArrivalTrackCode, TRACK)->getName();
+            pTrafficLog->m_nArrivalSignalCode = subObj.value("homeSignalCode").toInt();
+            pTrafficLog->m_strArrivaSignal = MainStation()->getDeviceByCode(pTrafficLog->m_nArrivalSignalCode, SIGNALLAMP)->getName();
+            pTrafficLog->m_tProvArrivalTime = QDateTime::fromString(subObj.value("provArrivalTime").toString(), Qt::ISODate);
+            pTrafficLog->m_tRealArrivalTime = QDateTime::fromString(subObj.value("realArrivalTime").toString(), Qt::ISODate);
+            pTrafficLog->m_tAgrAdjDepartTime = QDateTime::fromString(subObj.value("agrAdjDepartTime").toString(), Qt::ISODate);
+            pTrafficLog->m_tAdjDepartTime = QDateTime::fromString(subObj.value("adjDepartTime").toString(), Qt::ISODate);
+            pTrafficLog->m_nArrivalLimit = subObj.value("arrivalLimit").toInt();
+            pTrafficLog->m_nArrivalRouteId = subObj.value("arrivalRouteId").toInt();
+            pTrafficLog->m_strArrivalLocomotive = subObj.value("arrivalLocomotive").toString();
+            pTrafficLog->m_strArrivalDriver = subObj.value("arrivalDriver").toString();
+            pTrafficLog->m_nArrivalTrainMaster = subObj.value("arrivalLength").toString();
+            pTrafficLog->m_nArrivalTrainValue = subObj.value("arrivalTrainNum").toInt();
+            pTrafficLog->m_nArrivalChange = subObj.value("arrivalChange").toInt();
+            pTrafficLog->m_nArrivalWeight = subObj.value("arrivalWeight").toInt();
+        }
         //出发信息
-        pTrafficLog->m_strDepartTrainNum = subObj.value("departTrainNumber").toString();
-        pTrafficLog->m_nDepartTrackCode = subObj.value("departTrack").toInt();
-        pTrafficLog->m_strDepartTrack = MainStation()->getDeviceByCode(pTrafficLog->m_nDepartTrackCode, TRACK)->getName();
-        pTrafficLog->m_nDepartSignalCode = subObj.value("startingSignalCode").toInt();
-        pTrafficLog->m_strDepartSignal = MainStation()->getDeviceByCode(pTrafficLog->m_nDepartSignalCode, SIGNALLAMP)->getName();
-        pTrafficLog->m_tProvDepartTime = QDateTime::fromString(subObj.value("provDepartTime").toString(), Qt::ISODate);
-        pTrafficLog->m_tRealDepartTime = QDateTime::fromString(subObj.value("realDepartTime").toString(), Qt::ISODate);
-        pTrafficLog->m_tAdjAgrDepartTime = QDateTime::fromString(subObj.value("adjAgrDepartTime").toString(), Qt::ISODate);
-        pTrafficLog->m_tAdjArrivalTime = QDateTime::fromString(subObj.value("adjArrivalTime").toString(), Qt::ISODate);
-        pTrafficLog->m_nDepartLimit = subObj.value("departLimit").toInt();
-        pTrafficLog->m_nDepartRouteId = subObj.value("departRouteId").toInt();
-        pTrafficLog->m_strDepartLocomotive = subObj.value("departLocomotive").toString();
-        pTrafficLog->m_strDepartDriver = subObj.value("departDriver").toString();
-        pTrafficLog->m_nDepartTrainMaster = subObj.value("departLength").toString();
-        pTrafficLog->m_nDepartTrainValue = subObj.value("departTrainNum").toInt();
-        pTrafficLog->m_nDepartChange = subObj.value("departChange").toInt();
-        pTrafficLog->m_nDepartWeight = subObj.value("departWeight").toInt();
+        if (pTrafficLog->m_nPlanType != 0x03) {
+            pTrafficLog->m_strDepartTrainNum = subObj.value("departTrainNumber").toString();
+            pTrafficLog->m_nDepartTrackCode = subObj.value("departTrack").toInt();
+            pTrafficLog->m_strDepartTrack = MainStation()->getDeviceByCode(pTrafficLog->m_nDepartTrackCode, TRACK)->getName();
+            pTrafficLog->m_nDepartSignalCode = subObj.value("startingSignalCode").toInt();
+            pTrafficLog->m_strDepartSignal = MainStation()->getDeviceByCode(pTrafficLog->m_nDepartSignalCode, SIGNALLAMP)->getName();
+            pTrafficLog->m_tProvDepartTime = QDateTime::fromString(subObj.value("provDepartTime").toString(), Qt::ISODate);
+            pTrafficLog->m_tRealDepartTime = QDateTime::fromString(subObj.value("realDepartTime").toString(), Qt::ISODate);
+            pTrafficLog->m_tAdjAgrDepartTime = QDateTime::fromString(subObj.value("adjAgrDepartTime").toString(), Qt::ISODate);
+            pTrafficLog->m_tAdjArrivalTime = QDateTime::fromString(subObj.value("adjArrivalTime").toString(), Qt::ISODate);
+            pTrafficLog->m_nDepartLimit = subObj.value("departLimit").toInt();
+            pTrafficLog->m_nDepartRouteId = subObj.value("departRouteId").toInt();
+            pTrafficLog->m_strDepartLocomotive = subObj.value("departLocomotive").toString();
+            pTrafficLog->m_strDepartDriver = subObj.value("departDriver").toString();
+            pTrafficLog->m_nDepartTrainMaster = subObj.value("departLength").toString();
+            pTrafficLog->m_nDepartTrainValue = subObj.value("departTrainNum").toInt();
+            pTrafficLog->m_nDepartChange = subObj.value("departChange").toInt();
+            pTrafficLog->m_nDepartWeight = subObj.value("departWeight").toInt();
+        }
 
         pTrafficLog->m_strDelayReason = subObj.value("delayReason").toString();
         pTrafficLog->m_bUpDown = subObj.value("upDown").toBool();
