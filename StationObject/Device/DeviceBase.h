@@ -21,8 +21,14 @@ namespace Station {
         {
             int SigType;
             QStringList Btnname;
+            QString RailwayTrack;
         };
-
+        struct TrackSingal {
+            int SingalCode_1[2];
+            int SingalCode_2[2];
+            int SingalCode_3[2];
+            int SingalCode_4[2];
+        };
         class DeviceBase;
         typedef QMap<QString, std::function<void(DeviceBase* pDevice, const QString& strElement)>> AttrMap;
         typedef QMap<CTCWindows::FunType, std::function<void(DeviceBase* pDevice)>> ClickEventMap;
@@ -106,6 +112,7 @@ namespace Station {
             virtual void ResetDevState() {}
 
         public:
+            TrackSingal* TracjSingal = nullptr;
             void setState(const uint& nState) { m_nState = nState; }
             uint getType() const { return m_nType; }
             void setStrType(const QString& strType) { m_strType = strType; }

@@ -44,7 +44,7 @@ namespace CTCWindows {
 	{
 		Station::StaStagePlan* pNewStagePlan = Station::MainStation()->NewStagePlan();
 		if (pNewStagePlan) {
-			ui.timeLabel->setText(pNewStagePlan->m_tOrderedTime.toString("yyyy-mm-dd hh:MM"));
+			ui.timeLabel->setText(pNewStagePlan->m_tOrderedTime.toString("yyyy-MM-dd hh:mm"));
 		}
 
 		QVector<QStringList> vecTableData;
@@ -55,9 +55,9 @@ namespace CTCWindows {
 				<< ""
 				<< "ÐÂÔö"
 				<< pStaStagePlan->m_strDepartTrainNum
-				<< pStaStagePlan->m_tArrivalTime.toString("hh:MM")
+				<< pStaStagePlan->m_tArrivalTime.toString("hh:mm")
 				<< pStaStagePlan->m_strDepartTrack
-				<< pStaStagePlan->m_tDepartTime.toString("hh:MM")
+				<< pStaStagePlan->m_tDepartTime.toString("hh:mm")
 			);
 		}
 		m_pStagePlanSignTable->ResetTableRows(vecTableData);

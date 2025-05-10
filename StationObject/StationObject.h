@@ -86,8 +86,7 @@ namespace Station {
         QPoint getOffset() const { return m_ptOffset; }
         bool IsMainStation() const { return m_bMainStation; }
         QWidget* ShowWidget() const { return m_pShowWidget; }
-        
- 
+        QMap<QString,QMap<int, int>> getTracksingal() { return TrackSingalCode; }
     public:
         static void InitCreatDeviceMap();
  
@@ -95,6 +94,7 @@ namespace Station {
         friend class MainStationObject;
         
     private:
+        QMap<QString, QMap<int, int>> TrackSingalCode;
         bool m_bMainStation = false;
         uint m_nStationId = 0;
         QString m_strStationName;
@@ -136,7 +136,6 @@ namespace Station {
         void SelectStaTrainDispatch(StaDispatchOrder* pOrder);   //查询机车调度命令
         void SelectStaTrafficLog();   //查询行车日志
         void GetStationOrderByJosn(const QByteArray& btDataArray, Order type);
-
         int AddNewTrain(StaTrain* pStaTrain); //添加新车次
         int DeleteTrain(StaTrain* pStaTrain); //删除车次
         int SetTrainRunning(StaTrain* pStaTrain, bool bRunning); //设置车次启动或停稳
@@ -211,6 +210,16 @@ namespace Station {
         int getStaLimits(Limits type);
         void setStaLimits(Limits type, int nValue);
         QVector<StaTrafficLog*> getvecTrafficLog() { return m_vecStaTrafficLog;}
+        QMap<int, QString> getPassengeTrain() { return m_mapPassengeTrain; }
+        QMap<int, QString> getFreighTrain() { return m_mapFreighTrain; }
+        QMap<int, QString> getTrainType() { return m_mapTrainType; }
+        void AddPassengeTrain(int nIndex, QString strtype) { m_mapPassengeTrain.insert(nIndex, strtype); }
+        void AddFreighTrain(int nIndex, QString strtype) { m_mapFreighTrain.insert(nIndex, strtype); }
+        void AddTrainType(int nIndex, QString strtype) { m_mapTrainType.insert(nIndex, strtype); }
+        void AddTrainRoute(StaTrainRoute* pRoute) { m_vecStaTrainRoute.append(pRoute); }
+        bool getAutoSendPlan() {
+            return m_bAutoSendPlan;
+        }
     public slots:
         void onReciveData(const QByteArray& dataAyyay);
         void onOrderIssued();
@@ -234,6 +243,9 @@ namespace Station {
 
         QVector<Device::DeviceBase*> m_vecSelectDevice;
 
+        QMap<int, QString> m_mapPassengeTrain;
+        QMap<int, QString> m_mapFreighTrain;
+        QMap<int, QString> m_mapTrainType;
 
         UserInfo m_infoCurrUser;
         QString m_strOrderToInterLock;

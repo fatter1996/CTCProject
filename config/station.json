@@ -8,11 +8,11 @@
     "localPortUDP": 8099,
     "localPortTCP": 8077,
     "#serverAddress": "服务终端通信地址",
-    "serverIp": "192.168.31.0",
+    "serverIp": "192.168.31.86",
     "serverPortUDP": 3355,
     "serverPortTCP": 3366,
     "#HttpServerAddress": "Http服务通信地址",
-    "HttpServerIp": "192.168.31.0",
+    "HttpServerIp": "192.168.31.86",
     "HttpServerPort": 6060
   },
   "stationInfo": "Station.txt",

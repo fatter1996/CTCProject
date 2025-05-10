@@ -37,7 +37,6 @@ namespace CTCWindows {
 			//创建显示设置界面
 			BaseWnd::StaVisibleSet* CreateStaVisibleSet() override;
 			BaseWnd::StaTraindiagramwidget* CreateStaTraindiagramwidget() override;
-			bool eventFilter(QObject* obj, QEvent* event);
 			//初始化主菜单
 			void InitStationViewMenuBar() override;
 			//初始化工具栏-主工具栏
@@ -46,19 +45,16 @@ namespace CTCWindows {
 			void InitTrafficLogToolBar() override;
 			//初始化工具栏-签收工具栏
 			void InitSignForToolBar() override;
-			void timerEvent(QTimerEvent* event);
 			//初始化工具栏-状态工具栏
 			void InitStateToolBar() override;
 			// 初始化工具栏-底部行车日志工具栏
-			void InitbottomTrafficLogToolBar() override;
+			void InitbottomTrafficLogToolBar() override {};
 			void InitStaTraindiagramwidget() override;
 			void InitBottomToolBar() override;
 			// 初始化工具栏-底部状态栏
 			void InitStatusBar() override;
 			//初始化界面布局
 			QLayout* WidgetLayout() override { return ui.centralWidget->layout(); }
-			//void onButtonToggled(bool checked);
-		    void InitStatusBar() override ;
 			void upDateTime();
 			QString getWeekday(const QDateTime& dateTime);
 		signals:

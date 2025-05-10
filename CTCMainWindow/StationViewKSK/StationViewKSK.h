@@ -4,6 +4,7 @@
 #include "ui_StationViewKSK.h"
 #include "./CTCMainWindow/StationViewKSK/ModuleWidget/TrainInformationInterfaceKSK.h"
 #include "./CTCMainWindow/StationViewKSK/ModuleWidget/StaTraindiagramwidgetKSK.h"
+#include "ModuleWidget/StaAddNewTrainKSK.h"
 namespace CTCWindows {
 	namespace CASCO {
 		class StationViewKSK : public CTCMainWindow
@@ -29,7 +30,8 @@ namespace CTCWindows {
 			BaseWnd::StaDispatchOrder* CreateStaDispatchOrder() override;
 			//创建显示设置界面
 			BaseWnd::StaVisibleSet* CreateStaVisibleSet() override;
-
+			// 初始化工具栏-底部行车日志工具栏
+			void InitbottomTrafficLogToolBar() override;
 
 			BaseWnd::StaTraindiagramwidget* CreateStaTraindiagramwidget() override;
 			//初始化主菜单
@@ -45,8 +47,11 @@ namespace CTCWindows {
 			void InitStaTraindiagramwidget() override;
 			QLayout* WidgetLayout() override { return ui.centralWidget->layout(); }
 			void InitStatusBar() override ;
+			StaAddNewTrainKSK* getInstance();
+
 		private:
 			StaTraindiagramwidgetKSK* m_pStaTraindiagram = nullptr;
+			StaAddNewTrainKSK* m_pStaAddNewTrain = nullptr;
 			TrainInformationInterfaceKSK*  m_pTrainFormation = nullptr;
 			Ui::StationViewKSK ui;
 		};

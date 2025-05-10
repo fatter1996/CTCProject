@@ -248,7 +248,6 @@ void StaTraindiagramwidgetKSK::drawNowTimeLine()
     int startY = SPACING_TOPORBOTTOM + SPACING_TIMEAXIS;
     int endY = startY + TrainDiagram->vectRailwayLine.size() * (TrainDiagram->stationDistance * 2)
         + (TrainDiagram->vectRailwayLine.size() - 1) * TrainDiagram->lintDistance;
-    qDebug() << "NowTimeLine" << nowTimeLinePx << startY << nowTimeLinePx << endY;
     painter.drawLine(nowTimeLinePx, startY, nowTimeLinePx, endY);
 }
 
@@ -459,9 +458,31 @@ void StaTraindiagramwidgetKSK::drawTrainPlan()
         painter.setPen(pen); //Ìí¼Ó»­±Ê
 
         int nIndex = getDirectionIndex(pTrafficLog);
-        TrainDiagram->vectRailwayLine[nIndex];
         m_pStaTrain = Station::MainStation()->getStaTrainById(pTrafficLog->m_nTrainId);
+        Station::Device::DeviceBase* pDevice = nullptr;
+        for (int i = 0; i < TrainDiagram->vectRailwayLine.size();i++) {
+            if (pTrafficLog->m_nPlanType == 0x03) {
+                pDevice = Station::MainStation()->getDeviceByName(pTrafficLog->m_strDepartSignal);
+                if (TrainDiagram->vectRailwayLine[i].endStation == dynamic_cast<Station::Device::StaSignal*>(pDevice)->getDirection()) {
+                    nIndex = i;
+                    break;
+                }
+            }
+            else {
+                pDevice = Station::MainStation()->getDeviceByName(pTrafficLog->m_strArrivaSignal);
+                if (TrainDiagram->vectRailwayLine[i].startStation == dynamic_cast<Station::Device::StaSignal*>(pDevice)->getDirection()) {
+                    nIndex = i;
+                    if (pTrafficLog->m_strDepartSignal == "") { break; }
+                    pDevice = Station::MainStation()->getDeviceByName(pTrafficLog->m_strDepartSignal);
+                    if (TrainDiagram->vectRailwayLine[i].endStation == dynamic_cast<Station::Device::StaSignal*>(pDevice)->getDirection()) {
+                        nIndex = i;
+                        break;
+                    }
 
+                }
+            }
+           
+        }
         
         if (pTrafficLog->m_nPlanType == 0x02) {
             Station::Device::StaSignal* pSignal = dynamic_cast<Station::Device::StaSignal*>(Station::MainStation()->getDeviceByName(pTrafficLog->m_strDepartSignal, SIGNALLAMP));

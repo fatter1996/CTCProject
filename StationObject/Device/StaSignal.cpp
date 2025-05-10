@@ -151,9 +151,6 @@ namespace Station {
 
         void StaSignal::DrawSignalButton()
         {
-            Station::Device::StaSignal* pSignal = nullptr;
-            Station::Device::DeviceBtn* pBtnType = nullptr;
-
             //列车按钮
             if ((m_nAttr & (SIGNAL_LCZD | SIGNAL_LCSD)) || m_strXHDType == "JZ_XHJ" || m_strXHDType == "CZ_XHJ") {
                 DrawButton(m_pPainter, Scale(m_rcTrainBtn), COLOR_BTN_GREEN, m_nBtnState & BTNDOWN_TRAIN | (m_bFlash && m_nFirstBtnType == 1), 1, COLOR_BTN_BLUE, m_bFlash ? COLOR_BTN_YELLOW : COLOR_BTN_WHITE);
@@ -441,14 +438,13 @@ namespace Station {
                 if (m_nFirstBtnType != pSignal->SigType) {
                     continue;
                 }
-                qDebug() << MainStation()->getSelectDevice().size();
                 if (pSignal->Btnname[MainStation()->getSelectDevice().size() - 1] == pDevice->getName()) {
                     listFlashSignalT.append(pSignal);
                 }
             }
             m_listFlashSignal.swap(listFlashSignalT);
             for (SignalBtn* pSignal : m_listFlashSignal) {
-                
+
                 if (pSignal->Btnname.size() > MainStation()->getSelectDevice().size()) {
                     pStaSignal = dynamic_cast<StaSignal*>(MainStation()->getDeviceByName(pSignal->Btnname[MainStation()->getSelectDevice().size()], SIGNALLAMP));
                     pStaSignal->setFlash();
@@ -696,6 +692,7 @@ namespace Station {
 
         void StaSignal::OrderClear(bool bClearTwinkle)
         {
+            setFlash(false);
             BtnStateReset();
         }
 

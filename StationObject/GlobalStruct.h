@@ -81,7 +81,7 @@ namespace Station {
 
 	struct StaOrder {
 	};
-
+	
 	struct StaStagePlan;
 	struct StaTrafficLog;
 	struct StaDispatchOrder;
@@ -189,9 +189,11 @@ namespace Station {
 		StaTrainRoute(StaTrafficLog* pTrafficLog, bool bArrivaRoute);
 
 	public:
+		QString SortOutTheData(QMap<int, int> SingalCode, QString SingalBtnName,bool Direction);
 		static void Init(StaTrainRoute* pTrainRoute, const QJsonObject& subObj);
 		void ChangeTrack(int nCode, const QString& strName );
 		QString getStateStr();
+		QString getRouteDescrip();
 	};
 
 	struct StaTrainDispatch : public StaOrder	//机车调度命令
@@ -242,7 +244,6 @@ namespace Station {
 			}
 			m_strOrderNum = m_strOrderNum.mid(i);
 		}
-		static QMap<QString,QString> GetOrder(int m_nOrderId,int m_nOrderType, int m_nSendState);
 	};
 
 	struct StaTrafficLog : public StaOrder //行车日志

@@ -595,22 +595,6 @@ namespace CTCWindows {
 
 		}
 
-		void StationViewTKY::timerEvent(QTimerEvent* event)
-		{
-			if (m_nTimerId == event->timerId()) {
-				UpdataDateTime();
-				m_pTimeLabel->setText(QDateTime::currentDateTime().toString("hh:mm:ss"));
-
-				if (BaseWnd::StaFunBtnToolBar::getCountdown() > 0) {
-					m_pCountdownLabel->show();
-					m_pCountdownLabel->setText(QString::number(BaseWnd::StaFunBtnToolBar::getCountdown() / 2));
-				}
-				else {
-					m_pCountdownLabel->hide();
-				}
-			}
-			return CTCMainWindow::timerEvent(event);
-		}
 
 		void StationViewTKY::InitBottomToolBar()
 		{
@@ -687,45 +671,6 @@ namespace CTCWindows {
 			m_pStatusBar->addWidget(permanentLabe2);
 			setStatusBar(m_pStatusBar);
 		}
-		void StationViewTKY::InitStatusBar()
-		{
-			TimerId = startTimer(500);
-			m_pStatusBar = new QStatusBar(this);
-			QWidget* m_pStatusBarWidget = new QWidget;
-			QHBoxLayout* StatusLayout = new QHBoxLayout(m_pStatusBarWidget);
-			m_pStatusBar->setFixedHeight(25);
-			m_pStatusBarWidget->setFixedHeight(25);
-			StatusLayout->setMargin(0);
-			QLabel* permanentLabel = new QLabel("中国铁道科学研究院");
-			permanentLabel->setStyleSheet(" border: 0.5px solid #ccc;");
-			QDateTime currentDateTime = QDateTime::currentDateTime();
-			QString timeStr = currentDateTime.toString("yyyy-MM-dd hh:mm:ss");
-			TimeLabel = new QLabel(QString("%1  %2").arg(timeStr).arg(getWeekday(currentDateTime)));
-			QLabel* permanentLabel3 = new QLabel(QString("本站名：%1").arg(Station::MainStation()->getStationName()));
-
-
-			QWidget* LabelWidget = new QWidget(m_pStatusBar);
-			LabelWidget->setObjectName("LabelName");
-
-			LabelWidget->setStyleSheet("QWidget#LabelName{border: 0.5px solid #ccc;}");
-			QLabel* Label1 = new QLabel(QString("1"));
-			QLabel* Label2 = new QLabel(QString("安六台"));
-			QSpacerItem* spacer = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
-			QHBoxLayout* Labellayout = new QHBoxLayout(LabelWidget);
-			Labellayout->setMargin(0);
-
-			Labellayout->addWidget(Label1);
-			Labellayout->addWidget(Label2);
-			Labellayout->addItem(spacer);
-			TimeLabel->setStyleSheet(" border: 0.5px solid #ccc;");
-			permanentLabel3->setStyleSheet(" border: 0.5px solid #ccc;");
-			StatusLayout->addWidget(permanentLabel, 1);
-			StatusLayout->addWidget(TimeLabel, 1);
-			StatusLayout->addWidget(permanentLabel3, 8);
-			StatusLayout->addWidget(LabelWidget, 0);
-
-			m_pStatusBar->addWidget(m_pStatusBarWidget, 1);
-
-		}
+		
 	}
 }

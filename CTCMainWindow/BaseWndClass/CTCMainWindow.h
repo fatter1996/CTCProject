@@ -83,7 +83,7 @@ namespace CTCWindows {
 		//获取实际大小
 		void setFixedSize(const QSize& size);
 		void SetShowToolbar(bool bShowBtn, bool bShowLabel);
-
+		void UpDataTrianLog() { m_pStationLog->OnTrafficLogTableUpData(); }
 	public:
 		virtual void ShowEditingInterface(void* pTextSign) {};
 
@@ -109,8 +109,6 @@ namespace CTCWindows {
 		// 初始化工具栏-底部行车日志工具栏
 		virtual void InitbottomTrafficLogToolBar() = 0 ;
 		virtual void InitBottomToolBar() {}
-		virtual void InitStatusBar() {}
-		virtual QLayout* WidgetLayout() = 0;
 
 		virtual void InitStaTraindiagramwidget() = 0;
 
@@ -126,7 +124,7 @@ namespace CTCWindows {
 		void DrawLine();
 
 	public slots:
-		void onButtonToggled(bool checked);
+		void onButtonToggled(bool checked) {};
 	
 		void TurnToStationCtrlDisp();
 		void TurnToStationMultiDisp();

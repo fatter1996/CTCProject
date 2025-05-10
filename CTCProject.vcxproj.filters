@@ -255,6 +255,9 @@
     <ClCompile Include="CTCMainWindow\StationViewKSK\ModuleWidget\StaTraindiagramwidgetKSK.cpp">
       <Filter>CTCMainWindow\StationViewKSK\ModuleWidget</Filter>
     </ClCompile>
+    <ClCompile Include="CTCMainWindow\StationViewKSK\ModuleWidget\StaAddNewTrainKSK.cpp">
+      <Filter>CTCMainWindow\StationViewKSK\ModuleWidget</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CTCObject\CTCObject.h">
@@ -588,6 +591,9 @@
     <QtMoc Include="CTCMainWindow\StationViewTKY\ModuleWidget\EditingInterfaceTKY.h">
       <Filter>CTCMainWindow\StationViewTKY\ModuleWidget</Filter>
     </QtMoc>
+    <QtMoc Include="CTCMainWindow\StationViewKSK\ModuleWidget\StaAddNewTrainKSK.h">
+      <Filter>CTCMainWindow\StationViewKSK\ModuleWidget</Filter>
+    </QtMoc>
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="CTCMainWindow\StationViewTKY\StationViewTKY.ui">
@@ -711,6 +717,9 @@
       <Filter>CTCMainWindow\StationViewKSK\ModuleWidget</Filter>
     </QtUic>
     <QtUic Include="CTCMainWindow\StationViewKSK\ModuleWidget\StaTraindiagramwidgetKSK.ui">
+      <Filter>CTCMainWindow\StationViewKSK\ModuleWidget</Filter>
+    </QtUic>
+    <QtUic Include="CTCMainWindow\StationViewKSK\ModuleWidget\StaAddNewTrainKSK.ui">
       <Filter>CTCMainWindow\StationViewKSK\ModuleWidget</Filter>
     </QtUic>
   </ItemGroup>

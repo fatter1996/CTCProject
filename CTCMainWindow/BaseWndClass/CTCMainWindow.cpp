@@ -142,7 +142,8 @@ namespace CTCWindows {
         StaPaintView()->setFixedSize(tempSize);
     }
     
-    void CTCMainWindow::UpdataDateTime()
+
+    void CTCMainWindow::timerEvent(QTimerEvent* event)
     {
 
         if (Station::MainStation()->NewDispatchOrder()) {

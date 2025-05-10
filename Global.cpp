@@ -93,7 +93,7 @@ namespace Station {
             m_nWeight = TrafficLog->m_nDepartWeight;
         } break;
         }
-        m_bRight = TrafficLog->m_bUpDown;
+        m_bRight = TrafficLog->m_bUpDown && !MainStation()->IsOverturn();
     }
 
     QString StaTrain::OverLimitLevel()
@@ -170,6 +170,7 @@ namespace Station {
         }
 
         //进路方向
+
         Device::StaSignal* pSignal = dynamic_cast<Device::StaSignal*>(MainStation()->getDeviceByCode(m_nSignalCode));
         m_strDirection = pSignal->getDirection();
         if (pSignal->getSXThroat()) {
@@ -189,34 +190,55 @@ namespace Station {
             }
         }
         
-
+        m_strRouteDescrip = getRouteDescrip();
+        qDebug() << "描述" << m_strRouteDescrip;
         //进路描述
-        if (m_strTrack == "") {
-            m_strRouteDescrip.append(pTrafficLog->m_strArrivaSignal);
-            m_strRouteDescrip.append(",");
-            m_strRouteDescrip.append(pTrafficLog->m_strDepartSignal);
-        }
-        else {
-            QString strSignalName;
-            Device::DeviceBase* pArrivaSignal = MainStation()->getDeviceByCode(m_nSignalCode);
-            for (Device::DeviceBase* pSignal : MainStation()->getDeviceVectorByType(SIGNALLAMP)) {
-                if (pSignal->getSXThroat() == pArrivaSignal->getSXThroat() && (pSignal->getAttr() & SIGNAL_FCXH) &&
-                    pSignal->getName().mid(1) == m_strTrack.left(m_strTrack.indexOf("G"))) {
-                    strSignalName = pSignal->getName();
-                    break;
-                }
-            }
-            if (m_bArrivaRoute) {   //接车
-                m_strRouteDescrip.append(m_strSignal);
-                m_strRouteDescrip.append(",");
-                m_strRouteDescrip.append(strSignalName);
-            }
-            else {  //发车
-                m_strRouteDescrip.append(strSignalName);
-                m_strRouteDescrip.append(",");
-                m_strRouteDescrip.append(m_strSignal);
-            }
-        }
+       // if (m_strTrack == "") {
+       //     m_strRouteDescrip.append(pTrafficLog->m_strArrivaSignal);
+       //     m_strRouteDescrip.append(",");
+       //     m_strRouteDescrip.append(pTrafficLog->m_strDepartSignal);
+       // }
+       // else {
+       //     QString strSignalName;
+       //
+       //     if (m_bArrivaRoute) {
+       //        // for (int i = 0; RounteList.size(); i++) {
+       //        //     m_strRouteDescrip.append(RounteList[i]);
+       //        //     if (i == RounteList.size() - 1) {
+       //        //         break;
+       //        //     }
+       //        //     m_strRouteDescrip.append(",");
+       //        // }
+       //     }
+       //     else {
+       //         //for (int i = 0; RounteList.size(); i++) {
+       //         //    m_strRouteDescrip.append(RounteList[i]);
+       //         //    if (i == RounteList.size() - 1) {
+       //         //        break;
+       //         //    }
+       //         //    m_strRouteDescrip.append(",");
+       //         //}
+       //     }
+       //     //qDebug() << "进路描述" << m_strRouteDescrip;
+       //    // Device::DeviceBase* pArrivaSignal = MainStation()->getDeviceByCode(m_nSignalCode);
+       //    // for (Device::DeviceBase* pSignal : MainStation()->getDeviceVectorByType(SIGNALLAMP)) {
+       //    //     if (pSignal->getSXThroat() == pArrivaSignal->getSXThroat() && (pSignal->getAttr() & SIGNAL_FCXH) &&
+       //    //         pSignal->getName().mid(1) == m_strTrack.left(m_strTrack.indexOf("G"))) {
+       //    //         strSignalName = pSignal->getName();
+       //    //         break;
+       //    //     }
+       //    // }
+       //    // if (m_bArrivaRoute) {   //接车
+       //    //     m_strRouteDescrip.append(m_strSignal);
+       //    //     m_strRouteDescrip.append(",");
+       //    //     m_strRouteDescrip.append(strSignalName);
+       //    // }
+       //    // else {  //发车
+       //    //     m_strRouteDescrip.append(strSignalName);
+       //    //     m_strRouteDescrip.append(",");
+       //    //     m_strRouteDescrip.append(m_strSignal);
+       //    // }
+       // }
     }
 
     void StaTrainRoute::ChangeTrack(int nCode, const QString& strName)
@@ -257,6 +279,80 @@ namespace Station {
         case 5: return "人工取消";
         default: return "等待触发";
         }
+    }
+    QString StaTrainRoute::SortOutTheData(QMap<int, int> SingalCode, QString SingalBtnName,bool Direction) {
+
+        Station::Device::DeviceBase* pEndSignal = nullptr;
+        QMap<int, int>::const_iterator iter;
+        QString m_strRouteDescrip;
+        
+        for (iter = SingalCode.constBegin(); iter != SingalCode.constEnd(); ++iter) {
+            if (m_strSignal[0] == "S") {
+                pEndSignal = Station::MainStation()->getDeviceByCode(iter.key());
+                if (Direction) {
+                    return m_strRouteDescrip = SingalBtnName + "," + pEndSignal->getName();
+                }
+                else {
+                    return m_strRouteDescrip = pEndSignal->getName() + "," + SingalBtnName;
+                }
+            }
+            else {
+                pEndSignal = Station::MainStation()->getDeviceByCode(iter.value());
+                if (Direction) {
+                    return m_strRouteDescrip = SingalBtnName + "," + pEndSignal->getName();
+                }
+                else {
+                    return m_strRouteDescrip = pEndSignal->getName() + "," + SingalBtnName;
+                }
+            }
+        }
+        return "";
+    }
+    QString StaTrainRoute::getRouteDescrip()
+    {
+        QList<Station::Device::SignalBtn*>* listFlashSignal = MainStation()->getSignalBtn();
+        QMap<QString,QMap<int, int>> Tracksingal = Station::MainStation()->getTracksingal();
+        QMap<QString, QMap<int, int>>::const_iterator it;
+        QMap<int, int> SingalCode;
+        if (m_bArrivaRoute) {
+            for (Station::Device::SignalBtn* pSingalBtn : *listFlashSignal) {
+                if (pSingalBtn->Btnname[0] == m_strSignal) {
+                    Station::Device::DeviceBase* pDevice = Station::MainStation()->getDeviceByName(pSingalBtn->Btnname[pSingalBtn->Btnname.size() - 1]);
+                    for (it = Tracksingal.constBegin(); it != Tracksingal.constEnd(); ++it) {
+                        if (it.key() == m_strTrack) {
+                            SingalCode = it.value();
+                            return SortOutTheData(SingalCode, m_strSignal, m_bArrivaRoute);
+                        }
+                        else {
+                            continue;
+                        }
+                    }
+                }
+                else {
+                    continue;
+                }
+            }
+        }
+        else {
+            for (Station::Device::SignalBtn* pSingalBtn : *listFlashSignal) {
+                if (pSingalBtn->Btnname[0] == m_strSignal) {
+                    Station::Device::DeviceBase* pDevice = Station::MainStation()->getDeviceByName(pSingalBtn->Btnname[pSingalBtn->Btnname.size()-1]);
+                    for (it = Tracksingal.constBegin(); it != Tracksingal.constEnd(); ++it) {
+                        if (it.key() == m_strTrack) {
+                            SingalCode = it.value();
+                            return SortOutTheData(SingalCode, m_strSignal, m_bArrivaRoute);;
+                        }
+                        else {
+                            continue;
+                        }
+                    }
+                }
+                else {
+                    continue;
+                }
+            }
+        }
+        return "";
     }
 
 
@@ -446,20 +542,17 @@ namespace Station {
 }
 
 namespace Station {
-    QMap<int, QString> m_mapPassengeTrain;
-    QMap<int, QString> m_mapFreighTrain;
-    QMap<int, QString> m_mapTrainType;
 
     void InsterTrainType(int nType, int nIndex, QString strtype)
     {
         if (nType == PASSENGE_TYPE) {
-            m_mapPassengeTrain.insert(nIndex, strtype);
+            MainStation()->AddPassengeTrain(nIndex, strtype);
         }
         if (nType == FREIGH_TYPE) {
-            m_mapFreighTrain.insert(nIndex, strtype);
+            MainStation()->AddFreighTrain(nIndex, strtype);
         }
         if (nType == TRAIN_TYPE) {
-            m_mapTrainType.insert(nIndex, strtype);
+            MainStation()->AddTrainType(nIndex, strtype);
         }
     }
 }

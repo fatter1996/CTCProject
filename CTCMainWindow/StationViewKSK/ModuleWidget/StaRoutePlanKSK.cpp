@@ -66,8 +66,8 @@ namespace CTCWindows {
 				<< pRoute->m_strTrack
 				<< (pRoute->m_vecSubRouteId.size() ?  "" : (pRoute->m_bAutoTouch ? "true" : "false") )
 				<< pRoute->m_strDirection
-				<< pRoute->m_tTriggerTime.toString("hh:MM")
-				<< pRoute->m_tPlanTime.toString("hh:MM")
+				<< pRoute->m_tTriggerTime.toString("hh:mm")
+				<< pRoute->m_tPlanTime.toString("hh:mm")
 				<< (pRoute->m_vecSubRouteId.size() ? "" : pRoute->getStateStr())
 				<< pRoute->m_strRouteDescrip;
 			return strList;
