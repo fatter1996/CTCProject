@@ -168,6 +168,7 @@ namespace Station {
         const QVector<StaTrainRoute*>& TrainRouteList() const { return m_vecStaTrainRoute; }
         const QVector<StaDispatchOrder*>& DispatchOrderList() const { return m_vecStaDispatchOrder; }
         const QVector<StaTrafficLog*>& TrafficLogList() const { return m_vecStaTrafficLog; }
+        void RemoveTrafficLog(StaTrafficLog* pTrafficLog) { m_vecStaTrafficLog.removeOne(pTrafficLog); }
         StaStagePlan* NewStagePlan() const { return m_pNewStagePlan; }
         void ClearNewStagePlan() { m_pNewStagePlan = nullptr; };
         StaDispatchOrder* NewDispatchOrder() const { return m_pNewDispatchOrder; }

@@ -2,7 +2,6 @@
 #include "Global.h"
 #include "StationObject/GlobalStruct.h" 
 #include <QMessageBox>
-
 #pragma execution_character_set("utf-8")
 
 namespace CTCWindows {
@@ -228,5 +227,59 @@ namespace CTCWindows {
 			}
 			this->close();
 		}
+
+		void StaAddNewTrainKSK::InitAddView(Station::StaTrafficLog* m_pCurTrafficLog)
+		{
+			ui.lineEdit->setText(m_pCurTrafficLog->m_strArrivalTrainNum);//到达车次号
+			ui.lineEdit_2->setText(m_pCurTrafficLog->m_strDepartTrainNum);//发车车次号
+			Station::StaTrain* pTrain = Station::MainStation()->getStaTrainById(m_pCurTrafficLog->m_nTrainId);//车次信息修改车次号
+			int index = ui.comboBox_2->findText(pTrain->m_strTrainType);//列车类型
+			if (index != -1) {
+				ui.comboBox_2->setCurrentIndex(index);
+			}
+			index = ui.comboBox_7->findText(pTrain->m_strOperationType);//运行类型
+			if (index != -1) {
+				ui.comboBox_7->setCurrentIndex(index);
+			}
+			ui.comboBox_3->setCurrentIndex(m_pCurTrafficLog->m_nArrivalLimit - 1);//到达超限
+			ui.comboBox_8->setCurrentIndex(m_pCurTrafficLog->m_nDepartLimit - 1);//出发超限
+
+			index = ui.comboBox_4->findText(m_pCurTrafficLog->m_strArrivaSignal);//接车口
+			if (index != -1) {
+				ui.comboBox_4->setCurrentIndex(index);
+				ui.comboBox_5->setCurrentIndex(index);//来向车站
+			}
+
+			index = ui.comboBox_9->findText(m_pCurTrafficLog->m_strDepartSignal);
+			if (index != -1) {
+				ui.comboBox_9->setCurrentIndex(index);//发车口
+				ui.comboBox_10->setCurrentIndex(index);//去向车站
+			}
+
+			index = ui.comboBox_6->findText(m_pCurTrafficLog->m_strArrivalTrack);
+			if (index != -1) {
+				ui.comboBox_6->setCurrentIndex(index);//接车股道
+			}
+			index = ui.comboBox_11->findText(m_pCurTrafficLog->m_strDepartTrack);
+			if (index != -1) {
+				ui.comboBox_11->setCurrentIndex(index);//发车股道
+			}
+
+
+			if (m_pCurTrafficLog->m_tRealArrivalTime.isNull()) {//到达时间
+				ui.dateTimeEdit->setDateTime(m_pCurTrafficLog->m_tProvArrivalTime);
+			}
+			else {
+				ui.dateTimeEdit->setDateTime(m_pCurTrafficLog->m_tRealArrivalTime);
+			}
+			if (m_pCurTrafficLog->m_tRealDepartTime.isNull()) {//发车时间
+				ui.dateTimeEdit_2->setDateTime(m_pCurTrafficLog->m_tProvDepartTime);
+			}
+			else {
+				ui.dateTimeEdit_2->setDateTime(m_pCurTrafficLog->m_tRealDepartTime);
+			}
+		}
 	}
 }
+
+

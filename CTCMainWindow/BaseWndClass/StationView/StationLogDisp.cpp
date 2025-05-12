@@ -41,7 +41,17 @@ namespace CTCWindows {
             pTrafficLogTable->setStretchLastSection(ALLHEAD, false);
             AddTrafficLogTable();
             connect(pTrafficLogTable->VerticalHeadTable(), &QTableWidget::clicked, [=](const QModelIndex& index) {
-
+               
+                QPoint globalPos = QCursor::pos();
+                ClickMenu(globalPos,m_pCurTrafficLog);
+                if (index.row() >= 0 && index.row() < Station::MainStation()->TrafficLogList().size()) {
+                    // 获取当前选中的交通日志
+                    m_pCurTrafficLog = Station::MainStation()->TrafficLogList().at(index.row());
+                }
+                else {
+                    // 处理越界情况
+                    qDebug() << "Error: Invalid row index clicked on vertical header:" << index.row();
+                }
             });
         }
         

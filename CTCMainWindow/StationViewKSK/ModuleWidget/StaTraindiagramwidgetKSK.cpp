@@ -432,16 +432,7 @@ namespace CTCWindows {
             }
         }
 
-        void StaTrainDiagramWidgetKSK::setPenInfoByPoint(QPainter* painter)
-        {
-            QFont font;
-            QPen pen; //»­±Ê
-            pen.setWidth(2);
-            pen.setColor(Qt::red);
-            font = QFont("Î¢ÈíÑÅºÚ", 11);
-            painter->setFont(font);
-            painter->setPen(pen); //Ìí¼Ó»­±Ê
-        }
+
 
         bool StaTrainDiagramWidgetKSK::eventFilter(QObject* obj, QEvent* event)
         {
@@ -510,10 +501,6 @@ namespace CTCWindows {
 
         void StaTrainDiagramWidgetKSK::drawEndFlag(QPainter* painter, bool UPDown, int X, int Y)
         {
-            QPen pen;
-            pen.setWidth(2);
-            pen.setColor(Qt::red);
-            painter->setPen(pen);
 
             if (UPDown) {
                 painter->setBrush(Qt::NoBrush);

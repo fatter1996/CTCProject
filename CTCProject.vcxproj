@@ -128,6 +128,9 @@
     <ClCompile Include="CTCMainWindow\CustomControl\StationZoningSelection.cpp" />
     <ClCompile Include="CTCMainWindow\CustomControl\TableView.cpp" />
     <ClCompile Include="CTCMainWindow\CustomControl\TextSignLable.cpp" />
+    <ClCompile Include="CTCMainWindow\StationViewKSK\ModuleWidget\ModifyRelevantStationsKSK.cpp" />
+    <ClCompile Include="CTCMainWindow\StationViewKSK\ModuleWidget\ModifyTrainNumberKSK.cpp" />
+    <ClCompile Include="CTCMainWindow\StationViewKSK\ModuleWidget\QuickReportKSK.cpp" />
     <ClCompile Include="CTCMainWindow\StationViewKSK\ModuleWidget\StaAddNewTrainKSK.cpp" />
     <ClCompile Include="CTCMainWindow\StationViewKSK\ModuleWidget\StaAlarmWindowKSK.cpp" />
     <ClCompile Include="CTCMainWindow\StationViewKSK\ModuleWidget\StaDispatchOrderKSK.cpp" />
@@ -242,6 +245,9 @@
     <QtMoc Include="CTCMainWindow\StationViewKSK\ModuleWidget\StaTrainDiagramWidgetKSK.h" />
     <QtMoc Include="CTCMainWindow\CommonWidget\SealTechnique.h" />
     <QtMoc Include="CTCMainWindow\StationViewKSK\ModuleWidget\StaAddNewTrainKSK.h" />
+    <QtMoc Include="CTCMainWindow\StationViewKSK\ModuleWidget\QuickReportKSK.h" />
+    <QtMoc Include="CTCMainWindow\StationViewKSK\ModuleWidget\ModifyRelevantStationsKSK.h" />
+    <QtMoc Include="CTCMainWindow\StationViewKSK\ModuleWidget\ModifyTrainNumberKSK.h" />
     <ClInclude Include="CTCObject\CTCObject.h" />
     <ClInclude Include="CultivateObject\Subject.h" />
     <ClInclude Include="Global.h" />
@@ -289,6 +295,9 @@
     <QtUic Include="CTCMainWindow\CustomControl\CarLocationEdit.ui" />
     <QtUic Include="CTCMainWindow\CustomControl\LntervallogicCheck.ui" />
     <QtUic Include="CTCMainWindow\CustomControl\StationZoningSelection.ui" />
+    <QtUic Include="CTCMainWindow\StationViewKSK\ModuleWidget\ModifyRelevantStationsKSK.ui" />
+    <QtUic Include="CTCMainWindow\StationViewKSK\ModuleWidget\ModifyTrainNumberKSK.ui" />
+    <QtUic Include="CTCMainWindow\StationViewKSK\ModuleWidget\QuickReportKSK.ui" />
     <QtUic Include="CTCMainWindow\StationViewKSK\ModuleWidget\StaAddNewTrainKSK.ui" />
     <QtUic Include="CTCMainWindow\StationViewKSK\ModuleWidget\StaAlarmWindowKSK.ui" />
     <QtUic Include="CTCMainWindow\StationViewKSK\ModuleWidget\StaDispatchOrderKSK.ui" />

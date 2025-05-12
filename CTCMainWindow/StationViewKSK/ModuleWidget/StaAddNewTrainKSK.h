@@ -2,7 +2,8 @@
 
 #include <QWidget>
 #include "ui_StaAddNewTrainKSK.h"
-#include <QCloseEvent>
+#include "StationObject/GlobalStruct.h"
+
 namespace CTCWindows {
 	namespace CASCO {
 		class StaAddNewTrainKSK : public QWidget
@@ -15,6 +16,7 @@ namespace CTCWindows {
 
 		public:
 			void InitAddView();
+			void InitAddView(Station::StaTrafficLog* m_pCurTrafficLog);
 			void ConnectEvent();
 
 		public slots:
