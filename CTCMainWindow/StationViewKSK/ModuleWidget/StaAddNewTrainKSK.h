@@ -3,6 +3,7 @@
 #include <QWidget>
 #include "ui_StaAddNewTrainKSK.h"
 #include <QCloseEvent>
+#include "Global.h"
 class StaAddNewTrainKSK : public QWidget
 {
 	Q_OBJECT
@@ -15,6 +16,7 @@ public:
 	void closeEvent(QCloseEvent* event);
 	void GetNowTime();
 	void ClearWidget();
+	void SetTrainValue(Station::StaTrafficLog* m_pCurTrafficLog);
 private:
 	bool begin = true;
 	bool end = true;

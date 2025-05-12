@@ -381,70 +381,13 @@ void StaTraindiagramwidgetKSK::drawTrainPlan()
     Station::StaTrain* m_pStaTrain = nullptr;
     QBrush brush;
     brush.setStyle(Qt::NoBrush);
-
     painter.setBrush(brush); //添加画刷
 
     Station::StaTrainRoute* m_pArrivalRoute;
     Station::StaTrainRoute* m_pDepartRoute;
-   // Station::StaTrafficLog* m_pstatraff = new Station::StaTrafficLog();
-   // m_pstatraff->m_nTrainId = 147;
-   // m_pstatraff->m_nPlanType = i;//计划类型 (接发-0x01,始发-0x02, 终到-0x03, 通过-0x04)
-   // 
-   // m_pstatraff->m_strArrivalTrainNum = "G1447";
-   // m_pstatraff->m_nArrivalTrackCode = 2;
-   // m_pstatraff->m_strArrivalTrack = "23G";
-   // m_pstatraff->m_nArrivalSignalCode = 2;
-   // m_pstatraff->m_strArrivaSignal = "XHD2";
-   // QDateTime dt1(
-   //     QDate(2025, 4, 17),    // 年, 月, 日
-   //     QTime(13, 15, 0)       // 时, 分, 秒
-   // );
-   // QDateTime dt2(
-   //     QDate(2025, 4, 17),    // 年, 月, 日
-   //     QTime(13, 20, 0)       // 时, 分, 秒
-   // );
-   // QDateTime dt3(
-   //     QDate(2025, 4, 17),    // 年, 月, 日
-   //     QTime(13, 10, 0)       // 时, 分, 秒
-   // );
-   // QDateTime dt4(
-   //     QDate(2025, 4, 17),    // 年, 月, 日
-   //     QTime(13, 00, 0)       // 时, 分, 秒
-   // );
-   // m_pstatraff->m_tProvArrivalTime = dt3;//计划到站时间
-   // m_pstatraff->m_tAdjDepartTime = dt4;//邻站发车时间
-   // m_pstatraff->m_strDepartTrainNum = "33G";
-   // m_pstatraff->m_nDepartTrackCode = 4;
-   // m_pstatraff->m_strDepartTrack = "33G";
-   // m_pstatraff->m_nDepartSignalCode = 3;
-   // m_pstatraff->m_strDepartSignal = "XHD22";
-   // m_pstatraff->m_tProvDepartTime = dt1;//计划发车
-   // m_pstatraff->m_tAdjArrivalTime = dt2;//邻站到达时间
-   // QVector<Station::StaTrafficLog*> mptraa = Station::MainStation()->getvecTrafficLog();
-   // mptraa.append(m_pstatraff);
-    //for (int i = 0; i < mptraa.size(); i++) {
     for (Station::StaTrafficLog* pTrafficLog : Station::MainStation()->getvecTrafficLog()) {
         m_pArrivalRoute = Station::MainStation()->getStaTrainRouteById(pTrafficLog->m_nArrivalRouteId);
         m_pDepartRoute = Station::MainStation()->getStaTrainRouteById(pTrafficLog->m_nDepartRouteId);
-       //Station::StaTrainRoute* m_Route = new Station::StaTrainRoute;
-       //m_Route->m_strRouteDescrip = begin;
-       //Station::StaTrainRoute* m_Route2 = new Station::StaTrainRoute;
-       //m_Route2->m_strRouteDescrip = end;
-       //Station::StaTrafficLog* pTrafficLog = mptraa.at(i);
-        QString start;
-        QString end;
-        int min = 0;
-        int startX = 0;
-        int startY = 0;
-        int middleX = 0;
-        int middleY = 0;
-        int stopX = 0;
-        int stopY = 0;
-        int endX = 0;
-        int endY = 0;
-        int offsetX = 0;
-        int offset1 = 0;
-        int offset2 = 0;
         int nStartX1 = 0;
         int nStartX2 = 0;
         int nEndX = 0;
@@ -456,74 +399,79 @@ void StaTraindiagramwidgetKSK::drawTrainPlan()
         font = QFont("微软雅黑", 11);
         painter.setFont(font);
         painter.setPen(pen); //添加画笔
-
-        int nIndex = getDirectionIndex(pTrafficLog);
+        painter.setRenderHint(QPainter::Antialiasing);
+        int nIndex = 0;
         m_pStaTrain = Station::MainStation()->getStaTrainById(pTrafficLog->m_nTrainId);
         Station::Device::DeviceBase* pDevice = nullptr;
-       //for (int i = 0; i < TrainDiagram->vectRailwayLine.size();i++) {
-       //    if (pTrafficLog->m_nPlanType == 0x03) {
-       //        pDevice = Station::MainStation()->getDeviceByName(pTrafficLog->m_strDepartSignal);
-       //        if (TrainDiagram->vectRailwayLine[i].endStation == dynamic_cast<Station::Device::StaSignal*>(pDevice)->getDirection()) {
-       //            nIndex = i;
-       //            break;
-       //        }
-       //    }
-       //    else {
-       //        pDevice = Station::MainStation()->getDeviceByName(pTrafficLog->m_strArrivaSignal);
-       //        if (TrainDiagram->vectRailwayLine[i].startStation == dynamic_cast<Station::Device::StaSignal*>(pDevice)->getDirection()) {
-       //            nIndex = i;
-       //            if (pTrafficLog->m_strDepartSignal == "") { break; }
-       //            pDevice = Station::MainStation()->getDeviceByName(pTrafficLog->m_strDepartSignal);
-       //            if (TrainDiagram->vectRailwayLine[i].endStation == dynamic_cast<Station::Device::StaSignal*>(pDevice)->getDirection()) {
-       //                nIndex = i;
-       //                break;
-       //            }
-       //
-       //        }
-       //    }
-       //   
-       //}
-        
+       for (int i = 0; i < TrainDiagram->vectRailwayLine.size();i++) {
+           if (pTrafficLog->m_nPlanType == 0x03) {
+               pDevice = Station::MainStation()->getDeviceByName(pTrafficLog->m_strArrivaSignal);
+               if (TrainDiagram->vectRailwayLine[i].startStation == dynamic_cast<Station::Device::StaSignal*>(pDevice)->getDirection()) {
+                   nIndex = i;
+                   break;
+               }
+               if (TrainDiagram->vectRailwayLine[i].endStation == dynamic_cast<Station::Device::StaSignal*>(pDevice)->getDirection()) {
+                   nIndex = i;
+                   break;
+               }
+           }
+           else if(pTrafficLog->m_nPlanType == 0x02) {
+               pDevice = Station::MainStation()->getDeviceByName(pTrafficLog->m_strDepartSignal);
+               if (TrainDiagram->vectRailwayLine[i].endStation == dynamic_cast<Station::Device::StaSignal*>(pDevice)->getDirection()) {
+                   nIndex = i;
+                   break;
+               }
+               if (TrainDiagram->vectRailwayLine[i].startStation == dynamic_cast<Station::Device::StaSignal*>(pDevice)->getDirection()) {
+                   nIndex = i;
+                   break;
+               }
+           }
+           else {
+               pDevice = Station::MainStation()->getDeviceByName(pTrafficLog->m_strArrivaSignal);
+               if (TrainDiagram->vectRailwayLine[i].endStation == dynamic_cast<Station::Device::StaSignal*>(pDevice)->getDirection()) {
+                   pDevice = Station::MainStation()->getDeviceByName(pTrafficLog->m_strDepartSignal);
+                   if (TrainDiagram->vectRailwayLine[i].startStation == dynamic_cast<Station::Device::StaSignal*>(pDevice)->getDirection()) {
+                       nIndex = i;
+                       break;
+                   }
+               }
+           }
+          
+       }
         if (pTrafficLog->m_nPlanType == 0x02) {
             Station::Device::StaSignal* pSignal = dynamic_cast<Station::Device::StaSignal*>(Station::MainStation()->getDeviceByName(pTrafficLog->m_strDepartSignal, SIGNALLAMP));
+            if (m_pDepartRoute == nullptr) {
+                continue;
+            }
             drawRouteLine(&painter, &TrainDiagram->vectRailwayLine[nIndex], pTrafficLog, m_pDepartRoute, nStartX1, nEndX, nEndY);
-   
-
             drawTrainNum(&painter, nStartX1, TrainDiagram->vectRailwayLine[nIndex].middleY, m_pStaTrain->m_strTrainNum);
-
             drawEndFlag(&painter, !pSignal->getSXThroat(), nEndX, nEndY);
         }
         else if (pTrafficLog->m_nPlanType == 0x03) {
             Station::Device::StaSignal* pSignal = dynamic_cast<Station::Device::StaSignal*>(Station::MainStation()->getDeviceByName(pTrafficLog->m_strArrivaSignal, SIGNALLAMP));
-
+            if (m_pArrivalRoute == nullptr) {
+                continue;
+            }
             drawRouteLine(&painter, &TrainDiagram->vectRailwayLine[nIndex], pTrafficLog, m_pArrivalRoute, nStartX1, nEndX, nEndY);
-            
-            drawTrainNum(&painter, nEndX, nEndY, m_pStaTrain->m_strTrainNum);
+            drawTrainNum(&painter, nEndX, nEndY, m_pStaTrain->m_strTrainNum);;
             drawEndFlag(&painter, pSignal->getSXThroat(), nStartX1, TrainDiagram->vectRailwayLine[nIndex].middleY);
         }
         else {
             Station::Device::StaSignal* pSignal = dynamic_cast<Station::Device::StaSignal*>(Station::MainStation()->getDeviceByName(pTrafficLog->m_strArrivaSignal, SIGNALLAMP));
-
+            if (m_pArrivalRoute == nullptr|| m_pDepartRoute == nullptr) {
+                continue;
+            }
             drawRouteLine(&painter, &TrainDiagram->vectRailwayLine[nIndex], pTrafficLog, m_pArrivalRoute, nStartX1, nEndX, nEndY);
             drawTrainNum(&painter,nEndX,nEndY, m_pStaTrain->m_strTrainNum);
             drawRouteLine(&painter, &TrainDiagram->vectRailwayLine[nIndex], pTrafficLog, m_pDepartRoute, nStartX2, nEndX, nEndY);
             drawEndFlag(&painter, pSignal->getSXThroat(), nEndX, nEndY);
+    
             painter.drawLine(nStartX1, TrainDiagram->vectRailwayLine[nIndex].middleY, nStartX2, TrainDiagram->vectRailwayLine[nIndex].middleY);
         }
+        painter.setRenderHint(QPainter::Antialiasing, false);
     }
 
 
-}
-
-void StaTraindiagramwidgetKSK::setPenInfoByPoint(QPainter* painter)
-{
-    QFont font;
-    QPen pen; //画笔
-    pen.setWidth(2);
-    pen.setColor(Qt::red);
-    font = QFont("微软雅黑", 11);
-    painter->setFont(font);
-    painter->setPen(pen); //添加画笔
 }
 
 
@@ -596,10 +544,6 @@ int StaTraindiagramwidgetKSK::getPointXByTime(QTime time)
 
 void StaTraindiagramwidgetKSK::drawEndFlag(QPainter* painter, bool UPDown, int X, int Y)
 {
-    QPen pen; 
-    pen.setWidth(2);
-    pen.setColor(Qt::red);
-    painter->setPen(pen);
 
     if (UPDown) {
         painter->setBrush(Qt::NoBrush);
@@ -623,7 +567,6 @@ void StaTraindiagramwidgetKSK::drawEndFlag(QPainter* painter, bool UPDown, int X
         painter->drawLine(X - triangleWidth / 2, lineStartY, X, lineStartY - triangleHeight);
         painter->drawLine(X, lineStartY - triangleHeight, X + triangleWidth / 2, lineStartY);
         painter->drawLine(X + triangleWidth / 2, lineStartY, X - triangleWidth / 2, lineStartY);
-    }
+    }    
 
-   
 }

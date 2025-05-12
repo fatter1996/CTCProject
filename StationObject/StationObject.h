@@ -186,6 +186,7 @@ namespace Station {
         const QVector<StaTrainRoute*>& TrainRouteList() { return m_vecStaTrainRoute; }
         const QVector<StaDispatchOrder*>& DispatchOrderList() { return m_vecStaDispatchOrder; }
         const QVector<StaTrafficLog*>& TrafficLogList() { return m_vecStaTrafficLog; }
+        const void RemoveLogVecOne(StaTrafficLog* m_pTrafficLog);
         StaStagePlan* NewStagePlan() { return m_pNewStagePlan; }
         void ClearNewStagePlan() { m_pNewStagePlan = nullptr; };
         StaDispatchOrder* NewDispatchOrder() { return m_pNewDispatchOrder; }
@@ -232,7 +233,7 @@ namespace Station {
         void SendDataToTCP(const QByteArray&);
         void TrainRouteUpData();
         void TrafficLogTableUpData();
-
+        
     private:
         //数据传输
         Transmission::StaProtocol* m_pProtocol = nullptr;

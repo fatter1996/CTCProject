@@ -279,7 +279,6 @@ namespace CTCWindows {
 			connect(AddToolBarBtn(":/CTCProject/icon/CASCO/preview.png", "打印预览", LOGVIEW_TOOL), &QPushButton::clicked, [=]() {});
 			connect(AddToolBarBtn(":/CTCProject/icon/CASCO/diagram.png", "运行图", LOGVIEW_TOOL), &QPushButton::clicked, this, &CTCMainWindow::TurnToTraindiagramDisp);
 			connect(AddToolBarBtn(":/CTCProject/icon/CASCO/newTrain.png", "新增车辆", LOGVIEW_TOOL), &QPushButton::clicked, [=]() {
-				
 				m_pStaAddNewTrain = getInstance();
 				m_pStaAddNewTrain->GetNowTime();
 				m_pStaAddNewTrain->ClearWidget();
