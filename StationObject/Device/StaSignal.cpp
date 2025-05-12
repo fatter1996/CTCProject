@@ -51,7 +51,7 @@ namespace Station {
                     dynamic_cast<StaSignal*>(pDevice)->m_bHigh = true;
                 }
                 else if (strElement == "FALSE") {
-                    dynamic_cast<StaSignal*>(pDevice)->m_bHigh = true;
+                    dynamic_cast<StaSignal*>(pDevice)->m_bHigh = false;
                 }
                 else {
                     dynamic_cast<StaSignal*>(pDevice)->m_bHigh = strElement.toInt();
@@ -95,7 +95,7 @@ namespace Station {
                 m_rcTrainBtn = QRectF(p7, p8);
             }
             //调车按钮
-            if (m_nAttr & (SIGNAL_LCZD | SIGNAL_LCSD) || m_strXHDType == "CZ_XHJ") {
+            if (m_nAttr & (SIGNAL_LCZD | SIGNAL_LCSD) || (m_strXHDType == "CZ_XHJ" && m_bCZAndDC)) {
                 if (!(m_nAttr & SIGNAL_ISXXH || m_nSignalType)) {
                     m_rcShuntBtn = QRectF(p9, p10);
                 }
@@ -107,7 +107,7 @@ namespace Station {
             //引导按钮,仅可作为始端
             m_bYDSD |= ((m_nAttr & SIGNAL_LCSD) && (m_nAttr & SIGNAL_JCXH || m_nAttr & SIGNAL_FCXH || m_nAttr & SIGNAL_FCJLXH));
             if (m_bYDSD) {
-                if (m_strXHDType == "JZ_XHJ") {
+                if (m_strXHDType == "JZ_XHJ" || (m_strXHDType == "CZ_XHJ" && !m_bCZAndDC)) {
                     m_rcGuideBtn = QRectF(p9, p10);
                 }
                 else {
@@ -155,7 +155,7 @@ namespace Station {
             }
             //调车按钮
             if (MainStation()->IsVisible(VisibleDev::shuntButton) &&
-                (m_nAttr & (SIGNAL_DCZD | SIGNAL_DCSD) || m_strXHDType == "DC_XHJ" || m_strXHDType == "CZ_XHJ")) {
+                (m_nAttr & (SIGNAL_DCZD | SIGNAL_DCSD) || m_strXHDType == "DC_XHJ" || (m_strXHDType == "CZ_XHJ" && m_bCZAndDC))) {
                 DrawButton(m_pPainter, Scale(m_rcShuntBtn), COLOR_BTN_DEEPGRAY, m_nBtnState & BTNDOWN_SHUNT, 2);
             }
             if (m_bYDSD ) {

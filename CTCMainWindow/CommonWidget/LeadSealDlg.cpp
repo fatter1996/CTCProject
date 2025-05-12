@@ -205,6 +205,7 @@ namespace CTCWindows {
 		connect(ui.confirmBtn, &QPushButton::clicked, [=]() {
 			pTrain->m_strTrainNum = m_pCurrLineEdit->text();
 			pTrain->m_bElectric = pCheckBox1->isChecked();
+			pTrain->m_bRealTrain = pCheckBox2->isChecked();
 			m_bResult = Station::MainStation()->AddNewTrain(pTrain);
 			this->close();
 		});

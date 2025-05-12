@@ -41,8 +41,7 @@ namespace CTCWindows {
             pTrafficLogTable->setStretchLastSection(ALLHEAD, false);
             AddTrafficLogTable();
             connect(pTrafficLogTable->VerticalHeadTable(), &QTableWidget::clicked, [=](const QModelIndex& index) {
-                int n = index.row();
-                m_pCurTrafficLog = Station::MainStation()->TrafficLogList().at(index.row());
+
             });
         }
         

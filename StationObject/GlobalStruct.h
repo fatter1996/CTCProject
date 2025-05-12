@@ -114,6 +114,7 @@ namespace Station {
 		int m_nWeight = 0; //×ÜÖØ
 		uint m_nEarlyOrLateTime = 0;
 		bool m_bDelete = false;
+		bool m_bRealTrain = true;
 
 	public:
 		StaTrain() {}

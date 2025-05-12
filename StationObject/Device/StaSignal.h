@@ -88,6 +88,7 @@ namespace Station {
             QPointF p12, p7, p8, p9, p10, p13, p14; //绘制坐标
             uint m_nXHDType = 0; //信号机类型
             QString m_strXHDType; //信号机类型
+            bool m_bCZAndDC = false;
             qreal m_nRadius = 0; //信号机半径
             qreal m_nBtnRadius = 8; //按钮半径
             uint m_nSignalType = 0; //信号类型

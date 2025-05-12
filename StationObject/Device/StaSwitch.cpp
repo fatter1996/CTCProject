@@ -369,7 +369,7 @@ namespace Station {
             QObject::connect(pAction4, &QAction::triggered, [=]() {
                 if (QMessageBox::question(nullptr, MSGBOX_TITTLE, QString("下发\"单解[道岔:%1]\"命令吗?").arg(m_strName), "确定", "取消") == 0) {
                     MainStation()->AddSelectDevice(this);
-                    MainStation()->SendPacketMsg(TARGET_INTERLOCK, 0x40, 0x08, 0x11);
+                    MainStation()->SendPacketMsg(TARGET_INTERLOCK, 0x40, 0x09, 0x11);
                 }
             });
             pMenu->addSeparator();
@@ -379,7 +379,7 @@ namespace Station {
             QObject::connect(pAction5, &QAction::triggered, [=]() {
                 if (QMessageBox::question(nullptr, MSGBOX_TITTLE, QString("下发\"封锁/解封[道岔:%1]\"命令吗?").arg(m_strName), "确定", "取消") == 0) {
                     MainStation()->AddSelectDevice(this);
-                    MainStation()->SendPacketMsg(TARGET_INTERLOCK, 0x40, (m_nSwitchState & SECTION_STATE_BLOCK) ? 0x0b : 0x0a, 0x11);
+                    MainStation()->SendPacketMsg(TARGET_INTERLOCK, 0x40, (m_nSwitchState & SWITCH_STATE_BLOCK) ? 0x0b : 0x0a, 0x11);
                 }
             });
             QAction* pAction6 = new QAction("区故解");
