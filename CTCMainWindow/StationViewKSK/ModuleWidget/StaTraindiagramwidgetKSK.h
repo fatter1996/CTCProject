@@ -15,22 +15,22 @@ namespace CTCWindows {
 		{
 			Q_OBJECT
 
-public:
-	StaTraindiagramwidgetKSK(QWidget *parent = nullptr);
-	~StaTraindiagramwidgetKSK();
-	void InitTraindiagramw();
-	void drawTimeAxis(bool isTop);
-	void drawGrid();
-	void drawNowTimeLine();
-	void drawStationName();
-	void drawTrainPlan();
-	int getDirectionIndex(Station::StaTrafficLog* pTrafficLog); 
-	void drawEndFlag(QPainter* painter, bool UPDown, int X, int Y);
-	void drawTrainNum(QPainter* painter, int X, int Y, QString trainNum);
-	int getPointXByTime(QTime time);
-	void timerEvent(QTimerEvent* event);
-	bool eventFilter(QObject* obj, QEvent* event);
-	void drawRouteLine(QPainter* painter, Station::RailwayLine* TrainDiagram, Station::StaTrafficLog* pTrafficLog, Station::StaTrainRoute* pRoute, int& startX, int& endX, int& nEndY);
+		public:
+			StaTrainDiagramWidgetKSK(QWidget* parent = nullptr);
+			~StaTrainDiagramWidgetKSK();
+			void InitTraindiagramw();
+			void drawTimeAxis(bool isTop);
+			void drawGrid();
+			void drawNowTimeLine();
+			void drawStationName();
+			void drawTrainPlan();
+			int getDirectionIndex(Station::StaTrafficLog* pTrafficLog);
+			void drawEndFlag(QPainter* painter, bool UPDown, int X, int Y);
+			void drawTrainNum(QPainter* painter, int X, int Y, QString trainNum);
+			int getPointXByTime(QTime time);
+			void timerEvent(QTimerEvent* event);
+			bool eventFilter(QObject* obj, QEvent* event);
+			void drawRouteLine(QPainter* painter, Station::RailwayLine RailwayLine, Station::StaTrafficLog* pTrafficLog, Station::StaTrainRoute* pRoute, int& nStartX, int& nEndX, int& nEndY);
 
 		private:
 			Ui::StaTrainDiagramWidgetKSKClass ui;

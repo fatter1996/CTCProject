@@ -432,7 +432,7 @@ namespace CTCWindows {
             }
         }
 
-}
+
 
         bool StaTrainDiagramWidgetKSK::eventFilter(QObject* obj, QEvent* event)
         {
@@ -499,8 +499,8 @@ namespace CTCWindows {
             return X;
         }
 
-void StaTraindiagramwidgetKSK::drawEndFlag(QPainter* painter, bool UPDown, int X, int Y)
-{
+        void StaTrainDiagramWidgetKSK::drawEndFlag(QPainter* painter, bool UPDown, int X, int Y)
+        {
 
             if (UPDown) {
                 painter->setBrush(Qt::NoBrush);

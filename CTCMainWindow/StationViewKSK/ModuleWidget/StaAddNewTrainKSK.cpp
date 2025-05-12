@@ -2,14 +2,6 @@
 #include "Global.h"
 #include "StationObject/GlobalStruct.h" 
 #include <QMessageBox>
-StaAddNewTrainKSK::StaAddNewTrainKSK(QWidget *parent)
-	: QWidget(parent)
-{
-	ui.setupUi(this);
-	InitAddView();
-	ConnectEvent();
-}
-
 #pragma execution_character_set("utf-8")
 
 namespace CTCWindows {
@@ -95,7 +87,7 @@ namespace CTCWindows {
 					ui.comboBox_4->setDisabled(false);
 					ui.comboBox_6->setDisabled(false);
 				}
-			});
+				});
 
 			connect(ui.checkBox_2, &QCheckBox::stateChanged, [=](int nState) {
 				if (nState) {
@@ -113,28 +105,30 @@ namespace CTCWindows {
 					ui.comboBox_9->setDisabled(false);
 					ui.comboBox_11->setDisabled(false);
 				}
-			});
+				});
 
 			Station::Device::DeviceBase* pDevice = nullptr;
 			connect(ui.comboBox_3, static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged), [=](int index) {
 				ui.comboBox_8->setCurrentIndex(index);
-			});
+				});
 			connect(ui.comboBox_4, static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged), [=](int index) {
 				ui.comboBox_5->setCurrentIndex(index);
-			});
+				});
 			connect(ui.comboBox_9, static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged), [=](int index) {
 				ui.comboBox_10->setCurrentIndex(index);
-			});
+				});
 			connect(ui.comboBox_6, static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged), [=](int index) {
 				ui.comboBox_11->setCurrentIndex(index);
-			});
+				});
 			connect(ui.pushButton, &QPushButton::clicked, [=]() {
 				ui.lineEdit_2->setText(ui.lineEdit->text());
-			});
+				});
 
 			connect(ui.pushButton_2, &QPushButton::clicked, this, &StaAddNewTrainKSK::AddNewTrafficLog);
 
-			connect(ui.pushButton_3, &QPushButton::clicked, this, &StaAddNewTrainKSK::close);
+			connect(ui.pushButton_3, &QPushButton::clicked, [=]() {
+				this->hide();
+				});
 		}
 
 		void StaAddNewTrainKSK::AddNewTrafficLog()
@@ -233,62 +227,106 @@ namespace CTCWindows {
 			if (Station::MainStation()->getAutoSendPlan()) {
 				Station::MainStation()->CreatTrainRouteByTrafficLog(pTrafficLog);
 			}
-			this->close();
+			this->hide();
+		
+
+		}
+		void StaAddNewTrainKSK::closeEvent(QCloseEvent* event) {
+			this->hide();
+			event->ignore();
+			}
+
+		void StaAddNewTrainKSK::InitAddView(Station::StaTrafficLog* m_pCurTrafficLog)
+		{
+			ui.lineEdit->setText(m_pCurTrafficLog->m_strArrivalTrainNum);//到达车次号
+			ui.lineEdit_2->setText(m_pCurTrafficLog->m_strDepartTrainNum);//发车车次号
+			Station::StaTrain* pTrain = Station::MainStation()->getStaTrainById(m_pCurTrafficLog->m_nTrainId);//车次信息修改车次号
+			int index = ui.comboBox_2->findText(pTrain->m_strTrainType);//列车类型
+			if (index != -1) {
+				ui.comboBox_2->setCurrentIndex(index);
+			}
+			index = ui.comboBox_7->findText(pTrain->m_strOperationType);//运行类型
+			if (index != -1) {
+				ui.comboBox_7->setCurrentIndex(index);
+			}
+			ui.comboBox_3->setCurrentIndex(m_pCurTrafficLog->m_nArrivalLimit - 1);//到达超限
+			ui.comboBox_8->setCurrentIndex(m_pCurTrafficLog->m_nDepartLimit - 1);//出发超限
+
+			index = ui.comboBox_4->findText(m_pCurTrafficLog->m_strArrivaSignal);//接车口
+			if (index != -1) {
+				ui.comboBox_4->setCurrentIndex(index);
+				ui.comboBox_5->setCurrentIndex(index);//来向车站
+			}
+
+			index = ui.comboBox_9->findText(m_pCurTrafficLog->m_strDepartSignal);
+			if (index != -1) {
+				ui.comboBox_9->setCurrentIndex(index);//发车口
+				ui.comboBox_10->setCurrentIndex(index);//去向车站
+			}
+
+			index = ui.comboBox_6->findText(m_pCurTrafficLog->m_strArrivalTrack);
+			if (index != -1) {
+				ui.comboBox_6->setCurrentIndex(index);//接车股道
+			}
+			index = ui.comboBox_11->findText(m_pCurTrafficLog->m_strDepartTrack);
+			if (index != -1) {
+				ui.comboBox_11->setCurrentIndex(index);//发车股道
+			}
+
+
+			if (m_pCurTrafficLog->m_tRealArrivalTime.isNull()) {//到达时间
+				ui.dateTimeEdit->setDateTime(m_pCurTrafficLog->m_tProvArrivalTime);
+			}
+			else {
+				ui.dateTimeEdit->setDateTime(m_pCurTrafficLog->m_tRealArrivalTime);
+			}
+			if (m_pCurTrafficLog->m_tRealDepartTime.isNull()) {//发车时间
+				ui.dateTimeEdit_2->setDateTime(m_pCurTrafficLog->m_tProvDepartTime);
+			}
+			else {
+				ui.dateTimeEdit_2->setDateTime(m_pCurTrafficLog->m_tRealDepartTime);
+			}
+
+		}
+		void StaAddNewTrainKSK::GetNowTime()
+		{
+			QDate date = QDate::currentDate();
+			QTime time = QTime::currentTime();
+
+			// 设置日期和时间
+			ui.dateTimeEdit->setDate(date);
+			ui.dateTimeEdit->setTime(time);
+			ui.dateTimeEdit_2->setDate(date);
+			ui.dateTimeEdit_2->setTime(time);
+
+		}
+		void StaAddNewTrainKSK::ClearWidget()
+		{
+			ui.dateTimeEdit->clear();
+			ui.dateTimeEdit_2->clear();
+			ui.comboBox->setCurrentIndex(0);
+			ui.comboBox_2->setCurrentIndex(0);
+			ui.comboBox_3->setCurrentIndex(0);
+			ui.comboBox_4->setCurrentIndex(0);
+			ui.comboBox_5->setCurrentIndex(0);
+			ui.comboBox_6->setCurrentIndex(0);
+			ui.comboBox_7->setCurrentIndex(0);
+			ui.comboBox_8->setCurrentIndex(0);
+			ui.comboBox_9->setCurrentIndex(0);
+			ui.comboBox_10->setCurrentIndex(0);
+			ui.comboBox_11->setCurrentIndex(0);
+			ui.checkBox->setChecked(false);
+			ui.checkBox_2->setChecked(false);
+			ui.checkBox_3->setChecked(false);
+			ui.checkBox_4->setChecked(false);
+			ui.checkBox_5->setChecked(false);
+			ui.checkBox_6->setChecked(false);
+			ui.checkBox_7->setChecked(false);
+			ui.checkBox_8->setChecked(false);
+			ui.lineEdit->clear();
+			ui.lineEdit_2->clear();
 		}
 	}
-}
-
-void StaAddNewTrainKSK::SetTrainValue(Station::StaTrafficLog* m_pCurTrafficLog)
-{
-	ui.lineEdit->setText(m_pCurTrafficLog->m_strArrivalTrainNum);//到达车次号
-	ui.lineEdit_2->setText(m_pCurTrafficLog->m_strDepartTrainNum);//发车车次号
-	Station::StaTrain* pTrain = Station::MainStation()->getStaTrainById(m_pCurTrafficLog->m_nTrainId);//车次信息修改车次号
-	int index  = ui.comboBox_2->findText(pTrain->m_strTrainType);//列车类型
-	if (index != -1) {
-		ui.comboBox_2->setCurrentIndex(index);
-	}
-	index = ui.comboBox_7->findText(pTrain->m_strOperationType);//运行类型
-	if (index != -1) {
-		ui.comboBox_7->setCurrentIndex(index);
-	}
-	ui.comboBox_3->setCurrentIndex(m_pCurTrafficLog->m_nArrivalLimit - 1);//到达超限
-	ui.comboBox_8->setCurrentIndex(m_pCurTrafficLog->m_nDepartLimit - 1);//出发超限
-
-	index = ui.comboBox_4->findText(m_pCurTrafficLog->m_strArrivaSignal);//接车口
-	if (index != -1) {
-		ui.comboBox_4->setCurrentIndex(index);	
-		ui.comboBox_5->setCurrentIndex(index);//来向车站
-	}
-
-	index = ui.comboBox_9->findText(m_pCurTrafficLog->m_strDepartSignal);
-	if (index != -1) {
-		ui.comboBox_9->setCurrentIndex(index);//发车口
-		ui.comboBox_10->setCurrentIndex(index);//去向车站
-	}
-
-	index = ui.comboBox_6->findText(m_pCurTrafficLog->m_strArrivalTrack); 	
-	if (index != -1) {
-		ui.comboBox_6->setCurrentIndex(index);//接车股道
-	}
-	index = ui.comboBox_11->findText(m_pCurTrafficLog->m_strDepartTrack);
-	if (index != -1) {
-		ui.comboBox_11->setCurrentIndex(index);//发车股道
-	}
-	
-	
-	if (m_pCurTrafficLog->m_tRealArrivalTime.isNull()) {//到达时间
-		ui.dateTimeEdit->setDateTime(m_pCurTrafficLog->m_tProvArrivalTime);
-	}
-	else {
-		ui.dateTimeEdit->setDateTime(m_pCurTrafficLog->m_tRealArrivalTime);
-	}
-	if (m_pCurTrafficLog->m_tRealDepartTime.isNull()) {//发车时间
-		ui.dateTimeEdit_2->setDateTime(m_pCurTrafficLog->m_tProvDepartTime);
-	}
-	else {
-		ui.dateTimeEdit_2->setDateTime(m_pCurTrafficLog->m_tRealDepartTime);
-	}
-
 }
 
 

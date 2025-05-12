@@ -399,11 +399,11 @@ namespace CTCWindows {
 			pMenu->addSeparator();
 			pMenu->addAction(pAction_12);
 			connect(pAction_12, &QAction::triggered, [=]() {//修改列车计划
-				if (m_pCurTrafficLog) {
+				//if (m_pCurTrafficLog) {
 					StaAddNewTrainKSK* pAddNewTrain = new StaAddNewTrainKSK;
 					pAddNewTrain->InitAddView(m_pCurTrafficLog);
 					pAddNewTrain->show();
-				}
+				//}
 				});
 			pMenu->addAction(pAction_13);
 			connect(pAction_13, &QAction::triggered, [=]() {//设置/取消重点列车

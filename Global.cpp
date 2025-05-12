@@ -190,7 +190,7 @@ namespace Station {
             }
         }
         
-        m_strRouteDescrip = getRouteDescrip();
+       getRouteDescrip();
     }
 
     void StaTrainRoute::ChangeTrack(int nCode, const QString& strName)

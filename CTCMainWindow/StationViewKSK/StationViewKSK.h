@@ -46,8 +46,9 @@ namespace CTCWindows {
 
 			QLayout* WidgetLayout() override { return ui.centralWidget->layout(); }
 			void InitStatusBar() override ;
-
+			StaAddNewTrainKSK* getInstance();
 		private:
+			StaAddNewTrainKSK* m_pStaAddNewTrain = nullptr;
 			TrainInformationInterfaceKSK*  m_pTrainFormation = nullptr;
 			Ui::StationViewKSK ui;
 		};

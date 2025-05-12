@@ -16,9 +16,6 @@ ModifyTrainNumberKSK::ModifyTrainNumberKSK(Station::StaTrafficLog* m_pCurTraffic
 		m_pCurTrafficLog->m_strDepartTrainNum = ui.lineEdit_4->text();//行车日志修改车次号
 		vecTrainRoute = Station::MainStation()->getStaTrainRouteByTrain(m_pCurTrafficLog->m_nTrainId);//列车进路序列
 
-		vecTrainRoute[0]->m_strTrainNum = ui.lineEdit_3->text();
-		vecTrainRoute[1]->m_strTrainNum = ui.lineEdit_4->text();
-
 		Station::MainStation()->getStaTrainById(m_pCurTrafficLog->m_nTrainId)->m_strTrainNum = ui.lineEdit_3->text();//车次信息修改车次号
 
 		});

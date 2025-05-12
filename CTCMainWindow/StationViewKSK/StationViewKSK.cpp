@@ -259,7 +259,11 @@ namespace CTCWindows {
 			addToolBar(m_pStationViewToolBar);
 			addToolBarBreak();
 		}
-
+		StaAddNewTrainKSK* StationViewKSK::getInstance()
+		{
+			static StaAddNewTrainKSK instance;
+			return &instance;
+		}
 		void StationViewKSK::InitTrafficLogToolBar()
 		{
 			qDebug() << "InitTrafficLogToolBarTKY";
