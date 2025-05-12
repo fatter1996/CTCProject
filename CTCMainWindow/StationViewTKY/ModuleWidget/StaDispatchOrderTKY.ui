@@ -639,12 +639,6 @@ padding: 4px;</string>
                </item>
                <item>
                 <widget class="QFrame" name="horizontalFrame_6">
-                 <property name="maximumSize">
-                  <size>
-                   <width>16777215</width>
-                   <height>186</height>
-                  </size>
-                 </property>
                  <layout class="QHBoxLayout" name="horizontalLayout_8">
                   <property name="spacing">
                    <number>0</number>

@@ -49,7 +49,7 @@ namespace CTCWindows {
 				<< pRoute->m_tTriggerTime.toString("yyyy-MM-dd hh:mm")
 				<< pRoute->m_strTrack
 				<< (pRoute->m_bArrivaRoute ? "接车" : "发车")
-				<< pRoute->m_strRouteDescrip
+				<< pRoute->m_strCurRouteDescrip
 				<< (pRoute->m_bAutoTouch ? "自动触发" : "人工触发")
 				<< pRoute->m_strDirection
 				<< pRoute->getStateStr();

@@ -5,14 +5,18 @@
 
 #include "./CTCMainWindow/BaseWndClass/ModuleWidget/StaAlarmWindow.h"
 
-class StaAlarmWindowKSK : public CTCWindows::BaseWnd::StaAlarmWindow
-{
-	Q_OBJECT
+namespace CTCWindows {
+	namespace CASCO {
+		class StaAlarmWindowKSK : public CTCWindows::BaseWnd::StaAlarmWindow
+		{
+			Q_OBJECT
 
-public:
-	StaAlarmWindowKSK(QWidget *parent = nullptr);
-	~StaAlarmWindowKSK();
+		public:
+			StaAlarmWindowKSK(QWidget* parent = nullptr);
+			~StaAlarmWindowKSK();
 
-private:
-	Ui::StaAlarmWindowKSKClass ui;
-};
+		private:
+			Ui::StaAlarmWindowKSKClass ui;
+		};
+	}
+}

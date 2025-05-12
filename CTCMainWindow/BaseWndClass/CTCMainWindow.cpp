@@ -23,7 +23,6 @@ namespace CTCWindows {
     //初始化主界面
     void CTCMainWindow::InitStattionView()
     {
-
         //创建单站界面
         m_pStationCtrl = CreateStationCtrlDisp();
         //创建功能按钮栏
@@ -35,6 +34,8 @@ namespace CTCWindows {
         m_pStationLog = CreateTrafficLogDisp();
         //创建进路序列窗口
         m_pRoutePlanWnd = CreateStaRoutePlanWnd();
+        m_pStaTrainDiagram = CreateStaTrainDiagramWidget();
+
         //初始化主菜单
         InitStationViewMenuBar();
         //初始化工具栏-主工具栏
@@ -45,8 +46,11 @@ namespace CTCWindows {
         InitSignForToolBar();
         //初始化工具栏-签收工具栏
         InitStateToolBar();
+        //初始化工具栏-底部工具栏
         InitBottomToolBar();
+
         InitStatusBar();
+
         //初始化界面布局
         InitViewLayout();
 
@@ -69,6 +73,10 @@ namespace CTCWindows {
             if (pServerComLabel) {
                 pServerComLabel->hide();
             }
+        }
+        if (m_pStaTrainDiagram) {
+            WidgetLayout()->addWidget(m_pStaTrainDiagram);
+            m_pStaTrainDiagram->hide();
         }
         if (m_pStationLog) {
             WidgetLayout()->addWidget(m_pStationLog);
@@ -194,7 +202,11 @@ namespace CTCWindows {
             m_pCurShowView = m_pStationMulti;
             m_pCurShowView->show();
         }
-
+        if (m_pCurShowView != m_pStaTrainDiagram) {
+            m_pCurShowView->hide();
+            m_pCurShowView = m_pStaTrainDiagram;
+            m_pCurShowView->show();
+        }
         if (m_pCurToolBar != m_pStationViewToolBar) {
             m_pCurToolBar->hide();
             m_pCurToolBar = m_pStationViewToolBar;
@@ -216,6 +228,20 @@ namespace CTCWindows {
 
         m_eViewFlag = ViewFlag::MultiStaView;
         setMouseState(MouseState::Default);
+    }
+
+    void CTCMainWindow::TurnToTraindiagramDisp()
+    {
+        if (m_pCurShowView != m_pStaTrainDiagram) {
+            m_pCurShowView->hide();
+            m_pCurShowView = m_pStaTrainDiagram;
+            m_pCurShowView->show();
+        }
+        else if (m_pCurShowView == m_pStaTrainDiagram) {
+            m_pCurShowView->hide();
+            m_pCurShowView = m_pStationLog;
+            m_pCurShowView->show();
+        }
     }
 
     void CTCMainWindow::TurnToTrafficLogDisp()
@@ -274,6 +300,13 @@ namespace CTCWindows {
 
     void CTCMainWindow::ShowDispatchOrderWnd()
     {
+        Station::MainStation()->ClearNewDispatchOrder();
+        if (Station::MainStation()->NewDispatchOrder() == nullptr) {
+            if (m_pSignForToolBar->findChild<QPushButton*>("dispatchBtn") != nullptr) {
+                QPushButton* pDispatchBtn = m_pSignForToolBar->findChild<QPushButton*>("dispatchBtn");
+                pDispatchBtn->setStyleSheet("QPushButton{background-color: rgb(210, 210, 210);}");
+            }
+        }
         BaseWnd::StaDispatchOrder* pDispatchOrderWnd = CreateStaDispatchOrder();
         pDispatchOrderWnd->setAttribute(Qt::WA_DeleteOnClose);
         pDispatchOrderWnd->ViewPermission(Station::LimitsOfAuthority::employee);
@@ -286,10 +319,17 @@ namespace CTCWindows {
             QMessageBox::warning(this, MSGBOX_TITTLE, "没有收到调度命令", "确定");
             return;
         }
+
         DispatchOrderSign* pDispatchOrderSign = new DispatchOrderSign(this);
         pDispatchOrderSign->setAttribute(Qt::WA_DeleteOnClose);
         pDispatchOrderSign->InitNewDispatchOrder(Station::MainStation()->NewDispatchOrder());
         pDispatchOrderSign->exec();
+        if (Station::MainStation()->NewDispatchOrder() == nullptr) {
+            if (m_pSignForToolBar->findChild<QPushButton*>("dispatchBtn") != nullptr) {
+                QPushButton* pDispatchBtn = m_pSignForToolBar->findChild<QPushButton*>("dispatchBtn");
+                pDispatchBtn->setStyleSheet("QPushButton{background-color: rgb(210, 210, 210);}");
+            }
+        }
     }
 
     void CTCMainWindow::ShowVisibleSetWnd()

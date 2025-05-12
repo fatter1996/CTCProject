@@ -235,7 +235,9 @@ namespace Station {
             while (nIndex < 3) {
                 m_pPainter.setPen(QPen(Qt::white));
                 m_pPainter.setBrush(Qt::NoBrush);
+                m_pPainter.setPen(Qt::white);
                 m_pPainter.drawRect(Scale(rcTeainNum[nIndex]));
+
                 if (nIndex < vecTrainRoute.size()) {
                     
                     pRoute = vecTrainRoute[nIndex];

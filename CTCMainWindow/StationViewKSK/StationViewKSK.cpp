@@ -7,6 +7,7 @@
 #include "ModuleWidget/StaRoutePlanKSK.h"
 #include "ModuleWidget/StaDispatchOrderKSK.h"
 #include "ModuleWidget/StaVisibleSetKSK.h"
+
 #include "Global.h"
 #include <QDebug>
 #pragma execution_character_set("utf-8")
@@ -59,6 +60,15 @@ namespace CTCWindows {
 		{
 			return new StaVisibleSetKSK(this);
 		} 
+
+		void StationViewKSK::InitStatusBar()
+		{
+		}
+
+		BaseWnd::StaTrainDiagramWidget* StationViewKSK::CreateStaTrainDiagramWidget()
+		{
+			return new StaTrainDiagramWidgetKSK(this);
+		}
 
 		void StationViewKSK::InitStationViewMenuBar()
 		{
@@ -256,11 +266,24 @@ namespace CTCWindows {
 			m_pTrafficLogToolBar = new QToolBar(this);
 			connect(AddToolBarBtn(":/CTCProject/icon/CASCO/print.png", "打印", LOGVIEW_TOOL), &QPushButton::clicked, [=]() {});
 			connect(AddToolBarBtn(":/CTCProject/icon/CASCO/preview.png", "打印预览", LOGVIEW_TOOL), &QPushButton::clicked, [=]() {});
-			connect(AddToolBarBtn(":/CTCProject/icon/CASCO/diagram.png", "运行图", LOGVIEW_TOOL), &QPushButton::clicked, [=]() {});
-			connect(AddToolBarBtn(":/CTCProject/icon/CASCO/newTrain.png", "新增车辆", LOGVIEW_TOOL), &QPushButton::clicked, [=]() {});
+			connect(AddToolBarBtn(":/CTCProject/icon/CASCO/diagram.png", "运行图", LOGVIEW_TOOL), &QPushButton::clicked, this, &CTCMainWindow::TurnToTraindiagramDisp);
+			connect(AddToolBarBtn(":/CTCProject/icon/CASCO/newTrain.png", "新增车辆", LOGVIEW_TOOL), &QPushButton::clicked, [=]() {
+				StaAddNewTrainKSK* pStaAddNewTrain = new StaAddNewTrainKSK;
+				pStaAddNewTrain->InitAddView();
+				pStaAddNewTrain->show();
+				update();
+			});
+
 			connect(AddToolBarBtn(":/CTCProject/icon/CASCO/user.png", "用户管理", LOGVIEW_TOOL), &QPushButton::clicked, [=]() {});
 			connect(AddToolBarBtn(":/CTCProject/icon/CASCO/history.png", "历史报表查询", LOGVIEW_TOOL), &QPushButton::clicked, [=]() {});
-			connect(AddToolBarBtn(":/CTCProject/icon/CASCO/view.png", "视图", LOGVIEW_TOOL), &QPushButton::clicked, [=]() {});
+			connect(AddToolBarBtn(":/CTCProject/icon/CASCO/view.png", "视图", LOGVIEW_TOOL), &QPushButton::clicked, [=]() {
+				m_pTrainFormation = new TrainInformationInterfaceKSK;
+				m_pTrainFormation->InitMyTree();
+				m_pTrainFormation->show();
+				connect(m_pTrainFormation, &TrainInformationInterfaceKSK::CheckComplete, m_pStationLog, [](TrainInformationInterfaceKSK* pTrainInforma) {
+
+				});
+			});
 			connect(AddToolBarBtn(":/CTCProject/icon/CASCO/upward.png", "显示上行车次", LOGVIEW_TOOL), &QPushButton::clicked, [=]() {});
 			connect(AddToolBarBtn(":/CTCProject/icon/CASCO/downward.png", "显示下行车次", LOGVIEW_TOOL), &QPushButton::clicked, [=]() {});
 			connect(AddToolBarBtn(":/CTCProject/icon/CASCO/allTrain.png", "显示上下行车次", LOGVIEW_TOOL), &QPushButton::clicked, [=]() {});
@@ -289,6 +312,7 @@ namespace CTCWindows {
 			pDispatBtn->setObjectName("dispatchBtn");
 			pDispatBtn->setFixedSize(96, 28);
 			connect(pDispatBtn, &QPushButton::clicked, this, &CTCMainWindow::ShowDispatchOrderSignWnd);
+
 			m_pSignForToolBar->addWidget(pDispatBtn);
 			//间隔
 			QLabel* pLabel = new QLabel(m_pSignForToolBar);
@@ -379,6 +403,8 @@ namespace CTCWindows {
 
 			addToolBar(m_pStateToolBar);
 		}
+
+
 
 	}
 }

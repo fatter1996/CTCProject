@@ -12,6 +12,7 @@
 namespace Station {
     namespace Device {
 
+        QVector<SignalBtn*> StaSignal::m_vecFlashSignal;
         StaSignal::StaSignal(QObject* pParent)
             : DeviceBase(pParent)
         {
@@ -152,6 +153,9 @@ namespace Station {
             if (MainStation()->IsVisible(VisibleDev::trainButton) && 
                 ((m_nAttr & (SIGNAL_LCZD | SIGNAL_LCSD)) || m_strXHDType == "JZ_XHJ" || m_strXHDType == "CZ_XHJ")) {
                 DrawButton(m_pPainter, Scale(m_rcTrainBtn), COLOR_BTN_GREEN, m_nBtnState & BTNDOWN_TRAIN);
+            }
+            if (m_nFirstBtnType == 3) {
+                DrawButton(m_pPainter, Scale(m_rcTrainBtn), COLOR_BTN_GREEN, m_nBtnState & BTNDOWN_TRAIN | (m_bFlash && m_nFirstBtnType == 3), 1, COLOR_BTN_BLUE, m_bFlash ? COLOR_BTN_YELLOW : COLOR_BTN_WHITE);
             }
             //调车按钮
             if (MainStation()->IsVisible(VisibleDev::shuntButton) &&
@@ -406,12 +410,58 @@ namespace Station {
             return false;
         }
 
+        void StaSignal::ButtonStatusSwitching(DeviceBase* pDevice) 
+        {
+            dynamic_cast<StaSignal*>(pDevice)->OnButtonClick();
+            StaSignal* pStaSignal = nullptr;
+            StaButton* pStaBtn = nullptr;
+            QVector<SignalBtn*> listFlashSignalT;
+            QVector<SignalBtn*> listFlashSignal = MainStation()->getSignalBtn();
+            for (SignalBtn* pSignal : m_vecFlashSignal) {
+                if (MainStation()->getSelectDevice().size() > 1 && pSignal->strBtnNameList.size() >= MainStation()->getSelectDevice().size()) {
+                    pStaSignal = dynamic_cast<StaSignal*>(MainStation()->getDeviceByName(pSignal->strBtnNameList[MainStation()->getSelectDevice().size() - 1], SIGNALLAMP));
+                    if (pStaSignal != nullptr) {
+                        pStaSignal->setFlash(false);
+                    }
+                    else { continue; }
+                }
+            }
+            if (MainStation()->getSelectDevice().size() > 1) {
+                listFlashSignal = m_vecFlashSignal;
+            }
+            for (SignalBtn* pSignal : listFlashSignal) {
+
+                if (MainStation()->getSelectDevice().size() == 0) { return; }
+                if (pSignal->strBtnNameList.size() < MainStation()->getSelectDevice().size()) {
+                    continue;
+                }
+                if (m_nFirstBtnType != pSignal->nType) {
+                    continue;
+                }
+                if (pSignal->strBtnNameList[MainStation()->getSelectDevice().size() - 1] == pDevice->getName()) {
+                    listFlashSignalT.append(pSignal);
+                }
+            }
+            m_vecFlashSignal.swap(listFlashSignalT);
+            for (SignalBtn* pSignal : m_vecFlashSignal) {
+
+                if (pSignal->strBtnNameList.size() > MainStation()->getSelectDevice().size()) {
+                    pStaSignal = dynamic_cast<StaSignal*>(MainStation()->getDeviceByName(pSignal->strBtnNameList[MainStation()->getSelectDevice().size()], SIGNALLAMP));
+                    pStaSignal->setFlash();
+                }
+            }
+        }
+
         void StaSignal::InitClickEvent()
         {
             for (int i = 0; i < static_cast<int>(CTCWindows::FunType::FunTypeEnd); ++i) {
                 switch (i)
                 {
                 case static_cast<int>(CTCWindows::FunType::RouteBuild):         //进路建立
+                    m_mapClickEvent[m_strType].insert(static_cast<CTCWindows::FunType>(i), [=](DeviceBase* pDevice) {
+                        ButtonStatusSwitching(pDevice);
+                    });
+                    break;
                 case static_cast<int>(CTCWindows::FunType::GuideBtn): {         //引导按钮
                     m_mapClickEvent[m_strType].insert(static_cast<CTCWindows::FunType>(i), [](DeviceBase* pDevice) {
                         dynamic_cast<StaSignal*>(pDevice)->OnButtonClick();
@@ -649,7 +699,13 @@ namespace Station {
 
         void StaSignal::OrderClear(bool bClearTwinkle)
         {
+            setFlash(false);
             BtnStateReset();
+        }
+
+        void StaSignal::ClearFlashSignal()
+        {
+            QVector<SignalBtn*>().swap(m_vecFlashSignal);
         }
 
         void StaSignal::setVollover(const QPointF& ptBase)

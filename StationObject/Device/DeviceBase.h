@@ -14,10 +14,17 @@
 #define COLOR_BTN_BLUE		 QColor("#0000EE")
 #define COLOR_BTN_WHITE      QColor("#FAFAFA")
 
-
+#define SIGNAL_TYPE_LC     1    
+#define SIGNAL_TYPE_DC     2    
+#define SIGNAL_TYPE_TG     3    
 
 namespace Station {
     namespace Device {
+        struct SignalBtn
+        {
+            int nType = -1;
+            QStringList strBtnNameList;
+        };
 
         class DeviceBase;
         typedef QMap<QString, std::function<void(DeviceBase* pDevice, const QString& strElement)>> AttrMap;
@@ -52,6 +59,7 @@ namespace Station {
 
         protected:
             virtual bool eventFilter(QObject* obj, QEvent* event) override;
+
         public:
             virtual void InitAttributeMap() = 0;
             //初始化设备信息
@@ -215,7 +223,7 @@ namespace Station {
 
         protected:
             //绘制按钮
-            void DrawButton(QPainter& pPainter, const QRectF rcButton, const QColor& cBtnColor, bool bBtnDown, int nType = 1, 
+            void DrawButton(QPainter& pPainter, const QRectF rcButton, const QColor& cBtnColor, bool bBtnDown, int nType = 1,
                 const QColor cBtnDownColor = COLOR_BTN_BLUE, const QColor cBtnElapsedColor = COLOR_BTN_WHITE);
             //按钮点击事件
             void OnButtonClick();
@@ -223,8 +231,7 @@ namespace Station {
             //按钮状态重置
             void BtnStateReset();
         public:
-            void setBtnState(int nState) { m_nBtnState = m_nBtnState; }
-
+            void setBtnState(int nState) { m_nBtnState = nState; }
         protected:
             int m_nBtnState = 0; //按钮状态
             static int m_nFirstBtnType; //按钮类型(1 - 列车按钮; 2 - 调车按钮; 3 - 通过按钮; 4 - 引导按钮; 5 - 功能按钮)

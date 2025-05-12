@@ -1,0 +1,14 @@
+{
+    "LINE": [
+      {
+        "YXT_MINITE_DISTANCE": 35,
+        "YXT_STATION_DISTANCE": 65,
+        "YXT_LINE_DISTANCE": 25,
+        "YXT_LINE_NUM": 4,
+        "StationAC": [ "甲站", "标准站", "丙站" ],
+        "StationAD": [ "甲站", "标准站", "戊站" ],
+        "StationBC": [ "丁站", "标准站", "丙站" ],
+        "StationBD": [ "丁站", "标准站", "戊站" ]
+      }
+    ]
+}    

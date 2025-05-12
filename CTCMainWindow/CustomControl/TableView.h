@@ -43,7 +43,6 @@ namespace CTCWindows {
             void SetRowItemsBKColor(int nRow, QColor bkcolor, int nStartCol = 0, int nEndCol = -1);
             void SetRowItemsTextColor(int nRow, QColor txtcolor, int nStartCol = 0, int nEndCol = -1);
             void SetRowItemsTextFont(int nRow, QFont font, int nStartCol = 0, int nEndCol = -1);
-
             QSize sizeHint() const override { return QSize(width(), minimumHeight()); }
 
         private:

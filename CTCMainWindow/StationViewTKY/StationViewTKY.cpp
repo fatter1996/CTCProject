@@ -110,19 +110,14 @@ namespace CTCWindows {
 				});
 
 				connect(pMenuBarInfo2->addNewAction("现存车管理", 1, 1), &QAction::triggered, [&]() {
-					if (m_pVehicleManage == nullptr) {
-						m_pVehicleManage = new VehicleManage;
-					}
-					m_pVehicleManage->show();
-					});
+					VehicleManage* pVehicleManage = new VehicleManage;
+					pVehicleManage->show();
+				});
 				connect(pMenuBarInfo2->addNewAction("确报查询", 1, 2), &QAction::triggered, [&]() {});
 				connect(pMenuBarInfo2->addNewAction("列控区间占用逻辑检查", 1, 3), &QAction::triggered, [&]() {
-					if (m_pLntervallogic == nullptr) {
-						m_pLntervallogic = new LntervallogicCheck;
-					}
-					m_pLntervallogic->show();
-
-					});
+					LntervallogicCheck* pLntervallogic = new LntervallogicCheck;
+					pLntervallogic->show();
+				});
 			}
 
 			MenuBarInfo* pMenuBarInfo3 = new MenuBarInfo;
@@ -310,19 +305,13 @@ namespace CTCWindows {
 			m_vecMenuBarInfo.append(pMenuBarInfo6);
 			pMenuBarInfo6->m_pMenu = m_pMenuBar->addMenu("查询(S)"); {
 				connect(pMenuBarInfo6->addNewAction("告警信息", 1, 0) , &QAction::triggered, [&]() {
-					
-					m_pStaAlarm = new StaAlarmWindowTKY;
-					m_pStaAlarm->show();
-
-					});
-				connect(pMenuBarInfo6->addNewAction("历史告警信息", 1, 1) , & QAction::triggered, [&]() {
-					
-					});
+					StaAlarmWindowTKY* pStaAlarm = new StaAlarmWindowTKY;
+					pStaAlarm->show();
+				});
+				connect(pMenuBarInfo6->addNewAction("历史告警信息", 1, 1) , & QAction::triggered, [&]() {});
 				pMenuBarInfo6->m_pMenu->addSeparator();
-				connect(pMenuBarInfo6->addNewAction("查询行车日志", 1, 2), &QAction::triggered, [&]() {
-					});
-				connect(pMenuBarInfo6->addNewAction("查询车次", 1, 3), &QAction::triggered, [&]() {
-					});
+				connect(pMenuBarInfo6->addNewAction("查询行车日志", 1, 2), &QAction::triggered, [&]() {});
+				connect(pMenuBarInfo6->addNewAction("查询车次", 1, 3), &QAction::triggered, [&]() {});
 				pMenuBarInfo6->m_pMenu->addSeparator();
 				connect(pMenuBarInfo6->addNewAction("调车作业单查询", 1, 4), &QAction::triggered, [&]() {
 					});
@@ -549,6 +538,11 @@ namespace CTCWindows {
 				m_pTimeLabel->move(width() - 108, 72);
 			}
 			return QObject::eventFilter(obj, event);
+		}
+
+		BaseWnd::StaTrainDiagramWidget* StationViewTKY::CreateStaTrainDiagramWidget()
+		{
+			return nullptr;
 		}
 
 		void StationViewTKY::timerEvent(QTimerEvent* event)

@@ -12,6 +12,7 @@
 #include "StationView/StationCtrlDisp.h"
 #include "StationView/StationMultiDisp.h"
 #include "StationView/StationLogDisp.h"
+#include "StationView/StaTrainDiagramWidget.h"
 #include "ModuleWidget/StaRoutePlan.h"
 #include "ModuleWidget/StaDispatchOrder.h"
 #include "ModuleWidget/StaVisibleSet.h"
@@ -94,6 +95,7 @@ namespace CTCWindows {
 		virtual BaseWnd::StaRoutePlan* CreateStaRoutePlanWnd() = 0;
 		virtual BaseWnd::StaDispatchOrder* CreateStaDispatchOrder() = 0;
 		virtual BaseWnd::StaVisibleSet* CreateStaVisibleSet() = 0;
+		virtual BaseWnd::StaTrainDiagramWidget* CreateStaTrainDiagramWidget() = 0;
 
 		//初始化主菜单
 		virtual void InitStationViewMenuBar() = 0;
@@ -107,8 +109,9 @@ namespace CTCWindows {
 		virtual void InitStateToolBar() = 0;
 		// 初始化工具栏-底部行车日志工具栏
 		virtual void InitBottomToolBar() {}
-		virtual void InitStatusBar() {}
+
 		virtual QLayout* WidgetLayout() = 0;
+		virtual void InitStatusBar() = 0;
 
 	private:
 		//初始化界面布局
@@ -120,6 +123,7 @@ namespace CTCWindows {
 	public slots:
 		void TurnToStationCtrlDisp();
 		void TurnToStationMultiDisp();
+		void TurnToTraindiagramDisp();
 		void TurnToTrafficLogDisp();
 		void ShowStagePlanSignWnd();
 		void ShowStaRoutePlanWnd(bool bShow = true);
@@ -151,6 +155,7 @@ namespace CTCWindows {
 		BaseWnd::StationCtrlDisp* m_pStationCtrl = nullptr;	//单站界面
 		BaseWnd::StationMultiDisp* m_pStationMulti = nullptr; //站间透明
 		BaseWnd::StationLogDisp* m_pStationLog = nullptr; //行车日志
+		BaseWnd::StaTrainDiagramWidget* m_pStaTrainDiagram = nullptr;//图标转换
 		QMenuBar* m_pMenuBar = nullptr; //主菜单
 		QVector<MenuBarInfo*> m_vecMenuBarInfo;
 		QStatusBar* m_pStatusBar = nullptr;//底部状态栏

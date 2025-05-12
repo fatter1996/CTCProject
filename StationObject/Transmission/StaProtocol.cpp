@@ -379,6 +379,7 @@ namespace Station {
                 nFlag += nLen;
                 
                 MainStation()->AddTrain(pTrain);
+                emit  MainStation()->TrafficLogTableUpData();
                 DeviceTrain* pDevice = dynamic_cast<Device::DeviceTrain*>(MainStation()->getDeviceByCode(pTrain->m_nPosCode));
                 if (pDevice) {
                     pDevice->SetTrain(pTrain);

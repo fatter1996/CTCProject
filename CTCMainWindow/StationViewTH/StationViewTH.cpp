@@ -28,6 +28,12 @@ namespace CTCWindows {
 			return new StationViewTH(parent);
 		}
 
+		BaseWnd::StaTrainDiagramWidget* StationViewTH::CreateStaTrainDiagramWidget()
+		{
+			return nullptr;
+		}
+
+
 		BaseWnd::StationCtrlDisp* StationViewTH::CreateStationCtrlDisp()
 		{
 			return new StationCtrlDispTH(this);

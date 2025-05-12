@@ -1,12 +1,17 @@
 #include "StaAlarmWindowKSK.h"
 #include <QIcon>
-StaAlarmWindowKSK::StaAlarmWindowKSK(QWidget *parent)
-	: StaAlarmWindow(parent)
-{
-	ui.setupUi(this);
-	setWindowTitle("CTC--御少");
-	setWindowIcon(QIcon(":/CTCProject/icon/icon.ico"));
-}
 
-StaAlarmWindowKSK::~StaAlarmWindowKSK()
-{}
+namespace CTCWindows {
+	namespace CASCO {
+		StaAlarmWindowKSK::StaAlarmWindowKSK(QWidget* parent)
+			: StaAlarmWindow(parent)
+		{
+			ui.setupUi(this);
+			setWindowTitle("CTC--御少");
+			setWindowIcon(QIcon(":/CTCProject/icon/icon.ico"));
+		}
+
+		StaAlarmWindowKSK::~StaAlarmWindowKSK()
+		{}
+	}
+}

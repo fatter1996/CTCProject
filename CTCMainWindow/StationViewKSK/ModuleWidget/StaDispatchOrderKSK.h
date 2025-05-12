@@ -34,18 +34,23 @@ namespace CTCWindows {
 			bool eventFilter(QObject* watched, QEvent* event);
 			void InitControl();
 			void SetTableWidgetStation(int index,int flag = 0);
-			QVector<QStringList> GetStationOrderData(QString strTrainNum, Station::StaDispatchOrder* pRoute, DataType type);				//	获取车站收令数据
-			QVector<QStringList> GetDispatcherReceivingData(QString strTrainNum, Station::StaDispatchOrder* pRoute, DataType type);		//	获取调度台收令数据
-			QVector<QStringList> GetTheLocomotiveCollectionData(QString strTrainNum, Station::StaDispatchOrder* pRoute, DataType type);	//	获取机车收令数据
-			void DispatchOrderListUpData() {}
-			void CurDispatchOrderUpData() {}
-			void TrainDispatchOrderListUpData() {}
-			void CurTrainDispatchOrderUpData() {}
+			QVector<QStringList> GetStationOrderData(QString strTrainNum, QVector<Station::StaDispatchOrder*> pRoute, DataType type);				//	获取车站收令数据
+			QVector<QStringList> GetDispatcherReceivingData(QString strTrainNum, QVector<Station::StaDispatchOrder*> pRoute, DataType type);		//	获取调度台收令数据
+			QVector<QStringList> GetTheLocomotiveCollectionData(QString strTrainNum, QVector<Station::StaDispatchOrder*> pRoute, DataType type);	//	获取机车收令数据
+			void ViewPermission(Station::LimitsOfAuthority operate) {}
+			void DispatchOrderListUpData();
+			void CurDispatchOrderUpData();
+			void TrainDispatchOrderListUpData();
+			void CurTrainDispatchOrderUpData();
 			void GetTrainInfo(Station::StaTrainDispatch* pTrainDispatch) {}
 			void InitTable();
+			void SignForDispatchOrder();
 			QVector<Control::TableViewHeadInfo> GetTrainRouteTableHeadInfo(TableSpecies m_intSpecies);
 		private:
 			Ui::StaDispatchOrderKSK ui;
+
+			int m_nrow = 0;
+
 			CTCWindows::Control::TableView* m_pStationOrder = nullptr;	//车站命令表格
 			CTCWindows::Control::TableView* m_pDispatcherCommand = nullptr;	//调度台命令表格
 			CTCWindows::Control::TableView* m_pLocomotiveOrder = nullptr;		//机车命令表格
@@ -53,6 +58,19 @@ namespace CTCWindows {
 			CTCWindows::Control::TableView* m_pReadTable = nullptr;	//阅读表格
 			CTCWindows::Control::TableView* m_pdispatchTable = nullptr;	//调度台接收表格
 			CTCWindows::Control::TableView* m_pLocomotiveTable = nullptr;	//机车接收表格
+			QVector<QStringList> TableDataList;
+
+			QVector<Station::StaDispatchOrder*> m_vecStationClosedDispatchOrder;//车站收令箱
+			QVector<Station::StaDispatchOrder*> m_vecStationAdvanceReceiptDispatchOrder;//车站预收箱
+			
+
+			QVector<Station::StaDispatchOrder*> m_vecConsoleHairDispatchOrder;		//调度台发令箱
+			QVector<Station::StaDispatchOrder*> m_vecConsoleStorageImpDispatchOrder;//调度台储令箱
+			QVector<Station::StaDispatchOrder*> m_vecConsoleTobesentDispatchOrder;	//调度台待发箱
+
+			QVector<Station::StaDispatchOrder*> m_vecLocomotiveHairDispatchOrder;//机车发令箱
+			QVector<Station::StaDispatchOrder*> m_vecLocomotiveStorageImpDispatchOrder;//机车储令
+			QVector<Station::StaDispatchOrder*> m_vecLocomotiveTobesentDispatchOrder;//机车待发箱
 		};
 	}
 }

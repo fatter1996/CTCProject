@@ -79,6 +79,26 @@ namespace Station {
 		ActiveApplyControlMode
 	};
 
+	struct RailwayLine {
+		QString startStation;
+		QString middleStation;
+		QString endStation;
+		int startY;
+		int middleY;
+		int endY;
+	};
+
+	struct TrainDiagramInfo //运行图界面定义
+	{
+		int width = 0;
+		int height = 0;
+		int linenum = 0;
+		int miniteDistance = 0; //十分格距离
+		int stationDistance = 0; //车站间距离
+		int lintDistance = 0; //线路间距离
+		QVector<RailwayLine> vectRailwayLine;
+	}; //运行图
+
 	struct StaOrder {
 	};
 
@@ -174,7 +194,8 @@ namespace Station {
 		int m_nSignalCode = -1; //进/出站信号机编号
 		QString m_strSignal; //进/出站信号机
 
-		QString m_strRouteDescrip; //进路描述
+		QString m_strCurRouteDescrip; //进路描述
+		QStringList m_strRouteDescripList; //进路描述
 		QString m_strDirection; //进路方向
 		int m_nRouteState = 0; //进路当前状态//0-等待、1-正在触发、2-触发完成、3-占用、4-出清、5-取消
 
@@ -191,9 +212,9 @@ namespace Station {
 
 	public:
 		static void Init(StaTrainRoute* pTrainRoute, const QJsonObject& subObj);
-		void ChangeTrack(int nCode, const QString& strName );
+		void ChangeTrack(int nCode, const QString& strName);
 		QString getStateStr();
-		QString getRouteDescrip();
+		void getRouteDescrip();
 	};
 
 	struct StaTrainDispatch : public StaOrder	//机车调度命令

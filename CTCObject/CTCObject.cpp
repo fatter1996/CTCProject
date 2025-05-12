@@ -30,7 +30,7 @@ namespace CTCDoc{
 		if (TtainTypeFileInit() < 0) {
 			qDebug() << "车辆类型解析失败。";
 		}
-		
+
 		//初始化站场设备
 		m_pMainStation->InitStaDevice();
 		//网络通信初始化
@@ -135,6 +135,17 @@ namespace CTCDoc{
 			qDebug() << "无效的json文件.";
 			return -1;
 		}
+
+		if (m_pMainStation->ReadInterLock(rootObj.value("interlockTable").toString()) < 0) {
+			qDebug() << "无效的txt文件.";
+			return -1;
+		}
+
+		if (m_pMainStation->ReadChartConfig(rootObj.value("chartconversion").toString()) < 0) {
+			qDebug() << "无效的json文件.";
+			return -1;
+		}
+
 		//解析站间透明信息
 		QJsonArray multiArray = rootObj.value("multiStation").toArray();
 		QJsonObject subObj;
@@ -163,6 +174,7 @@ namespace CTCDoc{
 				qDebug() << "无效的json文件.";
 				continue;
 			}
+
 			//初始化站场设备
 			pStation->InitStaDevice();
 			m_vecMultiStation.append(pStation);

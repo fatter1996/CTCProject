@@ -83,6 +83,12 @@ namespace Station {
             void setDirection(const QString& strDirection) { m_strDirection = strDirection; }
             QString getDirection() const { return m_strDirection; }
             QString getXHDTYpe() { return m_strXHDType; }
+            uint getSelectType() { return m_nSelectType; }
+            void ButtonStatusSwitching(DeviceBase* pDevice);
+            void setFlash(bool bFlash = true) { m_bFlash = bFlash; }
+
+        public:
+            static void ClearFlashSignal();
 
         private:
             QPointF p12, p7, p8, p9, p10, p13, p14; //绘制坐标
@@ -123,6 +129,10 @@ namespace Station {
 
             uint m_nBSQState = 0;
             QMap<SignalState, std::function<void()>> m_mapLightColor;
+            bool m_bFlash = false;
+
+        private:
+            static QVector<SignalBtn*> m_vecFlashSignal;
         };
     }
 }

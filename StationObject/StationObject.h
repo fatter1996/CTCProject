@@ -68,6 +68,7 @@ namespace Station {
         QPoint getOffset() const { return m_ptOffset; }
         bool IsMainStation() const { return m_bMainStation; }
         QWidget* ShowWidget() const { return m_pShowWidget; }
+        QMap<QString, QVector<int>> getTrackAdjSingal() { return m_mapTrackAdjSingalCode; }
 
     public:
         static void InitCreatDeviceMap();
@@ -76,6 +77,7 @@ namespace Station {
         friend class MainStationObject;
         
     private:
+        QMap<QString, QVector<int>> m_mapTrackAdjSingalCode;
         bool m_bMainStation = false;
         uint m_nStationId = 0;
         QString m_strStationName;
@@ -114,7 +116,6 @@ namespace Station {
         void SelectStaTrainDispatch(StaDispatchOrder* pOrder);   //查询机车调度命令
         void SelectStaTrafficLog();   //查询行车日志
         void GetStationOrderByJosn(const QByteArray& btDataArray, Order type);
-
         int AddNewTrain(StaTrain* pStaTrain); //添加新车次
         int DeleteTrain(StaTrain* pStaTrain); //删除车次
         int SetTrainRunning(StaTrain* pStaTrain, bool bRunning); //设置车次启动或停稳
@@ -126,6 +127,9 @@ namespace Station {
         int AddNewDispatchOrder(StaDispatchOrder* pDispatchOrder); //添加调度命令
         int AddNewTrafficLog(StaTrafficLog* pTrafficLog); //添加行车日志
         void CreatTrainRouteByTrafficLog(StaTrafficLog* pTrafficLog);
+        int ReadInterLock(const QString& filePath);   //解析"InterlockTable.txt"
+        void InterLockfileAnalysis(QString strLine);
+        int ReadChartConfig(const QString& filePath); //解析"Chart_Conversion.json"
 
         StaTrain* getStaTrainById(int nTrainId);
         StaTrain* getStaTempTrainById(int nTrainId);
@@ -156,20 +160,32 @@ namespace Station {
         CultivateObject::Subject* getCurSubject() const { return m_pCurSubject; }
         bool IsOverturn() const { return m_bOverturn; }
         
-        const QVector<StaTrain*>& TrainList() { return m_vecStaTrain; }
+        const QVector<StaTrain*>& TrainList() const { return m_vecStaTrain; }
         void AddTrain(StaTrain* pTrain) { m_vecStaTrain.append(pTrain); }
         void RemoveTempTrain(StaTrain* pTrain) { m_vecStaTempTrain.removeOne(pTrain); }
-        const QVector<StaStagePlan*>& StagePlanList() { return m_vecStaStagePlan; }
-        const QVector<StaTrainRoute*>& TrainRouteList() { return m_vecStaTrainRoute; }
         void RemoveTrainRoute(StaTrainRoute* pTrainRoute) { m_vecStaTrainRoute.removeOne(pTrainRoute); }
-        const QVector<StaDispatchOrder*>& DispatchOrderList() { return m_vecStaDispatchOrder; }
-        const QVector<StaTrafficLog*>& TrafficLogList() { return m_vecStaTrafficLog; }
-        StaStagePlan* NewStagePlan() { return m_pNewStagePlan; }
+        const QVector<StaStagePlan*>& StagePlanList() const { return m_vecStaStagePlan; }
+        const QVector<StaTrainRoute*>& TrainRouteList() const { return m_vecStaTrainRoute; }
+        const QVector<StaDispatchOrder*>& DispatchOrderList() const { return m_vecStaDispatchOrder; }
+        const QVector<StaTrafficLog*>& TrafficLogList() const { return m_vecStaTrafficLog; }
+        StaStagePlan* NewStagePlan() const { return m_pNewStagePlan; }
         void ClearNewStagePlan() { m_pNewStagePlan = nullptr; };
-        StaDispatchOrder* NewDispatchOrder() { return m_pNewDispatchOrder; }
+        StaDispatchOrder* NewDispatchOrder() const { return m_pNewDispatchOrder; }
         void ClearNewDispatchOrder() { m_pNewDispatchOrder = nullptr; };
         void setDiploid(DiploidOperate operate, int nType = STAVIEW); //站场大小缩放
         double getDiploid(DiploidRatio ratio) const { return m_mapDiploidRatio[ratio]; }
+        QVector<Device::SignalBtn*> getSignalBtn() const { return m_vecSignalBtn; }
+
+        QVector<StaTrafficLog*> getvecTrafficLog() const { return m_vecStaTrafficLog; }
+        QMap<int, QString> getPassengeTrain() const { return m_mapPassengeTrain; }
+        QMap<int, QString> getFreighTrain() const { return m_mapFreighTrain; }
+        QMap<int, QString> getTrainType() const { return m_mapTrainType; }
+        void AddPassengeTrain(int nIndex, QString strtype) { m_mapPassengeTrain.insert(nIndex, strtype); }
+        void AddFreighTrain(int nIndex, QString strtype) { m_mapFreighTrain.insert(nIndex, strtype); }
+        void AddTrainType(int nIndex, QString strtype) { m_mapTrainType.insert(nIndex, strtype); }
+        void AddTrainRoute(StaTrainRoute* pRoute) { m_vecStaTrainRoute.append(pRoute); }
+        bool getAutoSendPlan() const { return m_bAutoSendPlan; }
+        TrainDiagramInfo getTrainDiagram() const{ return m_TrainDiagram; }
 
     public:
         struct StaLimits {
@@ -182,6 +198,7 @@ namespace Station {
             bool nPlanControl = false;  //计划控制
             int nActiveApplyControlMode = -1;
         };
+
         int getStaLimits(Limits type);
         void setStaLimits(Limits type, int nValue);
 
@@ -205,7 +222,14 @@ namespace Station {
        
     private:
         StaLimits m_StaLimits;
+        TrainDiagramInfo m_TrainDiagram;
+
         QVector<Device::DeviceBase*> m_vecSelectDevice;
+
+        QMap<int, QString> m_mapPassengeTrain;  //货车类型
+        QMap<int, QString> m_mapFreighTrain;    //列车类型
+        QMap<int, QString> m_mapTrainType;      //运行类型
+
         UserInfo m_infoCurrUser;
         QString m_strOrderToInterLock;
         int m_nUserId = 0;
@@ -221,6 +245,7 @@ namespace Station {
         QMap<Order, std::function<StaOrder*()>> m_mapCreatStationOrder;
         QMap<Order, std::function<void(void*, const QJsonObject&)>> m_mapStationOrder;
         QMap<DiploidRatio, double> m_mapDiploidRatio;
+        QVector<Device::SignalBtn*> m_vecSignalBtn;
 
         StaStagePlan* m_pNewStagePlan = nullptr;
         StaDispatchOrder* m_pNewDispatchOrder = nullptr;

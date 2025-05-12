@@ -29,8 +29,8 @@ namespace CTCWindows {
 	{
 		ui.orderTypeLabel->setText(pNewDispatchOrder->m_strOrderTip);
 		ui.orderNumLabel->setText(pNewDispatchOrder->m_strOrderNum);
-		ui.orderDateLabel->setText(pNewDispatchOrder->m_tSendTime.toString("yyyy年mm月dd日"));
-		ui.orderTimeLabel->setText(pNewDispatchOrder->m_tSendTime.toString("hh:MM"));
+		ui.orderDateLabel->setText(pNewDispatchOrder->m_tSendTime.toString("yyyy年MM月dd日"));
+		ui.orderTimeLabel->setText(pNewDispatchOrder->m_tSendTime.toString("hh:mm"));
 		ui.sendAgencyLabel->setText(pNewDispatchOrder->m_strSendAgency);
 		ui.sendNameLabel->setText(pNewDispatchOrder->m_strSendName);
 		ui.contentEdit->setText(pNewDispatchOrder->m_strContent);
@@ -39,7 +39,10 @@ namespace CTCWindows {
 		vecTableData.append(QStringList() << pNewDispatchOrder->m_strOrderedUnit << "");
 		m_pOrderedUnitTable->ResetTableRows(vecTableData);
 
-		connect(ui.closeBtn, &QPushButton::clicked, this, &DispatchOrderSign::close);
+		connect(ui.closeBtn, &QPushButton::clicked,[=] {
+			Station::MainStation()->ClearNewDispatchOrder();
+			this->close();
+			});
 		connect(ui.signBtn, &QPushButton::clicked, [=]() {
 			pNewDispatchOrder->m_nStateDisOrder = 1;
 			Station::MainStation()->ClearNewDispatchOrder();
@@ -47,7 +50,7 @@ namespace CTCWindows {
 		});
 
 		connect(ui.refuseSignBtn, &QPushButton::clicked, [=]() {
-			pNewDispatchOrder->m_nStateDisOrder = 1;
+			pNewDispatchOrder->m_nStateDisOrder = 2;
 			Station::MainStation()->ClearNewDispatchOrder();
 			this->close();
 		});

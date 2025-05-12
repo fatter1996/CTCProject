@@ -18,6 +18,7 @@ namespace CTCWindows {
             horizontalHeader()->setMinimumHeight(16);
             setContextMenuPolicy(Qt::CustomContextMenu);
             setMinimumHeight(64);
+
         }
 
         TableView::~TableView()
@@ -84,6 +85,7 @@ namespace CTCWindows {
             setRowCount(vecTableData.size() + nStartRow);
             QTableWidgetItem* item = nullptr;
             QString strData;
+
             for (int i = nStartRow; i < vecTableData.size() + nStartRow; i++) {
                 for (int j = 0; j < vecTableData[i].size(); j++) {
                     if (j < columnCount()) {

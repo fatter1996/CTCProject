@@ -39,6 +39,7 @@ namespace CTCWindows {
 		m_pSealTechnique->UpdaTableWidget(Station::MainStation());
 		this->close();
 		m_pSealTechnique->show();
+
 	}
 
 	void AuxiliaryMenuWnd::PutThrough15S()

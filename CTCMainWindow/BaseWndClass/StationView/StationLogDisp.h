@@ -132,7 +132,6 @@ namespace CTCWindows {
             virtual void AdjacentStationDepart(const QDateTime& tReportTime = QDateTime());
             //邻站到达
             virtual void AdjacentStationArrival(const QDateTime& tReportTime = QDateTime());
-
         protected:
             Control::RichTableView* pTrafficLogTable = nullptr;
             Station::StaTrafficLog* m_pCurTrafficLog = nullptr;

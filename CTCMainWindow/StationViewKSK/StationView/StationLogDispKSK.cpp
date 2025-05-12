@@ -235,10 +235,8 @@ namespace CTCWindows {
 						<< pTrafficLog->m_tRealArrivalTime.toString("hh:mm")
 						<< "" << "" << "" << ""	//摘车辆数
 						<< "" //占用区间凭证号码
-						<< pTrain->m_strTrainType
-						<< QString("%1").arg(pTrafficLog->m_nArrivalTrainValue)
-						<< QString("%1").arg(pTrafficLog->m_nArrivalChange)
-						<< QString("%1").arg(pTrafficLog->m_nArrivalWeight)
+						<< ""
+						<< "" << "" << ""
 						<< "" << "" << "" << "" << "" //电话记录号码
 						<< (pTrafficLog->m_bUpDown ? "" : pTrafficLog->m_strDepartTrainNum)
 						<< (!pTrafficLog->m_bUpDown ? "" : pTrafficLog->m_strDepartTrainNum)
@@ -250,10 +248,8 @@ namespace CTCWindows {
 						<< pTrafficLog->m_tAdjArrivalTime.toString("hh:mm")
 						<< "" << "" << "" << ""	//摘车辆数
 						<< "" //占用区间凭证号码
-						<< pTrain->m_strTrainType
-						<< QString("%1").arg(pTrafficLog->m_nDepartTrainValue)
-						<< QString("%1").arg(pTrafficLog->m_nDepartChange)
-						<< QString("%1").arg(pTrafficLog->m_nDepartWeight)
+						<< ""
+						<< "" << "" << ""
 						<< "" << "" << "" << "" << "" //电话记录号码
 						<< "" //本务机车调车时分
 						<< pTrafficLog->m_strDelayReason
