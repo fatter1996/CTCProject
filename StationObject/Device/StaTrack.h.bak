@@ -22,7 +22,6 @@ namespace Station {
             H,
             O
         };
-        
         //股道
         class StaTrack : public StaSection, public DeviceTrain
         {

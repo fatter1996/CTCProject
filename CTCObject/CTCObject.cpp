@@ -140,10 +140,12 @@ namespace CTCDoc{
 			qDebug() << "无效的txt文件.";
 			return -1;
 		}
+
 		if (m_pMainStation->ReadChartConfig(rootObj.value("chartconversion").toString()) < 0) {
 			qDebug() << "无效的json文件.";
 			return -1;
 		}
+
 		//解析站间透明信息
 		QJsonArray multiArray = rootObj.value("multiStation").toArray();
 		QJsonObject subObj;

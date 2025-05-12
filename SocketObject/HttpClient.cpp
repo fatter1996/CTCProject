@@ -227,7 +227,7 @@ namespace Http {
 			.arg(pTrainRoute->m_tCleanTime.toString(Qt::ISODate))
 			.arg(pTrainRoute->m_nTrackCode)
 			.arg(pTrainRoute->m_nSignalCode)
-			.arg(pTrainRoute->m_strRouteDescrip)
+			.arg(pTrainRoute->m_strCurRouteDescrip)
 			.arg(pTrainRoute->m_strDirection)
 			.arg(pTrainRoute->m_nRouteState)
 			.arg(strSubRouteId.left(strSubRouteId.length() - 1))

@@ -198,12 +198,12 @@ namespace Station {
                 }
                 byteOperation.append(pTrain->m_strTrainNum.length());
                 byteOperation.append(pTrain->m_strTrainNum);
-                byteOperation.append(pTrainRoute->m_strRouteDescrip.length());
-                byteOperation.append(pTrainRoute->m_strRouteDescrip);
+                byteOperation.append(pTrainRoute->m_strCurRouteDescrip.length());
+                byteOperation.append(pTrainRoute->m_strCurRouteDescrip);
             }
             if (nType == 0x04) {    //ÐÞ¸Ä½øÂ·
-                byteOperation.append(pTrainRoute->m_strRouteDescrip.length());
-                byteOperation.append(pTrainRoute->m_strRouteDescrip);
+                byteOperation.append(pTrainRoute->m_strCurRouteDescrip.length());
+                byteOperation.append(pTrainRoute->m_strCurRouteDescrip);
             }
             return byteOperation;
         }

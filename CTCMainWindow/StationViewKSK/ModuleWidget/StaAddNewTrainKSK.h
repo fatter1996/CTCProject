@@ -3,10 +3,11 @@
 #include <QWidget>
 #include "ui_StaAddNewTrainKSK.h"
 #include <QCloseEvent>
-#include "Global.h"
-class StaAddNewTrainKSK : public QWidget
-{
-	Q_OBJECT
+namespace CTCWindows {
+	namespace CASCO {
+		class StaAddNewTrainKSK : public QWidget
+		{
+			Q_OBJECT
 
 public:
 	StaAddNewTrainKSK(QWidget *parent = nullptr);
@@ -25,3 +26,19 @@ private:
 	QMap<int, QString> m_mapTrainType;
 	Ui::StaAddNewTrainKSKClass ui;
 };
+		public:
+			StaAddNewTrainKSK(QWidget* parent = nullptr);
+			~StaAddNewTrainKSK();
+
+		public:
+			void InitAddView();
+			void ConnectEvent();
+
+		public slots:
+			void AddNewTrafficLog();
+
+		private:
+			Ui::StaAddNewTrainKSKClass ui;
+		};
+	}
+}

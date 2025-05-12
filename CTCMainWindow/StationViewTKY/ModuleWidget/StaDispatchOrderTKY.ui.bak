@@ -594,7 +594,7 @@ padding: 4px;</string>
                     <property name="maximumSize">
                      <size>
                       <width>32</width>
-                      <height>96</height>
+                      <height>16777215</height>
                      </size>
                     </property>
                     <property name="text">

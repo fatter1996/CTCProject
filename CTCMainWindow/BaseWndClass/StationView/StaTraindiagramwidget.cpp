@@ -1,11 +1,20 @@
-#include "StaTraindiagramwidget.h"
+#include "StaTrainDiagramWidget.h"
+#include <QFile>
+#include <QDebug>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QJsonArray>
+#include "Global.h"
 
 namespace CTCWindows {
 	namespace BaseWnd {
-		StaTraindiagramwidget::StaTraindiagramwidget(QWidget* parent) {
-
+		StaTrainDiagramWidget::StaTrainDiagramWidget(QWidget* parent)
+		{
+			TrainDiagram = Station::MainStation()->getTrainDiagram();
+			InitTraindiagramw();
 		}
-		StaTraindiagramwidget::~StaTraindiagramwidget()
+
+		StaTrainDiagramWidget::~StaTrainDiagramWidget()
 		{
 		}
 	}

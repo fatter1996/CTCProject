@@ -221,6 +221,7 @@ namespace Station {
             explicit DeviceBtn();
             ~DeviceBtn();
 
+            
         protected:
             //绘制按钮
             void DrawButton(QPainter& pPainter, const QRectF rcButton, const QColor& cBtnColor, bool bBtnDown, int nType = 1,
@@ -230,6 +231,7 @@ namespace Station {
             virtual void SetBtnState() = 0;
             //按钮状态重置
             void BtnStateReset();
+       
         public:
             void setBtnState(int nState) { m_nBtnState = nState; }
         protected:

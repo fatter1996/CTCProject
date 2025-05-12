@@ -258,7 +258,7 @@ namespace CTCWindows {
 					}
 					QByteArray btResult;
 					if (Http::HttpClient::ChangeRoute(pTrainRoute->m_nRouteId, strRoute, btResult)) {
-						pTrainRoute->m_strRouteDescrip = strRoute;
+						pTrainRoute->m_strCurRouteDescrip = strRoute;
 					}
 					OnTrainRouteUpData();
 				});
@@ -331,13 +331,13 @@ namespace CTCWindows {
 						StaTrainRoute* pSubTrainRoute = nullptr;
 						for (int nSubRouteId : pTrainRoute->m_vecSubRouteId) {
 							pSubTrainRoute = MainStation()->getStaTrainRouteById(nSubRouteId);
-							routeDescrip += pSubTrainRoute->m_strRouteDescrip;
+							routeDescrip += pSubTrainRoute->m_strCurRouteDescrip;
 							routeDescrip += ",";
 						}
 						routeDescrip = routeDescrip.left(routeDescrip.length() - 1);
 					}
 					else {
-						routeDescrip = pTrainRoute->m_strRouteDescrip;
+						routeDescrip = pTrainRoute->m_strCurRouteDescrip;
 					}
 					StaTrain* pTrain = MainStation()->getStaTrainById(pTrainRoute->m_nTrainId);
 					QString strTips = QString("确定要触发'股道:%1','%2'次列车,'%3','%4'进路?")

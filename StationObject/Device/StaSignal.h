@@ -84,16 +84,17 @@ namespace Station {
             QString getDirection() const { return m_strDirection; }
             QString getXHDTYpe() { return m_strXHDType; }
             uint getSelectType() { return m_nSelectType; }
-            QRectF getRcTrainbtn() { return m_rcTrainBtn; }
-            QRectF getRcShuntbtn() { return m_rcShuntBtn; }
-            DeviceBase* getRelatedBtn() { return m_pRelatedBtn; }
             void ButtonStatusSwitching(DeviceBase* pDevice);
             void setFlash(bool bFlash = true) { m_bFlash = bFlash; }
-            static QList<SignalBtn*>* getFlashSignal() { return &m_listFlashSignal; }
+
+        public:
+            static void ClearFlashSignal();
+
         private:
             QPointF p12, p7, p8, p9, p10, p13, p14; //绘制坐标
             uint m_nXHDType = 0; //信号机类型
             QString m_strXHDType; //信号机类型
+            bool m_bCZAndDC = false;
             qreal m_nRadius = 0; //信号机半径
             qreal m_nBtnRadius = 8; //按钮半径
             uint m_nSignalType = 0; //信号类型
@@ -131,7 +132,7 @@ namespace Station {
             bool m_bFlash = false;
 
         private:
-            static QList<SignalBtn*> m_listFlashSignal;
+            static QVector<SignalBtn*> m_vecFlashSignal;
         };
     }
 }

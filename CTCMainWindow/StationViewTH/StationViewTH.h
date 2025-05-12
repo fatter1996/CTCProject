@@ -16,11 +16,6 @@ namespace CTCWindows {
 		public:
 			//创建卡斯柯CTC
 			static StationViewTH* CreatStationView(QWidget* parent = nullptr);
-			// 初始化工具栏-底部行车日志工具栏
-			void InitbottomTrafficLogToolBar() override;
-
-			BaseWnd::StaTraindiagramwidget* CreateStaTraindiagramwidget() override;
-			
 			//创建单站界面
 			BaseWnd::StationCtrlDisp* CreateStationCtrlDisp() override;
 			//创建站间透明界面
@@ -33,8 +28,8 @@ namespace CTCWindows {
 			BaseWnd::StaDispatchOrder* CreateStaDispatchOrder() override;
 			//创建显示设置界面
 			BaseWnd::StaVisibleSet* CreateStaVisibleSet() override;
+			BaseWnd::StaTrainDiagramWidget* CreateStaTrainDiagramWidget() override;
 
-			void InitStaTraindiagramwidget() override;
 			//初始化主菜单
 			void InitStationViewMenuBar() override;
 			//初始化工具栏-主工具栏

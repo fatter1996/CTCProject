@@ -249,10 +249,10 @@
     <ClCompile Include="CTCMainWindow\BaseWndClass\ModuleWidget\StaTreeNode.cpp">
       <Filter>CTCMainWindow\BaseWndClass\ModuleWidget</Filter>
     </ClCompile>
-    <ClCompile Include="CTCMainWindow\BaseWndClass\StationView\StaTraindiagramwidget.cpp">
+    <ClCompile Include="CTCMainWindow\BaseWndClass\StationView\StaTrainDiagramWidget.cpp">
       <Filter>CTCMainWindow\BaseWndClass\StationView</Filter>
     </ClCompile>
-    <ClCompile Include="CTCMainWindow\StationViewKSK\ModuleWidget\StaTraindiagramwidgetKSK.cpp">
+    <ClCompile Include="CTCMainWindow\StationViewKSK\ModuleWidget\StaTrainDiagramWidgetKSK.cpp">
       <Filter>CTCMainWindow\StationViewKSK\ModuleWidget</Filter>
     </ClCompile>
     <ClCompile Include="CTCMainWindow\StationViewKSK\ModuleWidget\StaAddNewTrainKSK.cpp">
@@ -341,7 +341,7 @@
     <ClInclude Include="StationObject\Device\StaTextSign.h">
       <Filter>StationObject\Device</Filter>
     </ClInclude>
-    <ClInclude Include="CTCMainWindow\BaseWndClass\StationView\StaTraindiagramwidget.h">
+    <ClInclude Include="CTCMainWindow\BaseWndClass\StationView\StaTrainDiagramWidget.h">
       <Filter>CTCMainWindow\BaseWndClass\StationView</Filter>
     </ClInclude>
   </ItemGroup>
@@ -579,7 +579,7 @@
     <QtMoc Include="CTCMainWindow\BaseWndClass\ModuleWidget\StaTreeNode.h">
       <Filter>CTCMainWindow\BaseWndClass\ModuleWidget</Filter>
     </QtMoc>
-    <QtMoc Include="CTCMainWindow\StationViewKSK\ModuleWidget\StaTraindiagramwidgetKSK.h">
+    <QtMoc Include="CTCMainWindow\StationViewKSK\ModuleWidget\StaTrainDiagramWidgetKSK.h">
       <Filter>CTCMainWindow\StationViewKSK\ModuleWidget</Filter>
     </QtMoc>
     <QtMoc Include="StationObject\StationObject.h">
@@ -734,7 +734,7 @@
     <QtUic Include="CTCMainWindow\StationViewKSK\ModuleWidget\TrainInformationInterfaceKSK.ui">
       <Filter>CTCMainWindow\StationViewKSK\ModuleWidget</Filter>
     </QtUic>
-    <QtUic Include="CTCMainWindow\StationViewKSK\ModuleWidget\StaTraindiagramwidgetKSK.ui">
+    <QtUic Include="CTCMainWindow\StationViewKSK\ModuleWidget\StaTrainDiagramWidgetKSK.ui">
       <Filter>CTCMainWindow\StationViewKSK\ModuleWidget</Filter>
     </QtUic>
     <QtUic Include="CTCMainWindow\StationViewKSK\ModuleWidget\StaAddNewTrainKSK.ui">

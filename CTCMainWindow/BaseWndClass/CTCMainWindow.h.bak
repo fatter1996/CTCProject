@@ -172,7 +172,7 @@ namespace CTCWindows {
 		MouseState m_eMouseState = MouseState::Default;
 		MenuSyncAction m_stuMenuSyncAction;
 		QAction* m_pRoutePlanAction = nullptr;
-
+		int m_buttonTimerId = 0;
 		bool m_bShowToolbarBtn = true;
 		bool m_bShowToolbarLabel = true;
 	};

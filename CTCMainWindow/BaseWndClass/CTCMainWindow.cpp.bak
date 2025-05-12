@@ -52,6 +52,7 @@ namespace CTCWindows {
         InitStatusBar();
 
         //初始化界面布局
+        m_buttonTimerId = startTimer(200);
         InitViewLayout();
 
         SealTechnique::InitSealRecord(Station::MainStation());
@@ -143,23 +144,23 @@ namespace CTCWindows {
         StaPaintView()->setFixedSize(tempSize);
     }
     
-    void CTCMainWindow::UpdataDateTime()
+
+    void CTCMainWindow::timerEvent(QTimerEvent* event)
     {
-        if (!m_pBottomTimeLabel) {
-            return;
+
+        if (Station::MainStation()->NewDispatchOrder()) {
+            QPushButton* pDispatchBtn = m_pSignForToolBar->findChild<QPushButton*>("dispatchBtn");
+            if (pDispatchBtn) {
+                if (Station::Device::DeviceBase::getElapsed()) {
+                    pDispatchBtn->setStyleSheet("QPushButton{background-color: rgb(210, 210, 210);}");
+                }
+                else {
+                    pDispatchBtn->setStyleSheet("QPushButton{background-color: #FD0C0C;}");
+                }
+                m_pSignForToolBar->update();
+            }
         }
-        QDateTime date = QDateTime::currentDateTime();
-        QString strWeek;
-        switch (date.date().dayOfWeek()) {
-        case 1: strWeek = "星期一"; break;
-        case 2: strWeek = "星期二"; break;
-        case 3: strWeek = "星期三"; break;
-        case 4: strWeek = "星期四"; break;
-        case 5: strWeek = "星期五"; break;
-        case 6: strWeek = "星期六"; break;
-        case 7: strWeek = "星期日"; break;
-        }
-        m_pBottomTimeLabel->setText(QString("%1  %2").arg(date.toString("yyyy-MM-dd hh:mm:ss")).arg(strWeek));
+        return QMainWindow::timerEvent(event);
     }
 
     void CTCMainWindow::TurnToStationCtrlDisp()
@@ -258,6 +259,7 @@ namespace CTCWindows {
             m_pCurToolBar = m_pTrafficLogToolBar;
             m_pCurToolBar->show();
         }
+        //if(m_pCurShowView != )
 
         QPushButton* pSendPlanBtn = m_pStateToolBar->findChild<QPushButton*>("sendPlanBtn");
         if (pSendPlanBtn) {

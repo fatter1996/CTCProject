@@ -2,9 +2,10 @@
 
 #include "BaseWndClass/CTCMainWindow.h"
 #include "ui_StationViewKSK.h"
-#include "./CTCMainWindow/StationViewKSK/ModuleWidget/TrainInformationInterfaceKSK.h"
-#include "./CTCMainWindow/StationViewKSK/ModuleWidget/StaTraindiagramwidgetKSK.h"
+#include "ModuleWidget/TrainInformationInterfaceKSK.h"
+#include "ModuleWidget/StaTrainDiagramWidgetKSK.h"
 #include "ModuleWidget/StaAddNewTrainKSK.h"
+
 namespace CTCWindows {
 	namespace CASCO {
 		class StationViewKSK : public CTCMainWindow
@@ -30,10 +31,8 @@ namespace CTCWindows {
 			BaseWnd::StaDispatchOrder* CreateStaDispatchOrder() override;
 			//创建显示设置界面
 			BaseWnd::StaVisibleSet* CreateStaVisibleSet() override;
-			// 初始化工具栏-底部行车日志工具栏
-			void InitbottomTrafficLogToolBar() override;
 
-			BaseWnd::StaTraindiagramwidget* CreateStaTraindiagramwidget() override;
+			BaseWnd::StaTrainDiagramWidget* CreateStaTrainDiagramWidget() override;
 			//初始化主菜单
 			void InitStationViewMenuBar() override;
 			//初始化工具栏-主工具栏
@@ -44,14 +43,11 @@ namespace CTCWindows {
 			void InitSignForToolBar() override;
 			//初始化工具栏-状态工具栏
 			void InitStateToolBar() override;
-			void InitStaTraindiagramwidget() override;
+
 			QLayout* WidgetLayout() override { return ui.centralWidget->layout(); }
 			void InitStatusBar() override ;
-			StaAddNewTrainKSK* getInstance();
 
 		private:
-			StaTraindiagramwidgetKSK* m_pStaTraindiagram = nullptr;
-			StaAddNewTrainKSK* m_pStaAddNewTrain = nullptr;
 			TrainInformationInterfaceKSK*  m_pTrainFormation = nullptr;
 			Ui::StationViewKSK ui;
 		};

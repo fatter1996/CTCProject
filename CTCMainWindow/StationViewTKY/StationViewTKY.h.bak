@@ -54,14 +54,17 @@ namespace CTCWindows {
 			//初始化界面布局
 			QLayout* WidgetLayout() override { return ui.centralWidget->layout(); }
 
-		public:
-			void ShowEditingInterface(void* pTextSign) override;
-
 		signals:
 			void clickFunbutton(FunType eSelectType);
 			void countdownStarts();
 
 		private:
+			int TimerId = 0;
+			QLabel* TimeLabel = nullptr;
+			EditingInterfaceTKY* m_pEditInterFace = nullptr;
+			VehicleManage* m_pVehicleManage = nullptr;
+			StaAlarmWindowTKY*  m_pStaAlarm = nullptr;
+			LntervallogicCheck* m_pLntervallogic = nullptr;
 			QLabel* m_pCountdownLabel = nullptr;
 			QLabel* m_pTimeLabel = nullptr;
 			int m_nTimerId = 0;

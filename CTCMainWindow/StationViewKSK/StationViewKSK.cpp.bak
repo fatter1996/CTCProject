@@ -263,15 +263,15 @@ namespace CTCWindows {
 		void StationViewKSK::InitTrafficLogToolBar()
 		{
 			qDebug() << "InitTrafficLogToolBarTKY";
-			m_pTrafficLogToolBar = new QToolBar(this);
+			m_pTrafficLogToolBar = new QToolBar(this); 
+
 			connect(AddToolBarBtn(":/CTCProject/icon/CASCO/print.png", "打印", LOGVIEW_TOOL), &QPushButton::clicked, [=]() {});
 			connect(AddToolBarBtn(":/CTCProject/icon/CASCO/preview.png", "打印预览", LOGVIEW_TOOL), &QPushButton::clicked, [=]() {});
 			connect(AddToolBarBtn(":/CTCProject/icon/CASCO/diagram.png", "运行图", LOGVIEW_TOOL), &QPushButton::clicked, this, &CTCMainWindow::TurnToTraindiagramDisp);
 			connect(AddToolBarBtn(":/CTCProject/icon/CASCO/newTrain.png", "新增车辆", LOGVIEW_TOOL), &QPushButton::clicked, [=]() {
-				m_pStaAddNewTrain = getInstance();
-				m_pStaAddNewTrain->GetNowTime();
-				m_pStaAddNewTrain->ClearWidget();
-				m_pStaAddNewTrain->show();
+				StaAddNewTrainKSK* pStaAddNewTrain = new StaAddNewTrainKSK;
+				pStaAddNewTrain->InitAddView();
+				pStaAddNewTrain->show();
 				update();
 			});
 

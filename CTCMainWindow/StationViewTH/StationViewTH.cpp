@@ -28,11 +28,7 @@ namespace CTCWindows {
 			return new StationViewTH(parent);
 		}
 
-		void StationViewTH::InitbottomTrafficLogToolBar()
-		{
-		}
-
-		BaseWnd::StaTraindiagramwidget* StationViewTH::CreateStaTraindiagramwidget()
+		BaseWnd::StaTrainDiagramWidget* StationViewTH::CreateStaTrainDiagramWidget()
 		{
 			return nullptr;
 		}
@@ -66,10 +62,6 @@ namespace CTCWindows {
 		BaseWnd::StaVisibleSet* StationViewTH::CreateStaVisibleSet()
 		{
 			return new CASCO::StaVisibleSetKSK(this);
-		}
-
-		void StationViewTH::InitStaTraindiagramwidget()
-		{
 		}
 
 		void StationViewTH::InitStationViewMenuBar()

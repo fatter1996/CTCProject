@@ -69,7 +69,7 @@ namespace CTCWindows {
 				<< pRoute->m_tTriggerTime.toString("hh:mm")
 				<< pRoute->m_tPlanTime.toString("hh:mm")
 				<< (pRoute->m_vecSubRouteId.size() ? "" : pRoute->getStateStr())
-				<< pRoute->m_strRouteDescrip;
+				<< pRoute->m_strCurRouteDescrip;
 			return strList;
 		}
 

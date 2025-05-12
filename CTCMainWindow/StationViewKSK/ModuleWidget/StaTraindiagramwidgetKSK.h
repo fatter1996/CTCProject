@@ -1,16 +1,19 @@
 #pragma once
 
 #include <QWidget>
-#include "ui_StaTraindiagramwidgetKSK.h"
-#include "CTCMainWindow/BaseWndClass/StationView/StaTraindiagramwidget.h"
+#include "ui_StaTrainDiagramWidgetKSK.h"
+#include "StationView/StaTrainDiagramWidget.h"
 #include <QTime>
-#include "Global.h"
+
+
 #define SPACING_LEFTORRIGHT 2
 #define SPACING_TOPORBOTTOM 60
 #define SPACING_TIMEAXIS 50
-class StaTraindiagramwidgetKSK : public CTCWindows::BaseWnd::StaTraindiagramwidget
-{
-	Q_OBJECT
+namespace CTCWindows {
+	namespace CASCO {
+		class StaTrainDiagramWidgetKSK : public BaseWnd::StaTrainDiagramWidget
+		{
+			Q_OBJECT
 
 public:
 	StaTraindiagramwidgetKSK(QWidget *parent = nullptr);
@@ -29,12 +32,13 @@ public:
 	bool eventFilter(QObject* obj, QEvent* event);
 	void drawRouteLine(QPainter* painter, Station::RailwayLine* TrainDiagram, Station::StaTrafficLog* pTrafficLog, Station::StaTrainRoute* pRoute, int& startX, int& endX, int& nEndY);
 
-private:
-	Ui::StaTraindiagramwidgetKSKClass ui;
-	Station::TrainDiagramInfo* TrainDiagram = nullptr;
-	int maxStationWidgetWidth = 0;
-	int Timer_ID_60000 = 0; //进路序列刷新计时器
-	int nowTimeLinePx = 0;
-	int oldTimeLinePx = 0;
-	QTime nowTime;
-};
+		private:
+			Ui::StaTrainDiagramWidgetKSKClass ui;
+			int maxStationWidgetWidth = 0;
+			int Timer_ID_60000 = 0; //进路序列刷新计时器
+			int nowTimeLinePx = 0;
+			int oldTimeLinePx = 0;
+			QTime nowTime;
+		};
+	}
+}

@@ -207,11 +207,11 @@ namespace Station {
             m_mapAttribute[m_strType].insert("m_Color", [](DeviceBase* pDevice, const QString& strElement) {
                 switch (strElement.toInt())
                 {
-                case 0:  dynamic_cast<StaMark*>(pDevice)->m_cColor = Qt::white;  break;
-                case 1:  dynamic_cast<StaMark*>(pDevice)->m_cColor = Qt::red;    break;
-                case 2:  dynamic_cast<StaMark*>(pDevice)->m_cColor = Qt::yellow; break;
-                case 3:  dynamic_cast<StaMark*>(pDevice)->m_cColor = Qt::green;  break;
-                default: dynamic_cast<StaMark*>(pDevice)->m_cColor = Qt::white;  break;
+                case 0:  dynamic_cast<StaMark*>(pDevice)->m_cColor = COLOR_TRACK_WHITE;         break;
+                case 1:  dynamic_cast<StaMark*>(pDevice)->m_cColor = COLOR_TRACK_OUTSIDE_RED;   break;
+                case 2:  dynamic_cast<StaMark*>(pDevice)->m_cColor = COLOR_TRACK_YELLOW;        break;
+                case 3:  dynamic_cast<StaMark*>(pDevice)->m_cColor = COLOR_TRACK_GREEN;         break;
+                default: dynamic_cast<StaMark*>(pDevice)->m_cColor = COLOR_TRACK_WHITE;         break;
                 }
             });
             m_mapAttribute[m_strType].insert("m_Rect", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaMark*>(pDevice)->m_rcMark = QStringToQRectF(strElement); });
@@ -238,10 +238,10 @@ namespace Station {
             }
             else if (m_nType == 602) {
                 QPointF points[4] = {
-                        Scale(m_rcMark.bottomLeft()),
-                        Scale(m_rcMark.topLeft()),
-                        Scale(m_rcMark.topRight()),
-                        Scale(m_rcMark.bottomRight())
+                    Scale(m_rcMark.bottomLeft()),
+                    Scale(m_rcMark.topLeft()),
+                    Scale(m_rcMark.topRight()),
+                    Scale(m_rcMark.bottomRight())
                 };
                 m_pPainter.drawPolyline(points, 4);
             }
@@ -258,6 +258,9 @@ namespace Station {
                     QPointF(m_rcMark.left() + m_rcMark.width() * 0.85, m_rcMark.top() + m_rcMark.height() * 0.75));
                 m_pPainter.drawLine(QPointF(m_rcMark.left() + m_rcMark.width() * 0.3, m_rcMark.top() + m_rcMark.height() * 0.5),
                     QPointF(m_rcMark.left() + m_rcMark.width() * 0.7, m_rcMark.top() + m_rcMark.height() * 0.5));
+            }
+            else if (m_nType == 621) {
+                m_pPainter.drawEllipse(Scale(m_rcMark));
             }
         }
         //Õ¾³¡·­×ª

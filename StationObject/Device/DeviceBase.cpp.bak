@@ -349,6 +349,8 @@ namespace Station {
             }
         }
 
+
+ 
         void DeviceBase::onDeviceClick()
         {
             if (m_mapClickEvent[m_strType].contains(CTCWindows::BaseWnd::StaFunBtnToolBar::getCurrFunType())) {

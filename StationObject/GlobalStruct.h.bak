@@ -101,7 +101,7 @@ namespace Station {
 
 	struct StaOrder {
 	};
-
+	
 	struct StaStagePlan;
 	struct StaTrafficLog;
 	struct StaDispatchOrder;
@@ -181,7 +181,7 @@ namespace Station {
 	{
 		int m_nRouteId = 0; //进路序列ID
 		int m_nTrainId = 0; //车次ID
-
+		QString m_strTrainNum;
 		bool m_bArrivaRoute = true; //接发类型 (接车-true 发车-false)
 		bool m_bAutoTouch = false;//触发方式(自动触发-true 人工触发-false)
 
@@ -257,6 +257,14 @@ namespace Station {
 
 	public:
 		static void Init(StaDispatchOrder* pDispatch, const QJsonObject& subObj);
+		void setOrderNum() {
+			int i = 0;
+			// 找到第一个非 0 字符的位置
+			while (i < m_strOrderNum.length() && m_strOrderNum[i] == '0') {
+				++i;
+			}
+			m_strOrderNum = m_strOrderNum.mid(i);
+		}
 	};
 
 	struct StaTrafficLog : public StaOrder //行车日志

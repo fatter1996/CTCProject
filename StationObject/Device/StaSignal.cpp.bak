@@ -516,6 +516,7 @@ namespace Station {
                 }
                 }
             }
+            
         }
 
         void StaSignal::ShowDeviceMenu(const QPoint& ptPos)
@@ -701,10 +702,6 @@ namespace Station {
         {
             setFlash(false);
             BtnStateReset();
-        }
-
-        void StaSignal::ClearFlashSignal()
-        {
             QVector<SignalBtn*>().swap(m_vecFlashSignal);
         }
 

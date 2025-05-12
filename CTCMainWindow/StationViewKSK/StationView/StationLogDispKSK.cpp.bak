@@ -1,12 +1,5 @@
 #include "StationLogDispKSK.h"
-#include "./CTCMainWindow/StationViewKSK/ModuleWidget/QuickReportKSK.h"
-#include "./CTCMainWindow/StationViewKSK/ModuleWidget/ModifyRelevantStationsKSK.h"
-#include "./CTCMainWindow/StationViewKSK/ModuleWidget/ModifyTrainNumberKSK.h"
-#include "./CTCMainWindow/StationViewKSK/ModuleWidget/StaAddNewTrainKSK.h"
 #include "Global.h"
-#include <QInputDialog>
-#include <QDialogButtonBox>
-#include <QMessageBox>
 #pragma execution_character_set("utf-8")
 
 namespace CTCWindows {
@@ -209,6 +202,7 @@ namespace CTCWindows {
 				{ 0, 66, 1, 5, "重点"},	
 			};
 			pTrafficLogTable->TableHeadInit(5, 67, vecTableHeadInfo);
+			
 		}
 
 		void StationLogDispKSK::AddTrafficLogTable()
@@ -243,7 +237,9 @@ namespace CTCWindows {
 						<< "" << "" << "" << ""	//摘车辆数
 						<< "" //占用区间凭证号码
 						<< ""
-						<< "" << "" << ""
+						<< QString("%1").arg(pTrafficLog->m_nArrivalTrainValue)
+						<< QString("%1").arg(pTrafficLog->m_nArrivalChange)
+						<< QString("%1").arg(pTrafficLog->m_nArrivalWeight)
 						<< "" << "" << "" << "" << "" //电话记录号码
 						<< (pTrafficLog->m_bUpDown ? "" : pTrafficLog->m_strDepartTrainNum)
 						<< (!pTrafficLog->m_bUpDown ? "" : pTrafficLog->m_strDepartTrainNum)
@@ -256,7 +252,9 @@ namespace CTCWindows {
 						<< "" << "" << "" << ""	//摘车辆数
 						<< "" //占用区间凭证号码
 						<< ""
-						<< "" << "" << ""
+						<< QString("%1").arg(pTrafficLog->m_nDepartTrainValue)
+						<< QString("%1").arg(pTrafficLog->m_nDepartChange)
+						<< QString("%1").arg(pTrafficLog->m_nDepartWeight)
 						<< "" << "" << "" << "" << "" //电话记录号码
 						<< "" //本务机车调车时分
 						<< pTrafficLog->m_strDelayReason
@@ -289,158 +287,6 @@ namespace CTCWindows {
 			pTrafficLogTable->SetTableData(vecTableData);
 		}
 
-		void StationLogDispKSK::ClickMenu(QPoint pos, Station::StaTrafficLog* m_pCurTrafficLog)
-		{
-			QMenu* pMenu = new QMenu();
-			QAction* pAction = new QAction("上报到达点");
-			QAction* pAction_2 = new QAction("上报出发点");
-			QAction* pAction_3 = new QAction("上报通过点");
-			QAction* pAction_4 = new QAction("为始发车");
-			QAction* pAction_5 = new QAction("为终到车");
-			QAction* pAction_6 = new QAction("上报速报信息");
-			QAction* pAction_7 = new QAction("修改车次号");
-			QAction* pAction_8 = new QAction("修改相关邻站");
-			QAction* pAction_9 = new QAction("删除");
-			QAction* pAction_10 = new QAction("删除闪烁");
-			QAction* pAction_11 = new QAction("全体信息");
-			QAction* pAction_12 = new QAction("修改列车计划");
-			QAction* pAction_13 = new QAction("设置/取消重点列车");
-			QAction* pAction_14 = new QAction("设置删除标记");
-			QAction* pAction_15 = new QAction("允许股道与基本径路不一致");
-			QAction* pAction_16 = new QAction("允许出入口与基本径路不一致");
-			pMenu->addAction(pAction);
-			connect(pAction, &QAction::triggered, [=] (){//上报到达点
-				TrainArrival();
-				});
-			pMenu->addAction(pAction_2);
-			connect(pAction_2, &QAction::triggered, [=]() {//上报出发点
-				TrainDeparture();
-				});
-			pMenu->addAction(pAction_3);
-			connect(pAction_3, &QAction::triggered, [=]() {//上报通过点
-				TrainPassThrough();
-				});
-			pMenu->addAction(pAction_4);
-			connect(pAction_4, &QAction::triggered, [=]() {//为始发车
-				});
-			pMenu->addAction(pAction_5);
-			connect(pAction_5, &QAction::triggered, [=]() {//为终到车
-				});
-			pMenu->addSeparator();
-			pMenu->addAction(pAction_6);
-			connect(pAction_6, &QAction::triggered, [=]() {//上报速报信息
-				QuickReportKSK* Report = new QuickReportKSK(m_pCurTrafficLog);
-				Report->show();
-				});
-			pMenu->addAction(pAction_7);
-			connect(pAction_7, &QAction::triggered, [=]() {//修改车次号
-				ModifyTrainNumberKSK* pTrainNumber = new ModifyTrainNumberKSK(m_pCurTrafficLog);
-				pTrainNumber->show();
-
-				});
-			pMenu->addAction(pAction_8);
-			connect(pAction_8, &QAction::triggered, [=]() {//修改相关邻站
-				ModifyRelevantStationsKSK* m_pRelevantStations = new ModifyRelevantStationsKSK(m_pCurTrafficLog);
-				m_pRelevantStations->show();
-				});
-			pMenu->addAction(pAction_9);
-			connect(pAction_9, &QAction::triggered, [=]() {//删除
-				int ret = msgBox.exec();
-				if (m_pCurTrafficLog) {
-					QMessageBox msgBox(QMessageBox::Warning,
-						tr("CTC"),
-						tr("是否确定删除！"),
-						QMessageBox::Ok | QMessageBox::Cancel,
-						this);
-
-					// 自定义按钮文本
-					msgBox.setButtonText(QMessageBox::Ok, tr("确定"));
-					msgBox.setButtonText(QMessageBox::Cancel, tr("取消"));
-
-					// 显示对话框并获取结果
-					int ret = msgBox.exec();
-
-					if (ret == QMessageBox::Ok) {
-						qDebug() << "用户点击了确定";
-
-						QVector<Station::StaTrainRoute*> vecTrainRoute;
-						bool bAllClear = true;
-						QByteArray btResult;
-						vecTrainRoute = Station::MainStation()->getStaTrainRouteByTrain(m_pCurTrafficLog->m_nTrainId);
-						if (Http::HttpClient::DeleteStaTrafficLog(m_pCurTrafficLog->m_nLogId, btResult)) {
-							qDebug() << "已删除行车日志-->" << m_pCurTrafficLog->m_nLogId;
-						}
-						for (Station::StaTrainRoute* pTrainRoute : vecTrainRoute) {
-							if (Http::HttpClient::DeleteStaTrainRoute(pTrainRoute->m_nRouteId, btResult)) {
-								qDebug() << "已删除进路序列-->" << pTrainRoute->m_nRouteId;
-							}
-						}
-						if (Http::HttpClient::DeleteStaTrain(m_pCurTrafficLog->m_nTrainId, btResult)) {
-							qDebug() << "已删除车次信息-->" << m_pCurTrafficLog->m_nTrainId;
-						}
-						Station::MainStation()->RemoveLogVecOne(m_pCurTrafficLog);
-					}
-				}
-				});
-			pMenu->addSeparator();
-			pMenu->addAction(pAction_10);
-			connect(pAction_10, &QAction::triggered, [=]() {//删除闪烁
-
-				});
-			pMenu->addAction(pAction_11);
-			connect(pAction_11, &QAction::triggered, [=]() {//全体信息
-
-				});
-			pMenu->addSeparator();
-			pMenu->addAction(pAction_12);
-			connect(pAction_12, &QAction::triggered, [=]() {//修改列车计划
-				StaAddNewTrainKSK* pAddNewTrain = new StaAddNewTrainKSK;
-				pAddNewTrain->SetTrainValue(m_pCurTrafficLog);
-				pAddNewTrain->show();
-				});
-			pMenu->addAction(pAction_13);
-			connect(pAction_13, &QAction::triggered, [=]() {//设置/取消重点列车
-				if (m_pCurTrafficLog) {
-					Station::StaTrain* pTrain = Station::MainStation()->getStaTrainById(m_pCurTrafficLog->m_nTrainId);
-					QString strImportant;
-					if (pTrain->m_bImportant) {
-						strImportant = "当前为重点列车是否取消重点列车";
-					}
-					else {
-						strImportant = "当前为非重点列车是否设置重点列车";
-					}
-					QMessageBox msgBox(QMessageBox::Warning,
-						tr("CTC"),
-						tr("是否确定删除！"),
-						QMessageBox::Ok | QMessageBox::Cancel,
-						this);
-
-					msgBox.setButtonText(QMessageBox::Ok, tr("确定"));
-					msgBox.setButtonText(QMessageBox::Cancel, tr("取消"));
-
-					int ret = msgBox.exec();
-
-					if (ret == QMessageBox::Ok) {
-						pTrain->m_bImportant = !pTrain->m_bImportant;
-					}
-				}
-				});
-			pMenu->addAction(pAction_14);
-			connect(pAction_14, &QAction::triggered, [=]() {//设置删除标记
-
-				});
-			pMenu->addAction(pAction_15);
-			connect(pAction_15, &QAction::triggered, [=]() {//允许股道与基本径路不一致
-
-				});
-			pMenu->addAction(pAction_16);
-			connect(pAction_16, &QAction::triggered, [=]() {//允许出入口与基本径路不一致
-
-				});
-			pMenu->exec(pos);
-		}
-
-		
 		void StationLogDispKSK::ShowTableHead(bool bShow)
 		{
 			ui.tableHeadFrame->setHidden(!bShow);	

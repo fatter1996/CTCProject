@@ -197,26 +197,7 @@ namespace Station {
     {
         m_nTrackCode = nCode;
         m_strTrack = strName;
-
-        QString strSignalName;
-        Device::DeviceBase* pArrivaSignal = MainStation()->getDeviceByCode(m_nSignalCode, SIGNALLAMP);
-        for (Device::DeviceBase* pSignal : MainStation()->getDeviceVectorByType(SIGNALLAMP)) {
-            if (pSignal->getSXThroat() == pArrivaSignal->getSXThroat() && (pSignal->getAttr() & SIGNAL_FCXH) &&
-                pSignal->getName().mid(1) == m_strTrack.left(m_strTrack.indexOf("G"))) {
-                strSignalName = pSignal->getName();
-                break;
-            }
-        }
-        if (m_bArrivaRoute) {   //接车
-            m_strRouteDescrip.append(m_strSignal);
-            m_strRouteDescrip.append(",");
-            m_strRouteDescrip.append(strSignalName);
-        }
-        else {  //发车
-            m_strRouteDescrip.append(strSignalName);
-            m_strRouteDescrip.append(",");
-            m_strRouteDescrip.append(m_strSignal);
-        }
+        getRouteDescrip();
     }
 
     QString StaTrainRoute::getStateStr()
@@ -233,81 +214,48 @@ namespace Station {
         }
     }
 
-    QString StaTrainRoute::SortOutTheData(QMap<int, int> SingalCode, QString SingalBtnName,bool Direction) {
-
-        Station::Device::DeviceBase* pEndSignal = nullptr;
-        QMap<int, int>::const_iterator iter;
-        QString m_strRouteDescrip;
-        
-        for (iter = SingalCode.constBegin(); iter != SingalCode.constEnd(); ++iter) {
-            if (m_strSignal[0] == "S") {
-                pEndSignal = Station::MainStation()->getDeviceByCode(iter.key());
-                if (Direction) {
-                    return m_strRouteDescrip = SingalBtnName + "," + pEndSignal->getName();
-                }
-                else {
-                    return m_strRouteDescrip = pEndSignal->getName() + "," + SingalBtnName;
-                }
+    void StaTrainRoute::getRouteDescrip()
+    {
+        m_strRouteDescripList.clear();
+        QMap<QString,QVector<int>> mapTrackAdjSingal = Station::MainStation()->getTrackAdjSingal();
+        Device::DeviceBase* pDevice = nullptr;
+        QString strEntrySingal;
+        QString strExitSingal;
+        for (Device::SignalBtn* pSingalBtn : MainStation()->getSignalBtn()) {
+            if (m_bArrivaRoute) {
+                strEntrySingal = pSingalBtn->strBtnNameList[0];
+                strExitSingal = pSingalBtn->strBtnNameList[pSingalBtn->strBtnNameList.size() - 1];
             }
             else {
-                pEndSignal = Station::MainStation()->getDeviceByCode(iter.value());
-                if (Direction) {
-                    return m_strRouteDescrip = SingalBtnName + "," + pEndSignal->getName();
-                }
-                else {
-                    return m_strRouteDescrip = pEndSignal->getName() + "," + SingalBtnName;
-                }
+                strExitSingal = pSingalBtn->strBtnNameList[0];
+                strEntrySingal = pSingalBtn->strBtnNameList[pSingalBtn->strBtnNameList.size() - 1];
             }
-        }
-        return "";
-    }
-    QString StaTrainRoute::getRouteDescrip()
-    {
-        QList<Station::Device::SignalBtn*>* listFlashSignal = MainStation()->getSignalBtn();
-        QMap<QString,QMap<int, int>> Tracksingal = Station::MainStation()->getTracksingal();
-        QMap<QString, QMap<int, int>>::const_iterator it;
-        QMap<int, int> SingalCode;
-        if (m_bArrivaRoute) {
-            for (Station::Device::SignalBtn* pSingalBtn : *listFlashSignal) {
-                if (pSingalBtn->Btnname[0] == m_strSignal) {
-                    Station::Device::DeviceBase* pDevice = Station::MainStation()->getDeviceByName(pSingalBtn->Btnname[pSingalBtn->Btnname.size() - 1]);
-                    for (it = Tracksingal.constBegin(); it != Tracksingal.constEnd(); ++it) {
-                        if (it.key() == m_strTrack) {
-                            SingalCode = it.value();
-                            return SortOutTheData(SingalCode, m_strSignal, m_bArrivaRoute);
-                        }
-                        else {
-                            continue;
-                        }
-                    }
-                }
-                else {
-                    continue;
-                }
-            }
-        }
-        else {
-            for (Station::Device::SignalBtn* pSingalBtn : *listFlashSignal) {
-                if (pSingalBtn->Btnname[0] == m_strSignal) {
-                    Station::Device::DeviceBase* pDevice = Station::MainStation()->getDeviceByName(pSingalBtn->Btnname[pSingalBtn->Btnname.size()-1]);
-                    for (it = Tracksingal.constBegin(); it != Tracksingal.constEnd(); ++it) {
-                        if (it.key() == m_strTrack) {
-                            SingalCode = it.value();
-                            return SortOutTheData(SingalCode, m_strSignal, m_bArrivaRoute);;
-                        }
-                        else {
-                            continue;
-                        }
-                    }
-                }
-                else {
-                    continue;
-                }
-            }
-        }
-        return "";
-    }
 
+            if (strEntrySingal != m_strSignal) {
+                continue;
+            }
+            pDevice = MainStation()->getDeviceByName(strExitSingal, SIGNALLAMP);
+            if (!pDevice) {
+                continue;
+            }
+            for (int nCode : mapTrackAdjSingal[m_strTrack]) {
+                if (nCode == pDevice->getCode()) {
+                    QString strDescrip;
+                    for (const QString& strSignalBen : pSingalBtn->strBtnNameList) {
+                        strDescrip.append(strSignalBen);
+                        if (strSignalBen != pSingalBtn->strBtnNameList.back()) {
+                            strDescrip.append(",");
+                        }
+                    }
+                    m_strRouteDescripList.append(strDescrip);
+                    break;
+                }
+            }
+        }
+        if (m_strRouteDescripList.size() > 0) {
+            m_strCurRouteDescrip = m_strRouteDescripList[0];
+        }
+    }
 
     void StaTrainRoute::Init(StaTrainRoute* pTrainRoute, const QJsonObject& subObj)
     {
@@ -325,7 +273,7 @@ namespace Station {
         pTrainRoute->m_nSignalCode = subObj.value("signalCode").toInt();
         pTrainRoute->m_strSignal = MainStation()->getDeviceByCode(pTrainRoute->m_nSignalCode, SIGNALLAMP)->getName();
 
-        pTrainRoute->m_strRouteDescrip = subObj.value("routeDepict").toString();
+        pTrainRoute->m_strCurRouteDescrip = subObj.value("routeDepict").toString();
         pTrainRoute->m_strDirection = subObj.value("direction").toString();
         pTrainRoute->m_nRouteState = subObj.value("routeState").toInt();
 

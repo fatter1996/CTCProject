@@ -54,7 +54,7 @@ namespace CTCWindows {
 				<< (pRoute->m_vecSubRouteId.size() ? pRoute->getStateStr() : "")
 				<< pRoute->m_tPlanTime.toString("hh:MM")
 				<< pRoute->m_strDirection
-				<< pRoute->m_strRouteDescrip
+				<< pRoute->m_strCurRouteDescrip
 				<< "计划生成" 
 				<< "";
 			return strList;
