@@ -22,21 +22,15 @@ namespace Http {
 		static bool ClearStaStagePlan(QByteArray& btResult);
 		//车次
 		static bool AddStaTrain(Station::StaTrain* pTrain, QByteArray& btResult);
+		static bool UpdataStaTrainAttr(int stationId, QMap<QString, QByteArray> m_mapTrainValue, QByteArray& btResult);
 		static bool SelectStaTrainList(QByteArray& btResult);
 		static bool SelectStaTrain(int nTrainId, QByteArray& btResult);
 		static bool DeleteStaTrain(int nTrainId, QByteArray& btResult);
-		static bool ChangeTrainNum(int nTrainId, QString strTrainNum, QByteArray& btResult);
-		static bool SetTrainRunState(int nTrainId, bool bRunning, QByteArray& btResult);
-		static bool UpdataTrainPos(int nTrainId, int nPosCode, QByteArray& btResult);
-		static bool ChangeTrainAttr(int nTrainId, int nSpeed, QString strLocomotive, bool bElectric, QByteArray& btResult);
 		static bool ClearStaTrain(QByteArray& btResult);
 		//进路序列
 		static bool AddStaTrainRoute(Station::StaTrainRoute* pTrainRoute, QByteArray& btResult);
+		static bool UpdataStaTrainRouteAttr(int nRouteId, QMap<QString, QByteArray> m_mapRouteValue, QByteArray& btResult);
 		static bool SelectStaTrainRoute(QByteArray& btResult);
-		static bool UpdataRouteState(int nRouteId, int nState, QByteArray& btResult);
-		static bool ChangeRouteTrack(int nRouteId, int nTrackCode, QByteArray& btResult);
-		static bool ChangeTriggerType(int nRouteId, int nTriggerType, QByteArray& btResult);
-		static bool ChangeRoute(int nRouteId, QString strRoute, QByteArray& btResult);
 		static bool DeleteStaTrainRoute(int nRouteId, QByteArray& btResult);
 		static bool ClearStaTrainRoute(QByteArray& btResult);
 		//调度命令
@@ -53,6 +47,7 @@ namespace Http {
 		static bool ClearStaTrainDispatch(QByteArray& btResult);
 		//行车日志
 		static bool AddStaTrafficLog(Station::StaTrafficLog* pTrafficLog, QByteArray& btResult);
+		static bool UpdataStaTrafficLogAttr(int nLogId,QMap<QString, QByteArray> m_mapLogValue, QByteArray& btResult);
 		static bool SelectStaTrafficLog(QByteArray& btResult);
 		static bool UpdataRouteId(int nLogId, int nArrivalRouteId, int nDepartRouteId, QByteArray& btResult);
 		static bool UpdataPointReportTime(int nLogId, QString strPointType, QDateTime tPointTime, QByteArray& btResult);

@@ -355,18 +355,13 @@ namespace Station {
                 nFlag += nLen;
                 
                 MainStation()->AddTrain(pTrain);
-                emit  MainStation()->TrafficLogTableUpData();
-                emit  MainStation()->TrainRouteUpData();
                 DeviceTrain* pDevice = dynamic_cast<Device::DeviceTrain*>(MainStation()->getDeviceByCode(pTrain->m_nPosCode));
                 if (pDevice) {
                     pDevice->SetTrain(pTrain);
                 }
-                else {
-                    qDebug() << "未找到设备:" << pTrain->m_nPosCode;
-                }
             }
             else {
-                StaTrain* pTrain = MainStation()->getStaTrainById(dataArray[12]);
+                StaTrain* pTrain = MainStation()->getStaTrainById(dataArray[12] & 0xFF);
                 if (!pTrain) {
                     return QByteArray();
                 }
@@ -406,7 +401,23 @@ namespace Station {
                         qDebug() << "Not found NextDevice" << pTrain->m_nPosCode;
                     }
                 }
+                else if (dataArray[11] == 0x09) {   //车次信息更新
+                    QByteArray btResult;
+                    if (Http::HttpClient::SelectStaTrain(dataArray[12] & 0xFF, btResult)) {
+                        QJsonParseError error;
+                        QJsonDocument josnDoc = QJsonDocument::fromJson(btResult, &error);
+                        if (josnDoc.isNull()) {
+                            qDebug() << "无效的JSON格式:" << error.errorString();
+                            return QByteArray();
+                        }
+                        if (josnDoc.isObject()) {
+                            StaTrain::Init(pTrain, josnDoc.object());
+                        }
+                    }
+                }
             }
+            emit  MainStation()->TrafficLogTableUpData();
+            emit  MainStation()->TrainRouteUpData();
             return QByteArray();
         }
 
@@ -416,7 +427,11 @@ namespace Station {
                 StaTrainRoute* pTrainRoute = MainStation()->getStaTrainRouteById(dataArray[12]);
                 if (pTrainRoute) {
                     QByteArray btResult;
-                    if (Http::HttpClient::UpdataRouteState(dataArray[12], dataArray[13], btResult)) {
+                    
+                    QMap<QString, QByteArray> m_mapRoute = { 
+                        { "routeState", QByteArray::number(pTrainRoute->m_nRouteState) }
+                    };
+                    if (Http::HttpClient::UpdataStaTrainRouteAttr(pTrainRoute->m_nTrainId, m_mapRoute, btResult)) {
                         pTrainRoute->m_nRouteState = dataArray[13];
                         emit Station::MainStation()->TrainRouteUpData();
                     }

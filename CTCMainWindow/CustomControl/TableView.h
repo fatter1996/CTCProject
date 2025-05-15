@@ -35,7 +35,7 @@ namespace CTCWindows {
 
         public:
             void SetSectionText(const QString& strText, int nWidth);
-            void SetHeadData(QVector<TableViewHeadInfo>& vecHeadInfo, int nHeadType, Qt::Alignment alignment = Qt::AlignCenter, bool bStretchable = true);
+            void SetHeadData(QVector<TableViewHeadInfo> vecHeadInfo, int nHeadType, Qt::Alignment alignment = Qt::AlignCenter, bool bStretchable = true);
             void AddTableRows(const QVector<QStringList>& vecTableData, Qt::Alignment alignment = Qt::AlignCenter);
             void ResetTableRows(const QVector<QStringList>& vecTableData, Qt::Alignment alignment = Qt::AlignCenter);
             void RemoveAllRows();

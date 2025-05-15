@@ -254,7 +254,10 @@ namespace CTCWindows {
 						return;
 					}
 					QByteArray btResult;
-					if (Http::HttpClient::ChangeRoute(pTrainRoute->m_nRouteId, strRoute, btResult)) {
+					QMap<QString, QByteArray> m_mapRoute = { 
+						{ "routeDepict", pTrainRoute->m_strCurRouteDescrip.toLocal8Bit() } 
+					};
+					if (Http::HttpClient::UpdataStaTrainRouteAttr(pTrainRoute->m_nRouteId, m_mapRoute, btResult)) {
 						pTrainRoute->m_strCurRouteDescrip = strRoute;
 					}
 					OnTrainRouteUpData();
@@ -347,19 +350,7 @@ namespace CTCWindows {
 						.arg((pTrainRoute->m_bArrivaRoute == 0) ? "接车" : "发车");
 
 					if (QMessageBox::question(nullptr, MSGBOX_TITTLE, strTips, "是", "否") == 0) {
-						QByteArray btResult;
-						if (pTrainRoute->m_vecSubRouteId.size()) {
-							StaTrainRoute* pSubTrainRoute = nullptr;
-							for (int nSubRouteId : pTrainRoute->m_vecSubRouteId) {
-								if (Http::HttpClient::DeleteStaTrainRoute(nSubRouteId, btResult)) {
-									MainStation()->RemoveTrainRoute(MainStation()->getStaTrainRouteById(nSubRouteId));
-								}
-							}
-						}
-						if (Http::HttpClient::DeleteStaTrainRoute(pTrainRoute->m_nRouteId, btResult)) {
-							MainStation()->RemoveTrainRoute(pTrainRoute);
-						}
-						emit MainStation()->TrainRouteUpData();
+						MainStation()->DeleteTrainRoute(pTrainRoute->getSubTrainRouteList());
 					}
 				});
 				pMenu->exec(QCursor::pos());
@@ -377,7 +368,7 @@ namespace CTCWindows {
 			else {
 				vecTempRouteOrder = pTrainRoute->getSubTrainRouteList();
 			}
-			MainStation()->TrainTrackChange(vecTempRouteOrder, MainStation()->getDeviceByName(strTrack, TRACK));
+			MainStation()->TrainRouteTrackChange(vecTempRouteOrder, MainStation()->getDeviceByName(strTrack, TRACK));
 		}
 
 		void StaRoutePlan::OnTriggerTypeChange(StaTrainRoute* pTrainRoute, bool bAutoTouch)

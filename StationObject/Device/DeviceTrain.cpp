@@ -137,7 +137,7 @@ namespace Station {
                         else {
                             vecTempRouteOrder = pCurTrainRoute->getSubTrainRouteList();
                         }
-                        MainStation()->TrainTrackChange(vecTempRouteOrder, pTrack);
+                        MainStation()->TrainRouteTrackChange(vecTempRouteOrder, pTrack);
                     });
                 }
             }

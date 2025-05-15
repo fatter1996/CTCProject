@@ -44,7 +44,9 @@ namespace CTCWindows {
             connect(pTrafficLogTable->VerticalHeadTable(), &QTableWidget::clicked, [=](const QModelIndex& index) {
                 if (index.row() >= 0 && index.row() < Station::MainStation()->TrafficLogList().size()) {
                     m_pCurTrafficLog = Station::MainStation()->TrafficLogList().at(index.row());
-                    ShowHeadTableClickMenu(QCursor::pos(), m_pCurTrafficLog);
+                    if (m_pCurTrafficLog) {
+                        ShowHeadTableClickMenu(QCursor::pos());
+                    }
                 }
             });
         }
@@ -62,10 +64,12 @@ namespace CTCWindows {
 
             QByteArray btResult;
             QDateTime tAdjAgrDepartTime = tReportTime.isNull() ? QDateTime::currentDateTime() : tReportTime;
-            if (Http::HttpClient::UpdataPointReportTime(m_pCurTrafficLog->m_nLogId, m_mapPointReportType[TrafficLogInfo::AdjAgrDepartTime], tAdjAgrDepartTime, btResult)) {
+            QMap<QString, QByteArray> m_mapLogValue = { 
+                { m_mapPointReportType[TrafficLogInfo::AdjAgrDepartTime], m_pCurTrafficLog->m_tAdjAgrDepartTime.toString(Qt::ISODate).toLocal8Bit() }
+            };
+            if (Http::HttpClient::UpdataStaTrafficLogAttr(m_pCurTrafficLog->m_nLogId, m_mapLogValue, btResult)) {
                 m_pCurTrafficLog->m_tAdjAgrDepartTime = tAdjAgrDepartTime;
-                int nRow = Station::MainStation()->TrafficLogList().indexOf(m_pCurTrafficLog);
-                pTrafficLogTable->SetItemText(Station::MainStation()->TrafficLogList().indexOf(m_pCurTrafficLog), 
+                pTrafficLogTable->SetItemText(Station::MainStation()->TrafficLogList().indexOf(m_pCurTrafficLog),
                     m_mapLogICol[TrafficLogInfo::AdjAgrDepartTime], tAdjAgrDepartTime.toString("hh:mm"));
 
                 if (m_pTrafficMsgLog) {
@@ -95,9 +99,12 @@ namespace CTCWindows {
 
             QByteArray btResult;
             QDateTime tAgrAdjDepartTime = tReportTime.isNull() ? QDateTime::currentDateTime() : tReportTime;
-            if (Http::HttpClient::UpdataPointReportTime(m_pCurTrafficLog->m_nLogId, m_mapPointReportType[TrafficLogInfo::AgrAdjDepartTime], tAgrAdjDepartTime, btResult)) {
+            QMap<QString, QByteArray> m_mapLogValue = { 
+                { m_mapPointReportType[TrafficLogInfo::AgrAdjDepartTime], m_pCurTrafficLog->m_tAgrAdjDepartTime.toString(Qt::ISODate).toLocal8Bit() }
+            };
+            if (Http::HttpClient::UpdataStaTrafficLogAttr(m_pCurTrafficLog->m_nLogId, m_mapLogValue, btResult)) {
                 m_pCurTrafficLog->m_tAgrAdjDepartTime = tAgrAdjDepartTime;
-                pTrafficLogTable->SetItemText(Station::MainStation()->TrafficLogList().indexOf(m_pCurTrafficLog), 
+                pTrafficLogTable->SetItemText(Station::MainStation()->TrafficLogList().indexOf(m_pCurTrafficLog),
                     m_mapLogICol[TrafficLogInfo::AgrAdjDepartTime], tAgrAdjDepartTime.toString("hh:mm"));
 
                 if (m_pTrafficMsgLog) {
@@ -123,9 +130,12 @@ namespace CTCWindows {
 
             QByteArray btResult;
             QDateTime tRealArrivalTime = tReportTime.isNull() ? QDateTime::currentDateTime() : tReportTime;
-            if (Http::HttpClient::UpdataPointReportTime(m_pCurTrafficLog->m_nLogId, m_mapPointReportType[TrafficLogInfo::RealArrivalTime], tRealArrivalTime, btResult)) {
+            QMap<QString, QByteArray> m_mapLogValue = { 
+                { m_mapPointReportType[TrafficLogInfo::RealArrivalTime], m_pCurTrafficLog->m_tRealArrivalTime.toString(Qt::ISODate).toLocal8Bit() }
+            };
+            if (Http::HttpClient::UpdataStaTrafficLogAttr(m_pCurTrafficLog->m_nLogId, m_mapLogValue, btResult)) {
                 m_pCurTrafficLog->m_tRealArrivalTime = tRealArrivalTime;
-                pTrafficLogTable->SetItemText(Station::MainStation()->TrafficLogList().indexOf(m_pCurTrafficLog), 
+                pTrafficLogTable->SetItemText(Station::MainStation()->TrafficLogList().indexOf(m_pCurTrafficLog),
                     m_mapLogICol[TrafficLogInfo::RealArrivalTime], tRealArrivalTime.toString("hh:mm"));
 
                 if (m_pTrafficMsgLog) {
@@ -151,7 +161,10 @@ namespace CTCWindows {
 
             QByteArray btResult;
             QDateTime tRealDepartTime = tReportTime.isNull() ? QDateTime::currentDateTime() : tReportTime;
-            if (Http::HttpClient::UpdataPointReportTime(m_pCurTrafficLog->m_nLogId, m_mapPointReportType[TrafficLogInfo::RealDepartTime], tRealDepartTime, btResult)) {
+            QMap<QString, QByteArray> m_mapLogValue = { 
+                { m_mapPointReportType[TrafficLogInfo::RealDepartTime], m_pCurTrafficLog->m_tRealDepartTime.toString(Qt::ISODate).toLocal8Bit() }
+            };
+            if (Http::HttpClient::UpdataStaTrafficLogAttr(m_pCurTrafficLog->m_nLogId, m_mapLogValue, btResult)) {
                 m_pCurTrafficLog->m_tRealDepartTime = tRealDepartTime;
                 pTrafficLogTable->SetItemText(Station::MainStation()->TrafficLogList().indexOf(m_pCurTrafficLog),
                     m_mapLogICol[TrafficLogInfo::RealDepartTime], tRealDepartTime.toString("hh:mm"));
@@ -176,10 +189,13 @@ namespace CTCWindows {
             if (m_pCurTrafficLog->m_nPlanType == 0x02 || m_pCurTrafficLog->m_nPlanType == 0x03) {
                 return ;
             }
-
-            QByteArray btResult;  
+            
+            QByteArray btResult;
             QDateTime tPassThroughTime = tReportTime.isNull() ? QDateTime::currentDateTime() : tReportTime;
-            if (Http::HttpClient::UpdataPointReportTime(m_pCurTrafficLog->m_nLogId, m_mapPointReportType[TrafficLogInfo::RealArrivalTime], tPassThroughTime, btResult)) {
+            QMap<QString, QByteArray> m_mapLogValue = { 
+                { m_mapPointReportType[TrafficLogInfo::RealArrivalTime], m_pCurTrafficLog->m_tRealDepartTime.toString(Qt::ISODate).toLocal8Bit() }
+            };
+            if (Http::HttpClient::UpdataStaTrafficLogAttr(m_pCurTrafficLog->m_nLogId, m_mapLogValue, btResult)) {
                 m_pCurTrafficLog->m_tRealDepartTime = tPassThroughTime;
                 pTrafficLogTable->SetItemText(Station::MainStation()->TrafficLogList().indexOf(m_pCurTrafficLog),
                     m_mapLogICol[TrafficLogInfo::RealArrivalTime], "Í¨¹ý");
@@ -207,7 +223,10 @@ namespace CTCWindows {
 
             QByteArray btResult;
             QDateTime tAdjAgrDepartTime = tReportTime.isNull() ? QDateTime::currentDateTime() : tReportTime;
-            if (Http::HttpClient::UpdataPointReportTime(m_pCurTrafficLog->m_nLogId, m_mapPointReportType[TrafficLogInfo::AdjAgrDepartTime], tAdjAgrDepartTime, btResult)) {
+            QMap<QString, QByteArray> m_mapLogValue = { 
+                { m_mapPointReportType[TrafficLogInfo::AdjAgrDepartTime], m_pCurTrafficLog->m_tAdjAgrDepartTime.toString(Qt::ISODate).toLocal8Bit() }
+            };
+            if (Http::HttpClient::UpdataStaTrafficLogAttr(m_pCurTrafficLog->m_nLogId, m_mapLogValue, btResult)) {
                 m_pCurTrafficLog->m_tAdjAgrDepartTime = tAdjAgrDepartTime;
                 pTrafficLogTable->SetItemText(Station::MainStation()->TrafficLogList().indexOf(m_pCurTrafficLog),
                     m_mapLogICol[TrafficLogInfo::AdjAgrDepartTime], tAdjAgrDepartTime.toString("hh:mm"));
@@ -238,9 +257,12 @@ namespace CTCWindows {
             }
 
             QByteArray btResult;
-            if (Http::HttpClient::UpdataPointReportTime(m_pCurTrafficLog->m_nLogId, m_mapPointReportType[TrafficLogInfo::RealArrivalTime], QDateTime(), btResult)) {
+            QMap<QString, QByteArray> m_mapLogValue = { 
+                { m_mapPointReportType[TrafficLogInfo::RealArrivalTime], m_pCurTrafficLog->m_tRealArrivalTime.toString(Qt::ISODate).toLocal8Bit() }
+            };
+            if (Http::HttpClient::UpdataStaTrafficLogAttr(m_pCurTrafficLog->m_nLogId, m_mapLogValue, btResult)) {
                 m_pCurTrafficLog->m_tRealArrivalTime = QDateTime();
-                pTrafficLogTable->SetItemText(Station::MainStation()->TrafficLogList().indexOf(m_pCurTrafficLog), 
+                pTrafficLogTable->SetItemText(Station::MainStation()->TrafficLogList().indexOf(m_pCurTrafficLog),
                     m_mapLogICol[TrafficLogInfo::RealArrivalTime], "");
             }
             m_pCurTrafficLog = nullptr;
@@ -258,7 +280,10 @@ namespace CTCWindows {
             }
 
             QByteArray btResult;
-            if (Http::HttpClient::UpdataPointReportTime(m_pCurTrafficLog->m_nLogId, m_mapPointReportType[TrafficLogInfo::AdjAgrDepartTime], QDateTime(), btResult)) {
+            QMap<QString, QByteArray> m_mapLogValue = { 
+                { m_mapPointReportType[TrafficLogInfo::AdjAgrDepartTime], m_pCurTrafficLog->m_tAdjAgrDepartTime.toString(Qt::ISODate).toLocal8Bit() }
+            };
+            if (Http::HttpClient::UpdataStaTrafficLogAttr(m_pCurTrafficLog->m_nLogId, m_mapLogValue, btResult)) {
                 m_pCurTrafficLog->m_tAdjAgrDepartTime = QDateTime();
                 pTrafficLogTable->SetItemText(Station::MainStation()->TrafficLogList().indexOf(m_pCurTrafficLog),
                     m_mapLogICol[TrafficLogInfo::AdjAgrDepartTime], "");
@@ -278,7 +303,10 @@ namespace CTCWindows {
             }
 
             QByteArray btResult;
-            if (Http::HttpClient::UpdataPointReportTime(m_pCurTrafficLog->m_nLogId, m_mapPointReportType[TrafficLogInfo::RealDepartTime], QDateTime(), btResult)) {
+            QMap<QString, QByteArray> m_mapLogValue = { 
+                { m_mapPointReportType[TrafficLogInfo::RealDepartTime], m_pCurTrafficLog->m_tRealDepartTime.toString(Qt::ISODate).toLocal8Bit() }
+            };
+            if (Http::HttpClient::UpdataStaTrafficLogAttr(m_pCurTrafficLog->m_nLogId, m_mapLogValue, btResult)) {
                 m_pCurTrafficLog->m_tRealDepartTime = QDateTime();
                 pTrafficLogTable->SetItemText(Station::MainStation()->TrafficLogList().indexOf(m_pCurTrafficLog),
                     m_mapLogICol[TrafficLogInfo::RealDepartTime], "");
@@ -299,7 +327,10 @@ namespace CTCWindows {
 
             QByteArray btResult;
             QDateTime tAdjDepartTime = tReportTime.isNull() ? QDateTime::currentDateTime() : tReportTime;
-            if (Http::HttpClient::UpdataPointReportTime(m_pCurTrafficLog->m_nLogId, m_mapPointReportType[TrafficLogInfo::AdjDepartTime], QDateTime(), btResult)) {
+            QMap<QString, QByteArray> m_mapLogValue = { 
+                { m_mapPointReportType[TrafficLogInfo::AdjDepartTime], m_pCurTrafficLog->m_tAdjDepartTime.toString(Qt::ISODate).toLocal8Bit() }
+            };
+            if (Http::HttpClient::UpdataStaTrafficLogAttr(m_pCurTrafficLog->m_nLogId, m_mapLogValue, btResult)) {
                 m_pCurTrafficLog->m_tAdjDepartTime = tAdjDepartTime;
                 pTrafficLogTable->SetItemText(Station::MainStation()->TrafficLogList().indexOf(m_pCurTrafficLog),
                     m_mapLogICol[TrafficLogInfo::AdjDepartTime], tAdjDepartTime.toString("hh:mm"));
@@ -320,7 +351,10 @@ namespace CTCWindows {
 
             QByteArray btResult;
             QDateTime tAdjArrivalTime = tReportTime.isNull() ? QDateTime::currentDateTime() : tReportTime;
-            if (Http::HttpClient::UpdataPointReportTime(m_pCurTrafficLog->m_nLogId, m_mapPointReportType[TrafficLogInfo::AdjArrivalTime], QDateTime(), btResult)) {
+            QMap<QString, QByteArray> m_mapLogValue = { 
+                { m_mapPointReportType[TrafficLogInfo::AdjArrivalTime], m_pCurTrafficLog->m_tAdjArrivalTime.toString(Qt::ISODate).toLocal8Bit() }
+            };
+            if (Http::HttpClient::UpdataStaTrafficLogAttr(m_pCurTrafficLog->m_nLogId, m_mapLogValue, btResult)) {
                 m_pCurTrafficLog->m_tAdjArrivalTime = tAdjArrivalTime;
                 pTrafficLogTable->SetItemText(Station::MainStation()->TrafficLogList().indexOf(m_pCurTrafficLog),
                     m_mapLogICol[TrafficLogInfo::AdjArrivalTime], tAdjArrivalTime.toString("hh:mm"));

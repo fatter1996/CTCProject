@@ -42,7 +42,7 @@
                </widget>
               </item>
               <item>
-               <widget class="QComboBox" name="comboBox_4"/>
+               <widget class="QComboBox" name="Shift"/>
               </item>
              </layout>
             </item>
@@ -62,12 +62,12 @@
                </widget>
               </item>
               <item>
-               <widget class="QComboBox" name="comboBox"/>
+               <widget class="QComboBox" name="Dispatchconsole"/>
               </item>
              </layout>
             </item>
             <item>
-             <widget class="QPushButton" name="pushButton_14">
+             <widget class="QPushButton" name="copy">
               <property name="maximumSize">
                <size>
                 <width>107</width>
@@ -82,7 +82,7 @@
             <item>
              <layout class="QHBoxLayout" name="horizontalLayout_8">
               <item>
-               <widget class="QComboBox" name="comboBox_5"/>
+               <widget class="QComboBox" name="Copyrepot"/>
               </item>
              </layout>
             </item>
@@ -94,7 +94,7 @@
        <item>
         <layout class="QVBoxLayout" name="verticalLayout" stretch="0">
          <item>
-          <widget class="QWidget" name="widget" native="true">
+          <widget class="QWidget" name="tablewidget" native="true">
            <layout class="QVBoxLayout" name="verticalLayout_11"/>
           </widget>
          </item>
@@ -125,7 +125,7 @@
                    </widget>
                   </item>
                   <item>
-                   <widget class="QLineEdit" name="lineEdit"/>
+                   <widget class="QLineEdit" name="TrainId"/>
                   </item>
                  </layout>
                 </item>
@@ -139,7 +139,7 @@
                    </widget>
                   </item>
                   <item>
-                   <widget class="QLineEdit" name="lineEdit_3"/>
+                   <widget class="QLineEdit" name="Totalweight"/>
                   </item>
                  </layout>
                 </item>
@@ -153,7 +153,7 @@
                    </widget>
                   </item>
                   <item>
-                   <widget class="QLineEdit" name="lineEdit_5"/>
+                   <widget class="QLineEdit" name="Driver"/>
                   </item>
                  </layout>
                 </item>
@@ -167,7 +167,7 @@
                    </widget>
                   </item>
                   <item>
-                   <widget class="QComboBox" name="comboBox_6"/>
+                   <widget class="QComboBox" name="overlimit"/>
                   </item>
                  </layout>
                 </item>
@@ -188,7 +188,7 @@
                    </widget>
                   </item>
                   <item>
-                   <widget class="QLineEdit" name="lineEdit_2"/>
+                   <widget class="QLineEdit" name="TrainNumber"/>
                   </item>
                  </layout>
                 </item>
@@ -202,7 +202,7 @@
                    </widget>
                   </item>
                   <item>
-                   <widget class="QLineEdit" name="lineEdit_4"/>
+                   <widget class="QLineEdit" name="Conductor"/>
                   </item>
                  </layout>
                 </item>
@@ -245,7 +245,7 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QComboBox" name="comboBox_7"/>
+                 <widget class="QComboBox" name="TrainType"/>
                 </item>
                </layout>
               </item>
@@ -259,7 +259,7 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QLineEdit" name="lineEdit_7"/>
+                 <widget class="QLineEdit" name="Locomotivenumber"/>
                 </item>
                </layout>
               </item>
@@ -268,21 +268,21 @@
                 <item>
                  <layout class="QHBoxLayout" name="horizontalLayout_21">
                   <item>
-                   <widget class="QPushButton" name="pushButton_8">
+                   <widget class="QPushButton" name="add_2">
                     <property name="text">
                      <string>追加</string>
                     </property>
                    </widget>
                   </item>
                   <item>
-                   <widget class="QPushButton" name="pushButton_9">
+                   <widget class="QPushButton" name="edit_2">
                     <property name="text">
                      <string>修改</string>
                     </property>
                    </widget>
                   </item>
                   <item>
-                   <widget class="QPushButton" name="pushButton_10">
+                   <widget class="QPushButton" name="del_2">
                     <property name="text">
                      <string>删除</string>
                     </property>
@@ -293,21 +293,21 @@
                 <item>
                  <layout class="QHBoxLayout" name="horizontalLayout_22">
                   <item>
-                   <widget class="QPushButton" name="pushButton_11">
+                   <widget class="QPushButton" name="inster">
                     <property name="text">
                      <string>插入</string>
                     </property>
                    </widget>
                   </item>
                   <item>
-                   <widget class="QPushButton" name="pushButton_12">
+                   <widget class="QPushButton" name="Up">
                     <property name="text">
                      <string>上移</string>
                     </property>
                    </widget>
                   </item>
                   <item>
-                   <widget class="QPushButton" name="pushButton_13">
+                   <widget class="QPushButton" name="Down">
                     <property name="text">
                      <string>下移</string>
                     </property>
@@ -337,7 +337,7 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QTextBrowser" name="textBrowser"/>
+                 <widget class="QTextBrowser" name="Traction"/>
                 </item>
                </layout>
               </item>
@@ -357,7 +357,7 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QTextBrowser" name="textBrowser_2"/>
+                 <widget class="QTextBrowser" name="Attached"/>
                 </item>
                </layout>
               </item>
@@ -381,10 +381,10 @@
          </widget>
         </item>
         <item>
-         <widget class="QPlainTextEdit" name="plainTextEdit"/>
+         <widget class="QPlainTextEdit" name="Commonwords"/>
         </item>
         <item>
-         <widget class="QPushButton" name="pushButton_7">
+         <widget class="QPushButton" name="Choose">
           <property name="maximumSize">
            <size>
             <width>196</width>
@@ -404,42 +404,42 @@
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout_3">
      <item>
-      <widget class="QPushButton" name="pushButton">
+      <widget class="QPushButton" name="newconstruction">
        <property name="text">
         <string>新建</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="pushButton_2">
+      <widget class="QPushButton" name="add">
        <property name="text">
         <string>添加</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="pushButton_3">
+      <widget class="QPushButton" name="edit">
        <property name="text">
         <string>修改</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="pushButton_4">
+      <widget class="QPushButton" name="del">
        <property name="text">
         <string>删除</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="pushButton_5">
+      <widget class="QPushButton" name="send">
        <property name="text">
         <string>发送</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="pushButton_6">
+      <widget class="QPushButton" name="close">
        <property name="text">
         <string>关闭</string>
        </property>

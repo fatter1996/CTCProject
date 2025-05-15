@@ -115,7 +115,7 @@ namespace CTCWindows {
 				});
 				connect(pMenuBarInfo2->addNewAction("确报查询", 1, 2), &QAction::triggered, [&]() {});
 				connect(pMenuBarInfo2->addNewAction("列控区间占用逻辑检查", 1, 3), &QAction::triggered, [&]() {
-					LntervallogicCheck* pLntervallogic = new LntervallogicCheck;
+					CTCWindows::Control::LntervallogicCheck* pLntervallogic = new CTCWindows::Control::LntervallogicCheck;
 					pLntervallogic->show();
 				});
 			}

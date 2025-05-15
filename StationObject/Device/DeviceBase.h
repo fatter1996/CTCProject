@@ -158,6 +158,7 @@ namespace Station {
             // 其他
             //0x20-分路不良,0x21-总取消,0x22-总人解,0x23-区故解,0x24-引导总锁
             int m_nTipsType = 0;    
+            int m_nCountDown = 0;   //倒计时
             
         protected:
             static QMap<QString, ClickEventMap> m_mapClickEvent;

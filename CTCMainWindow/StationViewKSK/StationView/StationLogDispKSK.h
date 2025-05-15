@@ -16,7 +16,8 @@ namespace CTCWindows {
 			void InitTrafficLogTableHead() override;
 			void AddTrafficLogTable() override;
 			void OnTrafficLogTableUpData() override;
-			void ShowHeadTableClickMenu(QPoint pos, Station::StaTrafficLog* m_pCurTrafficLog) override;
+			void ShowHeadTableClickMenu(QPoint pos) override;
+			bool SetPlanType(bool bStartTrain, Station::StaTrafficLog* m_pCurTrafficLog);
 
 		private:
 			void OnTrackItemClicked(int nRow, int nCol, int nType);

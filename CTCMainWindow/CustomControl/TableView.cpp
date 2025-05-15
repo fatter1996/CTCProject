@@ -39,7 +39,7 @@ namespace CTCWindows {
             verticalHeader()->setMinimumWidth(nWidth);
         }
 
-        void TableView::SetHeadData(QVector<TableViewHeadInfo>& vecHeadInfo, int nHeadType, Qt::Alignment alignment, bool bStretchable)
+        void TableView::SetHeadData(QVector<TableViewHeadInfo> vecHeadInfo, int nHeadType, Qt::Alignment alignment, bool bStretchable)
         {
             QStringList strHeadList;
             for (const TableViewHeadInfo& infoHead : vecHeadInfo) {

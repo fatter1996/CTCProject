@@ -15,19 +15,15 @@ namespace CTCWindows {
 		public:
 			//列车进路序列
 			void InitTrainRouteTable();
-			virtual QVector<Control::TableViewHeadInfo>& GetTrainRouteTableHeadInfo() = 0;
+			virtual QVector<Control::TableViewHeadInfo> GetTrainRouteTableHeadInfo() = 0;
 			virtual QStringList GetTrainRouteTableDataByRoute(QString strTrainNum, Station::StaTrainRoute* pRoute) = 0;
 			virtual void UpDataRouteLimits() = 0;
 			//调车进路序列
 			void InitShuntRouteTable();
-			virtual QVector<Control::TableViewHeadInfo>& GetShuntRouteTableHeadInfo() {
-				return QVector<Control::TableViewHeadInfo>();
-			}
+			virtual QVector<Control::TableViewHeadInfo> GetShuntRouteTableHeadInfo() { return QVector<Control::TableViewHeadInfo>(); }
 			//勾计划
 			void InitHookPlanTable();
-			virtual QVector<Control::TableViewHeadInfo>& GetHookPlanTableHeadInfo() {
-				return QVector<Control::TableViewHeadInfo>();
-			}
+			virtual QVector<Control::TableViewHeadInfo> GetHookPlanTableHeadInfo() { return QVector<Control::TableViewHeadInfo>(); }
 
 			QSize sizeHint() const override { return QSize(width(), minimumHeight()); }
 

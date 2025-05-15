@@ -129,6 +129,8 @@ namespace Station {
         pTrain->m_nOperationType = subObj.value("operationTypeNumber").toInt();
         pTrain->m_strOperationType;	//运行类型
         pTrain->m_bRunning = subObj.value("isRun").toInt();
+        pTrain->m_bArmy = subObj.value("army").toInt();
+        pTrain->m_bImportant = subObj.value("keynote").toInt();
     }
 
     void StaStagePlan::Init(StaStagePlan* pStagePlan, const QJsonObject& subObj)
@@ -164,7 +166,7 @@ namespace Station {
             m_nTrackCode = pTrafficLog->m_nArrivalTrackCode;
             m_strTrack = pTrafficLog->m_strArrivalTrack;
             m_nSignalCode = pTrafficLog->m_nArrivalSignalCode;
-            m_strSignal = pTrafficLog->m_strArrivaSignal;
+            m_strSignal = pTrafficLog->m_strArrivalSignal;
         }
         else {  //发车
             m_strTrainNum = pTrafficLog->m_strDepartTrainNum;
@@ -254,7 +256,6 @@ namespace Station {
                 strExitSingal = pSingalBtn->strBtnNameList[0];
                 strEntrySingal = pSingalBtn->strBtnNameList[pSingalBtn->strBtnNameList.size() - 1];
             }
-
             if (strEntrySingal != m_strSignal) {
                 continue;
             }
@@ -284,13 +285,9 @@ namespace Station {
     QVector<StaTrainRoute*> StaTrainRoute::getSubTrainRouteList()
     {
         QVector<StaTrainRoute*> vecSubTrainRouteList;
-        if (m_bSunTrainRoute) {
-            for (int nSubRouteId : m_vecSubRouteId) {
-                vecSubTrainRouteList.append(MainStation()->getStaTrainRouteById(nSubRouteId)->getSubTrainRouteList());
-            }
-        }
-        else {
-            vecSubTrainRouteList.append(this);
+        vecSubTrainRouteList.append(this);
+        for (int nSubRouteId : m_vecSubRouteId) {
+            vecSubTrainRouteList.append(MainStation()->getStaTrainRouteById(nSubRouteId)->getSubTrainRouteList());
         }
         return vecSubTrainRouteList;
     }
@@ -432,7 +429,7 @@ namespace Station {
         m_nArrivalTrackCode = pStaStagePlan->m_nArrivalTrackCode;
         m_strArrivalTrack = pStaStagePlan->m_strArrivalTrack;
         m_nArrivalSignalCode = pStaStagePlan->m_nEntrySignalCode;
-        m_strArrivaSignal = pStaStagePlan->m_strEntrySignal;
+        m_strArrivalSignal = pStaStagePlan->m_strEntrySignal;
         m_tProvArrivalTime = pStaStagePlan->m_tArrivalTime;
 
         m_strDepartTrainNum = pStaStagePlan->m_strDepartTrainNum;
@@ -465,7 +462,7 @@ namespace Station {
             pTrafficLog->m_nArrivalTrackCode = subObj.value("arrivalTrack").toInt();
             pTrafficLog->m_strArrivalTrack = MainStation()->getDeviceByCode(pTrafficLog->m_nArrivalTrackCode, TRACK)->getName();
             pTrafficLog->m_nArrivalSignalCode = subObj.value("homeSignalCode").toInt();
-            pTrafficLog->m_strArrivaSignal = MainStation()->getDeviceByCode(pTrafficLog->m_nArrivalSignalCode, SIGNALLAMP)->getName();
+            pTrafficLog->m_strArrivalSignal = MainStation()->getDeviceByCode(pTrafficLog->m_nArrivalSignalCode, SIGNALLAMP)->getName();
             pTrafficLog->m_tProvArrivalTime = QDateTime::fromString(subObj.value("provArrivalTime").toString(), Qt::ISODate);
             pTrafficLog->m_tRealArrivalTime = QDateTime::fromString(subObj.value("realArrivalTime").toString(), Qt::ISODate);
             pTrafficLog->m_tAgrAdjDepartTime = QDateTime::fromString(subObj.value("agrAdjDepartTime").toString(), Qt::ISODate);

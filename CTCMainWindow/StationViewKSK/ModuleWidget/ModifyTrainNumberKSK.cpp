@@ -1,25 +1,46 @@
 #include "ModifyTrainNumberKSK.h"
 
-ModifyTrainNumberKSK::ModifyTrainNumberKSK(Station::StaTrafficLog* m_pCurTrafficLog,QWidget *parent)
-	: QWidget(parent)
-{
-	setWindowTitle("修改车次号");
-	ui.setupUi(this);
-	ui.comboBox->addItem(Station::MainStation()->getStationName());
 
-	ui.lineEdit->setText(m_pCurTrafficLog->m_strArrivalTrainNum); 
-	ui.lineEdit_2->setText(m_pCurTrafficLog->m_strDepartTrainNum);
+namespace CTCWindows {
+	namespace CASCO {
+		ModifyTrainNumberKSK::ModifyTrainNumberKSK(Station::StaTrafficLog* m_pCurTrafficLog, QWidget* parent)
+			: QWidget(parent)
+		{
+			setWindowTitle("修改车次号");
+			ui.setupUi(this);
+			ui.stationName->addItem(Station::MainStation()->getStationName());
 
-	connect(ui.pushButton, &QPushButton::clicked, [=]() {
-		QVector<Station::StaTrainRoute*> vecTrainRoute;
-		m_pCurTrafficLog->m_strArrivalTrainNum = ui.lineEdit_3->text();
-		m_pCurTrafficLog->m_strDepartTrainNum = ui.lineEdit_4->text();//行车日志修改车次号
-		vecTrainRoute = Station::MainStation()->getStaTrainRouteByTrain(m_pCurTrafficLog->m_nTrainId);//列车进路序列
+			ui.OldArrival->setText(m_pCurTrafficLog->m_strArrivalTrainNum);
+			ui.OldSetOff->setText(m_pCurTrafficLog->m_strDepartTrainNum);
 
-		Station::MainStation()->getStaTrainById(m_pCurTrafficLog->m_nTrainId)->m_strTrainNum = ui.lineEdit_3->text();//车次信息修改车次号
+			connect(ui.Confirm, &QPushButton::clicked, [=]() {
+				
+				QByteArray btResult;
+				Station::StaTrain* pTrain = Station::MainStation()->getStaTrainById(m_pCurTrafficLog->m_nTrainId);
+				if (!pTrain) {
+					return;
+				}
+				QString strTrainNum = (m_pCurTrafficLog->m_nPlanType == 0x02) ? ui.Arrival->text() : ui.OldSetOff->text();
+				if (!Station::MainStation()->ChangeTrainNum(pTrain, strTrainNum)) {
+					return;
+				}
 
-		});
+				QMap<QString, QByteArray> m_mapLogValue = { 
+					{ "arrivalTrainNumber", ui.Arrival->text().toLocal8Bit() },
+					{ "departTrainNumber", ui.Setoff->text().toLocal8Bit() }
+				};
+				if (Http::HttpClient::UpdataStaTrafficLogAttr(m_pCurTrafficLog->m_nLogId, m_mapLogValue, btResult)) {
+					m_pCurTrafficLog->m_strArrivalTrainNum = ui.Arrival->text();
+					m_pCurTrafficLog->m_strDepartTrainNum = ui.Setoff->text();
+					emit Station::MainStation()->TrafficLogTableUpData();
+				}
+				emit  Station::MainStation()->TrainRouteUpData();
+				this->close();
+			});
+			connect(ui.Cancel, &QPushButton::clicked, this, &ModifyTrainNumberKSK::close);
+		}
+
+		ModifyTrainNumberKSK::~ModifyTrainNumberKSK()
+		{}
 	}
-
-ModifyTrainNumberKSK::~ModifyTrainNumberKSK()
-{}
+}

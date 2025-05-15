@@ -27,7 +27,7 @@ namespace CTCWindows {
 		Station::StaTrafficLog* pTrafficLog = new Station::StaTrafficLog;
 		pTrafficLog->m_strArrivalTrainNum = ui.arrivalTrainNumEdit->text();
 		pTrafficLog->m_strArrivalTrack = ui.arrivalTrackCombo->currentData().toString();
-		pTrafficLog->m_strArrivaSignal = ui.arrivalSignalCombo->currentData().toString();
+		pTrafficLog->m_strArrivalSignal = ui.arrivalSignalCombo->currentData().toString();
 		pTrafficLog->m_tProvArrivalTime = getDateTimeByTime(ui.provArrivalTimeEdit->text());
 		//pTrafficLog->m_tRealArrivalTime = getDateTimeByTime(ui.realArrivalTimeEdit->text());
 		//pTrafficLog->m_tAgrAdjDepartTime = getDateTimeByTime(ui.agrAdjDepartEdit->text());

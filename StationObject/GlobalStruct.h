@@ -274,7 +274,7 @@ namespace Station {
 		int m_nArrivalTrackCode = 0; //到达股道编号
 		QString m_strArrivalTrack;//到达股道
 		int m_nArrivalSignalCode = 0; //进站信号机编号
-		QString m_strArrivaSignal; //进站信号机
+		QString m_strArrivalSignal; //进站信号机
 		QDateTime m_tProvArrivalTime; //计划到站时间
 		QDateTime m_tRealArrivalTime; //实际到站时间
 		QDateTime m_tAgrAdjDepartTime; //同意邻站发车时间

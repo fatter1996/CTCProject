@@ -170,13 +170,9 @@ namespace Station {
                 byteOperation.append(pTrain->m_strTrainNum.length());
                 byteOperation.append(pTrain->m_strTrainNum);
             }
-            else if (nType == 0x06) {    //添加车次
+            else if (nType == 0x06) {    //更新位置
                 byteOperation.append(pTrain->m_nPosCode & 0xff);
                 byteOperation.append(pTrain->m_nPosCode >> 8);
-            }
-            else if (nType == 0x08) {    //修改车次信息
-                byteOperation.append(pTrain->m_nSpeed);
-                byteOperation.append(pTrain->m_bElectric);
             }
             MainStation()->RemoveTempTrain(pTrain);
             return byteOperation;

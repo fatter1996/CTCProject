@@ -124,7 +124,7 @@ namespace Station {
         int AddNewTrain(StaTrain* pStaTrain); //添加新车次
         int DeleteTrain(StaTrain* pStaTrain); //删除车次
         int SetTrainRunning(StaTrain* pStaTrain, bool bRunning); //设置车次启动或停稳
-        int ChangeTrainNum(StaTrain* pStaTrain, const QString& strTrainNum); //设置车次启动或停稳
+        int ChangeTrainNum(StaTrain* pStaTrain, const QString& strTrainNum); //修改车次号
         int ChangeTrainAttr(StaTrain* pStaTrain, int nSpeed, const QString& strLocomotive, bool bElectric); //修改车次信息
         int AddNewStagePlan(StaStagePlan* pStaStagePlan); //添加阶段计划
         int AddNewTrainRoute(StaTrainRoute* pTrainRoute); //添加进路序列
@@ -136,6 +136,7 @@ namespace Station {
         void TrainRouteTriggerChange(const QVector<StaTrainRoute*>& vecRouteList, bool bAutoTouch);
         bool TrainRouteTrackChange(const QVector<StaTrainRoute*>& vecRouteList, Device::DeviceBase* pTrack);
         bool TrainRouteSignalChange(const QVector<StaTrainRoute*>& vecRouteList, Device::DeviceBase* pSignal);
+        bool DeleteTrainRoute(const QVector<StaTrainRoute*>& vecRouteList);
         QString getTriggerString(const QVector<StaTrainRoute*>& vecRouteList);
 
     public:
@@ -172,6 +173,7 @@ namespace Station {
         
         const QVector<StaTrain*>& TrainList() const { return m_vecStaTrain; }
         void AddTrain(StaTrain* pTrain) { m_vecStaTrain.append(pTrain); }
+        void AddTempTrain(StaTrain* pTrain) { m_vecStaTempTrain.append(pTrain); }
         void RemoveTempTrain(StaTrain* pTrain) { m_vecStaTempTrain.removeOne(pTrain); }
         void RemoveTrainRoute(StaTrainRoute* pTrainRoute) { m_vecStaTrainRoute.removeOne(pTrainRoute); }
         const QVector<StaStagePlan*>& StagePlanList() const { return m_vecStaStagePlan; }

@@ -41,7 +41,7 @@
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="1,1">
        <item>
-        <widget class="QComboBox" name="comboBox">
+        <widget class="QComboBox" name="Come">
          <property name="maximumSize">
           <size>
            <width>105</width>
@@ -78,7 +78,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QComboBox" name="comboBox_2"/>
+        <widget class="QComboBox" name="Sail"/>
        </item>
        <item>
         <widget class="QLabel" name="label_4">
@@ -92,14 +92,14 @@
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout_3">
        <item>
-        <widget class="QPushButton" name="pushButton">
+        <widget class="QPushButton" name="Confirm">
          <property name="text">
           <string>确定</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="pushButton_2">
+        <widget class="QPushButton" name="Cancel">
          <property name="text">
           <string>取消</string>
          </property>
