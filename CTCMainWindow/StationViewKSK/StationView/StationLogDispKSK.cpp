@@ -509,6 +509,7 @@ namespace CTCWindows {
 						QByteArray btResult;
 						vecTrainRoute = Station::MainStation()->getStaTrainRouteByTrain(m_pCurTrafficLog->m_nTrainId);
 						if (Http::HttpClient::DeleteStaTrafficLog(m_pCurTrafficLog->m_nLogId, btResult)) {
+							Station::MainStation()->RemoveTrafficLog(m_pCurTrafficLog);
 							qDebug() << "已删除行车日志-->" << m_pCurTrafficLog->m_nLogId;
 							Station::MainStation()->RemoveLogVecOne(m_pCurTrafficLog);
 						}
