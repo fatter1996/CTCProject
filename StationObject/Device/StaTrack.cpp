@@ -35,10 +35,8 @@ namespace Station {
         void StaTrack::InitDeviceAttribute()
         {
             m_rcRespondRect = QRectF(p1, p4);
-            TrainFrame* pTrainFrame = new TrainFrame;
             int nWidth = m_rcRespondRect.width() > 64 ? 64 : m_rcRespondRect.width();
-            pTrainFrame->m_rcFrame = QRectF(m_ptCenter.x() - nWidth / 2, m_ptCenter.y() - 16, nWidth, 32);
-            m_vecTrainFrame.append(pTrainFrame);
+            m_rcTrainFrame = QRectF(m_ptCenter.x() - nWidth / 2, m_ptCenter.y() - 12, nWidth, 24);
         }
         int index = 0;
         void StaTrack::Draw(bool isMulti)
@@ -194,13 +192,25 @@ namespace Station {
             Station::MainStationObject* Station = Station::MainStation();
             QString stationName = Station->getStationName();
           
-            
-            if (m_vecTrainFrame[0]->m_rcFrame.contains(ptPos)) {   //车次号
-                ShowTrainMenu(QCursor::pos(), m_nCode);
+            QMenu* pMenu = new QMenu();
+            pMenu->setAttribute(Qt::WA_DeleteOnClose);
+            if (m_rcTrainFrame.contains(ptPos)) {   //车次号
+                ShowTrainMenu(pMenu, m_nCode);
+                if (m_pTrain) {
+                    pMenu->addSeparator();
+                    StaTrafficLog* pTrafficLog = MainStation()->getStaTrafficLogByTrain(m_pTrain->m_nTrainId);
+                    if (pTrafficLog) {
+                        if (pTrafficLog->m_nPlanType == 0x02) {
+                            ShowRoutewMenu(pMenu, m_pTrain->m_strTrainNum, MainStation()->getStaTrainRouteById(pTrafficLog->m_nDepartRouteId));
+                        }
+                        else {
+                            ShowRoutewMenu(pMenu, m_pTrain->m_strTrainNum, MainStation()->getStaTrainRouteById(pTrafficLog->m_nArrivalRouteId));
+                        }
+                    }
+                }
             }
             else {
-                QMenu* pMenu = new QMenu();
-                pMenu->setAttribute(Qt::WA_DeleteOnClose);
+                
                 QAction* pAction1 = new QAction("封锁/解封");
                 pMenu->addAction(pAction1);
                 QObject::connect(pAction1, &QAction::triggered, [=]() {
@@ -252,8 +262,12 @@ namespace Station {
                 QObject::connect(pAction4, &QAction::triggered, [=]() {
                     m_nPowerCut = true;
                 });
-
+            }
+            if (pMenu->actions().size()) {
                 pMenu->exec(QCursor::pos());
+            }
+            else {
+                pMenu->close();
             }
         }
 

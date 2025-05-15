@@ -9,6 +9,9 @@
 #include <QMessageBox>
 #pragma execution_character_set("utf-8")
 
+#define		ARRIVAL		0x01
+#define		DEPART		0x02
+
 namespace CTCWindows {
 	namespace CASCO {
 		StationLogDispKSK::StationLogDispKSK(QWidget* parent)
@@ -113,6 +116,22 @@ namespace CTCWindows {
 			connect(ui.cancelDepartBtn, &QPushButton::clicked, [=]() {
 				CancelDepart();
 			});
+
+			connect(pTrafficLogTable->DataTable(), &QTableWidget::cellDoubleClicked, [=](int nRow, int nCol) {
+				m_pCurTrafficLog = Station::MainStation()->TrafficLogList().at(nRow);
+				if (!m_pCurTrafficLog) {
+					return;
+				}
+				if (!pTrafficLogTable->Item(nRow, nCol)) {
+					return;
+				}
+				m_mapColClickFunction[nCol](nRow, nCol);
+			});
+			m_mapColClickFunction = { 
+				{ m_mapLogICol[TrafficLogInfo::ArrivalTrack], std::bind(&StationLogDispKSK::OnTrackItemClicked, this, std::placeholders::_1, std::placeholders::_2, ARRIVAL) },
+				{ m_mapLogICol[TrafficLogInfo::DepartTrack], std::bind(&StationLogDispKSK::OnTrackItemClicked, this, std::placeholders::_1, std::placeholders::_2, DEPART) },
+			};
+			
 		}
 
 		StationLogDispKSK::~StationLogDispKSK()
@@ -289,7 +308,7 @@ namespace CTCWindows {
 			pTrafficLogTable->SetTableData(vecTableData);
 		}
 
-		void StationLogDispKSK::ClickMenu(QPoint pos, Station::StaTrafficLog* m_pCurTrafficLog)
+		void StationLogDispKSK::ShowHeadTableClickMenu(QPoint pos, Station::StaTrafficLog* m_pCurTrafficLog)
 		{
 			QMenu* pMenu = new QMenu();
 			QAction* pAction = new QAction("上报到达点");
@@ -448,7 +467,99 @@ namespace CTCWindows {
 			pMenu->exec(pos);
 		}
 
-		
+		void StationLogDispKSK::OnTrackItemClicked(int nRow, int nCol, int nType)
+		{
+			Station::Device::StaTrack* pTrack = nullptr;
+			QStringList strTrackList;
+			for (Station::Device::DeviceBase* pDevice : Station::MainStation()->getDeviceVectorByType(TRACK)) {
+				pTrack = dynamic_cast<Station::Device::StaTrack*>(pDevice);
+				if (pTrack->TrackType() == "ZX_GD" || pTrack->TrackType() == "GD_QD") {
+					strTrackList.append(pTrack->getName());
+				}
+			}
+
+			pTrafficLogTable->AddComboBox(nRow, nCol, strTrackList, pTrafficLogTable->Item(nRow, nCol)->text(), [=](const QString& strTrack) {
+				pTrafficLogTable->DataTable()->removeCellWidget(nRow, nCol);
+				pTrafficLogTable->DataTable()->item(nRow, nCol)->setText(strTrack);
+				
+				QVector<Station::StaTrainRoute*> vecTempRouteOrder;
+				if (nType == ARRIVAL) {	//接车股道
+					for (Station::StaTrainRoute* pRoute : Station::MainStation()->getStaTrainRouteByTrain(m_pCurTrafficLog->m_nTrainId)) {
+						vecTempRouteOrder.append(pRoute->getSubTrainRouteList());
+					}
+				}
+				else {
+					vecTempRouteOrder = Station::MainStation()->getStaTrainRouteById(m_pCurTrafficLog->m_nDepartRouteId)->getSubTrainRouteList();
+				}
+				//先修改进路,如修改失败则不修改行车日志
+				Station::Device::DeviceBase* pTrack = Station::MainStation()->getDeviceByName(strTrack, TRACK);
+				if (!Station::MainStation()->TrainRouteTrackChange(vecTempRouteOrder, pTrack)) {
+					return;
+				}
+
+				if (nType == ARRIVAL) {
+					if (Http::HttpClient::ChangeRouteTrack(pRoute->m_nRouteId, pTrack->getCode(), btResult)) {
+						m_pCurTrafficLog->m_strArrivalTrack = strTrack;
+						m_pCurTrafficLog->m_nArrivalTrackCode = pTrack->getCode();
+						m_pCurTrafficLog->m_strDepartTrack = strTrack;
+						m_pCurTrafficLog->m_nDepartTrackCode = pTrack->getCode();
+					}
+				}
+				else {
+					if (Http::HttpClient::ChangeRouteTrack(pRoute->m_nRouteId, pTrack->getCode(), btResult)) {
+						m_pCurTrafficLog->m_strDepartTrack = strTrack;
+						m_pCurTrafficLog->m_nDepartTrackCode = pTrack->getCode();
+					}
+				}
+				emit Station::MainStation()->TrafficLogTableUpData();
+			});
+		}
+
+		void StationLogDispKSK::OnSignalItemClicked(int nRow, int nCol, int nType)
+		{
+			QStringList strSignalList;
+			for (Station::Device::DeviceBase* pDevice : Station::MainStation()->getDeviceVectorByType(SIGNALLAMP)) {
+				if (dynamic_cast<Station::Device::StaSignal*>(pDevice)->getXHDTYpe() == "JZ_XHJ") {
+					strSignalList.append(pDevice->getName());
+				}
+			}
+
+			pTrafficLogTable->AddComboBox(nRow, nCol, strSignalList, pTrafficLogTable->Item(nRow, nCol)->text(), [=](const QString& strSignal) {
+				pTrafficLogTable->DataTable()->removeCellWidget(nRow, nCol);
+				pTrafficLogTable->DataTable()->item(nRow, nCol)->setText(strSignal);
+
+				Station::Device::DeviceBase* pSignal = Station::MainStation()->getDeviceByName(strSignal, TRACK);
+
+				QVector<Station::StaTrainRoute*> vecTempRouteOrder;
+				if (nType == ARRIVAL) {
+					vecTempRouteOrder = Station::MainStation()->getStaTrainRouteById(m_pCurTrafficLog->m_nArrivalRouteId)->getSubTrainRouteList();
+				}
+				else {
+					vecTempRouteOrder = Station::MainStation()->getStaTrainRouteById(m_pCurTrafficLog->m_nDepartRouteId)->getSubTrainRouteList();
+				}
+				//先修改进路,如修改失败则不修改行车日志
+				if (!Station::MainStation()->TrainTrackChange(vecTempRouteOrder, pTrack)) {
+					return;
+				}
+
+				if (nType == ARRIVAL) {
+					if (Http::HttpClient::ChangeRouteTrack(pRoute->m_nRouteId, pTrack->getCode(), btResult)) {
+						m_pCurTrafficLog->m_strArrivalTrack = strTrack;
+						m_pCurTrafficLog->m_nArrivalTrackCode = pTrack->getCode();
+						m_pCurTrafficLog->m_strDepartTrack = strTrack;
+						m_pCurTrafficLog->m_nDepartTrackCode = pTrack->getCode();
+					}
+				}
+				else {
+					if (Http::HttpClient::ChangeRouteTrack(pRoute->m_nRouteId, pTrack->getCode(), btResult)) {
+						m_pCurTrafficLog->m_strDepartTrack = strTrack;
+						m_pCurTrafficLog->m_nDepartTrackCode = pTrack->getCode();
+					}
+				}
+				emit Station::MainStation()->TrafficLogTableUpData();
+			});
+		}
+
 		void StationLogDispKSK::ShowTableHead(bool bShow)
 		{
 			ui.tableHeadFrame->setHidden(!bShow);	

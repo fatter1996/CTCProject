@@ -268,7 +268,7 @@
       "m_nCode": "0x7c",
       "m_nSX": 0,
       "isLeave": 1,
-      "m_Direction": "X",
+      "m_Direction": "XF",
       "m_ArrowPoint": "1735,140",
       "m_RoutePoint": "1360,120,1475,270",
       "m_FrameRect": "1485,120,1780,270",

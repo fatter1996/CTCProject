@@ -16,12 +16,18 @@ namespace CTCWindows {
 			void InitTrafficLogTableHead() override;
 			void AddTrafficLogTable() override;
 			void OnTrafficLogTableUpData() override;
-			void ClickMenu(QPoint pos, Station::StaTrafficLog* m_pCurTrafficLog) override;
+			void ShowHeadTableClickMenu(QPoint pos, Station::StaTrafficLog* m_pCurTrafficLog) override;
+
+		private:
+			void OnTrackItemClicked(int nRow, int nCol, int nType);
+			void OnSignalItemClicked(int nRow, int nCol, int nType);
+
 		public slots:
 			void ShowTableHead(bool bShow = true) override;
 
 		private:
 			Ui::StationLogDispKSK ui;
+			QMap<int, std::function<void(int, int)>> m_mapColClickFunction;
 		};
 	}
 }

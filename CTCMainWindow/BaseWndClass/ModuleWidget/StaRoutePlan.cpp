@@ -239,18 +239,15 @@ namespace CTCWindows {
 			}
 
 			QMenu* pMenu = new QMenu();
-			QString strRouteTemp;
-			for (QString strRoute : pTrainRoute->m_vecFlexibleRoute) {
-				strRouteTemp = strRoute;
-				strRouteTemp.replace(',', '-');
-				QAction* pAction = new QAction(strRouteTemp);
+			for (QString strRoute : pTrainRoute->m_strRouteDescripList) {
+				strRoute.replace(',', '-');
+				QAction* pAction = new QAction(strRoute);
 				pAction->setCheckable(true);
 				pMenu->addAction(pAction);
-				if (strRouteTemp == index.data()) {
+				if (strRoute == index.data()) {
 					pAction->setChecked(true);
 					pAction->setEnabled(false);
 				}
-				strRoute.replace(',', '-');
 				connect(pAction, &QAction::triggered, [=]() {
 					if (pTrainRoute->m_nRouteState != 0) {
 						QMessageBox::information(this, MSGBOX_TITTLE, "进路状态不允许修改进路!", "确定");
@@ -326,50 +323,7 @@ namespace CTCWindows {
 				QAction* pAction1 = new QAction("人工触发");
 				pMenu->addAction(pAction1);
 				connect(pAction1, &QAction::triggered, [=]() {
-					QString routeDescrip;
-					if (pTrainRoute->m_vecSubRouteId.size()) {
-						StaTrainRoute* pSubTrainRoute = nullptr;
-						for (int nSubRouteId : pTrainRoute->m_vecSubRouteId) {
-							pSubTrainRoute = MainStation()->getStaTrainRouteById(nSubRouteId);
-							routeDescrip += pSubTrainRoute->m_strCurRouteDescrip;
-							routeDescrip += ",";
-						}
-						routeDescrip = routeDescrip.left(routeDescrip.length() - 1);
-					}
-					else {
-						routeDescrip = pTrainRoute->m_strCurRouteDescrip;
-					}
-					StaTrain* pTrain = MainStation()->getStaTrainById(pTrainRoute->m_nTrainId);
-					QString strTips = QString("确定要触发'股道:%1','%2'次列车,'%3','%4'进路?")
-						.arg(pTrainRoute->m_strTrack)
-						.arg(pTrain->m_strTrainNum)
-						.arg(routeDescrip)
-						.arg(pTrainRoute->m_bArrivaRoute ? "接车" : "发车");
-
-					if (QMessageBox::question(nullptr, MSGBOX_TITTLE, strTips, "是", "否") == 0) {
-						if (pTrainRoute->m_vecSubRouteId.size()) {
-							StaTrainRoute* pSubTrainRoute = nullptr;
-							QByteArray btResult;
-							for (int nSubRouteId : pTrainRoute->m_vecSubRouteId) {
-								pSubTrainRoute = MainStation()->getStaTrainRouteById(nSubRouteId);
-								MainStation()->SendPacketMsg(TARGET_INTERLOCK, 0x61, pSubTrainRoute->m_nRouteId, 0x02);
-								
-								pSubTrainRoute->m_nRouteState = 1;
-								if (Http::HttpClient::UpdataRouteState(pTrainRoute->m_nRouteId, pSubTrainRoute->m_nRouteState, btResult)) {
-									//MainStation()->TrainRouteList().removeOne(pTrainRoute);
-								}
-							}
-						}
-						else {
-							MainStation()->SendPacketMsg(TARGET_INTERLOCK, 0x61, pTrainRoute->m_nRouteId, 0x02);
-							QByteArray btResult;
-							pTrainRoute->m_nRouteState = 1;
-							if (Http::HttpClient::UpdataRouteState(pTrainRoute->m_nRouteId, pTrainRoute->m_nRouteState, btResult)) {
-								//MainStation()->TrainRouteList().removeOne(pTrainRoute);
-							}
-						}
-						emit MainStation()->TrainRouteUpData();
-					}
+					MainStation()->TrainRouteTrigger(pTrainRoute, pTrainRoute->getSubTrainRouteList(), pTrainRoute->m_bArrivaRoute ? "接车" : "发车");
 				});
 
 				QAction* pAction2 = new QAction("明细");
@@ -392,7 +346,7 @@ namespace CTCWindows {
 						.arg(pTrain->m_strTrainNum)
 						.arg((pTrainRoute->m_bArrivaRoute == 0) ? "接车" : "发车");
 
-					if (QMessageBox::question(nullptr, "信息对话框", strTips, "是", "否") == 0) {
+					if (QMessageBox::question(nullptr, MSGBOX_TITTLE, strTips, "是", "否") == 0) {
 						QByteArray btResult;
 						if (pTrainRoute->m_vecSubRouteId.size()) {
 							StaTrainRoute* pSubTrainRoute = nullptr;
@@ -414,38 +368,21 @@ namespace CTCWindows {
 
 		void StaRoutePlan::OnTrackChange(StaTrainRoute* pTrainRoute, QString strTrack)
 		{
-			QVector<StaTrainRoute*> vecTempRouteOrder = MainStation()->getStaTrainRouteByTrain(pTrainRoute->m_nTrainId);
-			for (StaTrainRoute* pRoute : vecTempRouteOrder) {
-				if (pRoute->m_nRouteState != 0) {
-					QMessageBox::information(this, MSGBOX_TITTLE, "进路状态不允许修改到达股道!", "确定");
-					return;
+			QVector<StaTrainRoute*> vecTempRouteOrder;
+			if (pTrainRoute->m_bArrivaRoute) {
+				for (StaTrainRoute* pRoute : MainStation()->getStaTrainRouteByTrain(pTrainRoute->m_nTrainId)) {
+					vecTempRouteOrder.append(pRoute->getSubTrainRouteList());
 				}
 			}
-			Device::DeviceBase* pTrack = MainStation()->getDeviceByName(strTrack, TRACK);
-			if (pTrack) {
-				QByteArray btResult;
-				for (StaTrainRoute* pRoute : vecTempRouteOrder) {
-					if (Http::HttpClient::ChangeRouteTrack(pRoute->m_nRouteId, pTrack->getCode(), btResult)) {
-						pRoute->ChangeTrack(pTrack->getCode(), pTrack->getName());
-						MainStation()->SendPacketMsg(TARGET_INTERLOCK, 0x61, pRoute->m_nRouteId, 0x04);
-					}
-				}
-				OnTrainRouteUpData();
+			else {
+				vecTempRouteOrder = pTrainRoute->getSubTrainRouteList();
 			}
+			MainStation()->TrainTrackChange(vecTempRouteOrder, MainStation()->getDeviceByName(strTrack, TRACK));
 		}
 
 		void StaRoutePlan::OnTriggerTypeChange(StaTrainRoute* pTrainRoute, bool bAutoTouch)
 		{
-			if (pTrainRoute->m_nRouteState != 0) {
-				QMessageBox::information(this, MSGBOX_TITTLE, "进路状态不允许修改触发方式!", "确定");
-				return;
-			}
-
-			QByteArray btResult;
-			if (Http::HttpClient::ChangeTriggerType(pTrainRoute->m_nRouteId, bAutoTouch ? 1 : 2, btResult)) {
-				pTrainRoute->m_bAutoTouch = bAutoTouch;
-			}
-			OnTrainRouteUpData();
+			MainStation()->TrainRouteTriggerChange(pTrainRoute->getSubTrainRouteList(), bAutoTouch);
 		}
 
 		void StaRoutePlan::timerEvent(QTimerEvent* event)
@@ -453,10 +390,12 @@ namespace CTCWindows {
 			if (event->timerId() == m_nTimerId_15) {	//自动触发检查
 				QByteArray btResult;
 				for (StaTrainRoute* pTrainRoute : MainStation()->TrainRouteList()) {
-					if (pTrainRoute->m_vecSubRouteId.size() == 0 && pTrainRoute->m_bAutoTouch) {
-						if (pTrainRoute->m_tPlanTime.toTime_t() >= QDateTime::currentDateTime().toTime_t()) {
-							pTrainRoute->m_tTriggerTime = QDateTime::currentDateTime();
-							MainStation()->SendPacketMsg(TARGET_INTERLOCK, 0x61, pTrainRoute->m_nRouteId, 0x02);
+					for (StaTrainRoute* pTrainRoute : pTrainRoute->getSubTrainRouteList()) {
+						if (pTrainRoute->m_bAutoTouch &&pTrainRoute->m_nRouteState == 0) {
+							if (pTrainRoute->m_tPlanTime.toTime_t() <= QDateTime::currentDateTime().toTime_t()) {
+								pTrainRoute->m_tTriggerTime = QDateTime::currentDateTime();
+								MainStation()->SendPacketMsg(TARGET_INTERLOCK, 0x61, pTrainRoute->m_nRouteId, 0x02);
+							}
 						}
 					}
 				}

@@ -74,6 +74,7 @@ namespace CTCWindows {
 			}
 			return pAction;
 		}
+
 		void StationCtrlDisp::ShowRightMouseMenu(QMenu* pMenu, const QPoint& ptMouse)
 		{
 			QMenu* pSubMenu1 = new QMenu();
@@ -159,7 +160,6 @@ namespace CTCWindows {
 			pMenu->addAction(AddActionToMenu("Çå¿ÕÎÄ×Ö±ê×¢", [=](bool) {
 				Station::MainStation()->ClearAllTextSign();
 			}));
-
 		}
 
 		void StationCtrlDisp::onLeftbuttonRelease()

@@ -66,16 +66,6 @@ namespace CTCWindows {
 			connect(ui.cancelDepartBtn, &QPushButton::clicked, [=]() {
 				CancelDepart();
 			});
-			//connect(ui.adjPreviewBtn, &QPushButton::clicked, this, &StationLogDisp::AdjacentStationPreview);
-			//connect(ui.agreeAdjBtn, &QPushButton::clicked, this, &StationLogDisp::AgreeAdjacentStations);
-			//connect(ui.arrivalBtn, &QPushButton::clicked, this, &StationLogDisp::TrainArrival);
-			//connect(ui.departureBtn, &QPushButton::clicked, this, &StationLogDisp::TrainDeparture);
-			//connect(ui.throughBtn, &QPushButton::clicked, this, &StationLogDisp::TrainPassThrough);
-			//connect(ui.adjAgrBtn, &QPushButton::clicked, this, &StationLogDisp::AdjacentStation);
-			//
-			////connect(ui.supPointBtn, &QPushButton::clicked, this, &StationLogDisp::AdjacentStation);
-			//connect(ui.cancelBlockBtn, &QPushButton::clicked, this, &StationLogDisp::CancelBlock);
-			//connect(ui.cancelDepartBtn, &QPushButton::clicked, this, &StationLogDisp::CancelDepart);
 		}
 
 		StationLogDispTKY::~StationLogDispTKY()
@@ -143,10 +133,10 @@ namespace CTCWindows {
 				pTrain = Station::MainStation()->getStaTrainById(pTrafficLog->m_nTrainId);
 				if (pTrain) {
 					if (pTrafficLog->IsReportedPoints()) {
-						txtColor = pTrain->m_bFreightTrain ? QColor(213, 30, 218) : QColor(85, 120, 182);
+						txtColor = pTrain->m_bFreightTrain ? QColor(85, 120, 182) : QColor(213, 30, 218);
 					}
 					else {
-						txtColor = pTrain->m_bFreightTrain ? Qt::red : Qt::blue;
+						txtColor = pTrain->m_bFreightTrain ? Qt::blue : Qt::red;
 					}
 					
 					QStringList strDataList = QStringList()

@@ -181,7 +181,7 @@ namespace Station {
 	{
 		int m_nRouteId = 0; //进路序列ID
 		int m_nTrainId = 0; //车次ID
-
+		QString m_strTrainNum;
 		bool m_bArrivaRoute = true; //接发类型 (接车-true 发车-false)
 		bool m_bAutoTouch = false;//触发方式(自动触发-true 人工触发-false)
 
@@ -195,12 +195,11 @@ namespace Station {
 		QString m_strSignal; //进/出站信号机
 
 		QString m_strCurRouteDescrip; //进路描述
-		QStringList m_strRouteDescripList; //进路描述
+		QStringList m_strRouteDescripList; //变通进路
 		QString m_strDirection; //进路方向
 		int m_nRouteState = 0; //进路当前状态//0-等待、1-正在触发、2-触发完成、3-占用、4-出清、5-取消
 
 		QVector<int> m_vecSubRouteId;	//子进路ID
-		QVector<QString> m_vecFlexibleRoute;	//变通进路
 		int m_nLogId = 0;	//关联行车日志ID
 		bool m_bSunTrainRoute = false;
 		int m_nRowIndex = 0;
@@ -213,8 +212,13 @@ namespace Station {
 	public:
 		static void Init(StaTrainRoute* pTrainRoute, const QJsonObject& subObj);
 		void ChangeTrack(int nCode, const QString& strName);
+		void ChangeSignal(int nCode, const QString& strName);
 		QString getStateStr();
 		void getRouteDescrip();
+		QVector<StaTrainRoute*> getSubTrainRouteList();
+		StaTrainRoute* getRelatedTrainRoute();
+		QString getTrainNum();
+		bool IsThrough();
 	};
 
 	struct StaTrainDispatch : public StaOrder	//机车调度命令

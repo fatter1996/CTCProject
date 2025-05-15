@@ -202,11 +202,7 @@ namespace CTCWindows {
             m_pCurShowView = m_pStationMulti;
             m_pCurShowView->show();
         }
-        if (m_pCurShowView != m_pStaTrainDiagram) {
-            m_pCurShowView->hide();
-            m_pCurShowView = m_pStaTrainDiagram;
-            m_pCurShowView->show();
-        }
+
         if (m_pCurToolBar != m_pStationViewToolBar) {
             m_pCurToolBar->hide();
             m_pCurToolBar = m_pStationViewToolBar;

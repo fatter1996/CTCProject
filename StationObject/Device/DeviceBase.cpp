@@ -7,8 +7,6 @@
 #include <QJsonObject>
 #include <QJsonArray>
 #include <QJsonDocument>
-#include <QMessageBox>
-#include "CommonWidget/LeadSealDlg.h"
 
 #pragma execution_character_set("utf-8")
 
@@ -558,25 +556,25 @@ namespace Station {
 
         void DeviceArrow::InitArrowAttributeMap(QString strType, QMap<QString, AttrMap>& mapAttribute)
         {
-            mapAttribute[strType].insert("p11", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<DeviceArrow*>(pDevice)->p11 = DeviceBase::QStringToQPointF(strElement); });
-            mapAttribute[strType].insert("p12", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<DeviceArrow*>(pDevice)->p12 = DeviceBase::QStringToQPointF(strElement); });
-            mapAttribute[strType].insert("p13", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<DeviceArrow*>(pDevice)->p13 = DeviceBase::QStringToQPointF(strElement); });
-            mapAttribute[strType].insert("p14", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<DeviceArrow*>(pDevice)->p14 = DeviceBase::QStringToQPointF(strElement); });
-            mapAttribute[strType].insert("p15", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<DeviceArrow*>(pDevice)->p15 = DeviceBase::QStringToQPointF(strElement); });
-            mapAttribute[strType].insert("p16", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<DeviceArrow*>(pDevice)->p16 = DeviceBase::QStringToQPointF(strElement); });
-            mapAttribute[strType].insert("p17", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<DeviceArrow*>(pDevice)->p17 = DeviceBase::QStringToQPointF(strElement); });
+            mapAttribute[strType].insert("p11", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<DeviceArrow*>(pDevice)->p11 = QStringToQPointF(strElement); });
+            mapAttribute[strType].insert("p12", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<DeviceArrow*>(pDevice)->p12 = QStringToQPointF(strElement); });
+            mapAttribute[strType].insert("p13", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<DeviceArrow*>(pDevice)->p13 = QStringToQPointF(strElement); });
+            mapAttribute[strType].insert("p14", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<DeviceArrow*>(pDevice)->p14 = QStringToQPointF(strElement); });
+            mapAttribute[strType].insert("p15", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<DeviceArrow*>(pDevice)->p15 = QStringToQPointF(strElement); });
+            mapAttribute[strType].insert("p16", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<DeviceArrow*>(pDevice)->p16 = QStringToQPointF(strElement); });
+            mapAttribute[strType].insert("p17", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<DeviceArrow*>(pDevice)->p17 = QStringToQPointF(strElement); });
 
-            mapAttribute[strType].insert("p21", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<DeviceArrow*>(pDevice)->p21 = DeviceBase::QStringToQPointF(strElement); });
-            mapAttribute[strType].insert("p22", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<DeviceArrow*>(pDevice)->p22 = DeviceBase::QStringToQPointF(strElement); });
-            mapAttribute[strType].insert("p23", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<DeviceArrow*>(pDevice)->p23 = DeviceBase::QStringToQPointF(strElement); });
-            mapAttribute[strType].insert("p24", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<DeviceArrow*>(pDevice)->p24 = DeviceBase::QStringToQPointF(strElement); });
-            mapAttribute[strType].insert("p25", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<DeviceArrow*>(pDevice)->p25 = DeviceBase::QStringToQPointF(strElement); });
-            mapAttribute[strType].insert("p26", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<DeviceArrow*>(pDevice)->p26 = DeviceBase::QStringToQPointF(strElement); });
-            mapAttribute[strType].insert("p27", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<DeviceArrow*>(pDevice)->p27 = DeviceBase::QStringToQPointF(strElement); });
+            mapAttribute[strType].insert("p21", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<DeviceArrow*>(pDevice)->p21 = QStringToQPointF(strElement); });
+            mapAttribute[strType].insert("p22", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<DeviceArrow*>(pDevice)->p22 = QStringToQPointF(strElement); });
+            mapAttribute[strType].insert("p23", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<DeviceArrow*>(pDevice)->p23 = QStringToQPointF(strElement); });
+            mapAttribute[strType].insert("p24", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<DeviceArrow*>(pDevice)->p24 = QStringToQPointF(strElement); });
+            mapAttribute[strType].insert("p25", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<DeviceArrow*>(pDevice)->p25 = QStringToQPointF(strElement); });
+            mapAttribute[strType].insert("p26", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<DeviceArrow*>(pDevice)->p26 = QStringToQPointF(strElement); });
+            mapAttribute[strType].insert("p27", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<DeviceArrow*>(pDevice)->p27 = QStringToQPointF(strElement); });
 
             mapAttribute[strType].insert("m_ArrowPoint", [](DeviceBase* pDevice, const QString& strElement) {
                 DeviceArrow* pArrow = dynamic_cast<DeviceArrow*>(pDevice);
-                pArrow->ptArrow = DeviceBase::QStringToQPointF(strElement);
+                pArrow->ptArrow = QStringToQPointF(strElement);
                 pArrow->p11 = QPointF(pArrow->ptArrow.x() - 10, pArrow->ptArrow.y());
                 pArrow->p12 = QPointF(pArrow->p11.x() - 8, pArrow->p11.y() - 8);
                 pArrow->p13 = QPointF(pArrow->p12.x(), pArrow->p12.y() + 4);
@@ -634,6 +632,25 @@ namespace Station {
             m_mapAttribute[m_strType].insert("inStart2", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaDistant*>(pDevice)->m_nInStart2 = strElement.toUInt(); });
             m_mapAttribute[m_strType].insert("outStart", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaDistant*>(pDevice)->m_nOutStart = strElement.toUInt(); });
             m_mapAttribute[m_strType].insert("outStart2", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaDistant*>(pDevice)->m_nOutStart2 = strElement.toUInt(); });
+            m_mapAttribute[m_strType].insert("m_Direction", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaDistant*>(pDevice)->m_strDirection = strElement; });
+            m_mapAttribute[m_strType].insert("m_FrameRect", [=](DeviceBase* pDevice, const QString& strElement) { 
+                
+                dynamic_cast<StaDistant*>(pDevice)->m_rcFrame = QStringToQRectF(strElement); 
+                qDebug() << m_strType << dynamic_cast<StaDistant*>(pDevice)->getName() << strElement << QStringToQRectF(strElement) << dynamic_cast<StaDistant*>(pDevice)->m_rcFrame;
+                });
+            m_mapAttribute[m_strType].insert("m_Button", [](DeviceBase* pDevice, const QString& strElement) {
+                QJsonParseError error;
+                QJsonDocument josnDoc = QJsonDocument::fromJson(strElement.toUtf8(), &error);
+                if (josnDoc.isNull()) {
+                    qDebug() << "无效的JSON格式:" << error.errorString();
+                    return;
+                }
+                if (josnDoc.isObject()) {
+                    for (const QString& key : josnDoc.object().keys()) {
+                        m_mapAttribute[pDevice->getStrType()][key](pDevice, QJsonDocument(josnDoc.object().value(key).toObject()).toJson());
+                    }
+                }
+                });
             return DeviceBase::InitAttributeMap();
         }
 
@@ -645,311 +662,6 @@ namespace Station {
             //绘制文字
             DrawText();
             return DeviceBase::Draw(isMulti);
-        }
-
-        int DeviceTrain::m_nInTrainFrame = false;
-        DeviceTrain::DeviceTrain()
-        {
-        
-        }
-        DeviceTrain::~DeviceTrain()
-        {
-        
-        }
-
-        void DeviceTrain::DrawTrainFrame(QPainter& pPainter)
-        {
-            pPainter.setPen(QPen(COLOR_TRACK_WHITE, 1, Qt::DashLine));
-            pPainter.setBrush(Qt::NoBrush);
-            double nDiploid = m_bMainStation ?
-                MainStation()->getDiploid(DiploidRatio::StaTrainNumDiploid) :
-                MainStation()->getDiploid(DiploidRatio::MultiTrainNumDiploid);
-
-            QRectF rcFrame;
-            for (TrainFrame* pTrainFrame : m_vecTrainFrame) {
-                if (pTrainFrame->m_bContains || MainStation()->IsVisible(VisibleDev::trainNumWnd)) {
-                    rcFrame = QRectF(
-                        pTrainFrame->m_rcFrame.center().x() - pTrainFrame->m_rcFrame.width() * nDiploid / 2,
-                        pTrainFrame->m_rcFrame.center().y() - pTrainFrame->m_rcFrame.height() * nDiploid / 2,
-                        pTrainFrame->m_rcFrame.width() * nDiploid,
-                        pTrainFrame->m_rcFrame.height() * nDiploid);
-                    pPainter.drawRect(Scale(rcFrame));
-                }
-            }
-        }
-
-        void DeviceTrain::DrawTrain(QPainter& pPainter)
-        {
-            if (m_bTrainLeave) {
-                m_pTrain = nullptr;
-                m_bTrainLeave = false;
-            }
-            if (m_pTrain) {
-                if (m_pTrain->m_bDelete) {
-                    delete m_pTrain;
-                    m_pTrain = nullptr;
-                    m_bTrainLeave = false;
-                    return;
-                }
-
-                double nDiploid = 0;
-                if (m_bMainStation) {
-                    nDiploid = MainStation()->getDiploid(DiploidRatio::StaTrainNumDiploid);
-                }
-                else {
-                    nDiploid = MainStation()->getDiploid(DiploidRatio::MultiTrainNumDiploid);
-                }
-                QRectF rcFrame;
-                for (TrainFrame* pTrainFrame : m_vecTrainFrame) {
-                    rcFrame = QRectF(
-                        pTrainFrame->m_rcFrame.center().x() - pTrainFrame->m_rcFrame.width() * nDiploid / 2,
-                        pTrainFrame->m_rcFrame.center().y() - pTrainFrame->m_rcFrame.height() * nDiploid / 2,
-                        pTrainFrame->m_rcFrame.width() * nDiploid,
-                        pTrainFrame->m_rcFrame.height() * nDiploid);
-                    DrawTrainFrame(pPainter, rcFrame);
-                    DrawTrainHead(pPainter, rcFrame);
-                    DrawTrainTail(pPainter, rcFrame);
-                }
-            }
-            else {
-                m_pTrain = nullptr;
-                m_bTrainLeave = false;
-            }
-        }
-
-        void DeviceTrain::DrawTrainFrame(QPainter& pPainter, QRectF rcFrame)
-        {
-            pPainter.setPen(Qt::NoPen);
-            if (m_pTrain->m_bElectric) {
-                pPainter.setBrush(Qt::green);
-            }
-            else {
-                pPainter.setBrush(Qt::white);
-            }
-
-            pPainter.drawRect(Scale(rcFrame));
-            if (m_pTrain->m_bFreightTrain) {
-                pPainter.setPen(Qt::blue);
-            }
-            else {
-                pPainter.setPen(Qt::red);
-            }
-            double nDiploid = 0;
-            if (m_bMainStation) {
-                nDiploid = MainStation()->getDiploid(DiploidRatio::StaTrainNumDiploid);
-            }
-            else {
-                nDiploid = MainStation()->getDiploid(DiploidRatio::MultiTrainNumDiploid);
-            }
-            QFont font = pPainter.font();
-            font.setPointSizeF(16 * nDiploid);
-            pPainter.setFont(font);
-            pPainter.drawText(Scale(rcFrame), m_pTrain->m_strTrainNum, QTextOption(Qt::AlignCenter));
-        }
-
-        void DeviceTrain::DrawTrainHead(QPainter& pPainter, QRectF rcFrame)
-        {
-            pPainter.setPen(Qt::NoPen);
-            if (m_pTrain->m_bRunning) {
-                QPolygonF triangle;
-                double nDiploid = MainStation()->getDiploid(DiploidRatio::StaTrainNumDiploid);
-                pPainter.setRenderHint(QPainter::Antialiasing, true);
-                if (m_pTrain->m_bRight) {
-                    triangle << Scale(rcFrame.topRight()) << Scale(rcFrame.bottomRight())
-                        << Scale(QPointF(rcFrame.right() + 16 * nDiploid, rcFrame.top() + 16 * nDiploid));
-                }
-                else {
-                    triangle << Scale(rcFrame.topLeft()) << Scale(rcFrame.bottomLeft())
-                        << Scale(QPointF(rcFrame.left() - 16 * nDiploid, rcFrame.top() + 16 * nDiploid));
-                }
-                pPainter.drawPolygon(triangle);
-                pPainter.setRenderHint(QPainter::Antialiasing, false);
-            }
-        }
-
-        void DeviceTrain::DrawTrainTail(QPainter& pPainter, QRectF rcFrame)
-        {
-            QBrush brush;
-            int nMinutes = 0;
-            if (m_pTrain->m_nEarlyOrLateTime > 0) { //晚点
-                nMinutes = m_pTrain->m_nEarlyOrLateTime / 60;
-                brush.setColor(Qt::blue);
-            }
-            else if (m_pTrain->m_nEarlyOrLateTime > 0) {    //早点
-                nMinutes = -m_pTrain->m_nEarlyOrLateTime / 60;
-                brush.setColor(Qt::red);
-            }
-
-            if (nMinutes > 0) {
-                double nDiploid = MainStation()->getDiploid(DiploidRatio::StaTrainNumDiploid);
-                QRectF rcLabel;
-                if (m_pTrain->m_bRight) {
-                    rcLabel = QRectF(rcFrame.left() - 40 * nDiploid, rcFrame.top(), 40 * nDiploid, rcFrame.height());
-                }
-                else {
-                    rcLabel = QRectF(rcFrame.right() + 40 * nDiploid, rcFrame.top(), 40 * nDiploid, rcFrame.height());
-                }
-                pPainter.setPen(Qt::NoPen);
-                pPainter.setBrush(brush);
-                pPainter.drawRect(Scale(rcLabel));
-
-                QString strTime;
-                if (nMinutes < 99) {
-                    strTime = QString::number(nMinutes).rightJustified(2, '0');
-                }
-                else {
-                    strTime = QString("%1:%2")
-                        .arg(QString::number(nMinutes / 60).rightJustified(2, '0'))
-                        .arg(QString::number(nMinutes % 60).rightJustified(2, '0'));
-                }
-                pPainter.setPen(Qt::white);
-                pPainter.drawText(Scale(rcLabel), strTime);
-            }
-        }
-
-        void DeviceTrain::ShowTrainMenu(QPoint ptPos, int nCode)
-        {
-            QMenu* pMenu = new QMenu();
-            pMenu->setAttribute(Qt::WA_DeleteOnClose);
-            QAction* pAction1 = new QAction("加车次号");
-            pAction1->setEnabled(!m_pTrain);
-            pMenu->addAction(pAction1);
-            QObject::connect(pAction1, &QAction::triggered, [=]() {
-                StaTrain* pTrain = new StaTrain;
-                pTrain->m_nPosCode = nCode;
-                if (CTCWindows::LeadSealDlg::LeadSealPassword(CTCWindows::KeyInputType::AddTrain, pTrain)) {
-                    qDebug() << "车次添加成功";
-                }
-            });
-            QAction* pAction2 = new QAction("删除车次号");
-            pAction2->setEnabled(m_pTrain);
-            pMenu->addAction(pAction2);
-            QObject::connect(pAction2, &QAction::triggered, [=]() {
-                QDialog* pDialog = new QDialog;
-                pDialog->setWindowIcon(QIcon("icon/icon.ico"));
-                pDialog->setWindowTitle("车次号删除");
-                pDialog->setAttribute(Qt::WA_DeleteOnClose);
-                pDialog->setFixedSize(200, 120);
-                QVBoxLayout* pLayout = new QVBoxLayout(pDialog);
-                pLayout->setMargin(8);
-                pLayout->setSpacing(8);
-                pDialog->setLayout(pLayout);
-
-                QHBoxLayout* pLayout1 = new QHBoxLayout(pDialog);
-                pLayout1->setMargin(8);
-                pLayout1->setSpacing(8);
-                QLabel* pLabel = new QLabel(pDialog);
-                pLabel->setFixedSize(56, 24);
-                pLabel->setText("车次号");
-                pLayout1->addWidget(pLabel);
-                QLineEdit* pLineEdit = new QLineEdit(pDialog);
-                pLineEdit->setFixedHeight(24);
-                pLineEdit->setEnabled(false);
-                pLineEdit->setText(m_pTrain->m_strTrainNum);
-                QFont font = pLineEdit->font();
-                font.setPointSize(11);
-                pLineEdit->setFont(font);
-                pLineEdit->setStyleSheet("QLineEdit:disabled { background-color: rgb(250, 250, 250); }");
-                pLayout1->addWidget(pLineEdit);
-                pLayout->addLayout(pLayout1);
-
-                QHBoxLayout* pLayout2 = new QHBoxLayout(pDialog);
-                pLayout2->setMargin(0);
-                pLayout2->setSpacing(8);
-                QPushButton* pPushButton1 = new QPushButton(pDialog);
-                pPushButton1->setFixedSize(64, 24);
-                pPushButton1->setText("确定");
-                QObject::connect(pPushButton1, &QPushButton::clicked, [=]() {
-                    if (MainStation()->DeleteTrain(m_pTrain)) {
-                        m_pTrain = nullptr;
-                    }
-                    pDialog->close();
-                });
-                pLayout2->addWidget(pPushButton1);
-                QPushButton* pPushButton2 = new QPushButton(pDialog);
-                pPushButton2->setFixedSize(64, 24);
-                pPushButton2->setText("取消");
-                QObject::connect(pPushButton1, &QPushButton::clicked, [=]() {
-                    pDialog->close();
-                });
-                pLayout2->addWidget(pPushButton2);
-                pLayout->addLayout(pLayout2);
-                pDialog->exec();
-            });
-            QAction* pAction3 = new QAction("车次号确认");
-            pAction3->setEnabled(m_pTrain);
-            pMenu->addAction(pAction3);
-            QObject::connect(pAction3, &QAction::triggered, [=]() {
-                CTCWindows::LeadSealDlg::LeadSealPassword(CTCWindows::KeyInputType::ConfirmTrain, m_pTrain);
-            });
-            QAction* pAction4 = new QAction("修正车次号");
-            pAction4->setEnabled(m_pTrain);
-            pMenu->addAction(pAction4);
-            QObject::connect(pAction4, &QAction::triggered, [=]() {
-                CTCWindows::LeadSealDlg::LeadSealPassword(CTCWindows::KeyInputType::AmendTrain, m_pTrain);
-            });
-            QAction* pAction5 = new QAction("变更车次号");
-            pAction5->setEnabled(m_pTrain);
-            pMenu->addAction(pAction5);
-            QObject::connect(pAction5, &QAction::triggered, [=]() {
-                CTCWindows::LeadSealDlg::LeadSealPassword(CTCWindows::KeyInputType::ChangeTrain, m_pTrain);
-                });
-            QAction* pAction6 = new QAction("该车次属性");
-            pAction6->setEnabled(m_pTrain);
-            pMenu->addAction(pAction6);
-            QObject::connect(pAction6, &QAction::triggered, [=]() {
-                CTCWindows::LeadSealDlg::LeadSealPassword(CTCWindows::KeyInputType::ChangeTrainAttr, m_pTrain); 
-                });
-            QAction* pAction7 = new QAction("设置车次停稳");
-            pAction7->setEnabled(m_pTrain);
-            pMenu->addAction(pAction7);
-            QObject::connect(pAction7, &QAction::triggered, [=]() {
-                if (QMessageBox::question(nullptr, MSGBOX_TITTLE, QString("确定要设置车次%1停稳?").arg(m_pTrain->m_strTrainNum), "是", "否") == 0) {
-                    MainStation()->SetTrainRunning(m_pTrain, false);
-                }
-            });
-            QAction* pAction8 = new QAction("设置车次启动");
-            pAction8->setEnabled(m_pTrain);
-            pMenu->addAction(pAction8);
-            QObject::connect(pAction8, &QAction::triggered, [=]() {
-                if (QMessageBox::question(nullptr, MSGBOX_TITTLE, QString("确定要设置车次%1启动?").arg(m_pTrain->m_strTrainNum), "是", "否") == 0) {
-                    MainStation()->SetTrainRunning(m_pTrain, true);
-                }
-            });
-            pMenu->exec(ptPos);
-        }
-
-        void DeviceTrain::onMouseMoveToTrainFrame(const QPoint& ptPos)
-        {
-            QRectF reMouse;  //鼠标判断区域略小于显示区域 以防与信号机按钮判定区域重合
-            for (TrainFrame* pTrainFrame : m_vecTrainFrame) {
-                reMouse = { pTrainFrame->m_rcFrame.x(), pTrainFrame->m_rcFrame.y() + 10, 
-                    pTrainFrame->m_rcFrame.width(), pTrainFrame->m_rcFrame.height() - 20 };
-                if (Scale(reMouse).contains(ptPos)) {
-                    CTCWindows::MainWindow()->setMouseState(CTCWindows::MouseState::AddTrain);
-                    if (!pTrainFrame->m_bContains) {
-                        m_nInTrainFrame++;
-                    }
-                    pTrainFrame->m_bContains = true;
-                }
-                else {
-                    if (pTrainFrame->m_bContains) {
-                        m_nInTrainFrame--;
-                    }
-                    pTrainFrame->m_bContains = false;
-                }
-            }
-            if (m_nInTrainFrame <= 0) {
-                CTCWindows::MainWindow()->setMouseState(CTCWindows::MouseState::Default);
-            }
-        }
-
-        void DeviceTrain::MoveTo(DeviceTrain* pNext)
-        {
-            if (pNext && m_pTrain) {
-                pNext->SetTrain(m_pTrain);
-                m_bTrainLeave = true;
-            }
         }
     }
 }

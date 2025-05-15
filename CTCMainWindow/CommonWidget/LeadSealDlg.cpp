@@ -79,11 +79,7 @@ namespace CTCWindows {
 			pEdit->setFixedHeight(24);
 			m_pCurrLineEdit = pEdit;
 			ui.contentWidget->layout()->addWidget(pEdit);
-
-			connect(ui.confirmBtn, &QPushButton::clicked, [&]() {
-				qDebug() << m_pCurrLineEdit->text();
-				this->close();
-			});
+			connect(ui.confirmBtn, &QPushButton::clicked, this, &LeadSealDlg::close);
 		}
 		else if (type == KeyInputType::InputShuntingTime) {
 			ui.tiplabel->setText("调车作业钩时分");
@@ -102,13 +98,7 @@ namespace CTCWindows {
 			pCheck->setText("强制执行");
 			pLayout->addWidget(pCheck, 0, Qt::AlignCenter);
 
-			connect(ui.confirmBtn, &QPushButton::clicked, [&]() {
-				if (pCheck->isChecked()) {
-					qDebug() << "强制执行";
-				}
-				qDebug() << m_pCurrLineEdit->text()+"分钟";
-				this->close();
-				});
+			connect(ui.confirmBtn, &QPushButton::clicked, this, &LeadSealDlg::close);
 		}
 		else {
 			Station::StaTrain* pTrain = static_cast<Station::StaTrain*>(pAttrObject);
@@ -204,6 +194,17 @@ namespace CTCWindows {
 
 		connect(ui.confirmBtn, &QPushButton::clicked, [=]() {
 			pTrain->m_strTrainNum = m_pCurrLineEdit->text();
+			switch (pTrain->m_strTrainNum.at(0).toUpper().toLatin1())
+			{
+			case 'K':
+			case 'T':
+			case 'Z':
+			case 'D':
+			case 'G':
+			case 'L':	pTrain->m_bFreightTrain = false; break;
+			default:	pTrain->m_bFreightTrain = true;  break;
+			}
+
 			pTrain->m_bElectric = pCheckBox1->isChecked();
 			pTrain->m_bRealTrain = pCheckBox2->isChecked();
 			m_bResult = Station::MainStation()->AddNewTrain(pTrain);

@@ -267,6 +267,9 @@
     <ClCompile Include="CTCMainWindow\StationViewKSK\ModuleWidget\ModifyTrainNumberKSK.cpp">
       <Filter>CTCMainWindow\StationViewKSK\ModuleWidget</Filter>
     </ClCompile>
+    <ClCompile Include="StationObject\Device\DeviceTrain.cpp">
+      <Filter>StationObject\Device</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CTCObject\CTCObject.h">
@@ -343,6 +346,9 @@
     </ClInclude>
     <ClInclude Include="CTCMainWindow\BaseWndClass\StationView\StaTrainDiagramWidget.h">
       <Filter>CTCMainWindow\BaseWndClass\StationView</Filter>
+    </ClInclude>
+    <ClInclude Include="StationObject\Device\DeviceTrain.h">
+      <Filter>StationObject\Device</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

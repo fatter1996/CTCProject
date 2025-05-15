@@ -65,6 +65,9 @@ namespace Station {
         } break; 
         }
         m_nPosCode = pStagePlan->m_nJJQDCode;
+        m_bElectric = pStagePlan->m_bElectric; //电力
+        m_nOverLimitLevel = pStagePlan->m_nOverLimitLevel; //超限等级
+        m_bFreightTrain = pStagePlan->m_bFreightTrain; //列货类型(列车-false, 货车-true)
     }
 
     StaTrain::StaTrain(StaTrafficLog* TrafficLog)
@@ -153,7 +156,9 @@ namespace Station {
     {
         m_bArrivaRoute = bArrivaRoute;
         m_nTrainId = pTrafficLog->m_nTrainId;
+        m_nLogId = pTrafficLog->m_nLogId;
         if (m_bArrivaRoute) {   //接车
+            m_strTrainNum = pTrafficLog->m_strArrivalTrainNum;
             m_tPlanTime = pTrafficLog->m_tProvArrivalTime;
             m_tTriggerTime = pTrafficLog->m_tProvArrivalTime;
             m_nTrackCode = pTrafficLog->m_nArrivalTrackCode;
@@ -162,6 +167,7 @@ namespace Station {
             m_strSignal = pTrafficLog->m_strArrivaSignal;
         }
         else {  //发车
+            m_strTrainNum = pTrafficLog->m_strDepartTrainNum;
             m_tPlanTime = pTrafficLog->m_tProvDepartTime;
             m_tTriggerTime = pTrafficLog->m_tProvDepartTime;
             m_nTrackCode = pTrafficLog->m_nDepartTrackCode;
@@ -196,6 +202,25 @@ namespace Station {
     {
         m_nTrackCode = nCode;
         m_strTrack = strName;
+        Device::DeviceBase* pSignal = MainStation()->getDeviceByCode(m_nSignalCode, SIGNALLAMP);
+        if (!pSignal) {
+            return;
+        }
+        Device::DeviceBase* pSignalNew = nullptr;
+        for (int nSignalCode : Station::MainStation()->getTrackAdjSingal()[m_strTrack]) {
+            pSignalNew = MainStation()->getDeviceByCode(nSignalCode, SIGNALLAMP);
+            if (pSignalNew->getSXThroat() == pSignal->getSXThroat()) {
+                m_nSignalCode = nSignalCode;
+                m_strSignal = pSignalNew->getName();
+            }
+        }
+        getRouteDescrip();
+    }
+
+    void StaTrainRoute::ChangeSignal(int nCode, const QString& strName)
+    {
+        m_nSignalCode = nCode;
+        m_strSignal = strName;
         getRouteDescrip();
     }
 
@@ -256,10 +281,70 @@ namespace Station {
         }
     }
 
+    QVector<StaTrainRoute*> StaTrainRoute::getSubTrainRouteList()
+    {
+        QVector<StaTrainRoute*> vecSubTrainRouteList;
+        if (m_bSunTrainRoute) {
+            for (int nSubRouteId : m_vecSubRouteId) {
+                vecSubTrainRouteList.append(MainStation()->getStaTrainRouteById(nSubRouteId)->getSubTrainRouteList());
+            }
+        }
+        else {
+            vecSubTrainRouteList.append(this);
+        }
+        return vecSubTrainRouteList;
+    }
+
+    StaTrainRoute* StaTrainRoute::getRelatedTrainRoute()
+    {
+        for (StaTrainRoute* pRoute : MainStation()->TrainRouteList()) {
+            if (pRoute == this) {
+                continue;
+            }
+            if (pRoute->m_nTrainId == this->m_nTrainId && !pRoute->m_bSunTrainRoute) {
+                return pRoute;
+            }
+        }
+        return nullptr;
+    }
+
+    QString StaTrainRoute::getTrainNum()
+    {
+        if (m_strTrainNum.isEmpty()) {
+            StaTrafficLog* pTrafficLog = MainStation()->getStaTrafficLogById(m_nLogId);
+            if (pTrafficLog) {
+                if (m_bArrivaRoute) {
+                    m_strTrainNum = pTrafficLog->m_strArrivalTrainNum;
+                }
+                else {
+                    m_strTrainNum = pTrafficLog->m_strDepartTrainNum;
+                }
+            }
+        }
+        
+        return m_strTrainNum;
+    }
+
+    bool StaTrainRoute::IsThrough()
+    {
+        StaTrafficLog* pTrafficLog = MainStation()->getStaTrafficLogById(m_nLogId);
+        if (pTrafficLog) {
+            if (m_bArrivaRoute) {
+                m_strTrainNum = pTrafficLog->m_strArrivalTrainNum;
+            }
+            else {
+                m_strTrainNum = pTrafficLog->m_strDepartTrainNum;
+            }
+            return (pTrafficLog->m_nPlanType == 0x04);
+        }
+        return false;
+    }
+
     void StaTrainRoute::Init(StaTrainRoute* pTrainRoute, const QJsonObject& subObj)
     {
         pTrainRoute->m_nRouteId = subObj.value("routeId").toInt();
         pTrainRoute->m_nTrainId = subObj.value("trainId").toInt();
+        pTrainRoute->m_nLogId = subObj.value("logId").toInt();
         pTrainRoute->m_bArrivaRoute = subObj.value("arriveRoute").toInt();
         pTrainRoute->m_bAutoTouch = subObj.value("autoTouch").toInt();
 
@@ -275,13 +360,14 @@ namespace Station {
         pTrainRoute->m_strCurRouteDescrip = subObj.value("routeDepict").toString();
         pTrainRoute->m_strDirection = subObj.value("direction").toString();
         pTrainRoute->m_nRouteState = subObj.value("routeState").toInt();
-
+        pTrainRoute->getRouteDescrip();
         QStringList strSubRoute = subObj.value("subRouteId").toString().split(',');
         for (QString strRouteId : strSubRoute) {
             if (strRouteId.toInt() != 0) {
                 pTrainRoute->m_vecSubRouteId.append(strRouteId.toInt());
             }
         }
+        
     }
 
     void StaTrainDispatch::Init(StaTrainDispatch* pTrainDispatch, const QJsonObject& subObj)
