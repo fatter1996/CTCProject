@@ -87,7 +87,7 @@ namespace CTCWindows {
 
 	public:
 		virtual void ShowEditingInterface(void* pTextSign) {};
-
+		void timerEvent(QTimerEvent* event);
 	private:
 		virtual BaseWnd::StationCtrlDisp* CreateStationCtrlDisp() = 0;
 		virtual BaseWnd::StationMultiDisp* CreateMultiStationDisp() = 0;
@@ -173,6 +173,7 @@ namespace CTCWindows {
 		MenuSyncAction m_stuMenuSyncAction;
 		QAction* m_pRoutePlanAction = nullptr;
 
+		int m_buttonTimerId = 0;
 		bool m_bShowToolbarBtn = true;
 		bool m_bShowToolbarLabel = true;
 	};

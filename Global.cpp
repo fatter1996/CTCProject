@@ -263,7 +263,6 @@ namespace Station {
                 strEntrySingal = pSingalBtn->strBtnNameList[0];
                 if (strEntrySingal == "SJ") {
                     strExitSingal = pSingalBtn->strBtnNameList[pSingalBtn->strBtnNameList.size() - 2];
-                    qDebug() << "strEntrySingal" << strEntrySingal << "strExitSingal" << strExitSingal;
                 }
                 else {
                     strExitSingal = pSingalBtn->strBtnNameList[pSingalBtn->strBtnNameList.size() - 1];
@@ -273,16 +272,12 @@ namespace Station {
                 strExitSingal = pSingalBtn->strBtnNameList[0];
                 if (strExitSingal == "SJ") {
                     strEntrySingal = pSingalBtn->strBtnNameList[pSingalBtn->strBtnNameList.size() - 2];
-                    qDebug() << "strEntrySingal" << strEntrySingal << "strExitSingal" << strExitSingal;
                 }
                 else {
                     strEntrySingal = pSingalBtn->strBtnNameList[pSingalBtn->strBtnNameList.size() - 1];
                 }
             }
         
-            if (strEntrySingal == "SJ") {
-                qDebug() << "strEntrySingal" << strEntrySingal << "strExitSingal" << strExitSingal;
-            }
             if (strEntrySingal != m_strSignal) {
                 continue;
             }

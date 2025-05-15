@@ -253,7 +253,10 @@ namespace Station {
             StaDispatchOrder* pDispatch = new StaDispatchOrder;
             int nFlag = 11;
             pDispatch->m_nOrderId = dataAyyay[nFlag++] & 0xFF;
-            pDispatch->m_strOrderNum = QString::fromLocal8Bit(dataAyyay.mid(nFlag, 8));
+       
+            QString hexStr = dataAyyay.mid(nFlag, 8).toHex();
+            hexStr.replace(QRegularExpression("^0+"), "");
+            pDispatch->m_strOrderNum = hexStr;
             nFlag += 8;
             QString strDepartTime = QString("%1-%2-%3T%4:%5:%6")
                 .arg((dataAyyay[nFlag] & 0xFF) + (dataAyyay[nFlag + 1] & 0xFF) * 256)

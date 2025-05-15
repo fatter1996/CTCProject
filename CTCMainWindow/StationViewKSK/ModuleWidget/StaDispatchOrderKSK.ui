@@ -78,21 +78,24 @@
           <height>553</height>
          </rect>
         </property>
+        <property name="inputMethodHints">
+         <set>Qt::ImhUrlCharactersOnly</set>
+        </property>
         <attribute name="label">
          <string comment="64">车站</string>
         </attribute>
-        <layout class="QVBoxLayout" name="verticalLayout_2">
+        <layout class="QVBoxLayout" name="verticalLayout_2" stretch="1,1,5">
          <property name="spacing">
           <number>12</number>
          </property>
          <property name="leftMargin">
-          <number>27</number>
+          <number>18</number>
          </property>
          <property name="topMargin">
           <number>12</number>
          </property>
          <property name="rightMargin">
-          <number>27</number>
+          <number>18</number>
          </property>
          <property name="bottomMargin">
           <number>12</number>
@@ -101,17 +104,17 @@
           <widget class="QWidget" name="stationReceive" native="true">
            <property name="minimumSize">
             <size>
-             <width>64</width>
+             <width>78</width>
              <height>96</height>
             </size>
            </property>
            <property name="maximumSize">
             <size>
-             <width>64</width>
+             <width>78</width>
              <height>96</height>
             </size>
            </property>
-           <layout class="QVBoxLayout" name="verticalLayout">
+           <layout class="QVBoxLayout" name="verticalLayout" stretch="1,1">
             <property name="spacing">
              <number>0</number>
             </property>
@@ -131,13 +134,13 @@
              <widget class="QLabel" name="label">
               <property name="minimumSize">
                <size>
-                <width>64</width>
+                <width>79</width>
                 <height>64</height>
                </size>
               </property>
               <property name="maximumSize">
                <size>
-                <width>64</width>
+                <width>10</width>
                 <height>64</height>
                </size>
               </property>
@@ -147,12 +150,18 @@
               <property name="text">
                <string/>
               </property>
+              <property name="scaledContents">
+               <bool>true</bool>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
              </widget>
             </item>
             <item>
              <widget class="QLabel" name="label_2">
               <property name="text">
-               <string>收令箱</string>
+               <string>车站收令箱</string>
               </property>
               <property name="alignment">
                <set>Qt::AlignCenter</set>
@@ -166,13 +175,13 @@
           <widget class="QWidget" name="stationAdvancereceipt" native="true">
            <property name="minimumSize">
             <size>
-             <width>64</width>
+             <width>81</width>
              <height>96</height>
             </size>
            </property>
            <property name="maximumSize">
             <size>
-             <width>64</width>
+             <width>10</width>
              <height>96</height>
             </size>
            </property>
@@ -181,7 +190,7 @@
              <number>0</number>
             </property>
             <property name="leftMargin">
-             <number>0</number>
+             <number>5</number>
             </property>
             <property name="topMargin">
              <number>0</number>
@@ -196,13 +205,13 @@
              <widget class="QLabel" name="label_3">
               <property name="minimumSize">
                <size>
-                <width>64</width>
+                <width>72</width>
                 <height>64</height>
                </size>
               </property>
               <property name="maximumSize">
                <size>
-                <width>64</width>
+                <width>72</width>
                 <height>64</height>
                </size>
               </property>
@@ -217,7 +226,7 @@
             <item>
              <widget class="QLabel" name="label_4">
               <property name="text">
-               <string>预收令箱</string>
+               <string>车站预收令箱</string>
               </property>
               <property name="alignment">
                <set>Qt::AlignCenter</set>
@@ -262,13 +271,13 @@
           <number>12</number>
          </property>
          <property name="leftMargin">
-          <number>27</number>
+          <number>18</number>
          </property>
          <property name="topMargin">
           <number>12</number>
          </property>
          <property name="rightMargin">
-          <number>27</number>
+          <number>18</number>
          </property>
          <property name="bottomMargin">
           <number>12</number>
@@ -277,13 +286,13 @@
           <widget class="QWidget" name="Dispatchsend" native="true">
            <property name="minimumSize">
             <size>
-             <width>64</width>
+             <width>79</width>
              <height>96</height>
             </size>
            </property>
            <property name="maximumSize">
             <size>
-             <width>64</width>
+             <width>71</width>
              <height>96</height>
             </size>
            </property>
@@ -307,13 +316,13 @@
              <widget class="QLabel" name="label_7">
               <property name="minimumSize">
                <size>
-                <width>64</width>
+                <width>74</width>
                 <height>64</height>
                </size>
               </property>
               <property name="maximumSize">
                <size>
-                <width>64</width>
+                <width>74</width>
                 <height>64</height>
                </size>
               </property>
@@ -328,7 +337,7 @@
             <item>
              <widget class="QLabel" name="label_8">
               <property name="text">
-               <string>发令箱</string>
+               <string>调度台发令箱</string>
               </property>
               <property name="alignment">
                <set>Qt::AlignCenter</set>
@@ -342,7 +351,7 @@
           <widget class="QWidget" name="Dispatchstorage" native="true">
            <property name="minimumSize">
             <size>
-             <width>64</width>
+             <width>79</width>
              <height>96</height>
             </size>
            </property>
@@ -372,13 +381,13 @@
              <widget class="QLabel" name="label_9">
               <property name="minimumSize">
                <size>
-                <width>64</width>
+                <width>80</width>
                 <height>64</height>
                </size>
               </property>
               <property name="maximumSize">
                <size>
-                <width>64</width>
+                <width>80</width>
                 <height>64</height>
                </size>
               </property>
@@ -393,7 +402,7 @@
             <item>
              <widget class="QLabel" name="label_10">
               <property name="text">
-               <string>储令箱</string>
+               <string>调度台储令箱</string>
               </property>
               <property name="alignment">
                <set>Qt::AlignCenter</set>
@@ -407,7 +416,7 @@
           <widget class="QWidget" name="Dispatchtobesend" native="true">
            <property name="minimumSize">
             <size>
-             <width>64</width>
+             <width>79</width>
              <height>96</height>
             </size>
            </property>
@@ -437,13 +446,13 @@
              <widget class="QLabel" name="label_11">
               <property name="minimumSize">
                <size>
-                <width>64</width>
+                <width>80</width>
                 <height>64</height>
                </size>
               </property>
               <property name="maximumSize">
                <size>
-                <width>64</width>
+                <width>80</width>
                 <height>64</height>
                </size>
               </property>
@@ -458,7 +467,7 @@
             <item>
              <widget class="QLabel" name="label_12">
               <property name="text">
-               <string>待发箱</string>
+               <string>调度台待发箱</string>
               </property>
               <property name="alignment">
                <set>Qt::AlignCenter</set>
@@ -500,13 +509,13 @@
           <number>12</number>
          </property>
          <property name="leftMargin">
-          <number>27</number>
+          <number>18</number>
          </property>
          <property name="topMargin">
           <number>12</number>
          </property>
          <property name="rightMargin">
-          <number>27</number>
+          <number>18</number>
          </property>
          <property name="bottomMargin">
           <number>12</number>
@@ -515,7 +524,7 @@
           <widget class="QWidget" name="Locomotivesend" native="true">
            <property name="minimumSize">
             <size>
-             <width>64</width>
+             <width>79</width>
              <height>96</height>
             </size>
            </property>
@@ -545,7 +554,7 @@
              <widget class="QLabel" name="label_13">
               <property name="minimumSize">
                <size>
-                <width>64</width>
+                <width>75</width>
                 <height>64</height>
                </size>
               </property>
@@ -566,7 +575,7 @@
             <item>
              <widget class="QLabel" name="label_14">
               <property name="text">
-               <string>发令箱</string>
+               <string>机车发令箱</string>
               </property>
               <property name="alignment">
                <set>Qt::AlignCenter</set>
@@ -580,7 +589,7 @@
           <widget class="QWidget" name="Locomotivestorage" native="true">
            <property name="minimumSize">
             <size>
-             <width>64</width>
+             <width>79</width>
              <height>96</height>
             </size>
            </property>
@@ -610,7 +619,7 @@
              <widget class="QLabel" name="label_15">
               <property name="minimumSize">
                <size>
-                <width>64</width>
+                <width>77</width>
                 <height>64</height>
                </size>
               </property>
@@ -631,7 +640,7 @@
             <item>
              <widget class="QLabel" name="label_16">
               <property name="text">
-               <string>储令箱</string>
+               <string>机车储令箱</string>
               </property>
               <property name="alignment">
                <set>Qt::AlignCenter</set>
@@ -645,7 +654,7 @@
           <widget class="QWidget" name="Locomotivetobesend" native="true">
            <property name="minimumSize">
             <size>
-             <width>64</width>
+             <width>79</width>
              <height>96</height>
             </size>
            </property>
@@ -675,7 +684,7 @@
              <widget class="QLabel" name="label_17">
               <property name="minimumSize">
                <size>
-                <width>64</width>
+                <width>80</width>
                 <height>64</height>
                </size>
               </property>
@@ -696,7 +705,7 @@
             <item>
              <widget class="QLabel" name="label_18">
               <property name="text">
-               <string>待发箱</string>
+               <string>机车待发箱</string>
               </property>
               <property name="alignment">
                <set>Qt::AlignCenter</set>

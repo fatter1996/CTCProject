@@ -217,9 +217,14 @@ namespace CTCWindows {
 		void StationLogDispKSK::OnTrafficLogTableUpData()
 		{
 			QVector<Control::TableRowDataInfo> vecTableData;
+			QVector<QStringList> vecHeadData;
 			Station::StaTrain* pTrain = nullptr;
+			QString ArrivaTrainNum;
+			QString DepartTrainNum;
 			QColor txtColor;
 			for (Station::StaTrafficLog* pTrafficLog : Station::MainStation()->TrafficLogList()) {
+				QStringList strHeadList;
+				QString head;
 				pTrain = Station::MainStation()->getStaTrainById(pTrafficLog->m_nTrainId);
 				if (pTrain) {
 					if (pTrafficLog->IsReportedPoints()) {
@@ -228,10 +233,21 @@ namespace CTCWindows {
 					else {
 						txtColor = pTrain->m_bFreightTrain ? Qt::red : Qt::blue;
 					}
-
+					head = pTrafficLog->m_strArrivalTrainNum;
+					if (pTrain->m_bImportant) {
+						head += "(重)";
+					}
+					if (pTrafficLog->m_bDeleteFlag) {
+						head += "(删)";
+						
+					}
+					strHeadList.append(head);
+					ArrivaTrainNum = pTrafficLog->m_strArrivalTrainNum;
+					DepartTrainNum = pTrafficLog->m_strDepartTrainNum;
+					
 					QStringList strDataList = QStringList()
-						<< (pTrafficLog->m_bUpDown ? "" : pTrafficLog->m_strArrivalTrainNum)
-						<< (!pTrafficLog->m_bUpDown ? "" : pTrafficLog->m_strArrivalTrainNum)
+						<< (pTrafficLog->m_bUpDown ? "" : ArrivaTrainNum)
+						<< (!pTrafficLog->m_bUpDown ? "" : ArrivaTrainNum)
 						<< pTrafficLog->m_strArrivaSignal
 						<< pTrafficLog->m_strArrivalTrack
 						<< pTrafficLog->m_tAgrAdjDepartTime.toString("hh:mm")
@@ -243,8 +259,8 @@ namespace CTCWindows {
 						<< ""
 						<< "" << "" << ""
 						<< "" << "" << "" << "" << "" //电话记录号码
-						<< (pTrafficLog->m_bUpDown ? "" : pTrafficLog->m_strDepartTrainNum)
-						<< (!pTrafficLog->m_bUpDown ? "" : pTrafficLog->m_strDepartTrainNum)
+						<< (pTrafficLog->m_bUpDown ? "" : DepartTrainNum)
+						<< (!pTrafficLog->m_bUpDown ? "" : DepartTrainNum)
 						<< pTrafficLog->m_strDepartTrack
 						<< pTrafficLog->m_strDepartSignal
 						<< pTrafficLog->m_tAdjAgrDepartTime.toString("hh:mm")
@@ -281,10 +297,12 @@ namespace CTCWindows {
 						<< (pTrain->m_bImportant ? "重点" : "");
 
 					vecTableData.append(Control::TableRowDataInfo(strDataList, txtColor));
+					vecHeadData.append(strHeadList);
 				}
 			}
 			pTrafficLogTable->ClearData();
-			pTrafficLogTable->SetTableData(vecTableData);
+
+			pTrafficLogTable->SetTableData(vecTableData,0, vecHeadData);
 		}
 
 		void StationLogDispKSK::SetPlanType(bool Type, Station::StaTrafficLog* m_pCurTrafficLog)
@@ -545,6 +563,11 @@ namespace CTCWindows {
 				}
 				});
 			pMenu->addAction(pAction_13);
+			pAction_13->setCheckable(true);// 启用可勾选状态
+			if (m_pCurTrafficLog) {
+				Station::StaTrain* pTrain = Station::MainStation()->getStaTrainById(m_pCurTrafficLog->m_nTrainId);
+				pAction_13->setChecked(pTrain->m_bImportant);
+			}
 			connect(pAction_13, &QAction::triggered, [=]() {//设置/取消重点列车
 				if (m_pCurTrafficLog) {
 					Station::StaTrain* pTrain = Station::MainStation()->getStaTrainById(m_pCurTrafficLog->m_nTrainId);
@@ -568,10 +591,12 @@ namespace CTCWindows {
 
 					if (ret == QMessageBox::Ok) {
 						pTrain->m_bImportant = !pTrain->m_bImportant;
+
 					}
 					QByteArray btResult;
 					QMap<QString, QByteArray>m_mapTrain = { {"keynote",QByteArray::number(pTrain->m_bImportant)}};
 					if (Http::HttpClient::ChangeStaTrain(Station::MainStation()->getStationId(), m_mapTrain, btResult)) {
+						emit Station::MainStation()->TrafficLogTableUpData();
 					};
 				}
 				});
@@ -585,10 +610,10 @@ namespace CTCWindows {
 					int ret = 0;
 					QString strImportant;
 					if (!m_pCurTrafficLog->m_bDeleteFlag) {
-						strImportant = "当前为重点列车是否取消重点列车";
+						strImportant = "是否为当前列车设置删除标记";
 					}
 					else {
-						strImportant = "当前为重点列车是否取消重点列车";
+						strImportant = "是否取消设置删除标记";
 
 					}
 					QMessageBox msgBox(QMessageBox::Warning,
@@ -600,16 +625,7 @@ namespace CTCWindows {
 					msgBox.setButtonText(QMessageBox::Cancel, tr("取消"));
 					ret = msgBox.exec();
 					if (ret == QMessageBox::Ok) {
-						if (!m_pCurTrafficLog->m_bDeleteFlag) {
-							m_pCurTrafficLog->m_strArrivalTrainNum = m_pCurTrafficLog->m_strArrivalTrainNum + "(删)";
-							m_pCurTrafficLog->m_strDepartTrainNum = m_pCurTrafficLog->m_strDepartTrainNum + "(删)";
-							m_pCurTrafficLog->m_bDeleteFlag = !m_pCurTrafficLog->m_bDeleteFlag;
-						}
-						else {
-							m_pCurTrafficLog->m_strArrivalTrainNum.remove("(删)"); 
-							m_pCurTrafficLog->m_strDepartTrainNum.remove("(删)");
-							m_pCurTrafficLog->m_bDeleteFlag = !m_pCurTrafficLog->m_bDeleteFlag;
-						}
+						m_pCurTrafficLog->m_bDeleteFlag = !m_pCurTrafficLog->m_bDeleteFlag;
 						QByteArray btResult;
 						QMap<QString, QByteArray>m_mapLogValue = { {"arrivalTrainNumber",m_pCurTrafficLog->m_strArrivalTrainNum.toLocal8Bit() },
 							{"departTrainNumber",m_pCurTrafficLog->m_strDepartTrainNum.toLocal8Bit()},

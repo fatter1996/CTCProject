@@ -53,7 +53,7 @@ namespace CTCWindows {
 
         //初始化界面布局
         InitViewLayout();
-
+        m_buttonTimerId = startTimer(200);
         SealTechnique::InitSealRecord(Station::MainStation());
 	}
 
@@ -278,12 +278,45 @@ namespace CTCWindows {
 
     void CTCMainWindow::ShowStagePlanSignWnd()
     {
+        Station::MainStation()->ClearNewStagePlan();
+        if (Station::MainStation()->NewStagePlan() == nullptr) {
+            if (m_pStateToolBar->findChild<QPushButton*>("stagePlanBtn") != nullptr) {
+                QPushButton* pDispatchBtn = m_pStateToolBar->findChild<QPushButton*>("stagePlanBtn");
+                pDispatchBtn->setStyleSheet("QPushButton{background-color: rgb(210, 210, 210);}");
+            }
+        }
         StagePlanSign* pStagePlanSign = new StagePlanSign(this);
         pStagePlanSign->setAttribute(Qt::WA_DeleteOnClose);
         pStagePlanSign->InitStagePlan();
         pStagePlanSign->exec();
     }
-
+    void CTCMainWindow::timerEvent(QTimerEvent* event) {
+        if (Station::MainStation()->NewStagePlan()) {
+            QPushButton* pDispatchBtn = m_pStateToolBar->findChild<QPushButton*>("stagePlanBtn");
+            if (pDispatchBtn) {
+                if (Station::Device::DeviceBase::getElapsed()) {
+                    pDispatchBtn->setStyleSheet("QPushButton{background-color: rgb(210, 210, 210);}");
+                }
+                else {
+                    pDispatchBtn->setStyleSheet("QPushButton{background-color: #FD0C0C;}");
+                }
+                m_pStateToolBar->update();
+            }
+        }
+        if (Station::MainStation()->NewDispatchOrder()) {
+            QPushButton* pDispatchBtn = m_pSignForToolBar->findChild<QPushButton*>("dispatchBtn");
+            if (pDispatchBtn) {
+                if (Station::Device::DeviceBase::getElapsed()) {
+                    pDispatchBtn->setStyleSheet("QPushButton{background-color: rgb(210, 210, 210);}");
+                }
+                else {
+                    pDispatchBtn->setStyleSheet("QPushButton{background-color: #FD0C0C;}");
+                }
+                m_pSignForToolBar->update();
+            }
+        }
+        return QMainWindow::timerEvent(event);
+    }
     void CTCMainWindow::ShowStaRoutePlanWnd(bool bShow)
     {
         if (bShow) {
