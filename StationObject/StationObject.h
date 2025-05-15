@@ -115,29 +115,31 @@ namespace Station {
         void SelectStaDispatch();   //查询调度命令
         void SelectStaTrainDispatch(StaDispatchOrder* pOrder);   //查询机车调度命令
         void SelectStaTrafficLog();   //查询行车日志
-
-        void ChangeOldStaTrainRoute(StaTrainRoute* pStaTrainRoute);//修改旧的进路序列数据
-
-
-        void ChangeStaTrafficLogData(Station::StaTrafficLog* m_pCurTrafficLog);
         void GetStationOrderByJosn(const QByteArray& btDataArray, Order type);
+        int ReadInterLock(const QString& filePath);   //解析"InterlockTable.txt"
+        void InterLockfileAnalysis(QString strLine);
+        int ReadChartConfig(const QString& filePath); //解析"Chart_Conversion.json"
+
+    public:
         int AddNewTrain(StaTrain* pStaTrain); //添加新车次
         int DeleteTrain(StaTrain* pStaTrain); //删除车次
         int SetTrainRunning(StaTrain* pStaTrain, bool bRunning); //设置车次启动或停稳
-        int ChangeTrainNum(StaTrain* pStaTrain, QString strTrainNum); //设置车次启动或停稳
-        int ChangeTrainAttr(StaTrain* pStaTrain, int nSpeed, QString strLocomotive, bool bElectric); //修改车次信息
+        int ChangeTrainNum(StaTrain* pStaTrain, const QString& strTrainNum); //修改车次号
+        int ChangeTrainAttr(StaTrain* pStaTrain, int nSpeed, const QString& strLocomotive, bool bElectric); //修改车次信息
         int AddNewStagePlan(StaStagePlan* pStaStagePlan); //添加阶段计划
         int AddNewTrainRoute(StaTrainRoute* pTrainRoute); //添加进路序列
         void InitCombinativeRoute(); //初始化组合进路
         int AddNewDispatchOrder(StaDispatchOrder* pDispatchOrder); //添加调度命令
         int AddNewTrafficLog(StaTrafficLog* pTrafficLog); //添加行车日志
         void CreatTrainRouteByTrafficLog(StaTrafficLog* pTrafficLog);
-        int ReadInterLock(const QString& filePath);   //解析"InterlockTable.txt"
-        void InterLockfileAnalysis(QString strLine);
-        int ReadChartConfig(const QString& filePath); //解析"Chart_Conversion.json"
-        int DeleteRoute(StaTrainRoute* pStaRoute);
-        void RemoveLogVecOne(StaTrafficLog* pTrafficLog);
+        void TrainRouteTrigger(StaTrainRoute* pCurRoute, const QVector<StaTrainRoute*>& vecRouteList, const QString& strType);
+        void TrainRouteTriggerChange(const QVector<StaTrainRoute*>& vecRouteList, bool bAutoTouch);
+        bool TrainRouteTrackChange(const QVector<StaTrainRoute*>& vecRouteList, Device::DeviceBase* pTrack);
+        bool TrainRouteSignalChange(const QVector<StaTrainRoute*>& vecRouteList, Device::DeviceBase* pSignal);
+        bool DeleteTrainRoute(const QVector<StaTrainRoute*>& vecRouteList);
+        QString getTriggerString(const QVector<StaTrainRoute*>& vecRouteList);
 
+    public:
         StaTrain* getStaTrainById(int nTrainId);
         StaTrain* getStaTempTrainById(int nTrainId);
         StaTrainRoute* getStaTrainRouteById(int nRouteId);
@@ -147,12 +149,14 @@ namespace Station {
         StaTrafficLog* getStaTrafficLogByTrain(int nTrainID);
         void RemoveTrain(StaTrain* pTrain);
 
-        void SendPacketMsg(int nTargetCode, int nOrderType = 0, int nAttr1 = -1, int nAttr2 = -1, QByteArray btAttr3 = QByteArray());
+    public:
         void SubmitCurSubject(); //提交当前题目
         void AddSelectDevice(Device::DeviceBase* pDevice); 
         bool IsAllowStaOperation(); //是否可操作
-        void CompareResult(const QByteArray& dataAyyay);
+        void CompareResult(const QByteArray& dataArray);
 
+    public:
+        void SendPacketMsg(int nTargetCode, int nOrderType = 0, int nAttr1 = -1, int nAttr2 = -1, QByteArray btAttr3 = QByteArray());
         void StationReset();
         void ClearDevice(bool bClearTwinkle = false);
         void PutThrough(int nTime);
@@ -169,6 +173,7 @@ namespace Station {
         
         const QVector<StaTrain*>& TrainList() const { return m_vecStaTrain; }
         void AddTrain(StaTrain* pTrain) { m_vecStaTrain.append(pTrain); }
+        void AddTempTrain(StaTrain* pTrain) { m_vecStaTempTrain.append(pTrain); }
         void RemoveTempTrain(StaTrain* pTrain) { m_vecStaTempTrain.removeOne(pTrain); }
         void RemoveTrainRoute(StaTrainRoute* pTrainRoute) { m_vecStaTrainRoute.removeOne(pTrainRoute); }
         const QVector<StaStagePlan*>& StagePlanList() const { return m_vecStaStagePlan; }
@@ -209,10 +214,9 @@ namespace Station {
 
         int getStaLimits(Limits type);
         void setStaLimits(Limits type, int nValue);
-        Transmission::StaProtocol* getPool() { return m_pProtocol; }
-        Transmission::StaPacket* getPack() { return m_pStaPacket;  }
+
     public slots:
-        void onReciveData(const QByteArray& dataAyyay);
+        void onReciveData(const QByteArray& dataArray);
         void onOrderIssued();
         void onOrderClear(bool bClearTwinkle = false);
         void onUserLogin(QString strUserName, QString strPassword);

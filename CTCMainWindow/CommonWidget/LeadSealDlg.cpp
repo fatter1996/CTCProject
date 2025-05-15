@@ -79,11 +79,7 @@ namespace CTCWindows {
 			pEdit->setFixedHeight(24);
 			m_pCurrLineEdit = pEdit;
 			ui.contentWidget->layout()->addWidget(pEdit);
-
-			connect(ui.confirmBtn, &QPushButton::clicked, [&]() {
-				qDebug() << m_pCurrLineEdit->text();
-				this->close();
-			});
+			connect(ui.confirmBtn, &QPushButton::clicked, this, &LeadSealDlg::close);
 		}
 		else if (type == KeyInputType::InputShuntingTime) {
 			ui.tiplabel->setText("调车作业钩时分");
@@ -102,13 +98,7 @@ namespace CTCWindows {
 			pCheck->setText("强制执行");
 			pLayout->addWidget(pCheck, 0, Qt::AlignCenter);
 
-			connect(ui.confirmBtn, &QPushButton::clicked, [&]() {
-				if (pCheck->isChecked()) {
-					qDebug() << "强制执行";
-				}
-				qDebug() << m_pCurrLineEdit->text()+"分钟";
-				this->close();
-				});
+			connect(ui.confirmBtn, &QPushButton::clicked, this, &LeadSealDlg::close);
 		}
 		else {
 			Station::StaTrain* pTrain = static_cast<Station::StaTrain*>(pAttrObject);
@@ -137,19 +127,7 @@ namespace CTCWindows {
 				ui.tiplabel->setText("修改车次号");
 				InitChangeTrainNum(pTrain);
 				connect(ui.confirmBtn, &QPushButton::clicked, [=]() {
-					pTrain->m_strTrainNum = m_pCurrLineEdit->text();
-
-					QByteArray btResult;
-					QMap<QString, QByteArray>m_mapTrain = { {"trainNum", pTrain->m_strTrainNum.toLocal8Bit()} };
-
-					if (Http::HttpClient::ChangeStaTrain(pTrain->m_nTrainId, m_mapTrain, btResult)) {
-						emit Station::MainStation()->SendDataToTCP(Station::MainStation()->getPack()->PackOrder(TARGET_INTERLOCK, 0x60, pTrain->m_nTrainId, 0x08));
-						m_bResult = true;
-					}
-					else {
-						m_bResult = false;
-					}
-					//m_bResult = Station::MainStation()->ChangeTrainNum(pTrain, m_pCurrLineEdit->text());
+					m_bResult = Station::MainStation()->ChangeTrainNum(pTrain, m_pCurrLineEdit->text());
 					this->close();
 				});
 			}
@@ -216,6 +194,17 @@ namespace CTCWindows {
 
 		connect(ui.confirmBtn, &QPushButton::clicked, [=]() {
 			pTrain->m_strTrainNum = m_pCurrLineEdit->text();
+			switch (pTrain->m_strTrainNum.at(0).toUpper().toLatin1())
+			{
+			case 'K':
+			case 'T':
+			case 'Z':
+			case 'D':
+			case 'G':
+			case 'L':	pTrain->m_bFreightTrain = false; break;
+			default:	pTrain->m_bFreightTrain = true;  break;
+			}
+
 			pTrain->m_bElectric = pCheckBox1->isChecked();
 			pTrain->m_bRealTrain = pCheckBox2->isChecked();
 			m_bResult = Station::MainStation()->AddNewTrain(pTrain);
@@ -298,23 +287,7 @@ namespace CTCWindows {
 		setFixedHeight(360);
 
 		connect(ui.confirmBtn, &QPushButton::clicked, [=]() {
-			QByteArray btResult;
-			pTrain->m_nSpeed = pEdit2->text().toInt();
-			pTrain->m_strLocomotive = pEdit3->text();
-
-			pTrain->m_bElectric = pCheckBox1->isChecked();
-			QMap<QString, QByteArray>m_mapTrain = { {"strLocomotive", pTrain->m_strLocomotive.toLocal8Bit()},
-				{"speed",QByteArray::number(pTrain->m_nSpeed)},
-				{"electric",QByteArray::number(pTrain->m_bElectric)}};
-
-			if (Http::HttpClient::ChangeStaTrain(pTrain->m_nTrainId, m_mapTrain, btResult)) {
-				emit Station::MainStation()->SendDataToTCP(Station::MainStation()->getPack()->PackOrder(TARGET_INTERLOCK, 0x60, pTrain->m_nTrainId, 0x08));
-				m_bResult = true;
-			}
-			else {
-				m_bResult = false;
-			}
-			//m_bResult = Station::MainStation()->ChangeTrainAttr(pTrain, pEdit2->text().toInt(), pEdit3->text(), pCheckBox1->isChecked());
+			m_bResult = Station::MainStation()->ChangeTrainAttr(pTrain, pEdit2->text().toInt(), pEdit3->text(), pCheckBox1->isChecked());
 			this->close();
 		});
 	}

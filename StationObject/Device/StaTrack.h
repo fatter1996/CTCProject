@@ -1,5 +1,6 @@
 ﻿#pragma once
 #include "DeviceBase.h"
+#include "DeviceTrain.h"
 
 namespace Station {
     namespace Device {

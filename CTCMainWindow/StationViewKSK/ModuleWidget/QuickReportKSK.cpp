@@ -14,6 +14,7 @@ namespace CTCWindows {
 			m_pTrainList->SetHeadData(GetTrainRouteTableHeadInfo(), HHead);
 			ui.tablewidget->layout()->addWidget(m_pTrainList);
 		}
+
 		QVector<CTCWindows::Control::TableViewHeadInfo> QuickReportKSK::GetTrainRouteTableHeadInfo()
 		{
 			m_nTrackRow = 1;

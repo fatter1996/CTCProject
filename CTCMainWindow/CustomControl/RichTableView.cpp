@@ -523,5 +523,15 @@ namespace CTCWindows {
                 }
             }
         }
+
+        void RichTableView::AddComboBox(int nRow, int nCol, const QStringList& strList, const QString& currText, std::function<void(const QString&)> CallBackFun)
+        {
+            QComboBox* pCombox = new QComboBox(this); // 下拉选择框控件
+            pCombox->installEventFilter(this);
+            pCombox->addItems(strList);
+            m_pDataTable->setCellWidget(nRow, nCol, pCombox);
+            pCombox->setCurrentText(currText);
+            connect(pCombox, &QComboBox::currentTextChanged, CallBackFun);
+        }
     }
 }

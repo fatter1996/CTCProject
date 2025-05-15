@@ -27,40 +27,26 @@ namespace Station {
             AttrMap mapAttrFun;
             m_mapAttribute.insert(m_strType, mapAttrFun);
             m_mapAttribute[m_strType].insert("BSType", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaSemiAutoBlock*>(pDevice)->m_nBlockType = strElement.toUInt(); });
-            m_mapAttribute[m_strType].insert("m_Direction", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaSemiAutoBlock*>(pDevice)->m_strDirection = strElement; });
-            m_mapAttribute[m_strType].insert("m_RoutePoint", [&](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaSemiAutoBlock*>(pDevice)->m_ptRouteWnd = QStringToQPointF(strElement); });
-            m_mapAttribute[m_strType].insert("m_FrameRect", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaSemiAutoBlock*>(pDevice)->m_rcFrame = QStringToQRectF(strElement); });
-            m_mapAttribute[m_strType].insert("m_Button", [](DeviceBase* pDevice, const QString& strElement) {
-                QJsonParseError error;
-                QJsonDocument josnDoc = QJsonDocument::fromJson(strElement.toUtf8(), &error);
-                if (josnDoc.isNull()) {
-                    qDebug() << "无效的JSON格式:" << error.errorString();
-                    return;
-                }
-                if (josnDoc.isObject()) {
-                    for (const QString& key : josnDoc.object().keys()) {
-                        m_mapAttribute[pDevice->getStrType()][key](pDevice, QJsonDocument(josnDoc.object().value(key).toObject()).toJson());
-                    }
-                }
-            });
-
             m_mapAttribute[m_strType].insert("BS", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaSemiAutoBlock*>(pDevice)->AddBlockBtn("闭塞", strElement); });
             m_mapAttribute[m_strType].insert("SG", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaSemiAutoBlock*>(pDevice)->AddBlockBtn("事故", strElement); });
             m_mapAttribute[m_strType].insert("FY", [](DeviceBase* pDevice, const QString& strElement) { dynamic_cast<StaSemiAutoBlock*>(pDevice)->AddBlockBtn("复原", strElement); });
             InitArrowAttributeMap(m_strType, m_mapAttribute);
+            InitRoutePreviewAttributeMap(m_strType, m_mapAttribute);
             return StaDistant::InitAttributeMap();
+        }
+
+        void StaSemiAutoBlock::InitDeviceAttribute()
+        {
+            return StaRoutePreview::InitDeviceAttribute();
         }
         
         void StaSemiAutoBlock::Draw(bool isMulti)
         {
             DrawArrow(m_pPainter);
-            DrawRoutePreviewWnd();
+            DrawRoutePreviewWnd(m_pPainter, m_strDirection);
             if (m_bMainStation) {
-                int nState = 0x01;
                 for (StaBlockBtn& btnBlock : m_vecBlockBtn) {
-                   
                     DrawButton(m_pPainter, Scale(btnBlock.m_rcBtn), COLOR_BTN_DEEPGRAY, m_nBtnState & 0x01);
-                    nState *= 2;
                 }
             }
             if (!m_rcFrame.isEmpty()) {
@@ -96,68 +82,13 @@ namespace Station {
             }
         }
 
-        void StaSemiAutoBlock::DrawRoutePreviewWnd()
-        {
-            QRectF rcTeainNum[3];
-            rcTeainNum[0] = { m_ptRouteWnd.x(), m_ptRouteWnd.y(), 120, 32 };
-            rcTeainNum[1] = { m_ptRouteWnd.x(), m_ptRouteWnd.y() + 32, 120, 32 };
-            rcTeainNum[2] = { m_ptRouteWnd.x(), m_ptRouteWnd.y() + 64, 120, 32 };
-
-            QVector<StaTrainRoute*> vecTrainRoute;
-            for (StaTrainRoute* pRoute : MainStation()->TrainRouteList()) {
-                if (pRoute->m_strSignal == m_strDirection) {
-                    vecTrainRoute.append(pRoute);
-                }
-            }
-            int nIndex = 0;
-            StaTrain* pTrain = nullptr;
-            QFont font = m_pPainter.font();
-            font.setPointSizeF(14);
-            m_pPainter.setFont(font);
-            StaTrainRoute* pRoute = nullptr;
-            while (nIndex < 3) {
-                m_pPainter.setPen(QPen(Qt::white));
-                m_pPainter.setBrush(Qt::NoBrush);
-                m_pPainter.drawRect(Scale(rcTeainNum[nIndex]));
-                if (nIndex < vecTrainRoute.size()) {
-                    
-                    pRoute = vecTrainRoute[nIndex];
-                    if (!pRoute->m_bAutoTouch) {//人工触发-false
-                        m_pPainter.setPen(QPen(COLOR_LIGHT_RED, 1));
-                    }
-                    else if (pRoute->m_bAutoTouch) {//自动触发-true
-                        m_pPainter.setPen(QPen(COLOR_BTN_YELLOW, 1));
-                    }
-
-                    if (pRoute->m_nRouteState == 2) {//触发成功
-                        m_pPainter.setPen(QPen(COLOR_BTN_GREEN_TG, 1));
-                    }
-                    pTrain = MainStation()->getStaTrainById(vecTrainRoute[nIndex]->m_nTrainId);
-                    if (!pTrain) {
-                        nIndex++;
-                        continue;
-                    }
-                    if (pRoute->m_bArrivaRoute)//接发类型 (接车-true 发车-false 通过)
-                    {
-                        m_pPainter.drawText(Scale(rcTeainNum[nIndex]), pTrain->m_strTrainNum + "  J" + pRoute->m_strTrack, QTextOption(Qt::AlignCenter));
-                    }
-                    else if (!pRoute->m_bArrivaRoute) {
-                        m_pPainter.drawText(Scale(rcTeainNum[nIndex]), pTrain->m_strTrainNum + "  F" + pRoute->m_strTrack, QTextOption(Qt::AlignCenter));
-                    }
-                    else {
-                        m_pPainter.drawText(Scale(rcTeainNum[nIndex]), pTrain->m_strTrainNum + "  T" + pRoute->m_strTrack, QTextOption(Qt::AlignCenter));
-                    }
-                }
-                nIndex++;
-            }
-        }
-
         bool StaSemiAutoBlock::Contains(const QPoint& ptPos)
         {
             bool bContains = false;
             for (StaBlockBtn& btnBlock : m_vecBlockBtn) {
                 bContains |= Scale(btnBlock.m_rcBtn).contains(ptPos);
             }
+            bContains |= StaRoutePreview::Contains(ptPos);
             return bContains;
         }
 
@@ -181,6 +112,19 @@ namespace Station {
             m_mapClickEvent[m_strType].insert(CTCWindows::FunType::FunBtn, [](DeviceBase* pDevice) {
                 dynamic_cast<StaSemiAutoBlock*>(pDevice)->OnButtonClick();
             });
+        }
+
+        void StaSemiAutoBlock::ShowDeviceMenu(const QPoint& ptPos)
+        {
+            QMenu* pMenu = new QMenu();
+            pMenu->setAttribute(Qt::WA_DeleteOnClose);
+            ShowRoutePreviewMenu(pMenu, ptPos);
+            if (pMenu->actions().size()) {
+                pMenu->exec(QCursor::pos());
+            }
+            else {
+                pMenu->close();
+            }
         }
 
         void StaSemiAutoBlock::SetBtnState()

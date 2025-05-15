@@ -1,7 +1,7 @@
 #pragma once
 #include <QObject>
 #include <QDateTime>
-#include <QMap>
+
 #define ROUTE_TYPE_ARRIVAL	true
 #define ROUTE_TYPE_DEPART	false
 
@@ -140,8 +140,6 @@ namespace Station {
 		StaTrain() {}
 		StaTrain(StaStagePlan* pStagePlan);
 		StaTrain(StaTrafficLog* pTrafficLog);
-		QMap<QString, QString> m_mapTrainValue;
-		void SetMap();
 		QString OverLimitLevel();
 		static void Init(StaTrain* pTrain, const QJsonObject& subObj);
 	};
@@ -183,7 +181,7 @@ namespace Station {
 	{
 		int m_nRouteId = 0; //进路序列ID
 		int m_nTrainId = 0; //车次ID
-
+		QString m_strTrainNum;
 		bool m_bArrivaRoute = true; //接发类型 (接车-true 发车-false)
 		bool m_bAutoTouch = false;//触发方式(自动触发-true 人工触发-false)
 
@@ -197,12 +195,11 @@ namespace Station {
 		QString m_strSignal; //进/出站信号机
 
 		QString m_strCurRouteDescrip; //进路描述
-		QStringList m_strRouteDescripList; //进路描述
+		QStringList m_strRouteDescripList; //变通进路
 		QString m_strDirection; //进路方向
 		int m_nRouteState = 0; //进路当前状态//0-等待、1-正在触发、2-触发完成、3-占用、4-出清、5-取消
 
 		QVector<int> m_vecSubRouteId;	//子进路ID
-		QVector<QString> m_vecFlexibleRoute;	//变通进路
 		int m_nLogId = 0;	//关联行车日志ID
 		bool m_bSunTrainRoute = false;
 		int m_nRowIndex = 0;
@@ -213,12 +210,15 @@ namespace Station {
 		StaTrainRoute(StaTrafficLog* pTrafficLog, bool bArrivaRoute);
 
 	public:
-		QMap<QString, QString> m_mapRouteMember;
 		static void Init(StaTrainRoute* pTrainRoute, const QJsonObject& subObj);
 		void ChangeTrack(int nCode, const QString& strName);
-		void SetMap();
+		void ChangeSignal(int nCode, const QString& strName);
 		QString getStateStr();
 		void getRouteDescrip();
+		QVector<StaTrainRoute*> getSubTrainRouteList();
+		StaTrainRoute* getRelatedTrainRoute();
+		QString getTrainNum();
+		bool IsThrough();
 	};
 
 	struct StaTrainDispatch : public StaOrder	//机车调度命令
@@ -274,7 +274,7 @@ namespace Station {
 		int m_nArrivalTrackCode = 0; //到达股道编号
 		QString m_strArrivalTrack;//到达股道
 		int m_nArrivalSignalCode = 0; //进站信号机编号
-		QString m_strArrivaSignal; //进站信号机
+		QString m_strArrivalSignal; //进站信号机
 		QDateTime m_tProvArrivalTime; //计划到站时间
 		QDateTime m_tRealArrivalTime; //实际到站时间
 		QDateTime m_tAgrAdjDepartTime; //同意邻站发车时间
@@ -338,8 +338,6 @@ namespace Station {
 	public:
 		StaTrafficLog() {}
 		StaTrafficLog(StaStagePlan* pStaStagePlan, int nTrainId);
-		QMap<QString, QString> m_mapLogMember;
-		void SetMap();
 		bool IsReportedPoints();
 		static void Init(StaTrafficLog* pTrafficLog, const QJsonObject& subObj);
 	};

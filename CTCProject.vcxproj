@@ -167,6 +167,7 @@
     <ClCompile Include="SocketObject\sockettcp.cpp" />
     <ClCompile Include="SocketObject\socketudp.cpp" />
     <ClCompile Include="StationObject\Device\DeviceBase.cpp" />
+    <ClCompile Include="StationObject\Device\DeviceTrain.cpp" />
     <ClCompile Include="StationObject\Device\StaAutoBlock.cpp" />
     <ClCompile Include="StationObject\Device\StaBraidLine.cpp" />
     <ClCompile Include="StationObject\Device\StaButton.cpp" />
@@ -253,6 +254,7 @@
     <ClInclude Include="Global.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="SocketObject\HttpClient.h" />
+    <ClInclude Include="StationObject\Device\DeviceTrain.h" />
     <ClInclude Include="StationObject\Device\StaAutoBlock.h" />
     <ClInclude Include="StationObject\Device\StaBraidLine.h" />
     <ClInclude Include="StationObject\Device\StaButton.h" />

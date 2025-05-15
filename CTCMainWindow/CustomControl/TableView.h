@@ -34,19 +34,19 @@ namespace CTCWindows {
             ~TableView();
 
         public:
-            void SetSectionText(QString text, int nWidth);
+            void SetSectionText(const QString& strText, int nWidth);
             void SetHeadData(QVector<TableViewHeadInfo> vecHeadInfo, int nHeadType, Qt::Alignment alignment = Qt::AlignCenter, bool bStretchable = true);
-            void AddTableRows(QVector<QStringList> vecTableData, Qt::Alignment alignment = Qt::AlignCenter);
-            void ResetTableRows(QVector<QStringList> vecTableData, Qt::Alignment alignment = Qt::AlignCenter);
+            void AddTableRows(const QVector<QStringList>& vecTableData, Qt::Alignment alignment = Qt::AlignCenter);
+            void ResetTableRows(const QVector<QStringList>& vecTableData, Qt::Alignment alignment = Qt::AlignCenter);
             void RemoveAllRows();
-            void SetRowItemsColor(int nRow, QColor bkcolor, QColor txtcolor, int nStartCol = 0, int nEndCol = -1);
-            void SetRowItemsBKColor(int nRow, QColor bkcolor, int nStartCol = 0, int nEndCol = -1);
-            void SetRowItemsTextColor(int nRow, QColor txtcolor, int nStartCol = 0, int nEndCol = -1);
-            void SetRowItemsTextFont(int nRow, QFont font, int nStartCol = 0, int nEndCol = -1);
+            void SetRowItemsColor(int nRow, const QColor& bkcolor, const QColor& txtcolor, int nStartCol = 0, int nEndCol = -1);
+            void SetRowItemsBKColor(int nRow, const QColor& bkcolor, int nStartCol = 0, int nEndCol = -1);
+            void SetRowItemsTextColor(int nRow, const QColor& txtcolor, int nStartCol = 0, int nEndCol = -1);
+            void SetRowItemsTextFont(int nRow, const QFont& font, int nStartCol = 0, int nEndCol = -1);
             QSize sizeHint() const override { return QSize(width(), minimumHeight()); }
 
         private:
-            void SetTableItem(QVector<QStringList> vecTableData, Qt::Alignment alignment, int nStartRow = 0);
+            void SetTableItem(const QVector<QStringList>& vecTableData, Qt::Alignment alignment, int nStartRow = 0);
             bool eventFilter(QObject* obj, QEvent* event) override;
 
         private:

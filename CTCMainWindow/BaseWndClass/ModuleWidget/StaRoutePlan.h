@@ -20,14 +20,10 @@ namespace CTCWindows {
 			virtual void UpDataRouteLimits() = 0;
 			//调车进路序列
 			void InitShuntRouteTable();
-			virtual QVector<Control::TableViewHeadInfo> GetShuntRouteTableHeadInfo() {
-				return QVector<Control::TableViewHeadInfo>();
-			}
+			virtual QVector<Control::TableViewHeadInfo> GetShuntRouteTableHeadInfo() { return QVector<Control::TableViewHeadInfo>(); }
 			//勾计划
 			void InitHookPlanTable();
-			virtual QVector<Control::TableViewHeadInfo> GetHookPlanTableHeadInfo() {
-				return QVector<Control::TableViewHeadInfo>();
-			}
+			virtual QVector<Control::TableViewHeadInfo> GetHookPlanTableHeadInfo() { return QVector<Control::TableViewHeadInfo>(); }
 
 			QSize sizeHint() const override { return QSize(width(), minimumHeight()); }
 

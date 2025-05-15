@@ -155,9 +155,8 @@ namespace Http {
 		return PostRequest("/trainProperty/saveTrainProperty", strContent, btResult);
 	}
 
-	bool HttpClient::ChangeStaTrain(int stationId, QMap<QString, QByteArray> m_mapTrainValue, QByteArray& btResult)
+	bool HttpClient::UpdataStaTrainAttr(int stationId, QMap<QString, QByteArray> m_mapTrainValue, QByteArray& btResult)
 	{
-
 		QString strContent = QString("stationId=%1").arg(stationId);
 		QString key;
 		QString Value;
@@ -197,12 +196,12 @@ namespace Http {
 	//	return PostRequest("/trainProperty/updateTrainProperty", strContent, btResult);
 	//}
 	//
-	bool HttpClient::SetTrainRunState(int nTrainId, bool bRunning, QByteArray& btResult)
-	{
-		QString strContent = QString("stationId=%1&trainId=%2&isRun=%3")
-			.arg(Station::MainStation()->getStationId()).arg(nTrainId).arg(bRunning);
-		return PostRequest("/trainProperty/updateTrainProperty", strContent, btResult);
-	}
+	//bool HttpClient::SetTrainRunState(int nTrainId, bool bRunning, QByteArray& btResult)
+	//{
+	//	QString strContent = QString("stationId=%1&trainId=%2&isRun=%3")
+	//		.arg(Station::MainStation()->getStationId()).arg(nTrainId).arg(bRunning);
+	//	return PostRequest("/trainProperty/updateTrainProperty", strContent, btResult);
+	//}
 
 	//bool HttpClient::UpdataTrainPos(int nTrainId, int nPosCode, QByteArray& btResult)
 	//{
@@ -252,7 +251,7 @@ namespace Http {
 		return PostRequest("/trainRouteSequence/saveTrainRouteSequence", strContent, btResult);
 	}
 
-	bool HttpClient::ChangeStaTraffRouteData(int nRouteId, QMap<QString, QByteArray> m_mapRouteValue, QByteArray& btResult)
+	bool HttpClient::UpdataStaTrainRouteAttr(int nRouteId, QMap<QString, QByteArray> m_mapRouteValue, QByteArray& btResult)
 	{
 		QString strContent = QString("id=%1").arg(nRouteId);
 		QString key;
@@ -480,7 +479,7 @@ namespace Http {
 		return PostRequest("/trainLog/insertTrainLogData", strContent, btResult);
 	}
 
-	bool HttpClient::ChangeStaTrafficLogData(int nLogId, QMap<QString, QByteArray> m_mapLogValue, QByteArray& btResult)
+	bool HttpClient::UpdataStaTrafficLogAttr(int nLogId, QMap<QString, QByteArray> m_mapLogValue, QByteArray& btResult)
 	{
 		QString strContent = QString("id=%1").arg(nLogId);
 		QString key;

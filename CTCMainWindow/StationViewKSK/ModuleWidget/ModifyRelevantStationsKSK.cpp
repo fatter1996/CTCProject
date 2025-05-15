@@ -10,8 +10,7 @@ namespace CTCWindows {
 			ui.setupUi(this);
 
 			ui.label->setText(QString("%1").arg(m_pCurTrafficLog->m_strArrivalTrainNum) + "¥Œ¡–≥µ");
-			QVector<Station::StaTrainRoute*> vecTrainRoute;
-			vecTrainRoute = Station::MainStation()->getStaTrainRouteByTrain(m_pCurTrafficLog->m_nTrainId);
+			
 			Station::Device::StaSignal* pArrivalSignal = dynamic_cast<Station::Device::StaSignal*>(Station::MainStation()->getDeviceByCode(m_pCurTrafficLog->m_nArrivalSignalCode));
 			Station::Device::StaSignal* pDepartSignal = dynamic_cast<Station::Device::StaSignal*>(Station::MainStation()->getDeviceByCode(m_pCurTrafficLog->m_nDepartSignalCode));
 
@@ -42,22 +41,31 @@ namespace CTCWindows {
 				ui.Sail->setCurrentIndex(index_2);
 			}
 			connect(ui.Confirm, &QPushButton::clicked, [=]() {
-
 				QByteArray btResult;
-				vecTrainRoute[0]->m_strDirection = ui.Come->currentText();
-				vecTrainRoute[1]->m_strDirection = ui.Sail->currentText();
-				for (int i = 0; i < vecTrainRoute.size(); i++) {
-					QMap<QString, QByteArray> m_mapRoute = { {"direction",vecTrainRoute[i]->m_strDirection.toLocal8Bit()} };
-					Http::HttpClient::ChangeStaTraffRouteData(vecTrainRoute[i]->m_nRouteId, m_mapRoute, btResult);
-
+				QString strDirection;
+				QMap<QString, QByteArray> m_mapRoute;
+				QVector<Station::StaTrainRoute*> vecTrainRoute = Station::MainStation()->getStaTrainRouteByTrain(m_pCurTrafficLog->m_nTrainId);
+				for (Station::StaTrainRoute* pTrainRoute : Station::MainStation()->getStaTrainRouteByTrain(m_pCurTrafficLog->m_nTrainId)) {
+					for (Station::StaTrainRoute* pSubTrainRoute : pTrainRoute->getSubTrainRouteList()) {
+						if (pTrainRoute->m_bArrivaRoute) {
+							strDirection = ui.Come->currentText();
+						}
+						else {
+							strDirection = ui.Sail->currentText();
+						}
+						
+						m_mapRoute = {
+							{ "direction", strDirection.toLocal8Bit() }
+						};
+						if (Http::HttpClient::UpdataStaTrainRouteAttr(pSubTrainRoute->m_nRouteId, m_mapRoute, btResult)) {
+							pSubTrainRoute->m_strDirection = strDirection;
+						}
+					}
 				}
 				emit  Station::MainStation()->TrainRouteUpData();
 				this->close();
-				});
-			connect(ui.Cancel, &QPushButton::clicked, [=]() {
-				this->close();
-				});
-
+			});
+			connect(ui.Cancel, &QPushButton::clicked, this, &ModifyRelevantStationsKSK::close);
 		}
 
 		ModifyRelevantStationsKSK::~ModifyRelevantStationsKSK()

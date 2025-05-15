@@ -18,9 +18,10 @@ namespace CTCWindows {
 			void InitAddView();
 			void InitAddView(Station::StaTrafficLog* m_pCurTrafficLog);
 			void ConnectEvent();
-			void AddNewTrafficLog(Station::StaTrafficLog* pTrafficLog);
+			void AddNewTrafficLog();
 
 		private:
+			bool m_bAddNew = false;
 			Station::StaTrafficLog* m_pTrafficLog = nullptr;
 			Ui::StaAddNewTrainKSKClass ui;
 		};

@@ -269,7 +269,7 @@ namespace CTCWindows {
                     }
                 }
                 else if (pTrafficLog->m_nPlanType == 3) {
-                    pSignal_1 = dynamic_cast<Station::Device::StaSignal*>(Station::MainStation()->getDeviceByName(pTrafficLog->m_strArrivaSignal, SIGNALLAMP));
+                    pSignal_1 = dynamic_cast<Station::Device::StaSignal*>(Station::MainStation()->getDeviceByName(pTrafficLog->m_strArrivalSignal, SIGNALLAMP));
                     if ((TrainDiagram.vectRailwayLine[i].middleStation == pSignal_1->getDirection()
                         || TrainDiagram.vectRailwayLine[i].startStation == pSignal_1->getDirection()))
                     {
@@ -277,7 +277,7 @@ namespace CTCWindows {
                     }
                 }
                 else {
-                    Station::Device::StaSignal* pSignal_1 = dynamic_cast<Station::Device::StaSignal*>(Station::MainStation()->getDeviceByName(pTrafficLog->m_strArrivaSignal, SIGNALLAMP));
+                    Station::Device::StaSignal* pSignal_1 = dynamic_cast<Station::Device::StaSignal*>(Station::MainStation()->getDeviceByName(pTrafficLog->m_strArrivalSignal, SIGNALLAMP));
                     Station::Device::StaSignal* pSignal_2 = dynamic_cast<Station::Device::StaSignal*>(Station::MainStation()->getDeviceByName(pTrafficLog->m_strDepartSignal, SIGNALLAMP));
 
                     if ((TrainDiagram.vectRailwayLine[i].startStation == pSignal_1->getDirection()
@@ -311,7 +311,7 @@ namespace CTCWindows {
                 }
 
                 if (pTrafficLog->m_tAdjDepartTime.isNull()) {
-                    Station::Device::StaSignal* pSignal = dynamic_cast<Station::Device::StaSignal*>(Station::MainStation()->getDeviceByName(pTrafficLog->m_strArrivaSignal, SIGNALLAMP));
+                    Station::Device::StaSignal* pSignal = dynamic_cast<Station::Device::StaSignal*>(Station::MainStation()->getDeviceByName(pTrafficLog->m_strArrivalSignal, SIGNALLAMP));
                     if ((RailwayLine.startStation == pSignal->getDirection())) {
                         nEndY = RailwayLine.startY;
                     }
@@ -418,13 +418,13 @@ namespace CTCWindows {
                     drawEndFlag(&painter, !pSignal->getSXThroat(), nEndX, nEndY);
                 }
                 else if (pTrafficLog->m_nPlanType == 0x03) {
-                    Station::Device::StaSignal* pSignal = dynamic_cast<Station::Device::StaSignal*>(Station::MainStation()->getDeviceByName(pTrafficLog->m_strArrivaSignal, SIGNALLAMP));
+                    Station::Device::StaSignal* pSignal = dynamic_cast<Station::Device::StaSignal*>(Station::MainStation()->getDeviceByName(pTrafficLog->m_strArrivalSignal, SIGNALLAMP));
                     drawRouteLine(&painter, TrainDiagram.vectRailwayLine[nIndex], pTrafficLog, m_pArrivalRoute, nStartX1, nEndX, nEndY);
                     drawTrainNum(&painter, nEndX, nEndY, m_pStaTrain->m_strTrainNum);
                     drawEndFlag(&painter, pSignal->getSXThroat(), nStartX1, TrainDiagram.vectRailwayLine[nIndex].middleY);
                 }
                 else {
-                    Station::Device::StaSignal* pSignal = dynamic_cast<Station::Device::StaSignal*>(Station::MainStation()->getDeviceByName(pTrafficLog->m_strArrivaSignal, SIGNALLAMP));
+                    Station::Device::StaSignal* pSignal = dynamic_cast<Station::Device::StaSignal*>(Station::MainStation()->getDeviceByName(pTrafficLog->m_strArrivalSignal, SIGNALLAMP));
                     drawRouteLine(&painter, TrainDiagram.vectRailwayLine[nIndex], pTrafficLog, m_pArrivalRoute, nStartX1, nEndX, nEndY);
                     drawTrainNum(&painter, nEndX, nEndY, m_pStaTrain->m_strTrainNum);
                     drawRouteLine(&painter, TrainDiagram.vectRailwayLine[nIndex], pTrafficLog, m_pDepartRoute, nStartX2, nEndX, nEndY);

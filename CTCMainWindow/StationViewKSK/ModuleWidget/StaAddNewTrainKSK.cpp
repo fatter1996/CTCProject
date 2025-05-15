@@ -21,6 +21,8 @@ namespace CTCWindows {
 
 		void StaAddNewTrainKSK::InitAddView()
 		{
+			m_bAddNew = true;
+			m_pTrafficLog = new Station::StaTrafficLog;
 			ui.stationname->addItem(Station::MainStation()->getStationName());
 
 			QMap<int, QString> mapPassengeTrain = Station::MainStation()->getPassengeTrain();
@@ -67,6 +69,43 @@ namespace CTCWindows {
 			ui.departuretime->setDateTime(QDateTime::currentDateTime());
 		}
 
+		void StaAddNewTrainKSK::InitAddView(Station::StaTrafficLog* m_pCurTrafficLog)
+		{
+			m_bAddNew = true;
+			m_pTrafficLog = m_pCurTrafficLog;
+			QVector<Station::StaTrain*> pt = Station::MainStation()->TrainList();
+			ui.stationname->addItem(Station::MainStation()->getStationName());
+			ui.Arrival->setText(m_pCurTrafficLog->m_strArrivalTrainNum);	//到达车次号
+			ui.setoff->setText(m_pCurTrafficLog->m_strDepartTrainNum);		//发车车次号
+			Station::StaTrain* pTrain = Station::MainStation()->getStaTrainById(m_pCurTrafficLog->m_nTrainId);	//车次信息修改车次号
+			ui.traintype->setCurrentText(pTrain->m_strTrainType);	//列车类型
+			ui.runtype->setCurrentText(pTrain->m_strOperationType);	//运行类型
+			ui.Reach->setCurrentIndex(m_pCurTrafficLog->m_nArrivalLimit);	//到达超限
+			ui.Departure->setCurrentIndex(m_pCurTrafficLog->m_nDepartLimit);	//出发超限
+			ui.pickup->setCurrentText(m_pCurTrafficLog->m_strArrivalSignal);		//接车口
+			ui.Come->setCurrentIndex(ui.pickup->findText(m_pCurTrafficLog->m_strArrivalSignal));	//来向车站
+			ui.hair->setCurrentText(m_pCurTrafficLog->m_strDepartSignal);	//发车口
+			ui.Head->setCurrentIndex(ui.hair->findText(m_pCurTrafficLog->m_strDepartSignal));	//去向车站
+			ui.pickupTrack->setCurrentText(m_pCurTrafficLog->m_strArrivalTrack);	//接车股道
+			ui.hairtrack->setCurrentText(m_pCurTrafficLog->m_strDepartTrack);		//发车股道
+
+			if (m_pCurTrafficLog->m_nPlanType == 0x02) {
+				ui.startbegin->setCheckState(Qt::Checked);
+			}
+			else if (m_pCurTrafficLog->m_nPlanType == 0x03) {
+				ui.theend->setCheckState(Qt::Checked);
+			}
+
+			ui.imp->setCheckState(pTrain->m_bImportant ? Qt::Checked : Qt::Unchecked);	//重点
+			ui.electricity->setCheckState(pTrain->m_bElectric ? Qt::Checked : Qt::Unchecked);	//电力
+			ui.army->setCheckState(pTrain->m_bArmy ? Qt::Checked : Qt::Unchecked);	//军运
+			ui.passenger->setCheckState(m_pCurTrafficLog->m_bPassenger ? Qt::Checked : Qt::Unchecked);	//客运
+			ui.railwaytrack->setCheckState(m_pCurTrafficLog->m_bAllowTrackNotMatch ? Qt::Checked : Qt::Unchecked);	//股道不一致
+			ui.exit->setCheckState(m_pCurTrafficLog->m_bAllowSignalNotMatch ? Qt::Checked : Qt::Unchecked);	//出入口不一致
+			ui.arrivaltime->setDateTime(m_pCurTrafficLog->m_tProvArrivalTime);	//到达时间
+			ui.departuretime->setDateTime(m_pCurTrafficLog->m_tProvDepartTime);	//发车时间
+		}
+
 		void StaAddNewTrainKSK::ConnectEvent()
 		{
 			ui.Come->setDisabled(true);
@@ -107,59 +146,26 @@ namespace CTCWindows {
 				}
 			});
 
-			Station::Device::DeviceBase* pDevice = nullptr;
-			connect(ui.Reach, static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged), [=](int index) {
-				ui.Departure->setCurrentIndex(index);
-			});
-			connect(ui.pickup, static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged), [=](int index) {
-				ui.Come->setCurrentIndex(index);
-			});
-			connect(ui.hair, static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged), [=](int index) {
-				ui.Head->setCurrentIndex(index);
-			});
-			connect(ui.pickupTrack, static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged), [=](int index) {
-				if (m_pTrafficLog) {
-					QVector<Station::StaTrainRoute*> pStaRoute = Station::MainStation()->getStaTrainRouteByTrain(m_pTrafficLog->m_nTrainId);
-					for (int i = 0; i < pStaRoute.size(); i++) {
-						if (pStaRoute[i]->m_nRouteState !=0 ) {
-							QMessageBox::warning(this, tr("CTC"), tr("进路状态不允许修改！"), tr("确定"), "", 0);
-						}
-					}
-				}
-				ui.hairtrack->setCurrentIndex(index);
-			});
-			connect(ui.hairtrack, static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged), [=](int index) {
-				if (m_pTrafficLog) {
-					QVector<Station::StaTrainRoute*> pStaRoute = Station::MainStation()->getStaTrainRouteByTrain(m_pTrafficLog->m_nTrainId);
-					for (int i = 0; i < pStaRoute.size(); i++) {
-						if (pStaRoute[i]->m_nRouteState != 0) {
-							QMessageBox::warning(this, tr("CTC"), tr("进路状态不允许修改！"), tr("确定"), "", 0);
-						}
-					}
-				}
-				});
-			connect(ui.Match, &QPushButton::clicked, [=]() {
-				ui.setoff->setText(ui.Arrival->text());
-			});
-
 			connect(ui.sure, &QPushButton::clicked, [=]() {
-				AddNewTrafficLog(m_pTrafficLog);
-				});
+				AddNewTrafficLog();
+			});
 
 			connect(ui.cancel, &QPushButton::clicked, this, &StaAddNewTrainKSK::close);
 		}
 
-		void StaAddNewTrainKSK::AddNewTrafficLog(Station::StaTrafficLog* pCurTrafficLog)
+		void StaAddNewTrainKSK::AddNewTrafficLog()
 		{
-			bool Change = false;
-			Station::StaTrafficLog* pTrafficLog = nullptr;
-			if (pCurTrafficLog == nullptr) {
-				pTrafficLog = new Station::StaTrafficLog;
+			Station::StaTrain* pTrain = nullptr;
+			if (m_bAddNew) {
+				pTrain = new Station::StaTrain(m_pTrafficLog);
 			}
 			else {
-				pTrafficLog = pCurTrafficLog;
-				Change = true;
+				pTrain = Station::MainStation()->getStaTrainById(m_pTrafficLog->m_nTrainId);
+				if (!pTrain) {
+					return;
+				}
 			}
+
 			//判断不能同时终到始发
 			if (ui.startbegin->checkState() && ui.theend->checkState()) {
 				QMessageBox::warning(this, tr("CTC"), tr("不能同时选择始发终到！"), tr("确定"), "", 0);
@@ -173,227 +179,141 @@ namespace CTCWindows {
 				QMessageBox::warning(this, tr("CTC"), tr("请确认数据数据填充完全！"), tr("确定"), "", 0);
 				return;
 			}
+
+			
+
 			//判断接发车时间
 			if (ui.arrivaltime->dateTime() == ui.departuretime->dateTime()) {
-				pTrafficLog->m_nPlanType = 4;
+				m_pTrafficLog->m_nPlanType = 4;
 			}
 			else {
-				pTrafficLog->m_nPlanType = 1;
+				m_pTrafficLog->m_nPlanType = 1;
 			}
-
 			//到达车次
-			pTrafficLog->m_strArrivalTrainNum = ui.Arrival->text();
+			m_pTrafficLog->m_strArrivalTrainNum = ui.Arrival->text();
 			//出发车次
-			pTrafficLog->m_strDepartTrainNum = ui.setoff->text();
-
+			m_pTrafficLog->m_strDepartTrainNum = ui.setoff->text();
 			//办理客运
-			pTrafficLog->m_bPassenger = ui.passenger->checkState();
+			m_pTrafficLog->m_bPassenger = ui.passenger->checkState();
 			//是否允许股道与基本径路不一致
-			pTrafficLog->m_bAllowTrackNotMatch = ui.railwaytrack->checkState();
+			m_pTrafficLog->m_bAllowTrackNotMatch = ui.railwaytrack->checkState();
 			//是否允许出入口与基本径路不一致
-			pTrafficLog->m_bAllowSignalNotMatch = ui.exit->checkState();
+			m_pTrafficLog->m_bAllowSignalNotMatch = ui.exit->checkState();
 
-			pTrafficLog->m_nArrivalLimit = ui.Reach->currentIndex();
-			pTrafficLog->m_strArrivalTrack = ui.pickupTrack->currentText();
-			pTrafficLog->m_strArrivaSignal = ui.pickup->currentText();
-			pTrafficLog->m_nDepartLimit = ui.Departure->currentIndex();
-			pTrafficLog->m_strDepartTrack = ui.hairtrack->currentText();
-			pTrafficLog->m_strDepartSignal = ui.hair->currentText();
+			m_pTrafficLog->m_nArrivalLimit = ui.Reach->currentIndex();
+			m_pTrafficLog->m_strArrivalTrack = ui.pickupTrack->currentText();
+			m_pTrafficLog->m_strArrivalSignal = ui.pickup->currentText();
+			m_pTrafficLog->m_nDepartLimit = ui.Departure->currentIndex();
+			m_pTrafficLog->m_strDepartTrack = ui.hairtrack->currentText();
+			m_pTrafficLog->m_strDepartSignal = ui.hair->currentText();
 			//始发
 			if (ui.startbegin->checkState()) {
-				pTrafficLog->m_nPlanType = 2;
-				pTrafficLog->m_tProvArrivalTime = QDateTime::fromString("");
-				pTrafficLog->m_nArrivalSignalCode = -1;
-				pTrafficLog->m_nArrivalTrackCode = -1;
+				m_pTrafficLog->m_nPlanType = 2;
+				m_pTrafficLog->m_tProvArrivalTime = QDateTime::fromString("");
+				m_pTrafficLog->m_nArrivalSignalCode = -1;
+				m_pTrafficLog->m_nArrivalTrackCode = -1;
 			}
 			else {
-				pTrafficLog->m_tProvArrivalTime = ui.arrivaltime->dateTime();
-				pTrafficLog->m_nArrivalSignalCode = Station::MainStation()->getDeviceByName(ui.pickup->currentText(), SIGNALLAMP)->getCode();
-				pTrafficLog->m_nArrivalTrackCode = Station::MainStation()->getDeviceByName(ui.pickupTrack->currentText(), TRACK)->getCode();
+				m_pTrafficLog->m_tProvArrivalTime = ui.arrivaltime->dateTime();
+				m_pTrafficLog->m_nArrivalSignalCode = Station::MainStation()->getDeviceByName(ui.pickup->currentText(), SIGNALLAMP)->getCode();
+				m_pTrafficLog->m_nArrivalTrackCode = Station::MainStation()->getDeviceByName(ui.pickupTrack->currentText(), TRACK)->getCode();
 			}
 			//终到
 			if (ui.theend->checkState()) {
-				pTrafficLog->m_nPlanType = 3;
-				pTrafficLog->m_tProvDepartTime = QDateTime::fromString("");
-				pTrafficLog->m_nDepartSignalCode = -1;
-				pTrafficLog->m_nDepartTrackCode = -1;
+				m_pTrafficLog->m_nPlanType = 3;
+				m_pTrafficLog->m_tProvDepartTime = QDateTime::fromString("");
+				m_pTrafficLog->m_nDepartSignalCode = -1;
+				m_pTrafficLog->m_nDepartTrackCode = -1;
 			}
 			else {
-				pTrafficLog->m_tProvDepartTime = ui.departuretime->dateTime();
-				pTrafficLog->m_nDepartSignalCode = Station::MainStation()->getDeviceByName(ui.hair->currentText(), SIGNALLAMP)->getCode();
-				pTrafficLog->m_nDepartTrackCode = Station::MainStation()->getDeviceByName(ui.hairtrack->currentText(), TRACK)->getCode();
+				m_pTrafficLog->m_tProvDepartTime = ui.departuretime->dateTime();
+				m_pTrafficLog->m_nDepartSignalCode = Station::MainStation()->getDeviceByName(ui.hair->currentText(), SIGNALLAMP)->getCode();
+				m_pTrafficLog->m_nDepartTrackCode = Station::MainStation()->getDeviceByName(ui.hairtrack->currentText(), TRACK)->getCode();
 			}
 
-			Station::StaTrain* pTrain = new Station::StaTrain(pTrafficLog);
-			if (ui.startbegin->checkState()) {
-				pTrain->m_strTrainNum = ui.setoff->text();
+			
+			
+			if (m_bAddNew) {
+				//添加车次,获取车次id
+				m_pTrafficLog->m_nTrainId = Station::MainStation()->AddNewTrain(pTrain);
+				//添加行车日志信息，进路序列
+				if (Station::MainStation()->AddNewTrafficLog(m_pTrafficLog)) {
+					Station::MainStation()->CreatTrainRouteByTrafficLog(m_pTrafficLog);
+				}
 			}
 			else {
-				pTrain->m_strTrainNum = ui.Arrival->text();
-			}
-
-			//添加车次运行类型，列车类型
-			pTrain->m_strTrainType = ui.traintype->currentText();
-			pTrain->m_strOperationType = ui.runtype->currentText();
-			//重点
-			pTrain->m_bImportant = ui.imp->checkState();
-			//电力
-			pTrain->m_bElectric = ui.electricity->checkState();
-			//军运
-			pTrain->m_bArmy = ui.army->checkState();
-			//获取车次id，添加车次信息
-			if (Change) {
-				Station::StaTrain* pStaTrain = Station::MainStation()->getStaTrainById(m_pTrafficLog->m_nTrainId);
-				pTrain->m_nTrainId = pStaTrain->m_nTrainId;
-				pStaTrain = pTrain;
-				pTrafficLog->m_nTrainId = pTrain->m_nTrainId;
-				m_pTrafficLog = pTrafficLog;
 				QByteArray btResult;
-				QMap<QString, QByteArray>m_mapTrain = { {"trainNum",pTrain->m_strTrainNum.toLocal8Bit()},
-				{"trainTypeNumber",pTrain->m_strTrainType.toLocal8Bit()} ,
-				{"operationTypeNumber",pTrain->m_strOperationType.toLocal8Bit()} ,
-				{"keynote",QByteArray::number(pTrain->m_bImportant)} ,
-				{"electric",QByteArray::number(pTrain->m_bElectric)},
-				{"army",QByteArray::number(pTrain->m_bArmy)}};
-
-				if (Http::HttpClient::ChangeStaTrain(Station::MainStation()->getStationId(), m_mapTrain, btResult)) {
+				QMap<QString, QByteArray> m_mapTrain = { 
+					{ "trainNum", ui.startbegin->isChecked() ? ui.setoff->text().toLocal8Bit() : ui.Arrival->text().toLocal8Bit() },
+					{ "trainTypeNumber", ui.traintype->currentText().toLocal8Bit() } ,
+					{ "operationTypeNumber", ui.runtype->currentText().toLocal8Bit() } ,
+					{ "keynote", QByteArray::number(ui.imp->isChecked()) } ,
+					{ "electric", QByteArray::number(ui.electricity->isChecked()) },
+					{ "army", QByteArray::number(ui.army->isChecked()) }
 				};
-				QMap<QString, QByteArray>m_mapLogValue = { {"arrivalTrainNumber",pTrafficLog->m_strArrivalTrainNum.toLocal8Bit()},
-					{"planType",QByteArray::number(pTrafficLog->m_nPlanType)},
-					{"passenger",QByteArray::number(pTrafficLog->m_bPassenger)},
-					{"allowTrackNotMatch",QByteArray::number(pTrafficLog->m_bAllowTrackNotMatch)},
-					{"allowSignalNotMatch",QByteArray::number(pTrafficLog->m_bAllowSignalNotMatch)},
-					{"departLimit",QByteArray::number(pTrafficLog->m_nDepartLimit)},
-					{"homeSignalCode",QByteArray::number(pTrafficLog->m_nArrivalSignalCode)},
-					{"arrivalTrack",QByteArray::number(pTrafficLog->m_nArrivalTrackCode)},
-					{"provArrivalTime",pTrafficLog->m_tProvArrivalTime.toString(Qt::ISODate).toLocal8Bit() },
-					{"provDepartTime",pTrafficLog->m_tProvDepartTime.toString(Qt::ISODate).toLocal8Bit()},
-					{"departTrack",QByteArray::number(pTrafficLog->m_nDepartTrackCode)},
-					{"startingSignalCode",QByteArray::number(pTrafficLog->m_nDepartSignalCode)},
-				};
-				if (Http::HttpClient::ChangeStaTrafficLogData(pTrafficLog->m_nLogId, m_mapLogValue, btResult)) {
-					emit Station::MainStation()->TrafficLogTableUpData();
-				}
-				//Station::MainStation()->ChangeStaTrafficLogData(pTrafficLog);
-				Change = false;
-			}
-			else {
-				pTrain->m_nTrainId = Station::MainStation()->AddNewTrain(pTrain);//进站列车
-				//获取行车日志列车id
-				pTrafficLog->m_nTrainId = pTrain->m_nTrainId;
 
-				//添加行车日志信息，行车计划
-				if (Station::MainStation()->AddNewTrafficLog(pTrafficLog) == 0) {
-					qDebug() << "添加行车日志失败";
+				if (Http::HttpClient::UpdataStaTrainAttr(Station::MainStation()->getStationId(), m_mapTrain, btResult)) {
+					Station::StaTrain* pTempTrain = new Station::StaTrain(*pTrain);
+					if (ui.startbegin->isChecked()) {
+						pTempTrain->m_strTrainNum = ui.setoff->text();
+					}
+					else {
+						pTempTrain->m_strTrainNum = ui.Arrival->text();
+					}
+					pTempTrain->m_strTrainType = ui.traintype->currentText();
+					pTempTrain->m_strOperationType = ui.runtype->currentText();
+					pTempTrain->m_bImportant = ui.imp->isChecked();
+					pTempTrain->m_bElectric = ui.electricity->isChecked();
+					pTempTrain->m_bArmy = ui.army->isChecked();
+					Station::MainStation()->AddTempTrain(pTempTrain);
+					Station::MainStation()->SendPacketMsg(TARGET_INTERLOCK, 0x60, pTrain->m_nTrainId, 0x09);
+				};
+
+
+				QVector<Station::StaTrainRoute*> vecSubRoute;
+				Station::StaTrainRoute* pArrivalRoute = Station::MainStation()->getStaTrainRouteById(m_pTrafficLog->m_nArrivalRouteId);
+				
+				if (pArrivalRoute) {
+					vecSubRoute.append(pArrivalRoute->getSubTrainRouteList());
 				}
-				if (Station::MainStation()->getAutoSendPlan()) {
-					Station::MainStation()->CreatTrainRouteByTrafficLog(pTrafficLog);
+				Station::StaTrainRoute* pDepartRoute = Station::MainStation()->getStaTrainRouteById(m_pTrafficLog->m_nDepartRouteId);
+				if (pDepartRoute) {
+					vecSubRoute.append(pDepartRoute->getSubTrainRouteList());
+				}
+
+				for (Station::StaTrainRoute* pRoute : vecSubRoute) {
+					if (pRoute->m_nRouteState != 0) {
+						QMessageBox::information(nullptr, MSGBOX_TITTLE, "进路状态不允许修改到达股道!", "确定");
+						return;
+					}
+				}
+				if (!Station::MainStation()->DeleteTrainRoute(vecSubRoute)) {
+					return;
+				}
+
+				QMap<QString, QByteArray> m_mapLogAttr = { 
+					{ "arrivalTrainNumber", m_pTrafficLog->m_strArrivalTrainNum.toLocal8Bit() },
+					{ "departTrainNumber", m_pTrafficLog->m_strDepartTrainNum.toLocal8Bit() },
+					{ "planType", QByteArray::number(m_pTrafficLog->m_nPlanType) },
+					{ "passenger", QByteArray::number(m_pTrafficLog->m_bPassenger) },
+					{ "allowTrackNotMatch", QByteArray::number(m_pTrafficLog->m_bAllowTrackNotMatch) },
+					{ "allowSignalNotMatch", QByteArray::number(m_pTrafficLog->m_bAllowSignalNotMatch) },
+					{ "arrivalLimit", QByteArray::number(m_pTrafficLog->m_nArrivalLimit) },
+					{ "departLimit", QByteArray::number(m_pTrafficLog->m_nDepartLimit) },
+					{ "homeSignalCode", QByteArray::number(m_pTrafficLog->m_nArrivalSignalCode) },
+					{ "arrivalTrack", QByteArray::number(m_pTrafficLog->m_nArrivalTrackCode) },
+					{ "provArrivalTime", m_pTrafficLog->m_tProvArrivalTime.toString(Qt::ISODate).toLocal8Bit() },
+					{ "provDepartTime", m_pTrafficLog->m_tProvDepartTime.toString(Qt::ISODate).toLocal8Bit() },
+					{ "departTrack", QByteArray::number(m_pTrafficLog->m_nDepartTrackCode) },
+					{ "startingSignalCode", QByteArray::number(m_pTrafficLog->m_nDepartSignalCode) },
+				};
+
+				if (Http::HttpClient::UpdataStaTrafficLogAttr(m_pTrafficLog->m_nLogId, m_mapLogAttr, btResult)) {
+					Station::MainStation()->CreatTrainRouteByTrafficLog(m_pTrafficLog);
 				}
 			}
+			emit Station::MainStation()->TrafficLogTableUpData();
 			this->close();
-
-		}
-
-		void StaAddNewTrainKSK::InitAddView(Station::StaTrafficLog* m_pCurTrafficLog)
-		{
-			QVector<Station::StaTrain*> pt = Station::MainStation()->TrainList();
-			ui.stationname->addItem(Station::MainStation()->getStationName());
-			ui.Arrival->setText(m_pCurTrafficLog->m_strArrivalTrainNum);//到达车次号
-			ui.setoff->setText(m_pCurTrafficLog->m_strDepartTrainNum);//发车车次号
-			Station::StaTrain* pTrain = Station::MainStation()->getStaTrainById(m_pCurTrafficLog->m_nTrainId);//车次信息修改车次号
-			int index = ui.traintype->findText(pTrain->m_strTrainType);//列车类型
-			if (index != -1) {
-				ui.traintype->setCurrentIndex(index);
-			}
-			index = ui.runtype->findText(pTrain->m_strOperationType);//运行类型
-			if (index != -1) {
-				ui.runtype->setCurrentIndex(index);
-			}
-			ui.Reach->setCurrentIndex(m_pCurTrafficLog->m_nArrivalLimit);//到达超限
-			ui.Departure->setCurrentIndex(m_pCurTrafficLog->m_nDepartLimit);//出发超限
-
-			index = ui.pickup->findText(m_pCurTrafficLog->m_strArrivaSignal);//接车口
-			if (index != -1) {
-				ui.pickup->setCurrentIndex(index);
-				ui.Come->setCurrentIndex(index);//来向车站
-			}
-
-			index = ui.hair->findText(m_pCurTrafficLog->m_strDepartSignal);
-			if (index != -1) {
-				ui.hair->setCurrentIndex(index);//发车口
-				ui.Head->setCurrentIndex(index);//去向车站
-			}
-			if(m_pCurTrafficLog->m_nPlanType == 0x02 ){
-				ui.startbegin->setCheckState(Qt::Checked);
-			}
-			else if(m_pCurTrafficLog->m_nPlanType == 0x03){
-				ui.theend->setCheckState(Qt::Checked);
-			}
-			index = ui.pickupTrack->findText(m_pCurTrafficLog->m_strArrivalTrack);
-			if (index != -1) {
-				ui.pickupTrack->setCurrentIndex(index);//接车股道
-			}
-			index = ui.hairtrack->findText(m_pCurTrafficLog->m_strDepartTrack);
-			if (index != -1) {
-				ui.hairtrack->setCurrentIndex(index);//发车股道
-			}
-
-			//重点
-			if (pTrain->m_bImportant) {
-				ui.imp->setCheckState(Qt::Checked);
-			}
-			else {
-				ui.imp->setCheckState(Qt::Unchecked);
-			}
-			//电力
-			if (pTrain->m_bElectric) {
-				ui.electricity->setCheckState(Qt::Checked);
-			}
-			else {
-				ui.electricity->setCheckState(Qt::Unchecked);
-			}
-			//军运
-			if (pTrain->m_bArmy) {
-				ui.army->setCheckState(Qt::Checked);
-			}
-			else {
-				ui.army->setCheckState(Qt::Unchecked);
-			}
-			//客运
-			if (m_pCurTrafficLog->m_bPassenger) {
-				ui.passenger->setCheckState(Qt::Checked);
-			}
-			else {
-				ui.passenger->setCheckState(Qt::Unchecked);
-			}
-			//股道不一致
-			if (m_pCurTrafficLog->m_bAllowTrackNotMatch) {
-				ui.railwaytrack->setCheckState(Qt::Checked);
-			}
-			else {
-				ui.railwaytrack->setCheckState(Qt::Unchecked);
-			}
-			//出入口不一致
-			if (m_pCurTrafficLog->m_bAllowSignalNotMatch) {
-				ui.exit->setCheckState(Qt::Checked);
-			}
-			else {
-				ui.exit->setCheckState(Qt::Unchecked);
-			}
-
-			if (m_pCurTrafficLog->m_tRealArrivalTime.isNull()) {//到达时间
-				ui.arrivaltime->setDateTime(m_pCurTrafficLog->m_tProvArrivalTime);
-			}
-			else {
-				ui.arrivaltime->setDateTime(m_pCurTrafficLog->m_tRealArrivalTime);
-			}
-			if (m_pCurTrafficLog->m_tRealDepartTime.isNull()) {//发车时间
-				ui.departuretime->setDateTime(m_pCurTrafficLog->m_tProvDepartTime);
-			}
-			else {
-				ui.departuretime->setDateTime(m_pCurTrafficLog->m_tRealDepartTime);
-			}
-			m_pTrafficLog = m_pCurTrafficLog;
 		}
 	}
 }

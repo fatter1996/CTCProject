@@ -1,6 +1,7 @@
 #pragma once
 #include <QTableWidget>
 #include <QHeaderView>
+#include <QComboBox>
 
 #define     HHEAD       0x01 
 #define     VHEAD       0x02 
@@ -89,6 +90,9 @@ namespace CTCWindows {
             void SetItemText(int nRow, int nCol, QString strText);
             void ClearData();
 
+            void AddComboBox(int nRow, int nCol, const QStringList& strList, const QString& currText, std::function<void(const QString&)> CallBackFun);
+
+
         public:
             void SetHorizontalHeadShowIndex(bool bShow = true) { m_bHorizontalHeadShowIndex = bShow; }
             void SetVerticalHeadShowIndex(bool bShow = true) { m_bVerticalHeadShowIndex = bShow; }
@@ -97,6 +101,8 @@ namespace CTCWindows {
             void SetHorizontalIndexDefaultHeight(int nHeight) { nHorizontalIndexDefaultHeight = nHeight; }
             void SetVerticalIndexDefaultWidth(int nWidth) { nVerticalIndexDefaultWidth = nWidth; }
             QTableWidget* VerticalHeadTable() { return m_pVerticalHeadTable; }
+            QTableWidget* DataTable() { return m_pDataTable; }
+            QTableWidgetItem* Item(int nRow, int nCol) { return m_pDataTable->item(nRow, nCol); }
 
         private:
             QScrollBar* m_pHorizontalScrollBar = nullptr;

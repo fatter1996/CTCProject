@@ -6,7 +6,6 @@
 #include <QXmlStreamReader>
 #include <QRectF>
 #include <QMap>
-#include <QMap>
 #include "StationObject/GlobalStruct.h"
 #include "BaseWndClass/ModuleWidget/StaFunBtnToolBar.h"
 
@@ -20,8 +19,7 @@
 
 namespace Station {
     namespace Device {
-        struct SignalBtn
-        {
+        struct SignalBtn {
             int nType = -1;
             QStringList strBtnNameList;
         };
@@ -68,7 +66,6 @@ namespace Station {
             void InitDeviceInfoFromJson(const QJsonObject& object);
 
         private:
-            
             //读取设备属性
             void ReadDeviceAttributeFromXml(QXmlStreamReader* m_pDeviceInfoReader);
             void ReadDeviceAttributeFromJson(const QJsonObject& lampObject, const QString& strKey);
@@ -161,6 +158,7 @@ namespace Station {
             // 其他
             //0x20-分路不良,0x21-总取消,0x22-总人解,0x23-区故解,0x24-引导总锁
             int m_nTipsType = 0;    
+            int m_nCountDown = 0;   //倒计时
             
         protected:
             static QMap<QString, ClickEventMap> m_mapClickEvent;
@@ -232,6 +230,7 @@ namespace Station {
             void BtnStateReset();
         public:
             void setBtnState(int nState) { m_nBtnState = nState; }
+
         protected:
             int m_nBtnState = 0; //按钮状态
             static int m_nFirstBtnType; //按钮类型(1 - 列车按钮; 2 - 调车按钮; 3 - 通过按钮; 4 - 引导按钮; 5 - 功能按钮)
@@ -265,6 +264,7 @@ namespace Station {
             QColor m_cColor2;
 
             uint m_nArrowState = 0; //箭头状态
+            
         };
 
 
@@ -313,43 +313,8 @@ namespace Station {
             uint m_nInStart2 = 0;
             uint m_nOutStart = 0;
             uint m_nOutStart2 = 0;
-        };
-
-
-        class DeviceTrain : virtual public DeviceScale {
-
-        public:
-            DeviceTrain();
-            ~DeviceTrain();
-
-        public:
-            //设置车次
-            void SetTrain(StaTrain* pTrain) { m_pTrain = pTrain; }
-            //车次移动
-            void MoveTo(DeviceTrain* pNext);
-
-        protected:
-            //绘制车次窗
-            void DrawTrainFrame(QPainter& pPainter);
-            //绘制车次
-            void DrawTrain(QPainter& pPainter);
-            void DrawTrainFrame(QPainter& pPainter, QRectF rcFrame);
-            void DrawTrainHead(QPainter& pPainter, QRectF rcFrame);
-            void DrawTrainTail(QPainter& pPainter, QRectF rcFrame);
-            void ShowTrainMenu(QPoint ptPos, int nCode);
-            void onMouseMoveToTrainFrame(const QPoint& ptPos);
-
-        public:
-            struct TrainFrame {
-                QRectF m_rcFrame;
-                bool m_bContains = false;
-            };
-            
-        protected:
-            QVector<TrainFrame*> m_vecTrainFrame;
-            StaTrain* m_pTrain = nullptr;
-            bool m_bTrainLeave = false;
-            static int m_nInTrainFrame;
+            QRectF m_rcFrame;
+            QString m_strDirection;
         };
     }
 }

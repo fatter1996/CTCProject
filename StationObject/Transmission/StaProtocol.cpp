@@ -12,17 +12,17 @@ namespace Station {
         StaProtocol::StaProtocol(QMap<QString, QVector<DeviceBase*>>& mapDeviceVector)
             : m_mapDeviceVector(mapDeviceVector)
         {
-            m_mapUnPackOrder.insert(0x80, [=](const QByteArray& dataAyyay) { return UnpackLogin(dataAyyay); });
-            m_mapUnPackOrder.insert(0x2f, [=](const QByteArray& dataAyyay) { return UnpackStationReset(dataAyyay); });
-            m_mapUnPackOrder.insert(0x30, [=](const QByteArray& dataAyyay) { return UnpackStaViewState(dataAyyay); });
-            m_mapUnPackOrder.insert(0x50, [=](const QByteArray& dataAyyay) { return UnpackStaStagePlan(dataAyyay); });
-            m_mapUnPackOrder.insert(0x51, [=](const QByteArray& dataAyyay) { return UnpackStaDispatchOrder(dataAyyay); });
-            m_mapUnPackOrder.insert(0x81, [=](const QByteArray& dataAyyay) { return UnpackCultivate(dataAyyay); });
-            m_mapUnPackOrder.insert(0x82, [=](const QByteArray& dataAyyay) { return UnpackPractice(dataAyyay); });
-            m_mapUnPackOrder.insert(0x60, [=](const QByteArray& dataAyyay) { return UnpackTrain(dataAyyay); });
-            m_mapUnPackOrder.insert(0x61, [=](const QByteArray& dataAyyay) { return UnpackTrainRoute(dataAyyay); });
-            m_mapUnPackOrder.insert(0x70, [=](const QByteArray& dataAyyay) { return UnpackLimits(dataAyyay); });
-            m_mapUnPackOrder.insert(0x72, [=](const QByteArray& dataAyyay) { return UnpackAdjTimePoint(dataAyyay); });
+            m_mapUnPackOrder.insert(0x80, [=](const QByteArray& dataArray) { return UnpackLogin(dataArray); });
+            m_mapUnPackOrder.insert(0x2f, [=](const QByteArray& dataArray) { return UnpackStationReset(dataArray); });
+            m_mapUnPackOrder.insert(0x30, [=](const QByteArray& dataArray) { return UnpackStaViewState(dataArray); });
+            m_mapUnPackOrder.insert(0x50, [=](const QByteArray& dataArray) { return UnpackStaStagePlan(dataArray); });
+            m_mapUnPackOrder.insert(0x51, [=](const QByteArray& dataArray) { return UnpackStaDispatchOrder(dataArray); });
+            m_mapUnPackOrder.insert(0x81, [=](const QByteArray& dataArray) { return UnpackCultivate(dataArray); });
+            m_mapUnPackOrder.insert(0x82, [=](const QByteArray& dataArray) { return UnpackPractice(dataArray); });
+            m_mapUnPackOrder.insert(0x60, [=](const QByteArray& dataArray) { return UnpackTrain(dataArray); });
+            m_mapUnPackOrder.insert(0x61, [=](const QByteArray& dataArray) { return UnpackTrainRoute(dataArray); });
+            m_mapUnPackOrder.insert(0x70, [=](const QByteArray& dataArray) { return UnpackLimits(dataArray); });
+            m_mapUnPackOrder.insert(0x72, [=](const QByteArray& dataArray) { return UnpackAdjTimePoint(dataArray); });
 
             InitSubjectProtocol();
             CultivateObject::Subject::InitConversionFun();
@@ -65,29 +65,29 @@ namespace Station {
             };
         }
 
-        QByteArray StaProtocol::UnpackData(const QByteArray& dataAyyay)
+        QByteArray StaProtocol::UnpackData(const QByteArray& dataArray)
         {
-            if (m_mapUnPackOrder.contains(dataAyyay[10] & 0xFF)) {
-                return m_mapUnPackOrder[dataAyyay[10] & 0xFF](dataAyyay);
+            if (m_mapUnPackOrder.contains(dataArray[10] & 0xFF)) {
+                return m_mapUnPackOrder[dataArray[10] & 0xFF](dataArray);
             }
             else {
-                return dataAyyay;
+                return dataArray;
             }
         }
 
-        QByteArray StaProtocol::UnpackLogin(const QByteArray& dataAyyay)
+        QByteArray StaProtocol::UnpackLogin(const QByteArray& dataArray)
         {
-            MainStation()->setUserId(dataAyyay[12] & 0xFF);
+            MainStation()->setUserId(dataArray[12] & 0xFF);
             return QByteArray();
         }
 
-        QByteArray StaProtocol::UnpackStationReset(const QByteArray& dataAyyay)
+        QByteArray StaProtocol::UnpackStationReset(const QByteArray& dataArray)
         {
             MainStation()->StationReset();
             return QByteArray();
         }
 
-        QByteArray StaProtocol::UnpackStaViewState(const QByteArray& dataAyyay)
+        QByteArray StaProtocol::UnpackStaViewState(const QByteArray& dataArray)
         {
             int nFlag = 11;
             //道岔
@@ -95,8 +95,8 @@ namespace Station {
                 StaSwitch* pSwitch = nullptr;
                 for (DeviceBase* pDevice : m_mapDeviceVector[SWITCH]) {
                     pSwitch = dynamic_cast<StaSwitch*>(pDevice);
-                    pSwitch->setSwitchState(dataAyyay[nFlag] & 0x0f);
-                    pSwitch->setState((dataAyyay[nFlag++] >> 4) & 0x0f);
+                    pSwitch->setSwitchState(dataArray[nFlag] & 0x0F);
+                    pSwitch->setState((dataArray[nFlag++] >> 4) & 0x0F);
                     pSwitch = nullptr;
                 }
             }
@@ -113,7 +113,7 @@ namespace Station {
                     }
                     if (!bAddByte) {
                         if (pSubDevice->getStrType() != "DC") {
-                            pSubDevice->setState(dataAyyay[nFlag] & 0x0f);
+                            pSubDevice->setState(dataArray[nFlag] & 0x0F);
                         }
                     
                         if (pSection == m_mapDeviceVector[SECTION].at(m_mapDeviceVector[SECTION].size() - 1)) {
@@ -122,7 +122,7 @@ namespace Station {
                     }
                     else {
                         if (pSubDevice->getStrType() != "DC") {
-                            pSubDevice->setState((dataAyyay[nFlag] >> 4) & 0x0f);
+                            pSubDevice->setState((dataArray[nFlag] >> 4) & 0x0F);
                         }
                         nFlag++;
                     }
@@ -134,14 +134,14 @@ namespace Station {
             //信号机
             {
                 for (DeviceBase* pDevice : m_mapDeviceVector[SIGNALLAMP]) {
-                    dynamic_cast<StaSignal*>(pDevice)->setState(dataAyyay[nFlag++] & 0xff);
+                    dynamic_cast<StaSignal*>(pDevice)->setState(dataArray[nFlag++] & 0xFF);
                 }
             }
             //半自动闭塞
             {
                 for (DeviceBase* pDevice : m_mapDeviceVector[SEMIAUTOBLOCK]) {
-                    dynamic_cast<StaSemiAutoBlock*>(pDevice)->setArrowState(dataAyyay[nFlag++] & 0xff);
-                    //dynamic_cast<StaSemiAutoBlock*>(pDevice)->setState(dataAyyay[nFlag++] & 0xff);
+                    dynamic_cast<StaSemiAutoBlock*>(pDevice)->setArrowState(dataArray[nFlag++] & 0xFF);
+                    //dynamic_cast<StaSemiAutoBlock*>(pDevice)->setState(dataArray[nFlag++] & 0xff);
                 }
             }
             //自动闭塞
@@ -149,9 +149,8 @@ namespace Station {
                 StaAutoBlock* pAutoBlock = nullptr;
                 for (DeviceBase* pDevice : m_mapDeviceVector[AUTOBLOCK]) {
                     pAutoBlock = dynamic_cast<StaAutoBlock*>(pDevice);
-                    pAutoBlock->setArrowState(dataAyyay[nFlag] & 0x0f);
-                    pAutoBlock->setState(dataAyyay[nFlag] & 0xf0);
-                    pAutoBlock->setLeaveTrackState(dataAyyay[nFlag + 1]);
+                    pAutoBlock->setArrowState(dataArray[nFlag] & 0x0F);
+                    pAutoBlock->setState(dataArray[nFlag] & 0xF0);
                     nFlag += 2;
                 }
             }
@@ -160,9 +159,8 @@ namespace Station {
                 StaConnection* pConnection = nullptr;
                 for (DeviceBase* pDevice : m_mapDeviceVector[CONNECTION]) {
                     pConnection = dynamic_cast<StaConnection*>(pDevice);
-                    //qDebug() << pConnection->getName() << (dataAyyay[nFlag] & 0xff);
-                    pConnection->setArrowState(dataAyyay[nFlag] & 0x33);
-                    pConnection->setState(dataAyyay[nFlag++] & 0xcc);
+                    pConnection->setArrowState(dataArray[nFlag] & 0x33);
+                    pConnection->setState(dataArray[nFlag++] & 0xCC);
                 }
             }
             //机务段
@@ -172,13 +170,13 @@ namespace Station {
                 for (DeviceBase* pDevice : m_mapDeviceVector[LOCOMOTIVE]) {
                     pLocomotive = dynamic_cast<StaLocomotive*>(pDevice);
                     if (!bAddByte) {
-                        pLocomotive->setState(dataAyyay[nFlag] & 0x0f);
+                        pLocomotive->setState(dataArray[nFlag] & 0x0F);
                         if (pLocomotive == m_mapDeviceVector[LOCOMOTIVE].at(m_mapDeviceVector[LOCOMOTIVE].size() - 1)) {
                             nFlag++;
                         }
                     }
                     else {
-                        pLocomotive->setState((dataAyyay[nFlag++] >> 4) & 0x0f);
+                        pLocomotive->setState((dataArray[nFlag++] >> 4) & 0x0F);
                     }
                     bAddByte = !bAddByte;
                 }
@@ -187,56 +185,42 @@ namespace Station {
             return QByteArray();
         }
 
-        QByteArray StaProtocol::UnpackStaStagePlan(const QByteArray& dataAyyay)
+        QByteArray StaProtocol::UnpackStaStagePlan(const QByteArray& dataArray)
         {
-            if (dataAyyay[16] == 0x01) {   //下发
+            if (dataArray[16] == 0x01) {   //下发
                 StaStagePlan* pStaStagePlan = new StaStagePlan;
                 int nFlag = 11;
-                pStaStagePlan->m_nPlanId = dataAyyay[nFlag++] & 0xFF;
-                pStaStagePlan->m_strPlanNum = dataAyyay.mid(nFlag, 4);
+                pStaStagePlan->m_nPlanId = dataArray[nFlag++] & 0xFF;
+                pStaStagePlan->m_strPlanNum = dataArray.mid(nFlag, 4);
                 nFlag += 4;
                 nFlag++;
-                pStaStagePlan->m_nPlanType = dataAyyay[nFlag++] & 0xFF;
-                int len = dataAyyay[nFlag++] & 0xFF;
-                pStaStagePlan->m_strArrivalTrainNum = dataAyyay.mid(nFlag, len);
+                pStaStagePlan->m_nPlanType = dataArray[nFlag++];
+                int len = dataArray[nFlag++] & 0xFF;
+                pStaStagePlan->m_strArrivalTrainNum = dataArray.mid(nFlag, len);
                 nFlag += len;
-                pStaStagePlan->m_nArrivalTrackCode = (dataAyyay[nFlag] & 0xFF) + (dataAyyay[nFlag + 1] & 0xFF) * 256;
+                pStaStagePlan->m_nArrivalTrackCode = (dataArray[nFlag] & 0xFF) + (dataArray[nFlag + 1] & 0xFF) * 256;
                 nFlag += 2;
                 pStaStagePlan->m_strArrivalTrack = MainStation()->getDeviceByCode(pStaStagePlan->m_nArrivalTrackCode, TRACK)->getName();
-                pStaStagePlan->m_nEntrySignalCode = (dataAyyay[nFlag] & 0xFF) + (dataAyyay[nFlag + 1] & 0xFF) * 256;
+                pStaStagePlan->m_nEntrySignalCode = (dataArray[nFlag] & 0xFF) + (dataArray[nFlag + 1] & 0xFF) * 256;
                 nFlag += 2;
                 pStaStagePlan->m_strEntrySignal = MainStation()->getDeviceByCode(pStaStagePlan->m_nEntrySignalCode, SIGNALLAMP)->getName();
-                QString strArrivaTime = QString("%1-%2-%3T%4:%5:%6")
-                    .arg((dataAyyay[nFlag] & 0xFF) + (dataAyyay[nFlag + 1] & 0xFF) * 256)
-                    .arg(dataAyyay[nFlag + 2] & 0xFF, 2, 10, QLatin1Char('0'))
-                    .arg(dataAyyay[nFlag + 3] & 0xFF, 2, 10, QLatin1Char('0'))
-                    .arg(dataAyyay[nFlag + 4] & 0xFF, 2, 10, QLatin1Char('0'))
-                    .arg(dataAyyay[nFlag + 5] & 0xFF, 2, 10, QLatin1Char('0'))
-                    .arg(dataAyyay[nFlag + 6] & 0xFF, 2, 10, QLatin1Char('0'));
+                pStaStagePlan->m_tArrivalTime = ByteArrayToDateTime(dataArray.mid(nFlag, 7));
                 nFlag += 7;
-                pStaStagePlan->m_tArrivalTime = QDateTime::fromString(strArrivaTime, Qt::ISODate);
-                int len2 = dataAyyay[nFlag++];
-                pStaStagePlan->m_strDepartTrainNum = dataAyyay.mid(nFlag, len2);
-                nFlag += len2;
-                pStaStagePlan->m_nDepartTrackCode = (dataAyyay[nFlag] & 0xFF) + (dataAyyay[nFlag + 1] & 0xFF) * 256;
+                len = dataArray[nFlag++];
+                pStaStagePlan->m_strDepartTrainNum = dataArray.mid(nFlag, len);
+                nFlag += len;
+                pStaStagePlan->m_nDepartTrackCode = (dataArray[nFlag] & 0xFF) + (dataArray[nFlag + 1] & 0xFF) * 256;
                 nFlag += 2;
                 pStaStagePlan->m_strDepartTrack = MainStation()->getDeviceByCode(pStaStagePlan->m_nArrivalTrackCode, TRACK)->getName();
-                pStaStagePlan->m_nExitSignalCode = (dataAyyay[nFlag] & 0xFF) + (dataAyyay[nFlag + 1] & 0xFF) * 256;
+                pStaStagePlan->m_nExitSignalCode = (dataArray[nFlag] & 0xFF) + (dataArray[nFlag + 1] & 0xFF) * 256;
                 nFlag += 2;
                 pStaStagePlan->m_strExitSignal = MainStation()->getDeviceByCode(pStaStagePlan->m_nExitSignalCode, SIGNALLAMP)->getName();
-                QString strDepartTime = QString("%1-%2-%3T%4:%5:%6")
-                    .arg((dataAyyay[nFlag] & 0xFF) + (dataAyyay[nFlag + 1] & 0xFF) * 256)
-                    .arg(dataAyyay[nFlag + 2] & 0xFF, 2, 10, QLatin1Char('0'))
-                    .arg(dataAyyay[nFlag + 3] & 0xFF, 2, 10, QLatin1Char('0'))
-                    .arg(dataAyyay[nFlag + 4] & 0xFF, 2, 10, QLatin1Char('0'))
-                    .arg(dataAyyay[nFlag + 5] & 0xFF, 2, 10, QLatin1Char('0'))
-                    .arg(dataAyyay[nFlag + 6] & 0xFF, 2, 10, QLatin1Char('0'));
+                pStaStagePlan->m_tDepartTime = ByteArrayToDateTime(dataArray.mid(nFlag, 7));
                 nFlag += 7;
-                pStaStagePlan->m_tDepartTime = QDateTime::fromString(strDepartTime, Qt::ISODate);
-                pStaStagePlan->m_bElectric = dataAyyay[nFlag++] & 0xFF;
-                pStaStagePlan->m_nOverLimitLevel = dataAyyay[nFlag++] & 0xFF;
-                pStaStagePlan->m_bFreightTrain = dataAyyay[nFlag++] & 0xFF;
-                pStaStagePlan->m_nJJQDCode = (dataAyyay[nFlag] & 0xFF) + (dataAyyay[nFlag + 1] & 0xFF) * 256;
+                pStaStagePlan->m_bElectric = dataArray[nFlag++];
+                pStaStagePlan->m_nOverLimitLevel = dataArray[nFlag++];
+                pStaStagePlan->m_bFreightTrain = dataArray[nFlag++];
+                pStaStagePlan->m_nJJQDCode = (dataArray[nFlag] & 0xFF) + (dataArray[nFlag + 1] & 0xFF) * 256;
                 if (pStaStagePlan->m_nArrivalTrackCode == 0 || pStaStagePlan->m_nDepartTrackCode == 0) {
                     pStaStagePlan->m_nPlanType = 5;
                     pStaStagePlan->m_strArrivalTrack = "";
@@ -248,7 +232,7 @@ namespace Station {
             return QByteArray();
         }
 
-        QByteArray StaProtocol::UnpackStaDispatchOrder(const QByteArray& dataAyyay)
+        QByteArray StaProtocol::UnpackStaDispatchOrder(const QByteArray& dataArray)
         {
             StaDispatchOrder* pDispatch = new StaDispatchOrder;
             int nFlag = 11;
@@ -258,44 +242,37 @@ namespace Station {
             hexStr.replace(QRegularExpression("^0+"), "");
             pDispatch->m_strOrderNum = hexStr;
             nFlag += 8;
-            QString strDepartTime = QString("%1-%2-%3T%4:%5:%6")
-                .arg((dataAyyay[nFlag] & 0xFF) + (dataAyyay[nFlag + 1] & 0xFF) * 256)
-                .arg(dataAyyay[nFlag + 2] & 0xFF, 2, 10, QLatin1Char('0'))
-                .arg(dataAyyay[nFlag + 3] & 0xFF, 2, 10, QLatin1Char('0'))
-                .arg(dataAyyay[nFlag + 4] & 0xFF, 2, 10, QLatin1Char('0'))
-                .arg(dataAyyay[nFlag + 5] & 0xFF, 2, 10, QLatin1Char('0'))
-                .arg(dataAyyay[nFlag + 6] & 0xFF, 2, 10, QLatin1Char('0'));
-            pDispatch->m_tSendTime = QDateTime::fromString(strDepartTime, Qt::ISODate);
+            pDispatch->m_tSendTime = ByteArrayToDateTime(dataArray.mid(nFlag, 7));;
             nFlag += 7;
-            int len = dataAyyay[nFlag++] & 0xFF;
-            pDispatch->m_strSendName = QString::fromLocal8Bit(dataAyyay.mid(nFlag, len));
+            int len = dataArray[nFlag++] & 0xFF;
+            pDispatch->m_strSendName = QString::fromLocal8Bit(dataArray.mid(nFlag, len));
             nFlag += len;
-            len = dataAyyay[nFlag++] & 0xFF;
-            pDispatch->m_strSendAgency = QString::fromLocal8Bit(dataAyyay.mid(nFlag, len));
+            len = dataArray[nFlag++] & 0xFF;
+            pDispatch->m_strSendAgency = QString::fromLocal8Bit(dataArray.mid(nFlag, len));
             nFlag += len;
-            len = dataAyyay[nFlag++] & 0xFF;
-            pDispatch->m_strOrderTip = QString::fromLocal8Bit(dataAyyay.mid(nFlag, len));
+            len = dataArray[nFlag++] & 0xFF;
+            pDispatch->m_strOrderTip = QString::fromLocal8Bit(dataArray.mid(nFlag, len));
             nFlag += len;
-            len = (dataAyyay[nFlag] & 0xFF) + (dataAyyay[nFlag + 1] & 0xFF) * 256;
+            len = (dataArray[nFlag] & 0xFF) + (dataArray[nFlag + 1] & 0xFF) * 256;
             nFlag += 2;
-            pDispatch->m_strContent = QString::fromLocal8Bit(dataAyyay.mid(nFlag, len));
+            pDispatch->m_strContent = QString::fromLocal8Bit(dataArray.mid(nFlag, len));
             nFlag += len;
-            len = dataAyyay[nFlag++] & 0xFF;
+            len = dataArray[nFlag++] & 0xFF;
             nFlag += len;
             MainStation()->AddNewDispatchOrder(pDispatch);
             return QByteArray();
         }
 
-        QByteArray StaProtocol::UnpackCultivate(const QByteArray& dataAyyay)
+        QByteArray StaProtocol::UnpackCultivate(const QByteArray& dataArray)
         {
-            if (MainStation()->getUserId() != (dataAyyay[11] & 0xFF)) {
+            if (MainStation()->getUserId() != (dataArray[11] & 0xFF)) {
                 return QByteArray();
             }
 
             CultivateObject::Subject::ClearTips();
             QByteArray byteToInterLock;
             QStringList subList;
-            for (QString strOrder : QString(dataAyyay.mid(13, dataAyyay[12] & 0xFF)).split("@")) {
+            for (QString strOrder : QString(dataArray.mid(13, dataArray[12] & 0xFF)).split("@")) {
                 subList = strOrder.split(":");
                 if (m_mapSubjectOrderType.contains(subList[0]) && subList.size() == 2) {
                     CultivateObject::Subject::SetDevSubject(subList[1].split(","), m_mapSubjectOrderType[subList[0]]);
@@ -307,33 +284,32 @@ namespace Station {
             return byteToInterLock;
         }
 
-        QByteArray StaProtocol::UnpackPractice(const QByteArray& dataAyyay)
+        QByteArray StaProtocol::UnpackPractice(const QByteArray& dataArray)
         {
-            if (MainStation()->getUserId() != (dataAyyay[11] & 0xFF)) {
+            if (MainStation()->getUserId() != (dataArray[11] & 0xFF)) {
                 return QByteArray();
             }
 
-            if (dataAyyay[13] == 0x02) {   //提交本题
+            if (dataArray[13] == 0x02) {   //提交本题
                 MainStation()->SubmitCurSubject();
                 return QByteArray();
             }
-            else if (dataAyyay[13] == 0x03) { //上传结果
+            else if (dataArray[13] == 0x03) { //上传结果
                 CultivateObject::Subject* pSubject = MainStation()->getCurSubject();
                 if (pSubject) {
-                    int Result = dataAyyay[22] & 0xFF;
-                    pSubject->setResult(Result);
+                    pSubject->setResult(dataArray[22]);
                 }
             }
             QString strMsg;
-            if (dataAyyay[12] == 0x01 && dataAyyay[13] == 0x01) {    //基础实训
-                MainStation()->setCurSubject(new CultivateObject::Subject(dataAyyay[14] & 0xFF, dataAyyay.mid(15, 7)));
-                strMsg = QString(dataAyyay.mid(23, dataAyyay[22] & 0xFF));
+            if (dataArray[12] == 0x01 && dataArray[13] == 0x01) {    //基础实训
+                MainStation()->setCurSubject(new CultivateObject::Subject(dataArray[14] & 0xFF, dataArray.mid(15, 7)));
+                strMsg = QString(dataArray.mid(23, dataArray[22] & 0xFF));
             }
-            else if (dataAyyay[12] == 0x02 && dataAyyay[13] == 0x01) {   //流程实训 
+            else if (dataArray[12] == 0x02 && dataArray[13] == 0x01) {   //流程实训 
                 MainStation()->setCurSubject(new CultivateObject::Subject(
-                    dataAyyay[14] & 0xFF, dataAyyay.mid(15, 7), 
-                    QString(dataAyyay.mid(23, dataAyyay[22] & 0xFF))));
-                strMsg = QString(dataAyyay.mid(25 + (dataAyyay[22] & 0xFF), dataAyyay[24 + (dataAyyay[22] & 0xFF)] & 0xFF));
+                    dataArray[14] & 0xFF, dataArray.mid(15, 7), 
+                    QString(dataArray.mid(23, dataArray[22] & 0xFF))));
+                strMsg = QString(dataArray.mid(25 + (dataArray[22] & 0xFF), dataArray[24 + (dataArray[22] & 0xFF)] & 0xFF));
             }
             
             QString strScene;   //场景
@@ -360,64 +336,59 @@ namespace Station {
             return byteToInterLock;
         }
 
-        QByteArray StaProtocol::UnpackTrain(const QByteArray& dataAyyay)
+        QByteArray StaProtocol::UnpackTrain(const QByteArray& dataArray)
         {
-            if (dataAyyay[11] == 0x01) {   //添加车次
+            if (dataArray[11] == 0x01) {   //添加车次
                 StaTrain* pTrain = new StaTrain;
                 int nFlag = 12;
-                pTrain->m_nTrainId = dataAyyay[nFlag++] & 0xFF;
-                int nLen = dataAyyay[nFlag++] & 0xFF;
-                pTrain->m_strTrainNum = dataAyyay.mid(nFlag, nLen);
+                pTrain->m_nTrainId = dataArray[nFlag++] & 0xFF;
+                int nLen = dataArray[nFlag++] & 0xFF;
+                pTrain->m_strTrainNum = dataArray.mid(nFlag, nLen);
                 nFlag += nLen;
-                pTrain->m_nPosCode = (dataAyyay[nFlag] & 0xFF) + (dataAyyay[nFlag + 1] & 0xFF) * 256;
+                pTrain->m_nPosCode = (dataArray[nFlag] & 0xFF) + (dataArray[nFlag + 1] & 0xFF) * 256;
                 nFlag += 2;
 
-                pTrain->m_bRight = dataAyyay[nFlag++] & 0xFF;
-                pTrain->m_bElectric = dataAyyay[nFlag++] & 0xFF;
-                pTrain->m_bFreightTrain = dataAyyay[nFlag++] & 0xFF;
-                pTrain->m_nOverLimitLevel = dataAyyay[nFlag++] & 0xFF;
-                pTrain->m_nSpeed = dataAyyay[nFlag++] & 0xFF;
-                nLen = dataAyyay[nFlag++] & 0xFF;
-                pTrain->m_strTrainType = dataAyyay.mid(nFlag, nLen);
+                pTrain->m_bRight = dataArray[nFlag++];
+                pTrain->m_bElectric = dataArray[nFlag++];
+                pTrain->m_bFreightTrain = dataArray[nFlag++];
+                pTrain->m_nOverLimitLevel = dataArray[nFlag++];
+                pTrain->m_nSpeed = dataArray[nFlag++];
+                nLen = dataArray[nFlag++] & 0xFF;
+                pTrain->m_strTrainType = dataArray.mid(nFlag, nLen);
                 nFlag += nLen;
                 
                 MainStation()->AddTrain(pTrain);
-                emit  MainStation()->TrafficLogTableUpData();
-                emit  MainStation()->TrainRouteUpData();
                 DeviceTrain* pDevice = dynamic_cast<Device::DeviceTrain*>(MainStation()->getDeviceByCode(pTrain->m_nPosCode));
                 if (pDevice) {
                     pDevice->SetTrain(pTrain);
                 }
-                else {
-                    qDebug() << "未找到设备:" << pTrain->m_nPosCode;
-                }
             }
             else {
-                StaTrain* pTrain = MainStation()->getStaTrainById(dataAyyay[12]);
+                StaTrain* pTrain = MainStation()->getStaTrainById(dataArray[12] & 0xFF);
                 if (!pTrain) {
                     return QByteArray();
                 }
 
-                if (dataAyyay[11] == 0x02) {   //删除车次
+                if (dataArray[11] == 0x02) {   //删除车次
                     MainStation()->RemoveTrain(pTrain);
                 }
-                else if (dataAyyay[11] == 0x03) {   //变更车次
-                    pTrain->m_strTrainNum = QString(dataAyyay.mid(14, dataAyyay[13] & 0xFF));;
+                else if (dataArray[11] == 0x03) {   //变更车次
+                    pTrain->m_strTrainNum = QString(dataArray.mid(14, dataArray[13] & 0xFF));;
                 }
-                else if (dataAyyay[11] == 0x04) {   //车次停稳
+                else if (dataArray[11] == 0x04) {   //车次停稳
                     pTrain->m_bRunning = false;
                 }
-                else if (dataAyyay[11] == 0x05) {   //车次启动
+                else if (dataArray[11] == 0x05) {   //车次启动
                     pTrain->m_bRunning = true;
                 }
-                else if (dataAyyay[11] == 0x06) {   //更新位置
+                else if (dataArray[11] == 0x06) {   //更新位置
                     qDebug() << "MoveTo";
                     DeviceBase* pDeviceTrain = MainStation()->getDeviceByCode(pTrain->m_nPosCode);
                     if (!pDeviceTrain) {
                         qDebug() << "Not found TrainPos";
                         return QByteArray();
                     }
-                    pTrain->m_nPosCode = (dataAyyay[13] & 0xFF) + (dataAyyay[14] & 0xFF) * 256;
+                    pTrain->m_nPosCode = (dataArray[13] & 0xFF) + (dataArray[14] & 0xFF) * 256;
                     DeviceBase* pNextDevice = MainStation()->getDeviceByCode(pTrain->m_nPosCode);
                     if (!pNextDevice) {
                         pNextDevice = MainStation()->getSwitchBySectionCode(pTrain->m_nPosCode);
@@ -433,49 +404,62 @@ namespace Station {
                         qDebug() << "Not found NextDevice" << pTrain->m_nPosCode;
                     }
                 }
+                else if (dataArray[11] == 0x09) {   //车次信息更新
+                    QByteArray btResult;
+                    if (Http::HttpClient::SelectStaTrain(dataArray[12] & 0xFF, btResult)) {
+                        QJsonParseError error;
+                        QJsonDocument josnDoc = QJsonDocument::fromJson(btResult, &error);
+                        if (josnDoc.isNull()) {
+                            qDebug() << "无效的JSON格式:" << error.errorString();
+                            return QByteArray();
+                        }
+                        if (josnDoc.isObject()) {
+                            StaTrain::Init(pTrain, josnDoc.object());
+                        }
+                    }
+                }
             }
+            emit  MainStation()->TrafficLogTableUpData();
+            emit  MainStation()->TrainRouteUpData();
             return QByteArray();
         }
 
-        QByteArray StaProtocol::UnpackTrainRoute(const QByteArray& dataAyyay)
+        QByteArray StaProtocol::UnpackTrainRoute(const QByteArray& dataArray)
         {
-            if (dataAyyay[11] == 0x03) {   //进路状态
-                StaTrainRoute* pTrainRoute = MainStation()->getStaTrainRouteById(dataAyyay[12]);
+            if (dataArray[11] == 0x03) {   //进路状态
+                StaTrainRoute* pTrainRoute = MainStation()->getStaTrainRouteById(dataArray[12]);
                 if (pTrainRoute) {
                     QByteArray btResult;
-                    pTrainRoute->m_nRouteState = dataAyyay[13];
-                    QMap<QString, QByteArray> m_mapRoute = { {"trainId",QByteArray::number(pTrainRoute->m_nTrainId)}, 
-                        {"autoTouch",QByteArray::number(pTrainRoute->m_nRouteState)}};
-
-                    if (Http::HttpClient::ChangeStaTraffRouteData(pTrainRoute->m_nTrainId, m_mapRoute, btResult)) {
+                    
+                    QMap<QString, QByteArray> m_mapRoute = { 
+                        { "routeState", QByteArray::number(pTrainRoute->m_nRouteState) }
+                    };
+                    if (Http::HttpClient::UpdataStaTrainRouteAttr(pTrainRoute->m_nTrainId, m_mapRoute, btResult)) {
+                        pTrainRoute->m_nRouteState = dataArray[13];
                         emit Station::MainStation()->TrainRouteUpData();
                     }
-                   // if (Http::HttpClient::ChangeTriggerType(dataAyyay[12], dataAyyay[13], btResult)) {
-                   //     
-                   //     emit Station::MainStation()->TrainRouteUpData();
-                   // }
                 }
             }
             return QByteArray();
         }
 
-        QByteArray StaProtocol::UnpackLimits(const QByteArray& dataAyyay)
+        QByteArray StaProtocol::UnpackLimits(const QByteArray& dataArray)
         {
-            if (dataAyyay[11] == 0x01) {
-                MainStation()->setStaLimits(Limits::RouteLimits, dataAyyay[12]);
+            if (dataArray[11] == 0x01) {
+                MainStation()->setStaLimits(Limits::RouteLimits, dataArray[12]);
                 CTCWindows::MainWindow()->RoutePlanWnd()->UpDataRouteLimits();
             }
-            else if (dataAyyay[11] == 0x02) {
-                MainStation()->setStaLimits(Limits::ExStaControl, dataAyyay[12]);
+            else if (dataArray[11] == 0x02) {
+                MainStation()->setStaLimits(Limits::ExStaControl, dataArray[12]);
             }
-            else if (dataAyyay[11] == 0x03) {
-                MainStation()->setStaLimits(Limits::ApplyControlMode, dataAyyay[12]);
+            else if (dataArray[11] == 0x03) {
+                MainStation()->setStaLimits(Limits::ApplyControlMode, dataArray[12]);
             }
-            else if (dataAyyay[11] == 0x04) {
-                MainStation()->setStaLimits(Limits::PlanControl, dataAyyay[12]);
+            else if (dataArray[11] == 0x04) {
+                MainStation()->setStaLimits(Limits::PlanControl, dataArray[12]);
             }
-            else if (dataAyyay[11] == 0x05) {
-                if (dataAyyay[12]) {
+            else if (dataArray[11] == 0x05) {
+                if (dataArray[12]) {
                     MainStation()->setStaLimits(Limits::ControlMode, 
                         MainStation()->getStaLimits(Limits::ActiveApplyControlMode));
                     MainStation()->setStaLimits(Limits::ActiveApplyControlMode, -1);
@@ -484,21 +468,12 @@ namespace Station {
             return QByteArray();
         }
 
-        QByteArray StaProtocol::UnpackAdjTimePoint(const QByteArray& dataAyyay)
+        QByteArray StaProtocol::UnpackAdjTimePoint(const QByteArray& dataArray)
         {
-            StaTrafficLog* pTrafficLog = MainStation()->getStaTrafficLogByTrain(dataAyyay[12] & 0xFF);
+            StaTrafficLog* pTrafficLog = MainStation()->getStaTrafficLogByTrain(dataArray[12] & 0xFF);
             if (pTrafficLog) {
-                int nFlag = 13;
-                QString strDepartTime = QString("%1-%2-%3T%4:%5:%6")
-                    .arg((dataAyyay[nFlag] & 0xFF) + (dataAyyay[nFlag + 1] & 0xFF) * 256)
-                    .arg(dataAyyay[nFlag + 2] & 0xFF, 2, 10, QLatin1Char('0'))
-                    .arg(dataAyyay[nFlag + 3] & 0xFF, 2, 10, QLatin1Char('0'))
-                    .arg(dataAyyay[nFlag + 4] & 0xFF, 2, 10, QLatin1Char('0'))
-                    .arg(dataAyyay[nFlag + 5] & 0xFF, 2, 10, QLatin1Char('0'))
-                    .arg(dataAyyay[nFlag + 6] & 0xFF, 2, 10, QLatin1Char('0'));
-
-                QDateTime date = QDateTime::fromString(strDepartTime, Qt::ISODate);
-                switch (dataAyyay[11] & 0xFF)
+                QDateTime date = ByteArrayToDateTime(dataArray.mid(13, 7));
+                switch (dataArray[11])
                 {
                 case 0x01: pTrafficLog->m_tAdjDepartTime = date;    break;
                 case 0x02: pTrafficLog->m_tAdjArrivalTime = date;   break;
@@ -510,6 +485,19 @@ namespace Station {
                 emit Station::MainStation()->TrafficLogTableUpData();
             }
             return QByteArray();
+        }
+
+        QDateTime StaProtocol::ByteArrayToDateTime(const QByteArray& dataArray)
+        {
+            QString strDepartTime = QString("%1-%2-%3T%4:%5:%6")
+                .arg((dataArray[0] & 0xFF) + (dataArray[1] & 0xFF) * 256)
+                .arg(dataArray[2], 2, 10, QLatin1Char('0'))
+                .arg(dataArray[3], 2, 10, QLatin1Char('0'))
+                .arg(dataArray[4], 2, 10, QLatin1Char('0'))
+                .arg(dataArray[5], 2, 10, QLatin1Char('0'))
+                .arg(dataArray[6], 2, 10, QLatin1Char('0'));
+
+            return QDateTime::fromString(strDepartTime, Qt::ISODate);
         }
     }
 }

@@ -26,11 +26,11 @@ namespace CTCWindows {
 
         }
 
-        void TableView::SetSectionText(QString text, int nWidth)
+        void TableView::SetSectionText(const QString& strText, int nWidth)
         {
             QAbstractButton* bSectionBtn = findChild<QAbstractButton*>();
             if (bSectionBtn) {
-                bSectionBtn->setText(text);
+                bSectionBtn->setText(strText);
                 bSectionBtn->installEventFilter(this);
                 QStyleOptionHeader opt;
                 opt.text = bSectionBtn->text();
@@ -69,18 +69,18 @@ namespace CTCWindows {
             }
         }
 
-        void TableView::AddTableRows(QVector<QStringList> vecTableData, Qt::Alignment alignment)
+        void TableView::AddTableRows(const QVector<QStringList>& vecTableData, Qt::Alignment alignment)
         {
             SetTableItem(vecTableData, alignment, rowCount());
         }
 
-        void TableView::ResetTableRows(QVector<QStringList> vecTableData, Qt::Alignment alignment)
+        void TableView::ResetTableRows(const QVector<QStringList>& vecTableData, Qt::Alignment alignment)
         {
             RemoveAllRows();
             SetTableItem(vecTableData, alignment);
         }
 
-        void TableView::SetTableItem(QVector<QStringList> vecTableData, Qt::Alignment alignment, int nStartRow)
+        void TableView::SetTableItem(const QVector<QStringList>& vecTableData, Qt::Alignment alignment, int nStartRow)
         {
             setRowCount(vecTableData.size() + nStartRow);
             QTableWidgetItem* item = nullptr;
@@ -111,13 +111,13 @@ namespace CTCWindows {
             setRowCount(0);
         }
 
-        void TableView::SetRowItemsColor(int nRow, QColor bkcolor, QColor txtcolor, int nStartCol, int nEndCol)
+        void TableView::SetRowItemsColor(int nRow, const QColor& bkcolor, const QColor& txtcolor, int nStartCol, int nEndCol)
         {
             SetRowItemsBKColor(nRow, bkcolor, nStartCol, (nEndCol == -1) ? columnCount() : nEndCol);
             SetRowItemsTextColor(nRow, txtcolor, nStartCol, (nEndCol == -1) ? columnCount() : nEndCol);
         }
 
-        void TableView::SetRowItemsBKColor(int nRow, QColor bkcolor, int nStartCol, int nEndCol)
+        void TableView::SetRowItemsBKColor(int nRow, const QColor& bkcolor, int nStartCol, int nEndCol)
         {
             for (int i = nStartCol; i < nEndCol; i++) {
                 QTableWidgetItem* pItem = item(nRow, i);
@@ -127,7 +127,7 @@ namespace CTCWindows {
             }
         }
 
-        void TableView::SetRowItemsTextColor(int nRow, QColor txtcolor, int nStartCol, int nEndCol)
+        void TableView::SetRowItemsTextColor(int nRow, const QColor& txtcolor, int nStartCol, int nEndCol)
         {
             for (int i = nStartCol; i < nEndCol; i++) {
                 QTableWidgetItem* pItem = item(nRow, i);
@@ -137,7 +137,7 @@ namespace CTCWindows {
             }
         }
 
-        void TableView::SetRowItemsTextFont(int nRow, QFont font, int nStartCol, int nEndCol)
+        void TableView::SetRowItemsTextFont(int nRow, const QFont& font, int nStartCol, int nEndCol)
         {
             for (int i = nStartCol; i < ((nEndCol == -1) ? columnCount() : nEndCol); i++) {
                 QTableWidgetItem* pItem = item(nRow, i);

@@ -9,6 +9,12 @@
 #include <QMessageBox>
 #pragma execution_character_set("utf-8")
 
+#define		STARTTRAIN		true
+#define		ENDTRAIN		false
+
+#define		ARRIVAL		0x01
+#define		DEPART		0x02
+
 namespace CTCWindows {
 	namespace CASCO {
 		StationLogDispKSK::StationLogDispKSK(QWidget* parent)
@@ -111,6 +117,22 @@ namespace CTCWindows {
 			connect(ui.cancelDepartBtn, &QPushButton::clicked, [=]() {
 				CancelDepart();
 			});
+
+			connect(pTrafficLogTable->DataTable(), &QTableWidget::cellDoubleClicked, [=](int nRow, int nCol) {
+				m_pCurTrafficLog = Station::MainStation()->TrafficLogList().at(nRow);
+				if (!m_pCurTrafficLog) {
+					return;
+				}
+				if (!pTrafficLogTable->Item(nRow, nCol)) {
+					return;
+				}
+				m_mapColClickFunction[nCol](nRow, nCol);
+			});
+			m_mapColClickFunction = { 
+				{ m_mapLogICol[TrafficLogInfo::ArrivalTrack], std::bind(&StationLogDispKSK::OnTrackItemClicked, this, std::placeholders::_1, std::placeholders::_2, ARRIVAL) },
+				{ m_mapLogICol[TrafficLogInfo::DepartTrack], std::bind(&StationLogDispKSK::OnTrackItemClicked, this, std::placeholders::_1, std::placeholders::_2, DEPART) },
+			};
+			
 		}
 
 		StationLogDispKSK::~StationLogDispKSK()
@@ -305,25 +327,20 @@ namespace CTCWindows {
 			pTrafficLogTable->SetTableData(vecTableData,0, vecHeadData);
 		}
 
-		void StationLogDispKSK::SetPlanType(bool Type, Station::StaTrafficLog* m_pCurTrafficLog)
+		bool StationLogDispKSK::SetPlanType(bool bStartTrain, Station::StaTrafficLog* m_pCurTrafficLog)
 		{
-			QByteArray btResult;
-			QVector<Station::StaTrainRoute*> vecTrainRoute;
-			vecTrainRoute = Station::MainStation()->getStaTrainRouteByTrain(m_pCurTrafficLog->m_nTrainId);
-			for (int i = 0; i < vecTrainRoute.size(); i++) {
-				if (Type) {
-					vecTrainRoute.remove(0);
-				}
-				else {
-					vecTrainRoute.remove(1);
+			for (Station::StaTrainRoute* pTrainRoute : Station::MainStation()->getStaTrainRouteByTrain(m_pCurTrafficLog->m_nTrainId)) {
+				if (!Station::MainStation()->DeleteTrainRoute(pTrainRoute->getSubTrainRouteList())) {
+					return false;
 				}
 			}
-			if (Type) {
+
+			if (bStartTrain) {
 				m_pCurTrafficLog->m_strArrivalTrainNum = "";
 				m_pCurTrafficLog->m_nArrivalTrackCode = -1;
 				m_pCurTrafficLog->m_strArrivalTrack = "";
 				m_pCurTrafficLog->m_nArrivalSignalCode = -1;
-				m_pCurTrafficLog->m_strArrivaSignal = "";
+				m_pCurTrafficLog->m_strArrivalSignal = "";
 				m_pCurTrafficLog->m_tProvArrivalTime = QDateTime::fromString("");
 				m_pCurTrafficLog->m_tRealArrivalTime = QDateTime::fromString("");
 				m_pCurTrafficLog->m_tAgrAdjDepartTime = QDateTime::fromString("");
@@ -356,8 +373,10 @@ namespace CTCWindows {
 				m_pCurTrafficLog->m_nDepartChange = -1;
 				m_pCurTrafficLog->m_nDepartWeight = -1;
 			}
+			return true;
 		}
-		void StationLogDispKSK::ClickMenu(QPoint pos, Station::StaTrafficLog* m_pCurTrafficLog)//删除闪烁 全体信息 
+
+		void StationLogDispKSK::ShowHeadTableClickMenu(QPoint pos)
 		{
 			QMenu* pMenu = new QMenu();
 			QAction* pAction = new QAction("上报到达点");
@@ -379,189 +398,131 @@ namespace CTCWindows {
 			pMenu->addAction(pAction);
 			connect(pAction, &QAction::triggered, [=] (){//上报到达点
 				TrainArrival();
-				});
+			});
 			pMenu->addAction(pAction_2);
 			connect(pAction_2, &QAction::triggered, [=]() {//上报出发点
 				TrainDeparture();
-				});
+			});
 			pMenu->addAction(pAction_3);
 			connect(pAction_3, &QAction::triggered, [=]() {//上报通过点
 				TrainPassThrough();
-				});
+			});
 			pMenu->addAction(pAction_4);
 			connect(pAction_4, &QAction::triggered, [=]() {//为始发车
-				if (m_pCurTrafficLog) {
-					int ret = 0;
-					QString strImportant;
-					if (m_pCurTrafficLog->m_nPlanType == 0x02) {
-						strImportant = "已经为始发车！";
-					}
-					else {
-						strImportant = "确认设置为始发车！";
-					}
-					QMessageBox msgBox(QMessageBox::Warning,
-						tr("CTC"),
-						tr("%1").arg(strImportant),
-						QMessageBox::Ok | QMessageBox::Cancel,
-						this);
+				if (m_pCurTrafficLog->m_nPlanType == 0x02) {;
+					QMessageBox::information(this, MSGBOX_TITTLE, "已经为始发车!", "确定");
+					return;
+				}
 
-					// 自定义按钮文本
-					msgBox.setButtonText(QMessageBox::Ok, tr("确定"));
-					msgBox.setButtonText(QMessageBox::Cancel, tr("取消"));
-					ret = msgBox.exec();
-					if (ret == QMessageBox::Ok) {
-						if (m_pCurTrafficLog->m_nPlanType == 0x03) {
-							int ret = QMessageBox::warning(
-								this,                   
-								tr("CTC"),              
-								tr("不能同时为始发终到！"), 
-								QMessageBox::Ok    
-							);
-							if (ret == QMessageBox::Ok) {
-								qDebug() << "用户点击了确定";
-								return;
-							}
-						}
+				if (QMessageBox::question(nullptr, MSGBOX_TITTLE, "确认设置为始发车！", "是", "否") != 0) {
+					return;
+				}
+				
+				if (m_pCurTrafficLog->m_nPlanType == 0x03) {
+					QMessageBox::information(this, MSGBOX_TITTLE, "不能同时为始发终到!", "确定");
+					return;
+				}
+				
+				if (SetPlanType(STARTTRAIN, m_pCurTrafficLog)) {
+					QByteArray btResult;
+					QMap<QString, QByteArray> m_mapLogValue = {
+						{ "planType", QByteArray::number(0x02) }
+					};
+					if (Http::HttpClient::UpdataStaTrafficLogAttr(m_pCurTrafficLog->m_nLogId, m_mapLogValue, btResult)) {
 						m_pCurTrafficLog->m_nPlanType = 0x02;
-						SetPlanType(true, m_pCurTrafficLog);
-						QByteArray btResult;
-						QMap<QString, QByteArray>m_mapLogValue = { {"planType",QByteArray::number(m_pCurTrafficLog->m_nPlanType)}
-						};
-						if (Http::HttpClient::ChangeStaTrafficLogData(m_pCurTrafficLog->m_nLogId, m_mapLogValue, btResult)) {
-							emit Station::MainStation()->TrafficLogTableUpData();
-						}
-						//Station::MainStation()->ChangeStaTrafficLogData(m_pCurTrafficLog);
+						emit Station::MainStation()->TrafficLogTableUpData();
 					}
 				}
-				});
+			});
 			pMenu->addAction(pAction_5);
 			connect(pAction_5, &QAction::triggered, [=]() {//为终到车
-				if (m_pCurTrafficLog) {
-					QString strImportant;
-					int ret = 0;
-					if (m_pCurTrafficLog->m_nPlanType == 0x03) {
-						strImportant = "已经为终到车！";
-					}
-					else {
-						strImportant = "确认设置为终到车！";
-					}
-					QMessageBox msgBox(QMessageBox::Warning,
-						tr("CTC"),
-						tr("%1").arg(strImportant),
-						QMessageBox::Ok | QMessageBox::Cancel,
-						this);
+				if (m_pCurTrafficLog->m_nPlanType == 0x03) {
+					QMessageBox::information(this, MSGBOX_TITTLE, "已经为终到车!", "确定");
+					return;
+				}
 
-					// 自定义按钮文本
-					msgBox.setButtonText(QMessageBox::Ok, tr("确定"));
-					msgBox.setButtonText(QMessageBox::Cancel, tr("取消"));
-					ret = msgBox.exec();
-					if (ret == QMessageBox::Ok) {
-						if (m_pCurTrafficLog->m_nPlanType == 0x02) {
-							int ret = QMessageBox::warning(
-								this,
-								tr("CTC"),
-								tr("不能同时为始发终到！"),
-								QMessageBox::Ok
-							);
-							if (ret == QMessageBox::Ok) {
-								qDebug() << "用户点击了确定";
-								return;
-							}
-						}
+				if (QMessageBox::question(nullptr, MSGBOX_TITTLE, "确认设置为终到车！", "是", "否") != 0) {
+					return;
+				}
+
+				if (m_pCurTrafficLog->m_nPlanType == 0x02) {
+					QMessageBox::information(this, MSGBOX_TITTLE, "不能同时为始发终到!", "确定");
+					return;
+				}
+
+				if (SetPlanType(false, m_pCurTrafficLog)) {
+					QByteArray btResult;
+					QMap<QString, QByteArray> m_mapLogValue = {
+						{ "planType", QByteArray::number(0x03) }
+					};
+					if (Http::HttpClient::UpdataStaTrafficLogAttr(m_pCurTrafficLog->m_nLogId, m_mapLogValue, btResult)) {
 						m_pCurTrafficLog->m_nPlanType = 0x03;
-						SetPlanType(false, m_pCurTrafficLog);
-						QByteArray btResult;
-						QMap<QString, QByteArray>m_mapLogValue = { {"planType",QByteArray::number(m_pCurTrafficLog->m_nPlanType)}
-						};
-						if (Http::HttpClient::ChangeStaTrafficLogData(m_pCurTrafficLog->m_nLogId, m_mapLogValue, btResult)) {
-							emit Station::MainStation()->TrafficLogTableUpData();
-						}
-						//Station::MainStation()->ChangeStaTrafficLogData(m_pCurTrafficLog);
+						emit Station::MainStation()->TrafficLogTableUpData();
 					}
 				}
-				});
+			});
+
 			pMenu->addSeparator();
 			pMenu->addAction(pAction_6);
 			connect(pAction_6, &QAction::triggered, [=]() {//上报速报信息
-				if (m_pCurTrafficLog) {
-					QuickReportKSK* Report = new QuickReportKSK(m_pCurTrafficLog);
-					Report->show();
-				}
-				});
+				QuickReportKSK* Report = new QuickReportKSK(m_pCurTrafficLog);
+				Report->show();
+			});
 			pMenu->addAction(pAction_7);
 			connect(pAction_7, &QAction::triggered, [=]() {//修改车次号
-				if (m_pCurTrafficLog) {
-					ModifyTrainNumberKSK* pTrainNumber = new ModifyTrainNumberKSK(m_pCurTrafficLog);
-					pTrainNumber->show();
-				}
-				});
+				ModifyTrainNumberKSK* pTrainNumber = new ModifyTrainNumberKSK(m_pCurTrafficLog);
+				pTrainNumber->show();
+			});
 			pMenu->addAction(pAction_8);
 			connect(pAction_8, &QAction::triggered, [=]() {//修改相关邻站
-				if (m_pCurTrafficLog) {
-					ModifyRelevantStationsKSK* m_pRelevantStations = new ModifyRelevantStationsKSK(m_pCurTrafficLog);
-					m_pRelevantStations->show();
-				}
-				});
+				ModifyRelevantStationsKSK* m_pRelevantStations = new ModifyRelevantStationsKSK(m_pCurTrafficLog);
+				m_pRelevantStations->show();
+			});
 			pMenu->addAction(pAction_9);
 			connect(pAction_9, &QAction::triggered, [=]() {//删除
-			
-				if (m_pCurTrafficLog) {
-					QMessageBox msgBox(QMessageBox::Warning,
-						tr("CTC"),
-						tr("是否确定删除！"),
-						QMessageBox::Ok | QMessageBox::Cancel,
-						this);
-
-					// 自定义按钮文本
-					msgBox.setButtonText(QMessageBox::Ok, tr("确定"));
-					msgBox.setButtonText(QMessageBox::Cancel, tr("取消"));
-
-					// 显示对话框并获取结果
-					int ret = msgBox.exec();
-
-					if (ret == QMessageBox::Ok) {
-						qDebug() << "用户点击了确定";
-
-						QVector<Station::StaTrainRoute*> vecTrainRoute;
-						bool bAllClear = true;
-						QByteArray btResult;
-						vecTrainRoute = Station::MainStation()->getStaTrainRouteByTrain(m_pCurTrafficLog->m_nTrainId);
-						if (Http::HttpClient::DeleteStaTrafficLog(m_pCurTrafficLog->m_nLogId, btResult)) {
-							Station::MainStation()->RemoveTrafficLog(m_pCurTrafficLog);
-							qDebug() << "已删除行车日志-->" << m_pCurTrafficLog->m_nLogId;
-							Station::MainStation()->RemoveLogVecOne(m_pCurTrafficLog);
-						}
-						for (Station::StaTrainRoute* pTrainRoute : vecTrainRoute) {
-							if (Http::HttpClient::DeleteStaTrainRoute(pTrainRoute->m_nRouteId, btResult)) {
-								qDebug() << "已删除进路序列-->" << pTrainRoute->m_nRouteId;
-							
-							}
-						}
-						emit Station::MainStation()->TrafficLogTableUpData();
-						emit Station::MainStation()->TrainRouteUpData();
-						Station::MainStation()->DeleteTrain(Station::MainStation()->getStaTrainById(m_pCurTrafficLog->m_nTrainId));
-					}
+				if (QMessageBox::question(nullptr, MSGBOX_TITTLE, "是否确定删除！", "是", "否") != 0) {
+					return;
 				}
-				});
+				QVector<Station::StaTrainRoute*> vecSubRoute;
+				Station::StaTrainRoute* pArrivalRoute = Station::MainStation()->getStaTrainRouteById(m_pCurTrafficLog->m_nArrivalRouteId);
+
+				if (pArrivalRoute) {
+					vecSubRoute.append(pArrivalRoute->getSubTrainRouteList());
+				}
+				Station::StaTrainRoute* pDepartRoute = Station::MainStation()->getStaTrainRouteById(m_pCurTrafficLog->m_nDepartRouteId);
+				if (pDepartRoute) {
+					vecSubRoute.append(pDepartRoute->getSubTrainRouteList());
+				}
+
+				if (!Station::MainStation()->DeleteTrainRoute(vecSubRoute)) {
+					return;
+				}
+				if (!Station::MainStation()->DeleteTrain(Station::MainStation()->getStaTrainById(m_pCurTrafficLog->m_nTrainId))) {
+					return;
+				}
+				QByteArray btResult;
+				if (Http::HttpClient::DeleteStaTrafficLog(m_pCurTrafficLog->m_nLogId, btResult)) {
+					Station::MainStation()->RemoveTrafficLog(m_pCurTrafficLog);
+				}
+				emit Station::MainStation()->TrafficLogTableUpData();
+				emit Station::MainStation()->TrainRouteUpData();
+			});
 			pMenu->addSeparator();
 			pMenu->addAction(pAction_10);
 			connect(pAction_10, &QAction::triggered, [=]() {//删除闪烁
 
-				});
+			});
 			pMenu->addAction(pAction_11);
 			connect(pAction_11, &QAction::triggered, [=]() {//全体信息
 
-				});
+			});
 			pMenu->addSeparator();
 			pMenu->addAction(pAction_12);
 			connect(pAction_12, &QAction::triggered, [=]() {//修改列车计划
-				if (m_pCurTrafficLog) {
-					StaAddNewTrainKSK* pAddNewTrain = new StaAddNewTrainKSK;
-					pAddNewTrain->InitAddView();
-					pAddNewTrain->InitAddView(m_pCurTrafficLog);
-					pAddNewTrain->show();
-				}
-				});
+				StaAddNewTrainKSK* pAddNewTrain = new StaAddNewTrainKSK;
+				pAddNewTrain->InitAddView(m_pCurTrafficLog);
+				pAddNewTrain->show();
+			});
 			pMenu->addAction(pAction_13);
 			pAction_13->setCheckable(true);// 启用可勾选状态
 			if (m_pCurTrafficLog) {
@@ -569,154 +530,186 @@ namespace CTCWindows {
 				pAction_13->setChecked(pTrain->m_bImportant);
 			}
 			connect(pAction_13, &QAction::triggered, [=]() {//设置/取消重点列车
-				if (m_pCurTrafficLog) {
-					Station::StaTrain* pTrain = Station::MainStation()->getStaTrainById(m_pCurTrafficLog->m_nTrainId);
-					QString strImportant;
-					if (pTrain->m_bImportant) {
-						strImportant = "当前为重点列车是否取消重点列车";
-					}
-					else {
-						strImportant = "当前为非重点列车是否设置重点列车";
-					}
-					QMessageBox msgBox(QMessageBox::Warning,
-						tr("CTC"),
-						tr("%1").arg(strImportant),
-						QMessageBox::Ok | QMessageBox::Cancel,
-						this);
-
-					msgBox.setButtonText(QMessageBox::Ok, tr("确定"));
-					msgBox.setButtonText(QMessageBox::Cancel, tr("取消"));
-
-					int ret = msgBox.exec();
-
-					if (ret == QMessageBox::Ok) {
-						pTrain->m_bImportant = !pTrain->m_bImportant;
-
-					}
-					QByteArray btResult;
-					QMap<QString, QByteArray>m_mapTrain = { {"keynote",QByteArray::number(pTrain->m_bImportant)}};
-					if (Http::HttpClient::ChangeStaTrain(Station::MainStation()->getStationId(), m_mapTrain, btResult)) {
-						emit Station::MainStation()->TrafficLogTableUpData();
-					};
+				Station::StaTrain* pTrain = Station::MainStation()->getStaTrainById(m_pCurTrafficLog->m_nTrainId);
+				if (!pTrain) {
+					return;
 				}
-				});
+
+				if (QMessageBox::question(nullptr, MSGBOX_TITTLE, QString("是否为当前列车%1重点列车")
+						.arg(pTrain->m_bImportant ? "取消" : "设置"), "是", "否") != 0) {
+					return;
+				}
+
+				QByteArray btResult;
+				QMap<QString, QByteArray> m_mapTrain = {
+					{ "keynote", QByteArray::number(!pTrain->m_bImportant)}
+				};
+				if (Http::HttpClient::UpdataStaTrainAttr(Station::MainStation()->getStationId(), m_mapTrain, btResult)) {
+					pTrain->m_bImportant = !pTrain->m_bImportant;
+				};
+			});
 			pMenu->addAction(pAction_14);
 			pAction_14->setCheckable(true);// 启用可勾选状态
-			if (m_pCurTrafficLog) {
-				pAction_14->setChecked(m_pCurTrafficLog->m_bDeleteFlag);
-			}
+			pAction_14->setChecked(m_pCurTrafficLog->m_bDeleteFlag);
 			connect(pAction_14, &QAction::triggered, [=]() {//设置删除标记
-				if (m_pCurTrafficLog) {
-					int ret = 0;
-					QString strImportant;
-					if (!m_pCurTrafficLog->m_bDeleteFlag) {
-						strImportant = "是否为当前列车设置删除标记";
-					}
-					else {
-						strImportant = "是否取消设置删除标记";
-
-					}
-					QMessageBox msgBox(QMessageBox::Warning,
-						tr("CTC"),
-						tr("%1").arg(strImportant),
-						QMessageBox::Ok | QMessageBox::Cancel,
-						this);
-					msgBox.setButtonText(QMessageBox::Ok, tr("确定"));
-					msgBox.setButtonText(QMessageBox::Cancel, tr("取消"));
-					ret = msgBox.exec();
-					if (ret == QMessageBox::Ok) {
-						m_pCurTrafficLog->m_bDeleteFlag = !m_pCurTrafficLog->m_bDeleteFlag;
-						QByteArray btResult;
-						QMap<QString, QByteArray>m_mapLogValue = { {"arrivalTrainNumber",m_pCurTrafficLog->m_strArrivalTrainNum.toLocal8Bit() },
-							{"departTrainNumber",m_pCurTrafficLog->m_strDepartTrainNum.toLocal8Bit()},
-							{"deleteFlag",QByteArray::number(m_pCurTrafficLog->m_bDeleteFlag)}
-						};
-						if (Http::HttpClient::ChangeStaTrafficLogData(m_pCurTrafficLog->m_nLogId, m_mapLogValue, btResult)) {
-							emit Station::MainStation()->TrafficLogTableUpData();
-						}
-						//Station::MainStation()->ChangeStaTrafficLogData(m_pCurTrafficLog);
-					}
+				if (QMessageBox::question(nullptr, MSGBOX_TITTLE, QString("是否为当前列车%1删除标记")
+						.arg(m_pCurTrafficLog->m_bDeleteFlag ? "取消" : "设置"), "是", "否") != 0) {
+					return;
 				}
-				});
+				QByteArray btResult;
+				QMap<QString, QByteArray> m_mapLogValue = {
+					{ "deleteFlag", QByteArray::number(!m_pCurTrafficLog->m_bDeleteFlag)}
+				};
+				if (Http::HttpClient::UpdataStaTrafficLogAttr(m_pCurTrafficLog->m_nLogId, m_mapLogValue, btResult)) {
+					m_pCurTrafficLog->m_bDeleteFlag = !m_pCurTrafficLog->m_bDeleteFlag;
+					emit Station::MainStation()->TrafficLogTableUpData();
+				}
+			});
 			pMenu->addAction(pAction_15);
 			pAction_15->setCheckable(true);
-			if (m_pCurTrafficLog) {
-				pAction_15->setChecked(m_pCurTrafficLog->m_bAllowTrackNotMatch);
-			}
+			pAction_15->setChecked(m_pCurTrafficLog->m_bAllowTrackNotMatch);
 			connect(pAction_15, &QAction::triggered, [=]() {//允许股道与基本径路不一致
-				if (m_pCurTrafficLog) {
-					int ret = 0;
-					QString strImportant;
-					if (!m_pCurTrafficLog->m_bAllowTrackNotMatch) {
-						strImportant = "是否允许股道与基本径路不一致！";
-					}
-					else {
-						strImportant = "是否取消允许股道与基本径路不一致！";
-					}
-					QMessageBox msgBox(QMessageBox::Warning,
-						tr("CTC"),
-						tr("%1").arg(strImportant),
-						QMessageBox::Ok | QMessageBox::Cancel,
-						this);
-					msgBox.setButtonText(QMessageBox::Ok, tr("确定"));
-					msgBox.setButtonText(QMessageBox::Cancel, tr("取消"));
-					ret = msgBox.exec();
-					if (ret == QMessageBox::Ok) {
-						m_pCurTrafficLog->m_bAllowTrackNotMatch = !m_pCurTrafficLog->m_bAllowTrackNotMatch;
-						
-					}
-					QByteArray btResult;
-					QMap<QString, QByteArray>m_mapLogValue = { {"allowTrackNotMatch",QByteArray::number(m_pCurTrafficLog->m_bAllowTrackNotMatch) }
-					};
-					if (Http::HttpClient::ChangeStaTrafficLogData(m_pCurTrafficLog->m_nLogId, m_mapLogValue, btResult)) {
-						emit Station::MainStation()->TrafficLogTableUpData();
-					}
-					//Station::MainStation()->ChangeStaTrafficLogData(m_pCurTrafficLog);
+				if (QMessageBox::question(nullptr, MSGBOX_TITTLE, QString("是否%1允许股道与基本径路不一致")
+					.arg(m_pCurTrafficLog->m_bAllowTrackNotMatch ? "取消" : "设置"), "是", "否") != 0) {
+					return;
 				}
-				});
+				QByteArray btResult;
+				QMap<QString, QByteArray> m_mapLogValue = { 
+					{ "allowTrackNotMatch", QByteArray::number(!m_pCurTrafficLog->m_bAllowTrackNotMatch) }
+				};
+				if (Http::HttpClient::UpdataStaTrafficLogAttr(m_pCurTrafficLog->m_nLogId, m_mapLogValue, btResult)) {
+					m_pCurTrafficLog->m_bAllowTrackNotMatch = !m_pCurTrafficLog->m_bAllowTrackNotMatch;
+					emit Station::MainStation()->TrafficLogTableUpData();
+				}
+			});
 			pMenu->addAction(pAction_16);
 			pAction_16->setCheckable(true);// 启用可勾选状态
-			if (m_pCurTrafficLog) {
-				pAction_16->setChecked(m_pCurTrafficLog->m_bAllowSignalNotMatch);
-			}
+			pAction_16->setChecked(m_pCurTrafficLog->m_bAllowSignalNotMatch);
 			connect(pAction_16, &QAction::triggered, [=]() {//允许出入口与基本径路不一致
-				if (m_pCurTrafficLog) {
-					int ret = 0;
-					QString strImportant;
-					if (!m_pCurTrafficLog->m_bAllowSignalNotMatch) {
-						strImportant = "是否允许出入口与基本径路不一致！";
-						
-					}
-					else {
-						strImportant = "是否取消允许出入口与基本径路不一致！";
-						
-					}
-					QMessageBox msgBox(QMessageBox::Warning,
-						tr("CTC"),
-						tr("%1").arg(strImportant),
-						QMessageBox::Ok | QMessageBox::Cancel,
-						this);
-					msgBox.setButtonText(QMessageBox::Ok, tr("确定"));
-					msgBox.setButtonText(QMessageBox::Cancel, tr("取消"));
-					ret = msgBox.exec();
-					if (ret == QMessageBox::Ok) {
-						m_pCurTrafficLog->m_bAllowSignalNotMatch = !m_pCurTrafficLog->m_bAllowSignalNotMatch;
-
-					}
-					QByteArray btResult;
-					QMap<QString, QByteArray>m_mapLogValue = { {"allowSignalNotMatch",QByteArray::number(m_pCurTrafficLog->m_bAllowSignalNotMatch) }
-					};
-					if (Http::HttpClient::ChangeStaTrafficLogData(m_pCurTrafficLog->m_nLogId, m_mapLogValue, btResult)) {
-						emit Station::MainStation()->TrafficLogTableUpData();
-					}
-				//	Station::MainStation()->ChangeStaTrafficLogData(m_pCurTrafficLog);
+				if (QMessageBox::question(nullptr, MSGBOX_TITTLE, QString("是否%1允许出入口与基本径路不一致")
+					.arg(m_pCurTrafficLog->m_bAllowSignalNotMatch ? "取消" : "设置"), "是", "否") != 0) {
+					return;
 				}
-				});
+				QByteArray btResult;
+				QMap<QString, QByteArray> m_mapLogValue = {
+					{ "allowSignalNotMatch", QByteArray::number(!m_pCurTrafficLog->m_bAllowSignalNotMatch) }
+				};
+				if (Http::HttpClient::UpdataStaTrafficLogAttr(m_pCurTrafficLog->m_nLogId, m_mapLogValue, btResult)) {
+					m_pCurTrafficLog->m_bAllowSignalNotMatch = !m_pCurTrafficLog->m_bAllowSignalNotMatch;
+					emit Station::MainStation()->TrafficLogTableUpData();
+				}
+			});
 			pMenu->exec(pos);
 		}
 
+		void StationLogDispKSK::OnTrackItemClicked(int nRow, int nCol, int nType)
+		{
+			Station::Device::StaTrack* pTrack = nullptr;
+			QStringList strTrackList;
+			for (Station::Device::DeviceBase* pDevice : Station::MainStation()->getDeviceVectorByType(TRACK)) {
+				pTrack = dynamic_cast<Station::Device::StaTrack*>(pDevice);
+				if (pTrack->TrackType() == "ZX_GD" || pTrack->TrackType() == "GD_QD") {
+					strTrackList.append(pTrack->getName());
+				}
+			}
 
-		
+			pTrafficLogTable->AddComboBox(nRow, nCol, strTrackList, pTrafficLogTable->Item(nRow, nCol)->text(), [=](const QString& strTrack) {
+				pTrafficLogTable->DataTable()->removeCellWidget(nRow, nCol);
+				pTrafficLogTable->DataTable()->item(nRow, nCol)->setText(strTrack);
+				
+				QVector<Station::StaTrainRoute*> vecTempRouteOrder;
+				if (nType == ARRIVAL) {	//接车股道
+					for (Station::StaTrainRoute* pRoute : Station::MainStation()->getStaTrainRouteByTrain(m_pCurTrafficLog->m_nTrainId)) {
+						vecTempRouteOrder.append(pRoute->getSubTrainRouteList());
+					}
+				}
+				else {
+					vecTempRouteOrder = Station::MainStation()->getStaTrainRouteById(m_pCurTrafficLog->m_nDepartRouteId)->getSubTrainRouteList();
+				}
+				//先修改进路,如修改失败则不修改行车日志
+				Station::Device::DeviceBase* pTrack = Station::MainStation()->getDeviceByName(strTrack, TRACK);
+				if (!Station::MainStation()->TrainRouteTrackChange(vecTempRouteOrder, pTrack)) {
+					return;
+				}
+				QByteArray btResult;
+				QMap<QString, QByteArray> m_mapLogValue;
+				if (nType == ARRIVAL) {
+					m_mapLogValue = {
+						{ "arrivalTrack", QByteArray::number(pTrack->getCode()) },
+						{ "departTrack", QByteArray::number(pTrack->getCode()) },
+					};
+					if (Http::HttpClient::UpdataStaTrafficLogAttr(m_pCurTrafficLog->m_nLogId, m_mapLogValue, btResult)) {
+						m_pCurTrafficLog->m_strArrivalTrack = strTrack;
+						m_pCurTrafficLog->m_nArrivalTrackCode = pTrack->getCode();
+						m_pCurTrafficLog->m_strDepartTrack = strTrack;
+						m_pCurTrafficLog->m_nDepartTrackCode = pTrack->getCode();
+					}
+				}
+				else {
+					m_mapLogValue = {
+						{ "departTrack", QByteArray::number(pTrack->getCode()) },
+					};
+					if (Http::HttpClient::UpdataStaTrafficLogAttr(m_pCurTrafficLog->m_nLogId, m_mapLogValue, btResult)) {
+						m_pCurTrafficLog->m_strDepartTrack = strTrack;
+						m_pCurTrafficLog->m_nDepartTrackCode = pTrack->getCode();
+					}
+				}
+				emit Station::MainStation()->TrafficLogTableUpData();
+			});
+		}
+
+		void StationLogDispKSK::OnSignalItemClicked(int nRow, int nCol, int nType)
+		{
+			QStringList strSignalList;
+			for (Station::Device::DeviceBase* pDevice : Station::MainStation()->getDeviceVectorByType(SIGNALLAMP)) {
+				if (dynamic_cast<Station::Device::StaSignal*>(pDevice)->getXHDTYpe() == "JZ_XHJ") {
+					strSignalList.append(pDevice->getName());
+				}
+			}
+
+			pTrafficLogTable->AddComboBox(nRow, nCol, strSignalList, pTrafficLogTable->Item(nRow, nCol)->text(), [=](const QString& strSignal) {
+				pTrafficLogTable->DataTable()->removeCellWidget(nRow, nCol);
+				pTrafficLogTable->DataTable()->item(nRow, nCol)->setText(strSignal);
+
+				Station::Device::DeviceBase* pSignal = Station::MainStation()->getDeviceByName(strSignal, TRACK);
+
+				QVector<Station::StaTrainRoute*> vecTempRouteOrder;
+				if (nType == ARRIVAL) {
+					vecTempRouteOrder = Station::MainStation()->getStaTrainRouteById(m_pCurTrafficLog->m_nArrivalRouteId)->getSubTrainRouteList();
+				}
+				else {
+					vecTempRouteOrder = Station::MainStation()->getStaTrainRouteById(m_pCurTrafficLog->m_nDepartRouteId)->getSubTrainRouteList();
+				}
+				//先修改进路,如修改失败则不修改行车日志
+				if (!Station::MainStation()->TrainRouteSignalChange(vecTempRouteOrder, pSignal)) {
+					return;
+				}
+
+				QByteArray btResult;
+				QMap<QString, QByteArray> m_mapLogValue;
+				
+				if (nType == ARRIVAL) {
+					m_mapLogValue = {
+						{ "homeSignalCode", QByteArray::number(pSignal->getCode()) },
+					};
+					if (Http::HttpClient::UpdataStaTrafficLogAttr(m_pCurTrafficLog->m_nLogId, m_mapLogValue, btResult)) {
+						m_pCurTrafficLog->m_strArrivalSignal = strSignal;
+						m_pCurTrafficLog->m_nArrivalSignalCode = pSignal->getCode();
+					}
+				}
+				else {
+					m_mapLogValue = {
+						{ "startingSignalCode", QByteArray::number(pSignal->getCode()) },
+					};
+					if (Http::HttpClient::UpdataStaTrafficLogAttr(m_pCurTrafficLog->m_nLogId, m_mapLogValue, btResult)) {
+						m_pCurTrafficLog->m_strDepartTrack = strSignal;
+						m_pCurTrafficLog->m_nDepartTrackCode = pSignal->getCode();
+					}
+				}
+				emit Station::MainStation()->TrafficLogTableUpData();
+			});
+		}
+
 		void StationLogDispKSK::ShowTableHead(bool bShow)
 		{
 			ui.tableHeadFrame->setHidden(!bShow);	

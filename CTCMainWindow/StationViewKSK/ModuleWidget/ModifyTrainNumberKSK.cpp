@@ -14,23 +14,30 @@ namespace CTCWindows {
 			ui.OldSetOff->setText(m_pCurTrafficLog->m_strDepartTrainNum);
 
 			connect(ui.Confirm, &QPushButton::clicked, [=]() {
-				m_pCurTrafficLog->m_strArrivalTrainNum = ui.Arrival->text();
-				m_pCurTrafficLog->m_strDepartTrainNum = ui.Setoff->text();//行车日志修改车次号
-			
-				Station::MainStation()->getStaTrainById(m_pCurTrafficLog->m_nTrainId)->m_strTrainNum = ui.Arrival->text();//车次信息修改车次号
+				
 				QByteArray btResult;
-				QMap<QString, QByteArray>m_mapLogValue = { {"arrivalTrainNumber",m_pCurTrafficLog->m_strArrivalTrainNum.toLocal8Bit()},
-				{"departTrainNumber",m_pCurTrafficLog->m_strDepartTrainNum.toLocal8Bit()} };
-				if (Http::HttpClient::ChangeStaTrafficLogData(m_pCurTrafficLog->m_nLogId, m_mapLogValue, btResult)) {
+				Station::StaTrain* pTrain = Station::MainStation()->getStaTrainById(m_pCurTrafficLog->m_nTrainId);
+				if (!pTrain) {
+					return;
+				}
+				QString strTrainNum = (m_pCurTrafficLog->m_nPlanType == 0x02) ? ui.Arrival->text() : ui.OldSetOff->text();
+				if (!Station::MainStation()->ChangeTrainNum(pTrain, strTrainNum)) {
+					return;
+				}
+
+				QMap<QString, QByteArray> m_mapLogValue = { 
+					{ "arrivalTrainNumber", ui.Arrival->text().toLocal8Bit() },
+					{ "departTrainNumber", ui.Setoff->text().toLocal8Bit() }
+				};
+				if (Http::HttpClient::UpdataStaTrafficLogAttr(m_pCurTrafficLog->m_nLogId, m_mapLogValue, btResult)) {
+					m_pCurTrafficLog->m_strArrivalTrainNum = ui.Arrival->text();
+					m_pCurTrafficLog->m_strDepartTrainNum = ui.Setoff->text();
 					emit Station::MainStation()->TrafficLogTableUpData();
 				}
-				//Station::MainStation()->ChangeStaTrafficLogData(m_pCurTrafficLog);
 				emit  Station::MainStation()->TrainRouteUpData();
 				this->close();
-				});
-			connect(ui.Cancel, &QPushButton::clicked, [=]() {
-				this->close();
-				});
+			});
+			connect(ui.Cancel, &QPushButton::clicked, this, &ModifyTrainNumberKSK::close);
 		}
 
 		ModifyTrainNumberKSK::~ModifyTrainNumberKSK()

@@ -65,6 +65,9 @@ namespace Station {
         } break; 
         }
         m_nPosCode = pStagePlan->m_nJJQDCode;
+        m_bElectric = pStagePlan->m_bElectric; //电力
+        m_nOverLimitLevel = pStagePlan->m_nOverLimitLevel; //超限等级
+        m_bFreightTrain = pStagePlan->m_bFreightTrain; //列货类型(列车-false, 货车-true)
     }
 
     StaTrain::StaTrain(StaTrafficLog* TrafficLog)
@@ -95,24 +98,6 @@ namespace Station {
         } break;
         }
         m_bRight = TrafficLog->m_bUpDown && !MainStation()->IsOverturn();
-    }
-
-    void StaTrain::SetMap()
-    {
-        m_mapTrainValue["trainNum"] = m_strTrainNum;
-        m_mapTrainValue["direction"] = QString::number(m_bRight);
-        m_mapTrainValue["trainLength"] = QString::number(m_nTrainLengh);
-        m_mapTrainValue["speed"] = QString::number(m_nSpeed);
-        m_mapTrainValue["electric"] = QString::number(m_bElectric);
-        m_mapTrainValue["overLimitLevel"] = QString::number(m_nOverLimitLevel);
-        m_mapTrainValue["freightTrain"] = QString::number(m_bFreightTrain);
-        m_mapTrainValue["posCode"] = QString::number(m_nPosCode);
-        m_mapTrainValue["trainTypeNumber"] = QString::number(m_nTrainType);
-        m_mapTrainValue["operationTypeNumber"] = QString::number(m_nOperationType);
-        m_mapTrainValue["isRun"] = QString::number(m_bRunning);
-        m_mapTrainValue["army"] = QString::number(m_bArmy);
-        m_mapTrainValue["keynote"] = QString::number(m_bImportant);
-        m_mapTrainValue["trainId"] = QString::number(m_nTrainId);
     }
 
     QString StaTrain::OverLimitLevel()
@@ -173,15 +158,18 @@ namespace Station {
     {
         m_bArrivaRoute = bArrivaRoute;
         m_nTrainId = pTrafficLog->m_nTrainId;
+        m_nLogId = pTrafficLog->m_nLogId;
         if (m_bArrivaRoute) {   //接车
+            m_strTrainNum = pTrafficLog->m_strArrivalTrainNum;
             m_tPlanTime = pTrafficLog->m_tProvArrivalTime;
             m_tTriggerTime = pTrafficLog->m_tProvArrivalTime;
             m_nTrackCode = pTrafficLog->m_nArrivalTrackCode;
             m_strTrack = pTrafficLog->m_strArrivalTrack;
             m_nSignalCode = pTrafficLog->m_nArrivalSignalCode;
-            m_strSignal = pTrafficLog->m_strArrivaSignal;
+            m_strSignal = pTrafficLog->m_strArrivalSignal;
         }
         else {  //发车
+            m_strTrainNum = pTrafficLog->m_strDepartTrainNum;
             m_tPlanTime = pTrafficLog->m_tProvDepartTime;
             m_tTriggerTime = pTrafficLog->m_tProvDepartTime;
             m_nTrackCode = pTrafficLog->m_nDepartTrackCode;
@@ -216,24 +204,26 @@ namespace Station {
     {
         m_nTrackCode = nCode;
         m_strTrack = strName;
+        Device::DeviceBase* pSignal = MainStation()->getDeviceByCode(m_nSignalCode, SIGNALLAMP);
+        if (!pSignal) {
+            return;
+        }
+        Device::DeviceBase* pSignalNew = nullptr;
+        for (int nSignalCode : Station::MainStation()->getTrackAdjSingal()[m_strTrack]) {
+            pSignalNew = MainStation()->getDeviceByCode(nSignalCode, SIGNALLAMP);
+            if (pSignalNew->getSXThroat() == pSignal->getSXThroat()) {
+                m_nSignalCode = nSignalCode;
+                m_strSignal = pSignalNew->getName();
+            }
+        }
         getRouteDescrip();
     }
 
-    void StaTrainRoute::SetMap()
+    void StaTrainRoute::ChangeSignal(int nCode, const QString& strName)
     {
-        m_mapRouteMember["trainId"] = QString::number(m_nTrainId);
-        m_mapRouteMember["arriveRoute"] = QString::number(m_bArrivaRoute);
-        m_mapRouteMember["autoTouch"] = QString::number(m_bAutoTouch);
-        m_mapRouteMember["planTime"] = m_tPlanTime.toString(Qt::ISODate);
-        m_mapRouteMember["triggerTime"] = m_tTriggerTime.toString(Qt::ISODate);
-        m_mapRouteMember["cleanTime"] = m_tCleanTime.toString(Qt::ISODate);
-        m_mapRouteMember["trackCode"] = QString::number(m_nTrackCode);
-        m_mapRouteMember["signalCode"] = QString::number(m_nSignalCode);
-        m_mapRouteMember["routeDepict"] = m_strCurRouteDescrip;
-        m_mapRouteMember["direction"] = m_strDirection;
-        m_mapRouteMember["routeState"] = QString::number(m_nRouteState);
-        m_mapRouteMember["subRouteId"] = QString::number(m_vecSubRouteId.size() - 1);
-        m_mapRouteMember["logId"] = QString::number(m_nLogId);
+        m_nSignalCode = nCode;
+        m_strSignal = strName;
+        getRouteDescrip();
     }
 
     QString StaTrainRoute::getStateStr()
@@ -258,26 +248,14 @@ namespace Station {
         QString strEntrySingal;
         QString strExitSingal;
         for (Device::SignalBtn* pSingalBtn : MainStation()->getSignalBtn()) {
-            
             if (m_bArrivaRoute) {
                 strEntrySingal = pSingalBtn->strBtnNameList[0];
-                if (strEntrySingal == "SJ") {
-                    strExitSingal = pSingalBtn->strBtnNameList[pSingalBtn->strBtnNameList.size() - 2];
-                }
-                else {
-                    strExitSingal = pSingalBtn->strBtnNameList[pSingalBtn->strBtnNameList.size() - 1];
-                }
+                strExitSingal = pSingalBtn->strBtnNameList[pSingalBtn->strBtnNameList.size() - 1];
             }
             else {
                 strExitSingal = pSingalBtn->strBtnNameList[0];
-                if (strExitSingal == "SJ") {
-                    strEntrySingal = pSingalBtn->strBtnNameList[pSingalBtn->strBtnNameList.size() - 2];
-                }
-                else {
-                    strEntrySingal = pSingalBtn->strBtnNameList[pSingalBtn->strBtnNameList.size() - 1];
-                }
+                strEntrySingal = pSingalBtn->strBtnNameList[pSingalBtn->strBtnNameList.size() - 1];
             }
-        
             if (strEntrySingal != m_strSignal) {
                 continue;
             }
@@ -288,17 +266,12 @@ namespace Station {
             for (int nCode : mapTrackAdjSingal[m_strTrack]) {
                 if (nCode == pDevice->getCode()) {
                     QString strDescrip;
-                    if (m_bArrivaRoute) {
-                        strDescrip.append(pSingalBtn->strBtnNameList[0]);
-                        strDescrip.append(",");
-                        strDescrip.append(pDevice->getName());
+                    for (const QString& strSignalBen : pSingalBtn->strBtnNameList) {
+                        strDescrip.append(strSignalBen);
+                        if (strSignalBen != pSingalBtn->strBtnNameList.back()) {
+                            strDescrip.append(",");
+                        }
                     }
-                    else {
-                        strDescrip.append(pDevice->getName());
-                        strDescrip.append(",");
-                        strDescrip.append(pSingalBtn->strBtnNameList[pSingalBtn->strBtnNameList.size()-1]);
-                    }
-                    qDebug() << strDescrip;
                     m_strRouteDescripList.append(strDescrip);
                     break;
                 }
@@ -309,10 +282,66 @@ namespace Station {
         }
     }
 
+    QVector<StaTrainRoute*> StaTrainRoute::getSubTrainRouteList()
+    {
+        QVector<StaTrainRoute*> vecSubTrainRouteList;
+        vecSubTrainRouteList.append(this);
+        for (int nSubRouteId : m_vecSubRouteId) {
+            vecSubTrainRouteList.append(MainStation()->getStaTrainRouteById(nSubRouteId)->getSubTrainRouteList());
+        }
+        return vecSubTrainRouteList;
+    }
+
+    StaTrainRoute* StaTrainRoute::getRelatedTrainRoute()
+    {
+        for (StaTrainRoute* pRoute : MainStation()->TrainRouteList()) {
+            if (pRoute == this) {
+                continue;
+            }
+            if (pRoute->m_nTrainId == this->m_nTrainId && !pRoute->m_bSunTrainRoute) {
+                return pRoute;
+            }
+        }
+        return nullptr;
+    }
+
+    QString StaTrainRoute::getTrainNum()
+    {
+        if (m_strTrainNum.isEmpty()) {
+            StaTrafficLog* pTrafficLog = MainStation()->getStaTrafficLogById(m_nLogId);
+            if (pTrafficLog) {
+                if (m_bArrivaRoute) {
+                    m_strTrainNum = pTrafficLog->m_strArrivalTrainNum;
+                }
+                else {
+                    m_strTrainNum = pTrafficLog->m_strDepartTrainNum;
+                }
+            }
+        }
+        
+        return m_strTrainNum;
+    }
+
+    bool StaTrainRoute::IsThrough()
+    {
+        StaTrafficLog* pTrafficLog = MainStation()->getStaTrafficLogById(m_nLogId);
+        if (pTrafficLog) {
+            if (m_bArrivaRoute) {
+                m_strTrainNum = pTrafficLog->m_strArrivalTrainNum;
+            }
+            else {
+                m_strTrainNum = pTrafficLog->m_strDepartTrainNum;
+            }
+            return (pTrafficLog->m_nPlanType == 0x04);
+        }
+        return false;
+    }
+
     void StaTrainRoute::Init(StaTrainRoute* pTrainRoute, const QJsonObject& subObj)
     {
         pTrainRoute->m_nRouteId = subObj.value("routeId").toInt();
         pTrainRoute->m_nTrainId = subObj.value("trainId").toInt();
+        pTrainRoute->m_nLogId = subObj.value("logId").toInt();
         pTrainRoute->m_bArrivaRoute = subObj.value("arriveRoute").toInt();
         pTrainRoute->m_bAutoTouch = subObj.value("autoTouch").toInt();
 
@@ -328,13 +357,14 @@ namespace Station {
         pTrainRoute->m_strCurRouteDescrip = subObj.value("routeDepict").toString();
         pTrainRoute->m_strDirection = subObj.value("direction").toString();
         pTrainRoute->m_nRouteState = subObj.value("routeState").toInt();
-
+        pTrainRoute->getRouteDescrip();
         QStringList strSubRoute = subObj.value("subRouteId").toString().split(',');
         for (QString strRouteId : strSubRoute) {
             if (strRouteId.toInt() != 0) {
                 pTrainRoute->m_vecSubRouteId.append(strRouteId.toInt());
             }
         }
+        
     }
 
     void StaTrainDispatch::Init(StaTrainDispatch* pTrainDispatch, const QJsonObject& subObj)
@@ -399,7 +429,7 @@ namespace Station {
         m_nArrivalTrackCode = pStaStagePlan->m_nArrivalTrackCode;
         m_strArrivalTrack = pStaStagePlan->m_strArrivalTrack;
         m_nArrivalSignalCode = pStaStagePlan->m_nEntrySignalCode;
-        m_strArrivaSignal = pStaStagePlan->m_strEntrySignal;
+        m_strArrivalSignal = pStaStagePlan->m_strEntrySignal;
         m_tProvArrivalTime = pStaStagePlan->m_tArrivalTime;
 
         m_strDepartTrainNum = pStaStagePlan->m_strDepartTrainNum;
@@ -413,69 +443,6 @@ namespace Station {
         }
     }
 
-    void StaTrafficLog::SetMap()
-    {
-        m_mapLogMember["trainId"] = QString::number(m_nTrainId);
-        m_mapLogMember["planType"] = QString::number(m_nPlanType);
-        m_mapLogMember["arrivalTrainNumber"] = m_strArrivalTrainNum;
-        m_mapLogMember["arrivalTrack"] = QString::number(m_nArrivalTrackCode);
-        m_mapLogMember["provArrivalTime"] = m_tProvArrivalTime.toString(Qt::ISODate);
-        m_mapLogMember["realArrivalTime"] = m_tRealArrivalTime.toString(Qt::ISODate);
-        m_mapLogMember["homeSignalCode"] = QString::number(m_nArrivalSignalCode);
-        m_mapLogMember["agrAdjDepartTime"] = m_tAgrAdjDepartTime.toString(Qt::ISODate);
-        m_mapLogMember["adjDepartTime"] = m_tAdjDepartTime.toString(Qt::ISODate);
-        m_mapLogMember["arrivalLimit"] = QString::number(m_nArrivalLimit);
-        m_mapLogMember["arrivalRouteId"] = QString::number(m_nArrivalRouteId);
-        m_mapLogMember["arrivalLocomotive"] = m_strArrivalLocomotive;
-        m_mapLogMember["arrivalDriver"] = m_strArrivalDriver;
-        m_mapLogMember["arrivalLength"] = m_nArrivalTrainMaster;
-        m_mapLogMember["arrivalTrainNum"] = QString::number(m_nArrivalTrainValue); 
-        m_mapLogMember["arrivalChange"] = QString::number(m_nArrivalChange);
-        m_mapLogMember["arrivalWeight"] = QString::number(m_nArrivalWeight);
-
-        m_mapLogMember["departTrainNumber"] = m_strDepartTrainNum;
-        m_mapLogMember["departTrack"] = QString::number(m_nDepartTrackCode);
-        m_mapLogMember["provDepartTime"] = m_tProvDepartTime.toString(Qt::ISODate);
-        m_mapLogMember["realDepartTime"] = m_tRealDepartTime.toString(Qt::ISODate);
-        m_mapLogMember["startingSignalCode"] = QString::number(m_nDepartSignalCode);
-        m_mapLogMember["adjAgrDepartTime"] = m_tAdjAgrDepartTime.toString(Qt::ISODate);
-        m_mapLogMember["adjArrivalTime"] = m_tAdjArrivalTime.toString(Qt::ISODate);
-        m_mapLogMember["delayReason"] = m_strDelayReason;
-        m_mapLogMember["departLimit"] = QString::number(m_nDepartLimit);
-        m_mapLogMember["departRouteId"] = QString::number(m_nDepartRouteId);
-        m_mapLogMember["departLocomotive"] = m_strDepartLocomotive;
-        m_mapLogMember["departDriver"] = m_strDepartDriver;
-        m_mapLogMember["departLength"] = m_nDepartTrainMaster;
-        m_mapLogMember["departTrainNum"] = QString::number(m_nDepartTrainValue);
-        m_mapLogMember["departChange"] = QString::number(m_nDepartChange);
-        m_mapLogMember["departWeight"] = QString::number(m_nDepartWeight);
-
-        m_mapLogMember["upDown"] = QString::number(m_bUpDown);
-        m_mapLogMember["deleteFlag"] = QString::number(m_bDeleteFlag);
-        m_mapLogMember["notes"] = m_strNotes;
-        m_mapLogMember["passenger"] = QString::number(m_bPassenger);
-
-        m_mapLogMember["allowTrackNotMatch"] = QString::number(m_bAllowTrackNotMatch);
-        m_mapLogMember["allowSignalNotMatch"] = QString::number(m_bAllowSignalNotMatch);
-        m_mapLogMember["ljStatus"] = QString::number(m_bLJStatus);
-        m_mapLogMember["jpStatus"] = QString::number(m_bJPStatus);
-        m_mapLogMember["lwStatus"] = QString::number(m_bLWStatus);
-        m_mapLogMember["jcStatus"] = QString::number(m_bJCStatus);
-        m_mapLogMember["hjStatus"] = QString::number(m_bHJStatus);
-        m_mapLogMember["cjStatus"] = QString::number(m_bCJStatus);
-        m_mapLogMember["ssStatus"] = QString::number(m_bSSStatus);
-        m_mapLogMember["zgStatus"] = QString::number(m_bZGStatus);
-        m_mapLogMember["hcStatus"] = QString::number(m_bHCStatus);
-        m_mapLogMember["zxStatus"] = QString::number(m_bZXStatus);
-        m_mapLogMember["xwStatus"] = QString::number(m_bXWStatus);
-        m_mapLogMember["dkStatus"] = QString::number(m_bDKStatus);
-        m_mapLogMember["chStatus"] = QString::number(m_bCHStatus);
-        m_mapLogMember["zwStatus"] = QString::number(m_bZWStatus);
-        m_mapLogMember["zkStatus"] = QString::number(m_bZKStatus);
-        m_mapLogMember["trainPosStatus"] = m_strTrainPosStatus;
-        m_mapLogMember["proc"] = m_strProc;
-        m_mapLogMember["strTrainArr"] = m_strTrainArr;
-    }
     bool StaTrafficLog::IsReportedPoints()
     {
         return m_tRealArrivalTime.isNull() && m_tAgrAdjDepartTime.isNull()
@@ -495,7 +462,7 @@ namespace Station {
             pTrafficLog->m_nArrivalTrackCode = subObj.value("arrivalTrack").toInt();
             pTrafficLog->m_strArrivalTrack = MainStation()->getDeviceByCode(pTrafficLog->m_nArrivalTrackCode, TRACK)->getName();
             pTrafficLog->m_nArrivalSignalCode = subObj.value("homeSignalCode").toInt();
-            pTrafficLog->m_strArrivaSignal = MainStation()->getDeviceByCode(pTrafficLog->m_nArrivalSignalCode, SIGNALLAMP)->getName();
+            pTrafficLog->m_strArrivalSignal = MainStation()->getDeviceByCode(pTrafficLog->m_nArrivalSignalCode, SIGNALLAMP)->getName();
             pTrafficLog->m_tProvArrivalTime = QDateTime::fromString(subObj.value("provArrivalTime").toString(), Qt::ISODate);
             pTrafficLog->m_tRealArrivalTime = QDateTime::fromString(subObj.value("realArrivalTime").toString(), Qt::ISODate);
             pTrafficLog->m_tAgrAdjDepartTime = QDateTime::fromString(subObj.value("agrAdjDepartTime").toString(), Qt::ISODate);
@@ -532,12 +499,12 @@ namespace Station {
 
         pTrafficLog->m_strDelayReason = subObj.value("delayReason").toString();
         pTrafficLog->m_bUpDown = subObj.value("upDown").toBool();
-        pTrafficLog->m_bDeleteFlag = subObj.value("deleteFlag").toInt();
+        pTrafficLog->m_bDeleteFlag = subObj.value("deleteFlag").toBool();
         pTrafficLog->m_strTrainArr = subObj.value("strTrainArr").toString();
         pTrafficLog->m_strNotes = subObj.value("notes").toString();
         pTrafficLog->m_bPassenger = subObj.value("passenger").toBool();
-        pTrafficLog->m_bAllowTrackNotMatch = subObj.value("allowTrackNotMatch").toInt();
-        pTrafficLog->m_bAllowSignalNotMatch = subObj.value("allowSignalNotMatch").toInt();
+        pTrafficLog->m_bAllowTrackNotMatch = subObj.value("allowTrackNotMatch").toBool();
+        pTrafficLog->m_bAllowSignalNotMatch = subObj.value("allowSignalNotMatch").toBool();
 
         pTrafficLog->m_bLJStatus = subObj.value("ljStatus").toBool();
         pTrafficLog->m_bJLStatus = subObj.value("jlStatus").toBool();
