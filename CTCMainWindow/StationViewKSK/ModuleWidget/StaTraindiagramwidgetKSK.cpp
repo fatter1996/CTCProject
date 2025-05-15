@@ -10,7 +10,7 @@ namespace CTCWindows {
             ui.setupUi(this);
             ui.diagramWidget->installEventFilter(this);
             ui.stationWidget->installEventFilter(this);
-
+            InitTraindiagramw();
         }
 
         StaTrainDiagramWidgetKSK::~StaTrainDiagramWidgetKSK()
@@ -296,7 +296,9 @@ namespace CTCWindows {
             int nOffset = 0;
             int nMiddleX = 0;
             int min = 0;
-
+            if (pRoute==nullptr) {
+                return;
+            }
             if (pRoute->m_bArrivaRoute) {
 
                 if (pTrafficLog->m_tRealArrivalTime.isNull()) {

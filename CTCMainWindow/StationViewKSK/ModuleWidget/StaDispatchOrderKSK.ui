@@ -98,7 +98,7 @@
           <number>12</number>
          </property>
          <item>
-          <widget class="QWidget" name="widget" native="true">
+          <widget class="QWidget" name="stationReceive" native="true">
            <property name="minimumSize">
             <size>
              <width>64</width>
@@ -163,7 +163,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QWidget" name="widget_2" native="true">
+          <widget class="QWidget" name="stationAdvancereceipt" native="true">
            <property name="minimumSize">
             <size>
              <width>64</width>
@@ -274,7 +274,7 @@
           <number>12</number>
          </property>
          <item>
-          <widget class="QWidget" name="widget_4" native="true">
+          <widget class="QWidget" name="Dispatchsend" native="true">
            <property name="minimumSize">
             <size>
              <width>64</width>
@@ -339,7 +339,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QWidget" name="widget_5" native="true">
+          <widget class="QWidget" name="Dispatchstorage" native="true">
            <property name="minimumSize">
             <size>
              <width>64</width>
@@ -404,7 +404,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QWidget" name="widget_6" native="true">
+          <widget class="QWidget" name="Dispatchtobesend" native="true">
            <property name="minimumSize">
             <size>
              <width>64</width>
@@ -512,7 +512,7 @@
           <number>12</number>
          </property>
          <item>
-          <widget class="QWidget" name="widget_7" native="true">
+          <widget class="QWidget" name="Locomotivesend" native="true">
            <property name="minimumSize">
             <size>
              <width>64</width>
@@ -577,7 +577,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QWidget" name="widget_8" native="true">
+          <widget class="QWidget" name="Locomotivestorage" native="true">
            <property name="minimumSize">
             <size>
              <width>64</width>
@@ -642,7 +642,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QWidget" name="widget_9" native="true">
+          <widget class="QWidget" name="Locomotivetobesend" native="true">
            <property name="minimumSize">
             <size>
              <width>64</width>
@@ -813,7 +813,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QFrame" name="frame">
+        <widget class="QFrame" name="stationframe">
          <property name="minimumSize">
           <size>
            <width>0</width>
@@ -876,7 +876,7 @@ background-color: rgb(250, 250, 250);</string>
             <number>8</number>
            </property>
            <item>
-            <widget class="QFrame" name="frame_2">
+            <widget class="QFrame" name="Copyframe">
              <property name="frameShape">
               <enum>QFrame::StyledPanel</enum>
              </property>
@@ -950,7 +950,7 @@ background-color: rgb(250, 250, 250);</string>
             </layout>
            </item>
            <item>
-            <widget class="QFrame" name="frame_3">
+            <widget class="QFrame" name="readframe">
              <property name="frameShape">
               <enum>QFrame::StyledPanel</enum>
              </property>
@@ -1174,7 +1174,7 @@ background-color: rgb(250, 250, 250);</string>
         </widget>
        </item>
        <item>
-        <widget class="QFrame" name="frame_4">
+        <widget class="QFrame" name="Dispatchframe">
          <property name="minimumSize">
           <size>
            <width>0</width>
@@ -1229,7 +1229,7 @@ background-color: rgb(250, 250, 250);</string>
           </widget>
          </item>
          <item>
-          <widget class="QFrame" name="frame_5">
+          <widget class="QFrame" name="DispatchReceiveframe">
            <property name="frameShape">
             <enum>QFrame::Panel</enum>
            </property>
@@ -1392,7 +1392,7 @@ background-color: rgb(250, 250, 250);</string>
         </widget>
        </item>
        <item>
-        <widget class="QFrame" name="frame_7">
+        <widget class="QFrame" name="Locomotiveframe">
          <property name="minimumSize">
           <size>
            <width>0</width>
@@ -1447,7 +1447,7 @@ background-color: rgb(250, 250, 250);</string>
           </widget>
          </item>
          <item>
-          <widget class="QFrame" name="frame_6">
+          <widget class="QFrame" name="LocomotiveReceiveframe">
            <property name="frameShape">
             <enum>QFrame::Panel</enum>
            </property>

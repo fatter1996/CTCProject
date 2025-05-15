@@ -64,7 +64,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QComboBox" name="comboBox">
+          <widget class="QComboBox" name="stationname">
            <property name="minimumSize">
             <size>
              <width>138</width>
@@ -103,7 +103,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QLineEdit" name="lineEdit">
+          <widget class="QLineEdit" name="Arrival">
            <property name="maximumSize">
             <size>
              <width>173</width>
@@ -130,7 +130,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QComboBox" name="comboBox_2">
+          <widget class="QComboBox" name="traintype">
            <property name="minimumSize">
             <size>
              <width>137</width>
@@ -146,7 +146,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="pushButton">
+          <widget class="QPushButton" name="Match">
            <property name="maximumSize">
             <size>
              <width>73</width>
@@ -182,7 +182,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QComboBox" name="comboBox_3">
+          <widget class="QComboBox" name="Reach">
            <property name="maximumSize">
             <size>
              <width>174</width>
@@ -237,7 +237,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QComboBox" name="comboBox_4"/>
+          <widget class="QComboBox" name="pickup"/>
          </item>
         </layout>
        </item>
@@ -260,7 +260,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QComboBox" name="comboBox_5"/>
+          <widget class="QComboBox" name="Come"/>
          </item>
         </layout>
        </item>
@@ -283,7 +283,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QComboBox" name="comboBox_6"/>
+          <widget class="QComboBox" name="pickupTrack"/>
          </item>
         </layout>
        </item>
@@ -303,10 +303,10 @@
           </widget>
          </item>
          <item>
-          <widget class="QDateTimeEdit" name="dateTimeEdit"/>
+          <widget class="QDateTimeEdit" name="arrivaltime"/>
          </item>
          <item>
-          <widget class="QCheckBox" name="checkBox">
+          <widget class="QCheckBox" name="startbegin">
            <property name="text">
             <string>始发</string>
            </property>
@@ -361,7 +361,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QLineEdit" name="lineEdit_2">
+          <widget class="QLineEdit" name="setoff">
            <property name="maximumSize">
             <size>
              <width>173</width>
@@ -391,7 +391,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QComboBox" name="comboBox_7">
+          <widget class="QComboBox" name="runtype">
            <property name="maximumSize">
             <size>
              <width>151</width>
@@ -421,7 +421,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QComboBox" name="comboBox_8">
+          <widget class="QComboBox" name="Departure">
            <property name="maximumSize">
             <size>
              <width>151</width>
@@ -476,7 +476,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QComboBox" name="comboBox_9">
+          <widget class="QComboBox" name="hair">
            <property name="maximumSize">
             <size>
              <width>151</width>
@@ -506,7 +506,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QComboBox" name="comboBox_10">
+          <widget class="QComboBox" name="Head">
            <property name="maximumSize">
             <size>
              <width>151</width>
@@ -536,7 +536,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QComboBox" name="comboBox_11">
+          <widget class="QComboBox" name="hairtrack">
            <property name="maximumSize">
             <size>
              <width>151</width>
@@ -560,10 +560,10 @@
           </widget>
          </item>
          <item>
-          <widget class="QDateTimeEdit" name="dateTimeEdit_2"/>
+          <widget class="QDateTimeEdit" name="departuretime"/>
          </item>
          <item>
-          <widget class="QCheckBox" name="checkBox_2">
+          <widget class="QCheckBox" name="theend">
            <property name="text">
             <string>终到</string>
            </property>
@@ -581,28 +581,28 @@
       <number>0</number>
      </property>
      <item>
-      <widget class="QCheckBox" name="checkBox_3">
+      <widget class="QCheckBox" name="electricity">
        <property name="text">
         <string>电力</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QCheckBox" name="checkBox_4">
+      <widget class="QCheckBox" name="passenger">
        <property name="text">
         <string>办理客运</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QCheckBox" name="checkBox_5">
+      <widget class="QCheckBox" name="imp">
        <property name="text">
         <string>重点列车</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QCheckBox" name="checkBox_6">
+      <widget class="QCheckBox" name="army">
        <property name="text">
         <string>军运</string>
        </property>
@@ -616,14 +616,14 @@
       <number>0</number>
      </property>
      <item>
-      <widget class="QCheckBox" name="checkBox_7">
+      <widget class="QCheckBox" name="railwaytrack">
        <property name="text">
         <string>允许股道与基本径路不一致</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QCheckBox" name="checkBox_8">
+      <widget class="QCheckBox" name="exit">
        <property name="text">
         <string>允许出入口与基本径路不一致</string>
        </property>
@@ -637,7 +637,7 @@
       <number>0</number>
      </property>
      <item>
-      <widget class="QPushButton" name="pushButton_2">
+      <widget class="QPushButton" name="sure">
        <property name="maximumSize">
         <size>
          <width>100</width>
@@ -650,7 +650,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="pushButton_3">
+      <widget class="QPushButton" name="cancel">
        <property name="maximumSize">
         <size>
          <width>100</width>

@@ -37,7 +37,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QLineEdit" name="lineEdit"/>
+       <widget class="QLineEdit" name="Content"/>
       </item>
      </layout>
     </item>
@@ -53,7 +53,7 @@
          </widget>
         </item>
         <item>
-         <widget class="QComboBox" name="comboBox">
+         <widget class="QComboBox" name="fontcolor">
           <item>
            <property name="text">
             <string>黑色</string>
@@ -100,7 +100,7 @@
        </layout>
       </item>
       <item>
-       <widget class="QComboBox" name="comboBox_2">
+       <widget class="QComboBox" name="backgroundcolor">
         <item>
          <property name="text">
           <string>白色</string>
@@ -138,7 +138,7 @@
     <item>
      <layout class="QHBoxLayout" name="horizontalLayout_3">
       <item>
-       <widget class="QPushButton" name="pushButton">
+       <widget class="QPushButton" name="sure">
         <property name="maximumSize">
          <size>
           <width>70</width>
@@ -151,7 +151,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="pushButton_2">
+       <widget class="QPushButton" name="Cancel">
         <property name="maximumSize">
          <size>
           <width>70</width>

@@ -17,10 +17,12 @@ namespace CTCWindows {
 			void AddTrafficLogTable() override;
 			void OnTrafficLogTableUpData() override;
 			void ClickMenu(QPoint pos, Station::StaTrafficLog* m_pCurTrafficLog) override;
+			void SetPlanType(bool Type, Station::StaTrafficLog* m_pCurTrafficLog);
 		public slots:
 			void ShowTableHead(bool bShow = true) override;
 
 		private:
+			bool Check = false;
 			Ui::StationLogDispKSK ui;
 		};
 	}

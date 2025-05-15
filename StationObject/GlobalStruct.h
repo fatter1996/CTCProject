@@ -1,7 +1,7 @@
 #pragma once
 #include <QObject>
 #include <QDateTime>
-
+#include <QMap>
 #define ROUTE_TYPE_ARRIVAL	true
 #define ROUTE_TYPE_DEPART	false
 
@@ -140,6 +140,8 @@ namespace Station {
 		StaTrain() {}
 		StaTrain(StaStagePlan* pStagePlan);
 		StaTrain(StaTrafficLog* pTrafficLog);
+		QMap<QString, QString> m_mapTrainValue;
+		void SetMap();
 		QString OverLimitLevel();
 		static void Init(StaTrain* pTrain, const QJsonObject& subObj);
 	};
@@ -211,8 +213,10 @@ namespace Station {
 		StaTrainRoute(StaTrafficLog* pTrafficLog, bool bArrivaRoute);
 
 	public:
+		QMap<QString, QString> m_mapRouteMember;
 		static void Init(StaTrainRoute* pTrainRoute, const QJsonObject& subObj);
 		void ChangeTrack(int nCode, const QString& strName);
+		void SetMap();
 		QString getStateStr();
 		void getRouteDescrip();
 	};
@@ -334,6 +338,8 @@ namespace Station {
 	public:
 		StaTrafficLog() {}
 		StaTrafficLog(StaStagePlan* pStaStagePlan, int nTrainId);
+		QMap<QString, QString> m_mapLogMember;
+		void SetMap();
 		bool IsReportedPoints();
 		static void Init(StaTrafficLog* pTrafficLog, const QJsonObject& subObj);
 	};

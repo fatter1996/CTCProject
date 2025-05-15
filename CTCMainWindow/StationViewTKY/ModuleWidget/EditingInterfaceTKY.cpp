@@ -10,11 +10,11 @@ namespace CTCWindows {
 		{
 			ui.setupUi(this);
 
-			connect(ui.pushButton, &QPushButton::clicked, [=] {
-				m_pTextSign->InitTextSign(ui.lineEdit->text(), m_pTextSign->getShowPos(), getColor(ui.comboBox->currentIndex()), getColor(ui.comboBox_2->currentIndex()));
+			connect(ui.sure, &QPushButton::clicked, [=] {
+				m_pTextSign->InitTextSign(ui.Content->text(), m_pTextSign->getShowPos(), getColor(ui.fontcolor->currentIndex()), getColor(ui.backgroundcolor->currentIndex()));
 				this->close();
 			});
-			connect(ui.pushButton_2, &QPushButton::clicked, this, &EditingInterfaceTKY::close);
+			connect(ui.Cancel, &QPushButton::clicked, this, &EditingInterfaceTKY::close);
 		}
 
 		EditingInterfaceTKY::~EditingInterfaceTKY()
@@ -24,7 +24,7 @@ namespace CTCWindows {
 
 		void EditingInterfaceTKY::setLinEditText(Station::Device::StaTextSign* pTextSign)
 		{
-			ui.lineEdit->setPlaceholderText(pTextSign->getText());
+			ui.Content->setPlaceholderText(pTextSign->getText());
 			m_pTextSign = pTextSign;
 		}
 

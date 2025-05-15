@@ -257,9 +257,14 @@ namespace CTCWindows {
 						return;
 					}
 					QByteArray btResult;
-					if (Http::HttpClient::ChangeRoute(pTrainRoute->m_nRouteId, strRoute, btResult)) {
-						pTrainRoute->m_strCurRouteDescrip = strRoute;
+					pTrainRoute->m_strCurRouteDescrip = strRoute;
+					QMap<QString, QByteArray> m_mapRoute = { {"routeDepict",pTrainRoute->m_strCurRouteDescrip.toLocal8Bit() } };
+					if (Http::HttpClient::ChangeStaTraffRouteData(pTrainRoute->m_nRouteId, m_mapRoute, btResult)) {
+						emit  MainStation()->TrainRouteUpData();
 					}
+					//if (Http::HttpClient::ChangeRoute(pTrainRoute->m_nRouteId, strRoute, btResult)) {
+					//	pTrainRoute->m_strCurRouteDescrip = strRoute;
+					//}
 					OnTrainRouteUpData();
 				});
 			}
@@ -353,20 +358,28 @@ namespace CTCWindows {
 							for (int nSubRouteId : pTrainRoute->m_vecSubRouteId) {
 								pSubTrainRoute = MainStation()->getStaTrainRouteById(nSubRouteId);
 								MainStation()->SendPacketMsg(TARGET_INTERLOCK, 0x61, pSubTrainRoute->m_nRouteId, 0x02);
-								
-								pSubTrainRoute->m_nRouteState = 1;
-								if (Http::HttpClient::UpdataRouteState(pTrainRoute->m_nRouteId, pSubTrainRoute->m_nRouteState, btResult)) {
-									//MainStation()->TrainRouteList().removeOne(pTrainRoute);
+								pTrainRoute->m_nRouteState = 1;
+								QMap<QString, QByteArray> m_mapRoute = { {"routeState",QByteArray::number(pTrainRoute->m_nRouteState)} };
+
+								//MainStation()->ChangeStaTraffRouteData(pTrainRoute, m_mapRoute);
+								if (Http::HttpClient::ChangeStaTraffRouteData(pTrainRoute->m_nRouteId, m_mapRoute, btResult)) {
+									emit  MainStation()->TrainRouteUpData();
 								}
+								//if (Http::HttpClient::UpdataRouteState(pTrainRoute->m_nRouteId, pSubTrainRoute->m_nRouteState, btResult)) {
+								//	//MainStation()->TrainRouteList().removeOne(pTrainRoute);
+								//}
 							}
 						}
 						else {
 							MainStation()->SendPacketMsg(TARGET_INTERLOCK, 0x61, pTrainRoute->m_nRouteId, 0x02);
 							QByteArray btResult;
-							pTrainRoute->m_nRouteState = 1;
-							if (Http::HttpClient::UpdataRouteState(pTrainRoute->m_nRouteId, pTrainRoute->m_nRouteState, btResult)) {
-								//MainStation()->TrainRouteList().removeOne(pTrainRoute);
+							QMap<QString, QByteArray> m_mapRoute = { {"routeState",QByteArray::number(pTrainRoute->m_nRouteState)} };
+							if (Http::HttpClient::ChangeStaTraffRouteData(pTrainRoute->m_nRouteId, m_mapRoute, btResult)) {
+								emit  MainStation()->TrainRouteUpData();
 							}
+							//if (Http::HttpClient::UpdataRouteState(pTrainRoute->m_nRouteId, pTrainRoute->m_nRouteState, btResult)) {
+							//	//MainStation()->TrainRouteList().removeOne(pTrainRoute);
+							//}
 						}
 						emit MainStation()->TrainRouteUpData();
 					}
@@ -425,10 +438,18 @@ namespace CTCWindows {
 			if (pTrack) {
 				QByteArray btResult;
 				for (StaTrainRoute* pRoute : vecTempRouteOrder) {
-					if (Http::HttpClient::ChangeRouteTrack(pRoute->m_nRouteId, pTrack->getCode(), btResult)) {
-						pRoute->ChangeTrack(pTrack->getCode(), pTrack->getName());
+					pRoute->ChangeTrack(pTrack->getCode(), pTrack->getName());
+					pRoute->m_nTrackCode = pTrack->getCode();
+					pRoute->m_strTrack = pTrack->getName();
+					pRoute->getRouteDescrip();
+					QMap<QString, QByteArray> m_mapRoute = { {"trackCode",QByteArray::number(pRoute->m_nTrackCode)} ,{"direction",pRoute->m_strDirection.toLocal8Bit()} };
+					if (Http::HttpClient::ChangeStaTraffRouteData(pRoute->m_nRouteId, m_mapRoute, btResult)) {
 						MainStation()->SendPacketMsg(TARGET_INTERLOCK, 0x61, pRoute->m_nRouteId, 0x04);
 					}
+					//if (Http::HttpClient::ChangeRouteTrack(pRoute->m_nRouteId, pTrack->getCode(), btResult)) {
+					//	
+					//	MainStation()->SendPacketMsg(TARGET_INTERLOCK, 0x61, pRoute->m_nRouteId, 0x04);
+					//}
 				}
 				OnTrainRouteUpData();
 			}
@@ -442,9 +463,14 @@ namespace CTCWindows {
 			}
 
 			QByteArray btResult;
-			if (Http::HttpClient::ChangeTriggerType(pTrainRoute->m_nRouteId, bAutoTouch ? 1 : 2, btResult)) {
-				pTrainRoute->m_bAutoTouch = bAutoTouch;
-			}
+			pTrainRoute->m_bAutoTouch = bAutoTouch ? 1 : 2;
+
+			QMap<QString, QByteArray> m_mapRoute = { {"autoTouch",QByteArray::number(pTrainRoute->m_bAutoTouch)} };
+			Http::HttpClient::ChangeStaTraffRouteData(pTrainRoute->m_nRouteId, m_mapRoute, btResult);
+				
+			//if (Http::HttpClient::ChangeTriggerType(pTrainRoute->m_nRouteId, bAutoTouch ? 1 : 2, btResult)) {
+			//	pTrainRoute->m_bAutoTouch = bAutoTouch;
+			//}
 			OnTrainRouteUpData();
 		}
 

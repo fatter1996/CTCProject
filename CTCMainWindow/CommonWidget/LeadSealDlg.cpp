@@ -137,7 +137,19 @@ namespace CTCWindows {
 				ui.tiplabel->setText("ÐÞ¸Ä³µ´ÎºÅ");
 				InitChangeTrainNum(pTrain);
 				connect(ui.confirmBtn, &QPushButton::clicked, [=]() {
-					m_bResult = Station::MainStation()->ChangeTrainNum(pTrain, m_pCurrLineEdit->text());
+					pTrain->m_strTrainNum = m_pCurrLineEdit->text();
+
+					QByteArray btResult;
+					QMap<QString, QByteArray>m_mapTrain = { {"trainNum", pTrain->m_strTrainNum.toLocal8Bit()} };
+
+					if (Http::HttpClient::ChangeStaTrain(pTrain->m_nTrainId, m_mapTrain, btResult)) {
+						emit Station::MainStation()->SendDataToTCP(Station::MainStation()->getPack()->PackOrder(TARGET_INTERLOCK, 0x60, pTrain->m_nTrainId, 0x08));
+						m_bResult = true;
+					}
+					else {
+						m_bResult = false;
+					}
+					//m_bResult = Station::MainStation()->ChangeTrainNum(pTrain, m_pCurrLineEdit->text());
 					this->close();
 				});
 			}
@@ -286,7 +298,23 @@ namespace CTCWindows {
 		setFixedHeight(360);
 
 		connect(ui.confirmBtn, &QPushButton::clicked, [=]() {
-			m_bResult = Station::MainStation()->ChangeTrainAttr(pTrain, pEdit2->text().toInt(), pEdit3->text(), pCheckBox1->isChecked());
+			QByteArray btResult;
+			pTrain->m_nSpeed = pEdit2->text().toInt();
+			pTrain->m_strLocomotive = pEdit3->text();
+
+			pTrain->m_bElectric = pCheckBox1->isChecked();
+			QMap<QString, QByteArray>m_mapTrain = { {"strLocomotive", pTrain->m_strLocomotive.toLocal8Bit()},
+				{"speed",QByteArray::number(pTrain->m_nSpeed)},
+				{"electric",QByteArray::number(pTrain->m_bElectric)}};
+
+			if (Http::HttpClient::ChangeStaTrain(pTrain->m_nTrainId, m_mapTrain, btResult)) {
+				emit Station::MainStation()->SendDataToTCP(Station::MainStation()->getPack()->PackOrder(TARGET_INTERLOCK, 0x60, pTrain->m_nTrainId, 0x08));
+				m_bResult = true;
+			}
+			else {
+				m_bResult = false;
+			}
+			//m_bResult = Station::MainStation()->ChangeTrainAttr(pTrain, pEdit2->text().toInt(), pEdit3->text(), pCheckBox1->isChecked());
 			this->close();
 		});
 	}

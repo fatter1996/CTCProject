@@ -2,8 +2,8 @@
 
 #include <QWidget>
 #include "ui_StaAddNewTrainKSK.h"
-#include <QCloseEvent>
-#include "Global.h"
+#include "StationObject/GlobalStruct.h"
+
 namespace CTCWindows {
 	namespace CASCO {
 		class StaAddNewTrainKSK : public QWidget
@@ -13,19 +13,15 @@ namespace CTCWindows {
 		public:
 			StaAddNewTrainKSK(QWidget* parent = nullptr);
 			~StaAddNewTrainKSK();
-			void InitAddView(Station::StaTrafficLog* m_pCurTrafficLog);
+
+		public:
 			void InitAddView();
+			void InitAddView(Station::StaTrafficLog* m_pCurTrafficLog);
 			void ConnectEvent();
-			void AddNewTrafficLog();
-			void GetNowTime();
-			void ClearWidget();
-			void closeEvent(QCloseEvent* event);
+			void AddNewTrafficLog(Station::StaTrafficLog* pTrafficLog);
+
 		private:
-			bool begin = true;
-			bool end = true;
-			QMap<int, QString> m_mapPassengeTrain;
-			QMap<int, QString> m_mapFreighTrain;
-			QMap<int, QString> m_mapTrainType;
+			Station::StaTrafficLog* m_pTrafficLog = nullptr;
 			Ui::StaAddNewTrainKSKClass ui;
 		};
 	}

@@ -440,10 +440,17 @@ namespace Station {
                 StaTrainRoute* pTrainRoute = MainStation()->getStaTrainRouteById(dataAyyay[12]);
                 if (pTrainRoute) {
                     QByteArray btResult;
-                    if (Http::HttpClient::ChangeTriggerType(dataAyyay[12], dataAyyay[13], btResult)) {
-                        pTrainRoute->m_nRouteState = dataAyyay[13];
+                    pTrainRoute->m_nRouteState = dataAyyay[13];
+                    QMap<QString, QByteArray> m_mapRoute = { {"trainId",QByteArray::number(pTrainRoute->m_nTrainId)}, 
+                        {"autoTouch",QByteArray::number(pTrainRoute->m_nRouteState)}};
+
+                    if (Http::HttpClient::ChangeStaTraffRouteData(pTrainRoute->m_nTrainId, m_mapRoute, btResult)) {
                         emit Station::MainStation()->TrainRouteUpData();
                     }
+                   // if (Http::HttpClient::ChangeTriggerType(dataAyyay[12], dataAyyay[13], btResult)) {
+                   //     
+                   //     emit Station::MainStation()->TrainRouteUpData();
+                   // }
                 }
             }
             return QByteArray();

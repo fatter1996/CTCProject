@@ -283,7 +283,7 @@ namespace CTCWindows {
 		}
 		bool StaDispatchOrderKSK::eventFilter(QObject * watched, QEvent * event)
 		{
-            if (watched == ui.widget) {
+            if (watched == ui.stationReceive) {
                 if (event->type() == QEvent::MouseButtonPress) {
                     QMouseEvent* mouseEvent = static_cast<QMouseEvent*>(event);
                     if (mouseEvent->button() == Qt::LeftButton) {
@@ -298,7 +298,7 @@ namespace CTCWindows {
                 }
 
 			}
-			else if(watched == ui.widget_2){
+			else if(watched == ui.stationAdvancereceipt){
 				if (event->type() == QEvent::MouseButtonPress) {
 					QMouseEvent* mouseEvent = static_cast<QMouseEvent*>(event);
 					if (mouseEvent->button() == Qt::LeftButton) {
@@ -314,7 +314,7 @@ namespace CTCWindows {
 					}
 				}
 			}
-			else if (watched == ui.widget_4) {
+			else if (watched == ui.Dispatchsend) {
 				if (event->type() == QEvent::MouseButtonPress) {
 					QMouseEvent* mouseEvent = static_cast<QMouseEvent*>(event);
 					if (mouseEvent->button() == Qt::LeftButton) {
@@ -328,7 +328,7 @@ namespace CTCWindows {
 					}
 				}
 			}
-			else if (watched == ui.widget_5) {
+			else if (watched == ui.Dispatchstorage) {
 				if (event->type() == QEvent::MouseButtonPress) {
 					QMouseEvent* mouseEvent = static_cast<QMouseEvent*>(event);
 					if (mouseEvent->button() == Qt::LeftButton) {
@@ -342,7 +342,7 @@ namespace CTCWindows {
 					}
 				}
 			}
-			else if (watched == ui.widget_6) {
+			else if (watched == ui.Dispatchtobesend) {
 				if (event->type() == QEvent::MouseButtonPress) {
 					QMouseEvent* mouseEvent = static_cast<QMouseEvent*>(event);
 					if (mouseEvent->button() == Qt::LeftButton) {
@@ -356,7 +356,7 @@ namespace CTCWindows {
 					}
 				}
 			}
-			else if (watched == ui.widget_7) {
+			else if (watched == ui.Locomotivesend) {
 				if (event->type() == QEvent::MouseButtonPress) {
 					QMouseEvent* mouseEvent = static_cast<QMouseEvent*>(event);
 					if (mouseEvent->button() == Qt::LeftButton) {
@@ -371,7 +371,7 @@ namespace CTCWindows {
 					}
 				}
 			}
-			else if (watched == ui.widget_8) {
+			else if (watched == ui.Locomotivestorage) {
 				if (event->type() == QEvent::MouseButtonPress) {
 					QMouseEvent* mouseEvent = static_cast<QMouseEvent*>(event);
 					if (mouseEvent->button() == Qt::LeftButton) {
@@ -385,7 +385,7 @@ namespace CTCWindows {
 					}
 				}
 			}
-			else if (watched == ui.widget_9) {
+			else if (watched == ui.Locomotivetobesend) {
 				if (event->type() == QEvent::MouseButtonPress) {
 					QMouseEvent* mouseEvent = static_cast<QMouseEvent*>(event);
 					if (mouseEvent->button() == Qt::LeftButton) {
@@ -404,30 +404,30 @@ namespace CTCWindows {
 
 		void StaDispatchOrderKSK::InitControl()
 		{
-			ui.widget->installEventFilter(this);
-			ui.widget_2->installEventFilter(this);
-			ui.widget_4->installEventFilter(this);
-			ui.widget_5->installEventFilter(this);
-			ui.widget_6->installEventFilter(this);
-			ui.widget_7->installEventFilter(this);
-			ui.widget_8->installEventFilter(this);
-			ui.widget_9->installEventFilter(this);
-			ui.widget->setAttribute(Qt::WA_AcceptTouchEvents, false);
-			ui.widget_2->setAttribute(Qt::WA_AcceptTouchEvents, false);
-			ui.widget_4->setAttribute(Qt::WA_AcceptTouchEvents, false);
-			ui.widget_5->setAttribute(Qt::WA_AcceptTouchEvents, false);
-			ui.widget_6->setAttribute(Qt::WA_AcceptTouchEvents, false);
-			ui.widget_7->setAttribute(Qt::WA_AcceptTouchEvents, false);
-			ui.widget_8->setAttribute(Qt::WA_AcceptTouchEvents, false);
-			ui.widget_9->setAttribute(Qt::WA_AcceptTouchEvents, false);
-			ui.widget->setMouseTracking(true);
-			ui.widget_2->setMouseTracking(true);
-			ui.widget_4->setMouseTracking(true);
-			ui.widget_5->setMouseTracking(true);
-			ui.widget_6->setMouseTracking(true);
-			ui.widget_7->setMouseTracking(true);
-			ui.widget_8->setMouseTracking(true);
-			ui.widget_9->setMouseTracking(true);
+			ui.stationReceive->installEventFilter(this);
+			ui.stationAdvancereceipt->installEventFilter(this);
+			ui.Dispatchsend->installEventFilter(this);
+			ui.Dispatchstorage->installEventFilter(this);
+			ui.Dispatchtobesend->installEventFilter(this);
+			ui.Locomotivesend->installEventFilter(this);
+			ui.Locomotivestorage->installEventFilter(this);
+			ui.Locomotivetobesend->installEventFilter(this);
+			ui.stationReceive->setAttribute(Qt::WA_AcceptTouchEvents, false);
+			ui.stationAdvancereceipt->setAttribute(Qt::WA_AcceptTouchEvents, false);
+			ui.Dispatchsend->setAttribute(Qt::WA_AcceptTouchEvents, false);
+			ui.Dispatchstorage->setAttribute(Qt::WA_AcceptTouchEvents, false);
+			ui.Dispatchtobesend->setAttribute(Qt::WA_AcceptTouchEvents, false);
+			ui.Locomotivesend->setAttribute(Qt::WA_AcceptTouchEvents, false);
+			ui.Locomotivestorage->setAttribute(Qt::WA_AcceptTouchEvents, false);
+			ui.Locomotivetobesend->setAttribute(Qt::WA_AcceptTouchEvents, false);
+			ui.stationReceive->setMouseTracking(true);
+			ui.stationAdvancereceipt->setMouseTracking(true);
+			ui.Dispatchsend->setMouseTracking(true);
+			ui.Dispatchstorage->setMouseTracking(true);
+			ui.Dispatchtobesend->setMouseTracking(true);
+			ui.Locomotivesend->setMouseTracking(true);
+			ui.Locomotivestorage->setMouseTracking(true);
+			ui.Locomotivetobesend->setMouseTracking(true);
 
 
 			m_pStationOrder->setEditTriggers(QAbstractItemView::NoEditTriggers);
@@ -495,7 +495,7 @@ namespace CTCWindows {
 			m_pStationOrder = new Control::TableView(this);//车站
 			m_pStationOrder->SetSectionText("序", 36);
 			m_pStationOrder->SetHeadData(GetTrainRouteTableHeadInfo(TableSpecies::station), HHead);
-			ui.frame->layout()->addWidget(m_pStationOrder); 
+			ui.stationframe->layout()->addWidget(m_pStationOrder);
 
 			connect(m_pStationOrder, &CTCWindows::Control::TableView::clicked, [=](const QModelIndex& index) {
 				qDebug() << "单击行:" << index.row()<<"车站"<< ui.label_19->text();
@@ -505,7 +505,7 @@ namespace CTCWindows {
 			m_pDispatcherCommand = new Control::TableView(this);//调度台
 			m_pDispatcherCommand->SetSectionText("序", 36);
 			m_pDispatcherCommand->SetHeadData(GetTrainRouteTableHeadInfo(TableSpecies::Dispatcher), HHead);
-			ui.frame_4->layout()->addWidget(m_pDispatcherCommand);
+			ui.Dispatchframe->layout()->addWidget(m_pDispatcherCommand);
 
 			connect(m_pDispatcherCommand, &CTCWindows::Control::TableView::clicked, [=](const QModelIndex& index) {
 				qDebug() << "单击行:" << index.row() << "调度台";
@@ -515,7 +515,7 @@ namespace CTCWindows {
 			m_pLocomotiveOrder = new Control::TableView(this);//机车
 			m_pLocomotiveOrder->SetSectionText("序", 36);
 			m_pLocomotiveOrder->SetHeadData(GetTrainRouteTableHeadInfo(TableSpecies::Locomot), HHead);
-			ui.frame_7->layout()->addWidget(m_pLocomotiveOrder);
+			ui.Locomotiveframe->layout()->addWidget(m_pLocomotiveOrder);
 
 			connect(m_pLocomotiveOrder, &CTCWindows::Control::TableView::clicked, [=](const QModelIndex& index) {
 				qDebug() << "单击行:" << index.row() << "机车";
@@ -525,7 +525,7 @@ namespace CTCWindows {
 			m_pCopyTable = new Control::TableView(this);;	//抄知处所表格
 			m_pCopyTable->SetSectionText("序", 36);
 			m_pCopyTable->SetHeadData(GetTrainRouteTableHeadInfo(TableSpecies::CopyTable), HHead);
-			ui.frame_2->layout()->addWidget(m_pCopyTable);
+			ui.Copyframe->layout()->addWidget(m_pCopyTable);
 
 			connect(m_pCopyTable, &CTCWindows::Control::TableView::clicked, [=](const QModelIndex& index) {
 				qDebug() << "单击行:" << index.row() << "抄知处所";
@@ -535,7 +535,7 @@ namespace CTCWindows {
 			m_pReadTable = new Control::TableView(this);;	//阅读表格
 			m_pReadTable->SetSectionText("序", 36);
 			m_pReadTable->SetHeadData(GetTrainRouteTableHeadInfo(TableSpecies::ReadTable), HHead);
-			ui.frame_3->layout()->addWidget(m_pReadTable);
+			ui.readframe->layout()->addWidget(m_pReadTable);
 
 			connect(m_pReadTable, &CTCWindows::Control::TableView::clicked, [=](const QModelIndex& index) {
 				qDebug() << "单击行:" << index.row() << "阅读表格";
@@ -544,7 +544,7 @@ namespace CTCWindows {
 			m_pdispatchTable = new Control::TableView(this);;	//调度台接收表格
 			m_pdispatchTable->SetSectionText("序", 36);
 			m_pdispatchTable->SetHeadData(GetTrainRouteTableHeadInfo(TableSpecies::DispatchTable), HHead);
-			ui.frame_5->layout()->addWidget(m_pdispatchTable);
+			ui.DispatchReceiveframe->layout()->addWidget(m_pdispatchTable);
 
 			connect(m_pdispatchTable, &CTCWindows::Control::TableView::clicked, [=](const QModelIndex& index) {
 				qDebug() << "单击行:" << index.row() << "调度台接收";
@@ -553,7 +553,7 @@ namespace CTCWindows {
 			m_pLocomotiveTable = new Control::TableView(this);;	//机车接收表格
 			m_pLocomotiveTable->SetSectionText("序", 36);
 			m_pLocomotiveTable->SetHeadData(GetTrainRouteTableHeadInfo(TableSpecies::LocomotTable), HHead);
-			ui.frame_6->layout()->addWidget(m_pLocomotiveTable);
+			ui.LocomotiveReceiveframe->layout()->addWidget(m_pLocomotiveTable);
 
 			connect(m_pLocomotiveTable, &CTCWindows::Control::TableView::clicked, [=](const QModelIndex& index) {
 				qDebug() << "单击行:" << index.row() << "机车接收表格";

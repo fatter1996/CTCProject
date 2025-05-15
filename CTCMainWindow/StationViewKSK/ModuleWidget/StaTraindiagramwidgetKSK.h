@@ -18,6 +18,8 @@ namespace CTCWindows {
 		public:
 			StaTrainDiagramWidgetKSK(QWidget* parent = nullptr);
 			~StaTrainDiagramWidgetKSK();
+
+		public:
 			void InitTraindiagramw();
 			void drawTimeAxis(bool isTop);
 			void drawGrid();

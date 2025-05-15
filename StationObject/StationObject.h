@@ -115,6 +115,11 @@ namespace Station {
         void SelectStaDispatch();   //查询调度命令
         void SelectStaTrainDispatch(StaDispatchOrder* pOrder);   //查询机车调度命令
         void SelectStaTrafficLog();   //查询行车日志
+
+        void ChangeOldStaTrainRoute(StaTrainRoute* pStaTrainRoute);//修改旧的进路序列数据
+
+
+        void ChangeStaTrafficLogData(Station::StaTrafficLog* m_pCurTrafficLog);
         void GetStationOrderByJosn(const QByteArray& btDataArray, Order type);
         int AddNewTrain(StaTrain* pStaTrain); //添加新车次
         int DeleteTrain(StaTrain* pStaTrain); //删除车次
@@ -130,6 +135,8 @@ namespace Station {
         int ReadInterLock(const QString& filePath);   //解析"InterlockTable.txt"
         void InterLockfileAnalysis(QString strLine);
         int ReadChartConfig(const QString& filePath); //解析"Chart_Conversion.json"
+        int DeleteRoute(StaTrainRoute* pStaRoute);
+        void RemoveLogVecOne(StaTrafficLog* pTrafficLog);
 
         StaTrain* getStaTrainById(int nTrainId);
         StaTrain* getStaTempTrainById(int nTrainId);
@@ -164,12 +171,12 @@ namespace Station {
         void AddTrain(StaTrain* pTrain) { m_vecStaTrain.append(pTrain); }
         void RemoveTempTrain(StaTrain* pTrain) { m_vecStaTempTrain.removeOne(pTrain); }
         void RemoveTrainRoute(StaTrainRoute* pTrainRoute) { m_vecStaTrainRoute.removeOne(pTrainRoute); }
-        const QVector<StaStagePlan*>& StagePlanList() { return m_vecStaStagePlan; }
-        const QVector<StaTrainRoute*>& TrainRouteList() { return m_vecStaTrainRoute; }
-        const QVector<StaDispatchOrder*>& DispatchOrderList() { return m_vecStaDispatchOrder; }
-        const QVector<StaTrafficLog*>& TrafficLogList() { return m_vecStaTrafficLog; }
-        const void RemoveLogVecOne(StaTrafficLog* m_pTrafficLog);
-        StaStagePlan* NewStagePlan() { return m_pNewStagePlan; }
+        const QVector<StaStagePlan*>& StagePlanList() const { return m_vecStaStagePlan; }
+        const QVector<StaTrainRoute*>& TrainRouteList() const { return m_vecStaTrainRoute; }
+        const QVector<StaDispatchOrder*>& DispatchOrderList() const { return m_vecStaDispatchOrder; }
+        const QVector<StaTrafficLog*>& TrafficLogList() const { return m_vecStaTrafficLog; }
+        void RemoveTrafficLog(StaTrafficLog* pTrafficLog) { m_vecStaTrafficLog.removeOne(pTrafficLog); }
+        StaStagePlan* NewStagePlan() const { return m_pNewStagePlan; }
         void ClearNewStagePlan() { m_pNewStagePlan = nullptr; };
         StaDispatchOrder* NewDispatchOrder() const { return m_pNewDispatchOrder; }
         void ClearNewDispatchOrder() { m_pNewDispatchOrder = nullptr; };
@@ -202,7 +209,8 @@ namespace Station {
 
         int getStaLimits(Limits type);
         void setStaLimits(Limits type, int nValue);
-
+        Transmission::StaProtocol* getPool() { return m_pProtocol; }
+        Transmission::StaPacket* getPack() { return m_pStaPacket;  }
     public slots:
         void onReciveData(const QByteArray& dataAyyay);
         void onOrderIssued();
@@ -215,7 +223,7 @@ namespace Station {
         void SendDataToTCP(const QByteArray&);
         void TrainRouteUpData();
         void TrafficLogTableUpData();
-        
+
     private:
         //数据传输
         Transmission::StaProtocol* m_pProtocol = nullptr;
