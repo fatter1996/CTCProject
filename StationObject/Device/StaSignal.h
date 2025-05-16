@@ -61,6 +61,8 @@ namespace Station {
             void InitSignalLightColor();
             //获取信号灯颜色
             void GetSignalLightColor();
+            //是否允许操作
+            bool IsAllowOperation(const QPoint& ptPos);
             //鼠标是否在设备上
             bool IsMouseWheel(const QPoint& ptPos) override;
             //初始化设备点击事件

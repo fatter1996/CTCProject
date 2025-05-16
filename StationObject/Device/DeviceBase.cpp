@@ -162,7 +162,7 @@ namespace Station {
 
                 if (event->type() == QEvent::MouseButtonRelease) {  //鼠标点击事件
                     QMouseEvent* mouseEvent = dynamic_cast<QMouseEvent*>(event);
-                    if (MainStation()->IsAllowStaOperation() && Contains(mouseEvent->pos())) {
+                    if (IsAllowOperation(mouseEvent->pos()) && Contains(mouseEvent->pos())) {
                         if (mouseEvent->button() == Qt::LeftButton) {   //鼠标左键点击事件
                             onDeviceClick();
                         }
@@ -268,6 +268,26 @@ namespace Station {
             }
         }
 
+        void DeviceBase::Draw(bool isMulti)
+        {
+            if (m_bMainStation) {
+                //绘制设备选中虚线框
+                if (m_bRangeVisible) {
+                    DrawSelectRange();
+                }
+                //绘制培训提示信息
+                if (m_bShowTips) {
+                    DrawCultivateTips();
+                }
+            }
+            //绘制设备名称
+            if (m_bShowName) {
+                DrawDeviceName();
+            }
+            
+            DrawCountDown();
+        }
+
         void DeviceBase::DrawDeviceName()
         {
             QFont font;
@@ -300,22 +320,26 @@ namespace Station {
             m_pPainter.drawText(rcTextRect, m_strName, QTextOption(Qt::AlignCenter));
         }
 
-        void DeviceBase::Draw(bool isMulti)
+        void DeviceBase::DrawCountDown()
         {
-            if (m_bMainStation) {
-                //绘制设备选中虚线框
-                if (m_bRangeVisible) {
-                    DrawSelectRange();
-                }
-                //绘制培训提示信息
-                if (m_bShowTips) {
-                    DrawCultivateTips();
-                }
+            if (m_nCountDown <= 0 || m_ptCountDown.isNull()) {
+                return;
             }
-            //绘制设备名称
-            if (m_bShowName) {
-                DrawDeviceName();
+            QFont font;
+            font.setFamily("微软雅黑");
+            font.setPixelSize(Scale(12));//字号
+            m_pPainter.setFont(font);//设置字体
+            m_pPainter.setPen(Qt::red);
+            m_pPainter.setBrush(Qt::NoBrush);
+            m_pPainter.drawText(QRectF(m_ptCountDown, QSizeF(24, 16)), QString::number(m_nCountDown), QTextOption(Qt::AlignCenter));
+            if (m_bElapsed) {
+                m_nCountDown--;
             }
+        }
+
+        bool DeviceBase::IsAllowOperation(const QPoint& ptPos)
+        {
+            return MainStation()->IsAllowStaOperation();
         }
 
         void DeviceBase::onMouseMoveToDevice(const QPoint& ptPos)
@@ -330,11 +354,11 @@ namespace Station {
                     m_nWheelDevCode = -1;
                 }
             }
-
+            
             if (m_nWheelDevCode == -1) {
                 QApplication::restoreOverrideCursor();
             }
-            else if (MainStation()->IsAllowStaOperation() && IsMouseWheel(ptPos)) {
+            else if (IsAllowOperation(ptPos) && IsMouseWheel(ptPos)) {
                 if (!MainStation()->getSelectDevice().size()) {
                     QApplication::setOverrideCursor(QCursor(Qt::PointingHandCursor));
                 }
@@ -344,6 +368,9 @@ namespace Station {
                 else {
                     QApplication::restoreOverrideCursor();
                 }
+            }
+            else if (m_strType == SIGNALLAMP) {
+            
             }
         }
 

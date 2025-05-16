@@ -49,8 +49,6 @@ namespace Http {
 		static bool AddStaTrafficLog(Station::StaTrafficLog* pTrafficLog, QByteArray& btResult);
 		static bool UpdataStaTrafficLogAttr(int nLogId,QMap<QString, QByteArray> m_mapLogValue, QByteArray& btResult);
 		static bool SelectStaTrafficLog(QByteArray& btResult);
-		static bool UpdataRouteId(int nLogId, int nArrivalRouteId, int nDepartRouteId, QByteArray& btResult);
-		static bool UpdataPointReportTime(int nLogId, QString strPointType, QDateTime tPointTime, QByteArray& btResult);
 		static bool DeleteStaTrafficLog(int nLogId, QByteArray& btResult);
 		static bool ClearStaTrafficLog(QByteArray& btResult);
 		//х╗оч

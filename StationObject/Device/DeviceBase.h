@@ -80,15 +80,18 @@ namespace Station {
             virtual void OrderClear(bool bClearTwinkle = false) {}
 
         protected:
-            
             //初始化设备属性
             virtual void InitDeviceAttribute() {}
             //站场绘制
             virtual void Draw(bool isMulti = false);
             //绘制设备选中虚线框
             virtual void DrawSelectRange() {}
+            //绘制设备倒计时
+            virtual void DrawCountDown();
             //绘制培训提示信息
             virtual void DrawCultivateTips() {}
+            //是否允许操作
+            virtual bool IsAllowOperation(const QPoint& ptPos);
             //判断鼠标是否在事件范围内
             virtual bool Contains(const QPoint& ptPos) { return false; }
             //鼠标是否在设备上
@@ -157,7 +160,8 @@ namespace Station {
             //0x14-道岔单锁,0x15-道岔单解,0x16-道岔封锁,0x17-道岔解封
             // 其他
             //0x20-分路不良,0x21-总取消,0x22-总人解,0x23-区故解,0x24-引导总锁
-            int m_nTipsType = 0;    
+            int m_nTipsType = 0;   
+            QPointF m_ptCountDown;
             int m_nCountDown = 0;   //倒计时
             
         protected:

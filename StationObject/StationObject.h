@@ -153,6 +153,7 @@ namespace Station {
         void SubmitCurSubject(); //提交当前题目
         void AddSelectDevice(Device::DeviceBase* pDevice); 
         bool IsAllowStaOperation(); //是否可操作
+        bool IsAllowShuntTrainOnly(); //是否允许调车
         void CompareResult(const QByteArray& dataArray);
 
     public:

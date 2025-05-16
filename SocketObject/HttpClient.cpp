@@ -158,15 +158,9 @@ namespace Http {
 	bool HttpClient::UpdataStaTrainAttr(int stationId, QMap<QString, QByteArray> m_mapTrainValue, QByteArray& btResult)
 	{
 		QString strContent = QString("stationId=%1").arg(stationId);
-		QString key;
-		QString Value;
-		QMap<QString, QByteArray>::iterator it;
-		for (it = m_mapTrainValue.begin(); it != m_mapTrainValue.end(); ++it) {
-			key = it.key();
-			Value = it.value();
-			strContent += QString("&%1=%2").arg(key).arg(Value);
+		for (const QString& strKey : m_mapTrainValue.keys()) {
+			strContent += QString("&%1=%2").arg(strKey).arg(QString(m_mapTrainValue[strKey]));
 		}
-		qDebug() << strContent;
 		return PostRequest("/trainRouteSequence/updateTrainRouteSequence", strContent, btResult);
 	}
 
@@ -189,34 +183,6 @@ namespace Http {
 		return PostRequest("/trainProperty/deleteTrainProperty", strContent, btResult);
 	}
 
-	//bool HttpClient::ChangeTrainNum(int nTrainId, QString strTrainNum, QByteArray& btResult)
-	//{
-	//	QString strContent = QString("stationId=%1&trainId=%2&trainNum=%3")
-	//		.arg(Station::MainStation()->getStationId()).arg(nTrainId).arg(strTrainNum);
-	//	return PostRequest("/trainProperty/updateTrainProperty", strContent, btResult);
-	//}
-	//
-	//bool HttpClient::SetTrainRunState(int nTrainId, bool bRunning, QByteArray& btResult)
-	//{
-	//	QString strContent = QString("stationId=%1&trainId=%2&isRun=%3")
-	//		.arg(Station::MainStation()->getStationId()).arg(nTrainId).arg(bRunning);
-	//	return PostRequest("/trainProperty/updateTrainProperty", strContent, btResult);
-	//}
-
-	//bool HttpClient::UpdataTrainPos(int nTrainId, int nPosCode, QByteArray& btResult)
-	//{
-	//	QString strContent = QString("stationId=%1&trainId=%2&posCode=%3")
-	//		.arg(Station::MainStation()->getStationId()).arg(nTrainId).arg(nPosCode);
-	//	return PostRequest("/trainProperty/updateTrainProperty", strContent, btResult);
-	//}
-	//
-	//bool HttpClient::ChangeTrainAttr(int nTrainId, int nSpeed, QString strLocomotive, bool bElectric, QByteArray& btResult)
-	//{
-	//	QString strContent = QString("stationId=%1&trainId=%2&speed=%3&strLocomotive=%4&electric=%5")
-	//		.arg(Station::MainStation()->getStationId()).arg(nTrainId).arg(nSpeed).arg(strLocomotive).arg(bElectric);
-	//	return PostRequest("/trainProperty/updateTrainProperty", strContent, btResult);
-	//}
-	//
 	bool HttpClient::ClearStaTrain(QByteArray& btResult)
 	{
 		QString strContent = QString("stationId=%1").arg(Station::MainStation()->getStationId());
@@ -254,54 +220,17 @@ namespace Http {
 	bool HttpClient::UpdataStaTrainRouteAttr(int nRouteId, QMap<QString, QByteArray> m_mapRouteValue, QByteArray& btResult)
 	{
 		QString strContent = QString("id=%1").arg(nRouteId);
-		QString key;
-		QString Value;
-		QMap<QString, QByteArray>::iterator it;
-		for (it = m_mapRouteValue.begin(); it != m_mapRouteValue.end(); ++it) {
-			key = it.key();
-			Value = it.value();
-			strContent += QString("&%1=%2").arg(key).arg(Value);
+		for (const QString& strKey : m_mapRouteValue.keys()) {
+			strContent += QString("&%1=%2").arg(strKey).arg(QString(m_mapRouteValue[strKey]));
 		}
-		qDebug() << strContent;
 		return PostRequest("/trainRouteSequence/updateTrainRouteSequence", strContent, btResult);
 	}
-
-
-	
 
 	bool HttpClient::SelectStaTrainRoute(QByteArray& btResult)
 	{
 		QString strContent = QString("stationId=%1").arg(Station::MainStation()->getStationId());
 		return PostRequest("/trainRouteSequence/selectTrainRouteSequenceList", strContent, btResult);
 	}
-
-	//bool HttpClient::UpdataRouteState(int nRouteId, int nState, QByteArray& btResult)
-	//{
-	//	QString strContent = QString("routeId=%1&routeState=%2")
-	//		.arg(nRouteId).arg(nState);
-	//	return PostRequest("/trainRouteSequence/updateTrainRouteSequence", strContent, btResult);
-	//}
-	//
-	//bool HttpClient::ChangeRouteTrack(int nRouteId, int nTrackCode, QByteArray& btResult)
-	//{
-	//	QString strContent = QString("routeId=%1&trackCode=%2")
-	//		.arg(nRouteId).arg(nTrackCode);
-	//	return PostRequest("/trainRouteSequence/updateTrainRouteSequence", strContent, btResult);
-	//}
-	//
-	//bool HttpClient::ChangeTriggerType(int nRouteId, int nTriggerType, QByteArray& btResult)
-	//{
-	//	QString strContent = QString("routeId=%1&autoTouch=%2")
-	//		.arg(nRouteId).arg(nTriggerType);
-	//	return PostRequest("/trainRouteSequence/updateTrainRouteSequence", strContent, btResult);
-	//}
-	//
-	//bool HttpClient::ChangeRoute(int nRouteId, QString strRoute, QByteArray& btResult)
-	//{
-	//	QString strContent = QString("routeId=%1&routeDepict=%2")
-	//		.arg(nRouteId).arg(strRoute);
-	//	return PostRequest("/trainRouteSequence/updateTrainRouteSequence", strContent, btResult);
-	//}
 
 	bool HttpClient::DeleteStaTrainRoute(int nRouteId, QByteArray& btResult)
 	{
@@ -482,15 +411,9 @@ namespace Http {
 	bool HttpClient::UpdataStaTrafficLogAttr(int nLogId, QMap<QString, QByteArray> m_mapLogValue, QByteArray& btResult)
 	{
 		QString strContent = QString("id=%1").arg(nLogId);
-		QString key;
-		QString Value;
-		QMap<QString, QByteArray>::iterator it;
-		for (it = m_mapLogValue.begin(); it != m_mapLogValue.end(); ++it) {
-			key = it.key();
-			Value = it.value();
-			strContent += QString("&%1=%2").arg(key).arg(Value);
+		for (const QString& strKey : m_mapLogValue.keys()) {
+			strContent += QString("&%1=%2").arg(strKey).arg(QString(m_mapLogValue[strKey]));
 		}
-		qDebug() << strContent;
 		return PostRequest("/trainLog/updateTrainLogData", strContent, btResult);
 	}
 
@@ -498,20 +421,6 @@ namespace Http {
 	{
 		QString strContent = QString("stationId=%1").arg(Station::MainStation()->getStationId());
 		return PostRequest("/trainLog/selectTrainLogList", strContent, btResult);
-	}
-
-	bool HttpClient::UpdataRouteId(int nLogId, int nArrivalRouteId, int nDepartRouteId, QByteArray& btResult)
-	{
-		QString strContent = QString("id=%1&arrivalRouteId=%2&departRouteId=%3")
-			.arg(nLogId).arg(nArrivalRouteId).arg(nDepartRouteId);
-		return PostRequest("/trainLog/updateTrainLogData", strContent, btResult);
-	}
-
-	bool HttpClient::UpdataPointReportTime(int nLogId, QString strPointType, QDateTime tPointTime, QByteArray& btResult)
-	{
-		QString strContent = QString("id=%1&%2=%3")
-			.arg(nLogId).arg(strPointType).arg(tPointTime.toString(Qt::ISODate));
-		return PostRequest("/trainLog/updateTrainLogData", strContent, btResult);
 	}
 
 	bool HttpClient::DeleteStaTrafficLog(int nLogId, QByteArray& btResult)

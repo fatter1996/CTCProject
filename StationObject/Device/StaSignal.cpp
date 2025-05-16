@@ -126,10 +126,20 @@ namespace Station {
             else {
                 m_rcLightTotal = m_rcLight1;
             }
+
+            m_ptCountDown = { m_rcTextRect.right() + 4, m_rcTextRect.top() };
         }
 
         void StaSignal::Draw(bool isMulti)
         {
+            switch (m_nState & 0xC0)
+            {
+            case 0x40:  m_nCountDown = 30;  break;
+            case 0x80:  m_nCountDown = 180; break;
+            case 0xC0:  m_nCountDown = 15;  break;
+            default:    m_nCountDown = 0;   break;
+            }
+
             if (m_nAttr & SIGNAL_JCXH || m_strXHDType == "JZ_XHJ") {    //进站信号机
                 m_bShowName = MainStation()->IsVisible(VisibleDev::entrySignalName);
             }
@@ -381,6 +391,16 @@ namespace Station {
                 return true;
             }
             return false; 
+        }
+
+        bool StaSignal::IsAllowOperation(const QPoint& ptPos)
+        {
+            if (MainStation()->IsAllowShuntTrainOnly()) {
+                return Scale(m_rcShuntBtn).contains(ptPos);
+            }
+            else {
+                return MainStation()->IsAllowStaOperation();
+            }
         }
 
         bool StaSignal::IsMouseWheel(const QPoint& ptPos)

@@ -60,12 +60,12 @@ namespace Station {
                     if (m_nType == 501) {
                         m_nState = 0x02;
                     }
-                    if (m_nType == 502 && (MainStation()->getSelectDevice().size() == 0 || 
+                }
+                else {
+                    if (m_nType == 502 && (MainStation()->getSelectDevice().size() == 0 ||
                         CTCWindows::BaseWnd::StaFunBtnToolBar::getCurrFunType() != CTCWindows::FunType::RouteBuild)) {
                         m_nState = 0x03;
                     }
-                }
-                else {
                     if (m_nType == 503) {
                         m_nState = 0x01;
                     }
