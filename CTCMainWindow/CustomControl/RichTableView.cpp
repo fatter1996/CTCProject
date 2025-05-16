@@ -396,7 +396,6 @@ namespace CTCWindows {
 
         void RichTableView::AddVerticalHeadRow(int nNeedRow)
         {
-            qDebug() << "nNeedRow" << nNeedRow;
             if (nNeedRow > m_pVerticalHeadTable->rowCount()) {
                 AddRows(nNeedRow - m_pVerticalHeadTable->rowCount());
                 for (int i = 0; i < m_pVerticalHeadTable->columnCount() - m_bVerticalHeadShowIndex; i++) {
@@ -437,7 +436,7 @@ namespace CTCWindows {
         void RichTableView::SetTableData(QVector<TableRowDataInfo> vecTableData, int nStartRow, QVector<QStringList> vecHeadData, Qt::Alignment alignment)
         {
             AddVerticalHeadRow(nStartRow + vecHeadData.size());
-            qDebug() << vecTableData.size();
+
             QTableWidgetItem* item = nullptr;
             for (int i = 0; i < vecTableData.size(); i++) {
                 for (int j = 0; j < vecTableData[i].vecTableRowData.size(); j++) {

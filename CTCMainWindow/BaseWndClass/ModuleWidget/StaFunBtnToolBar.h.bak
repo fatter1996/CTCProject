@@ -10,7 +10,7 @@
 
 namespace CTCWindows {
     //功能按钮类型
-    enum class FunType : int {
+    enum class FunType : int  {
         RouteBuild = 0x01,      //进路建立
         GuideBtn,               //引导按钮
         SignalReopen,           //信号重开
@@ -37,7 +37,12 @@ namespace CTCWindows {
         StateChange,            //方式转换
 
         STrackBlock,            //上引导总锁
-        XTrackBlock             //下引导总锁
+        XTrackBlock,            //下引导总锁
+
+        TrackPowerCut,          //股道停电
+        SwitchDWPowerCut,       //接触网定位无电
+        SwitchFWPowerCut,       //接触网反位无电
+        FunTypeEnd
     };
 
     enum class OperObjType : int {
@@ -54,6 +59,11 @@ namespace CTCWindows {
                           
         Ascend = 0x21,    //上行总锁
         Descend,          //下行总锁
+
+        SwitchCQ,         //岔前
+        SwitchDW,         //定位
+        SwitchFW,         //反位
+
         UnAscend = 0x29,    //上行解锁
         UnDescend,          //下行解锁
                           
@@ -79,14 +89,22 @@ namespace CTCWindows {
             StaFunBtnToolBar(QWidget* parent = nullptr);
             ~StaFunBtnToolBar();
 
-            virtual void InitAuxiliaryMenu(AuxiliaryMenuWnd* pAuxiliary) = 0;
+        public:
+            void InitConnect();
             void ButtonClicked(FunType eSelectType);
             void timerEvent(QTimerEvent* event) override;
 
         public:
+            virtual void InitAuxiliaryMenu(AuxiliaryMenuWnd* pAuxiliary);
+            void TrackPowerCut(AuxiliaryMenuWnd* pAuxiliary);
+            void SwitchDWPowerCut(AuxiliaryMenuWnd* pAuxiliary);
+            void SwitchFWPowerCut(AuxiliaryMenuWnd* pAuxiliary);
+            
+        public:
             static FunType getCurrFunType() { return m_SelectFunType; }
             static void setOperObjType(OperObjType eType) { m_nOperObjType = eType; }
             static OperObjType getOperObjType() { return m_nOperObjType; }
+            static int getCountdown() { return m_nCountdown; }
 
         public slots:
             void onButtonClicked(QAbstractButton* pButton);
@@ -105,11 +123,13 @@ namespace CTCWindows {
             QPushButton* m_pCommandIssuedBtn = nullptr;
             QPushButton* m_pRouteBuildBtn = nullptr;
             QPushButton* m_pAuxiliaryMenuBtn = nullptr;
+            QPushButton* m_pMethodConvert = nullptr;
           
         private:
             int m_nTimerID_500 = -1;
 
         protected:
+            static int m_nCountdown;
             static FunType m_SelectFunType;
             static OperObjType m_nOperObjType;
         };

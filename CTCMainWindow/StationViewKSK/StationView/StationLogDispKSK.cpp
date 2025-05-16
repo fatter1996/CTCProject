@@ -241,12 +241,12 @@ namespace CTCWindows {
 			QVector<Control::TableRowDataInfo> vecTableData;
 			QVector<QStringList> vecHeadData;
 			Station::StaTrain* pTrain = nullptr;
-			QString ArrivaTrainNum;
-			QString DepartTrainNum;
 			QColor txtColor;
+			QString strHead;
+			QStringList strHeadList;
 			for (Station::StaTrafficLog* pTrafficLog : Station::MainStation()->TrafficLogList()) {
-				QStringList strHeadList;
-				QString head;
+				
+				strHeadList.clear();
 				pTrain = Station::MainStation()->getStaTrainById(pTrafficLog->m_nTrainId);
 				if (pTrain) {
 					if (pTrafficLog->IsReportedPoints()) {
@@ -255,22 +255,19 @@ namespace CTCWindows {
 					else {
 						txtColor = pTrain->m_bFreightTrain ? Qt::red : Qt::blue;
 					}
-					head = pTrafficLog->m_strArrivalTrainNum;
+					strHead = pTrafficLog->m_strArrivalTrainNum;
 					if (pTrain->m_bImportant) {
-						head += "(重)";
+						strHead += "(重)";
 					}
 					if (pTrafficLog->m_bDeleteFlag) {
-						head += "(删)";
-						
+						strHead += "(删)";
 					}
-					strHeadList.append(head);
-					ArrivaTrainNum = pTrafficLog->m_strArrivalTrainNum;
-					DepartTrainNum = pTrafficLog->m_strDepartTrainNum;
+					strHeadList.append(strHead);
 					
 					QStringList strDataList = QStringList()
-						<< (pTrafficLog->m_bUpDown ? "" : ArrivaTrainNum)
-						<< (!pTrafficLog->m_bUpDown ? "" : ArrivaTrainNum)
-						<< pTrafficLog->m_strArrivaSignal
+						<< (pTrafficLog->m_bUpDown ? "" : pTrafficLog->m_strArrivalTrainNum)
+						<< (!pTrafficLog->m_bUpDown ? "" : pTrafficLog->m_strArrivalTrainNum)
+						<< pTrafficLog->m_strArrivalSignal
 						<< pTrafficLog->m_strArrivalTrack
 						<< pTrafficLog->m_tAgrAdjDepartTime.toString("hh:mm")
 						<< pTrafficLog->m_tAdjDepartTime.toString("hh:mm")
@@ -281,8 +278,8 @@ namespace CTCWindows {
 						<< ""
 						<< "" << "" << ""
 						<< "" << "" << "" << "" << "" //电话记录号码
-						<< (pTrafficLog->m_bUpDown ? "" : DepartTrainNum)
-						<< (!pTrafficLog->m_bUpDown ? "" : DepartTrainNum)
+						<< (pTrafficLog->m_bUpDown ? "" : pTrafficLog->m_strDepartTrainNum)
+						<< (!pTrafficLog->m_bUpDown ? "" : pTrafficLog->m_strDepartTrainNum)
 						<< pTrafficLog->m_strDepartTrack
 						<< pTrafficLog->m_strDepartSignal
 						<< pTrafficLog->m_tAdjAgrDepartTime.toString("hh:mm")
@@ -323,8 +320,7 @@ namespace CTCWindows {
 				}
 			}
 			pTrafficLogTable->ClearData();
-
-			pTrafficLogTable->SetTableData(vecTableData,0, vecHeadData);
+			pTrafficLogTable->SetTableData(vecTableData, 0, vecHeadData);
 		}
 
 		bool StationLogDispKSK::SetPlanType(bool bStartTrain, Station::StaTrafficLog* m_pCurTrafficLog)
@@ -379,34 +375,26 @@ namespace CTCWindows {
 		void StationLogDispKSK::ShowHeadTableClickMenu(QPoint pos)
 		{
 			QMenu* pMenu = new QMenu();
+			
 			QAction* pAction = new QAction("上报到达点");
-			QAction* pAction_2 = new QAction("上报出发点");
-			QAction* pAction_3 = new QAction("上报通过点");
-			QAction* pAction_4 = new QAction("为始发车");
-			QAction* pAction_5 = new QAction("为终到车");
-			QAction* pAction_6 = new QAction("上报速报信息");
-			QAction* pAction_7 = new QAction("修改车次号");
-			QAction* pAction_8 = new QAction("修改相关邻站");
-			QAction* pAction_9 = new QAction("删除");
-			QAction* pAction_10 = new QAction("删除闪烁");
-			QAction* pAction_11 = new QAction("全体信息");
-			QAction* pAction_12 = new QAction("修改列车计划");
-			QAction* pAction_13 = new QAction("设置/取消重点列车");
-			QAction* pAction_14 = new QAction("设置删除标记");
-			QAction* pAction_15 = new QAction("允许股道与基本径路不一致");
-			QAction* pAction_16 = new QAction("允许出入口与基本径路不一致");
 			pMenu->addAction(pAction);
 			connect(pAction, &QAction::triggered, [=] (){//上报到达点
 				TrainArrival();
 			});
+
+			QAction* pAction_2 = new QAction("上报出发点");
 			pMenu->addAction(pAction_2);
 			connect(pAction_2, &QAction::triggered, [=]() {//上报出发点
 				TrainDeparture();
 			});
+
+			QAction* pAction_3 = new QAction("上报通过点");
 			pMenu->addAction(pAction_3);
 			connect(pAction_3, &QAction::triggered, [=]() {//上报通过点
 				TrainPassThrough();
 			});
+
+			QAction* pAction_4 = new QAction("为始发车");
 			pMenu->addAction(pAction_4);
 			connect(pAction_4, &QAction::triggered, [=]() {//为始发车
 				if (m_pCurTrafficLog->m_nPlanType == 0x02) {;
@@ -434,6 +422,8 @@ namespace CTCWindows {
 					}
 				}
 			});
+
+			QAction* pAction_5 = new QAction("为终到车");
 			pMenu->addAction(pAction_5);
 			connect(pAction_5, &QAction::triggered, [=]() {//为终到车
 				if (m_pCurTrafficLog->m_nPlanType == 0x03) {
@@ -463,21 +453,29 @@ namespace CTCWindows {
 			});
 
 			pMenu->addSeparator();
+
+			QAction* pAction_6 = new QAction("上报速报信息");
 			pMenu->addAction(pAction_6);
 			connect(pAction_6, &QAction::triggered, [=]() {//上报速报信息
 				QuickReportKSK* Report = new QuickReportKSK(m_pCurTrafficLog);
 				Report->show();
 			});
+
+			QAction* pAction_7 = new QAction("修改车次号");
 			pMenu->addAction(pAction_7);
 			connect(pAction_7, &QAction::triggered, [=]() {//修改车次号
 				ModifyTrainNumberKSK* pTrainNumber = new ModifyTrainNumberKSK(m_pCurTrafficLog);
 				pTrainNumber->show();
 			});
+
+			QAction* pAction_8 = new QAction("修改相关邻站");
 			pMenu->addAction(pAction_8);
 			connect(pAction_8, &QAction::triggered, [=]() {//修改相关邻站
 				ModifyRelevantStationsKSK* m_pRelevantStations = new ModifyRelevantStationsKSK(m_pCurTrafficLog);
 				m_pRelevantStations->show();
 			});
+
+			QAction* pAction_9 = new QAction("删除");
 			pMenu->addAction(pAction_9);
 			connect(pAction_9, &QAction::triggered, [=]() {//删除
 				if (QMessageBox::question(nullptr, MSGBOX_TITTLE, "是否确定删除！", "是", "否") != 0) {
@@ -507,26 +505,36 @@ namespace CTCWindows {
 				emit Station::MainStation()->TrafficLogTableUpData();
 				emit Station::MainStation()->TrainRouteUpData();
 			});
+
 			pMenu->addSeparator();
+
+			QAction* pAction_10 = new QAction("删除闪烁");
 			pMenu->addAction(pAction_10);
 			connect(pAction_10, &QAction::triggered, [=]() {//删除闪烁
 
 			});
+
+			QAction* pAction_11 = new QAction("全体信息");
 			pMenu->addAction(pAction_11);
 			connect(pAction_11, &QAction::triggered, [=]() {//全体信息
 
 			});
+
 			pMenu->addSeparator();
+
+			QAction* pAction_12 = new QAction("修改列车计划");
 			pMenu->addAction(pAction_12);
 			connect(pAction_12, &QAction::triggered, [=]() {//修改列车计划
 				StaAddNewTrainKSK* pAddNewTrain = new StaAddNewTrainKSK;
 				pAddNewTrain->InitAddView(m_pCurTrafficLog);
 				pAddNewTrain->show();
 			});
+			
+			QAction* pAction_13 = new QAction("设置/取消重点列车");
 			pMenu->addAction(pAction_13);
 			pAction_13->setCheckable(true);// 启用可勾选状态
-			if (m_pCurTrafficLog) {
-				Station::StaTrain* pTrain = Station::MainStation()->getStaTrainById(m_pCurTrafficLog->m_nTrainId);
+			Station::StaTrain* pTrain = Station::MainStation()->getStaTrainById(m_pCurTrafficLog->m_nTrainId);
+			if (pTrain) {
 				pAction_13->setChecked(pTrain->m_bImportant);
 			}
 			connect(pAction_13, &QAction::triggered, [=]() {//设置/取消重点列车
@@ -534,12 +542,10 @@ namespace CTCWindows {
 				if (!pTrain) {
 					return;
 				}
-
 				if (QMessageBox::question(nullptr, MSGBOX_TITTLE, QString("是否为当前列车%1重点列车")
 						.arg(pTrain->m_bImportant ? "取消" : "设置"), "是", "否") != 0) {
 					return;
 				}
-
 				QByteArray btResult;
 				QMap<QString, QByteArray> m_mapTrain = {
 					{ "keynote", QByteArray::number(!pTrain->m_bImportant)}
@@ -548,6 +554,8 @@ namespace CTCWindows {
 					pTrain->m_bImportant = !pTrain->m_bImportant;
 				};
 			});
+
+			QAction* pAction_14 = new QAction("设置删除标记");
 			pMenu->addAction(pAction_14);
 			pAction_14->setCheckable(true);// 启用可勾选状态
 			pAction_14->setChecked(m_pCurTrafficLog->m_bDeleteFlag);
@@ -565,6 +573,8 @@ namespace CTCWindows {
 					emit Station::MainStation()->TrafficLogTableUpData();
 				}
 			});
+
+			QAction* pAction_15 = new QAction("允许股道与基本径路不一致");
 			pMenu->addAction(pAction_15);
 			pAction_15->setCheckable(true);
 			pAction_15->setChecked(m_pCurTrafficLog->m_bAllowTrackNotMatch);
@@ -582,6 +592,8 @@ namespace CTCWindows {
 					emit Station::MainStation()->TrafficLogTableUpData();
 				}
 			});
+
+			QAction* pAction_16 = new QAction("允许出入口与基本径路不一致");
 			pMenu->addAction(pAction_16);
 			pAction_16->setCheckable(true);// 启用可勾选状态
 			pAction_16->setChecked(m_pCurTrafficLog->m_bAllowSignalNotMatch);
@@ -599,6 +611,7 @@ namespace CTCWindows {
 					emit Station::MainStation()->TrafficLogTableUpData();
 				}
 			});
+
 			pMenu->exec(pos);
 		}
 

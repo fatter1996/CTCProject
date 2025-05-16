@@ -10,7 +10,7 @@
 
 namespace CTCWindows {
     //功能按钮类型
-    enum class FunType : int  {
+    enum class FunType : int {
         RouteBuild = 0x01,      //进路建立
         GuideBtn,               //引导按钮
         SignalReopen,           //信号重开
